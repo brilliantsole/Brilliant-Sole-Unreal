@@ -1,0 +1,577 @@
+{
+	"folders": [
+		{
+			"name": "BrilliantSole_Unreal",
+			"path": "."
+		},
+		{
+			"name": "UE5",
+			"path": "/Users/Shared/Epic Games/UE_5.3"
+		}
+	],
+	"settings": {
+		"typescript.tsc.autoDetect": "off",
+		"npm.autoDetect": "off"
+	},
+	"extensions": {
+		"recommendations": [
+			"ms-vscode.cpptools",
+			"ms-dotnettools.csharp",
+			"vadimcn.vscode-lldb",
+			"ms-vscode.mono-debug",
+			"dfarley1.file-picker"
+		]
+	},
+	"tasks": {
+		"version": "2.0.0",
+		"tasks": [
+			{
+				"label": "BrilliantSole_Unreal Mac Debug Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_Unreal",
+					"Mac",
+					"Debug",
+					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal Mac Debug Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_Unreal",
+					"Mac",
+					"Debug",
+					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"BrilliantSole_Unreal Mac Debug Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal Mac Debug Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_Unreal",
+					"Mac",
+					"Debug",
+					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal Mac DebugGame Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_Unreal",
+					"Mac",
+					"DebugGame",
+					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal Mac DebugGame Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_Unreal",
+					"Mac",
+					"DebugGame",
+					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"BrilliantSole_Unreal Mac DebugGame Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal Mac DebugGame Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_Unreal",
+					"Mac",
+					"DebugGame",
+					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal Mac Development Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_Unreal",
+					"Mac",
+					"Development",
+					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal Mac Development Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_Unreal",
+					"Mac",
+					"Development",
+					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"BrilliantSole_Unreal Mac Development Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal Mac Development Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_Unreal",
+					"Mac",
+					"Development",
+					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal Mac Test Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_Unreal",
+					"Mac",
+					"Test",
+					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal Mac Test Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_Unreal",
+					"Mac",
+					"Test",
+					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"BrilliantSole_Unreal Mac Test Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal Mac Test Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_Unreal",
+					"Mac",
+					"Test",
+					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal Mac Shipping Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_Unreal",
+					"Mac",
+					"Shipping",
+					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal Mac Shipping Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_Unreal",
+					"Mac",
+					"Shipping",
+					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"BrilliantSole_Unreal Mac Shipping Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal Mac Shipping Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_Unreal",
+					"Mac",
+					"Shipping",
+					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_UnrealEditor Mac Debug Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_UnrealEditor",
+					"Mac",
+					"Debug",
+					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_UnrealEditor Mac Debug Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_UnrealEditor",
+					"Mac",
+					"Debug",
+					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"BrilliantSole_UnrealEditor Mac Debug Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_UnrealEditor Mac Debug Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_UnrealEditor",
+					"Mac",
+					"Debug",
+					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_UnrealEditor Mac DebugGame Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_UnrealEditor",
+					"Mac",
+					"DebugGame",
+					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_UnrealEditor Mac DebugGame Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_UnrealEditor",
+					"Mac",
+					"DebugGame",
+					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"BrilliantSole_UnrealEditor Mac DebugGame Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_UnrealEditor Mac DebugGame Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_UnrealEditor",
+					"Mac",
+					"DebugGame",
+					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_UnrealEditor Mac Development Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_UnrealEditor",
+					"Mac",
+					"Development",
+					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_UnrealEditor Mac Development Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_UnrealEditor",
+					"Mac",
+					"Development",
+					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"BrilliantSole_UnrealEditor Mac Development Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_UnrealEditor Mac Development Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_UnrealEditor",
+					"Mac",
+					"Development",
+					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			}
+		]
+	},
+	"launch": {
+		"version": "0.2.0",
+		"configurations": [
+			{
+				"name": "Launch BrilliantSole_Unreal (Debug)",
+				"request": "launch",
+				"program": "/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/Binaries/Mac/UnrealGame-Mac-Debug.app/Contents/MacOS/UnrealGame-Mac-Debug",
+				"preLaunchTask": "BrilliantSole_Unreal Mac Debug Build",
+				"args": [
+				],
+				"cwd": "/Users/Shared/Epic Games/UE_5.3",
+				"type": "lldb"
+			},
+			{
+				"name": "Launch BrilliantSole_Unreal (DebugGame)",
+				"request": "launch",
+				"program": "/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/Binaries/Mac/UnrealGame-Mac-DebugGame.app/Contents/MacOS/UnrealGame-Mac-DebugGame",
+				"preLaunchTask": "BrilliantSole_Unreal Mac DebugGame Build",
+				"args": [
+				],
+				"cwd": "/Users/Shared/Epic Games/UE_5.3",
+				"type": "lldb"
+			},
+			{
+				"name": "Launch BrilliantSole_Unreal (Development)",
+				"request": "launch",
+				"program": "/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/Binaries/Mac/UnrealGame.app/Contents/MacOS/UnrealGame",
+				"preLaunchTask": "BrilliantSole_Unreal Mac Development Build",
+				"args": [
+				],
+				"cwd": "/Users/Shared/Epic Games/UE_5.3",
+				"type": "lldb"
+			},
+			{
+				"name": "Launch BrilliantSole_Unreal (Test)",
+				"request": "launch",
+				"program": "/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/Binaries/Mac/UnrealGame-Mac-Test.app/Contents/MacOS/UnrealGame-Mac-Test",
+				"preLaunchTask": "BrilliantSole_Unreal Mac Test Build",
+				"args": [
+				],
+				"cwd": "/Users/Shared/Epic Games/UE_5.3",
+				"type": "lldb"
+			},
+			{
+				"name": "Launch BrilliantSole_Unreal (Shipping)",
+				"request": "launch",
+				"program": "/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/Binaries/Mac/UnrealGame-Mac-Shipping.app/Contents/MacOS/UnrealGame-Mac-Shipping",
+				"preLaunchTask": "BrilliantSole_Unreal Mac Shipping Build",
+				"args": [
+				],
+				"cwd": "/Users/Shared/Epic Games/UE_5.3",
+				"type": "lldb"
+			},
+			{
+				"name": "Launch BrilliantSole_UnrealEditor (Debug)",
+				"request": "launch",
+				"program": "/Users/Shared/Epic Games/UE_5.3/Engine/Binaries/Mac/UnrealEditor-Mac-Debug.app/Contents/MacOS/UnrealEditor-Mac-Debug",
+				"preLaunchTask": "BrilliantSole_UnrealEditor Mac Debug Build",
+				"args": [
+					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject"
+				],
+				"cwd": "/Users/Shared/Epic Games/UE_5.3",
+				"type": "lldb"
+			},
+			{
+				"name": "Launch BrilliantSole_UnrealEditor (DebugGame)",
+				"request": "launch",
+				"program": "/Users/Shared/Epic Games/UE_5.3/Engine/Binaries/Mac/UnrealEditor-Mac-DebugGame.app/Contents/MacOS/UnrealEditor-Mac-DebugGame",
+				"preLaunchTask": "BrilliantSole_UnrealEditor Mac DebugGame Build",
+				"args": [
+					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject"
+				],
+				"cwd": "/Users/Shared/Epic Games/UE_5.3",
+				"type": "lldb"
+			},
+			{
+				"name": "Launch BrilliantSole_UnrealEditor (Development)",
+				"request": "launch",
+				"program": "/Users/Shared/Epic Games/UE_5.3/Engine/Binaries/Mac/UnrealEditor.app/Contents/MacOS/UnrealEditor",
+				"preLaunchTask": "BrilliantSole_UnrealEditor Mac Development Build",
+				"args": [
+					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject"
+				],
+				"cwd": "/Users/Shared/Epic Games/UE_5.3",
+				"type": "lldb"
+			},
+			{
+				"name": "Generate Project Files",
+				"type": "coreclr",
+				"request": "launch",
+				"preLaunchTask": "UnrealBuildTool Mac Development Build",
+				"program": "/Users/Shared/Epic Games/UE_5.3/Engine/Build/BatchFiles/RunUBT.bat",
+				"args": [
+					"-projectfiles",
+					"-vscode",
+					"-project=/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject",
+					"-game",
+					"-engine",
+					"-dotnet"
+				],
+				"console": "internalConsole",
+				"internalConsoleOptions": "openOnSessionStart",
+				"stopAtEntry": false,
+				"cwd": "/Users/Shared/Epic Games/UE_5.3"
+			}
+		]
+	}
+}

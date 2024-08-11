@@ -1,3 +1,11 @@
-# BrilliantSole_Unreal
+# Brilliant Sole Unreal SDK Demo
 
-Developed with Unreal Engine 5
+In the BleGoodies Plugin, modify BleUtils.cpp's `UBleUtils::HexToUUID` function:
+
+```
+FString UBleUtils::HexToUUID(const FString &InHexString)
+{
+	FString HexString = InHexString.TrimStartAndEnd();
+	return HexString;
+}
+```

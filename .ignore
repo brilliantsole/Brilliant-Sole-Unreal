@@ -3,23 +3,8 @@
 /.git
 /.vscode
 /Intermediate
-/Build
 /Plugins/BrilliantSoleSDK/Content
 /Plugins/BrilliantSoleSDK/Intermediate
 /Plugins/BleUtilities/
 
-Binaries
-DerivedDataCache
-.vscode
-.vs
 .DS_Store
-*.VC.db
-*.opensdf
-*.opendb
-*.sdf
-*.sln
-*.suo
-*.xcodeproj
-*.xcworkspace
-
-TODO.txt
