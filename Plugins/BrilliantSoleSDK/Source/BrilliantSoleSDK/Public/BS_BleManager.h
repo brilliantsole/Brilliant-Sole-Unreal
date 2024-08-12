@@ -4,23 +4,22 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "BS_BleScanner.generated.h"
+#include "BS_BleManager.generated.h"
 
 UCLASS()
-class BRILLIANTSOLESDK_API ABS_BleScanner : public AActor
+class BRILLIANTSOLESDK_API ABS_BleManager : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	// Sets default values for this actor's properties
-	ABS_BleScanner();
+	ABS_BleManager();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
 };
