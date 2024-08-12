@@ -1,18 +1,9 @@
-/Saved
-/Content
-/.git
-/.vscode
-/Intermediate
-/Build
-/Plugins/BrilliantSoleSDK/Content
-/Plugins/BrilliantSoleSDK/Intermediate
-/Plugins/BleUtilities/
-
 Binaries
 DerivedDataCache
+Intermediate
+Saved
 .vscode
 .vs
-.DS_Store
 *.VC.db
 *.opensdf
 *.opendb
@@ -21,5 +12,11 @@ DerivedDataCache
 *.suo
 *.xcodeproj
 *.xcworkspace
+
+.DS_Store
+
+TODO.txt
+Build
+/Plugins/BleUtilities/
 
 TODO.txt
