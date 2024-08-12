@@ -33,7 +33,7 @@
 					"BrilliantSole_Unreal",
 					"Mac",
 					"Debug",
-					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
 					"-waitmutex"
 				],
 				"problemMatcher": "$msCompile",
@@ -50,7 +50,7 @@
 					"BrilliantSole_Unreal",
 					"Mac",
 					"Debug",
-					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
 					"-waitmutex"
 				],
 				"problemMatcher": "$msCompile",
@@ -70,7 +70,7 @@
 					"BrilliantSole_Unreal",
 					"Mac",
 					"Debug",
-					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
 					"-waitmutex",
 					"-clean"
 				],
@@ -88,7 +88,7 @@
 					"BrilliantSole_Unreal",
 					"Mac",
 					"DebugGame",
-					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
 					"-waitmutex"
 				],
 				"problemMatcher": "$msCompile",
@@ -105,7 +105,7 @@
 					"BrilliantSole_Unreal",
 					"Mac",
 					"DebugGame",
-					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
 					"-waitmutex"
 				],
 				"problemMatcher": "$msCompile",
@@ -125,7 +125,7 @@
 					"BrilliantSole_Unreal",
 					"Mac",
 					"DebugGame",
-					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
 					"-waitmutex",
 					"-clean"
 				],
@@ -143,7 +143,7 @@
 					"BrilliantSole_Unreal",
 					"Mac",
 					"Development",
-					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
 					"-waitmutex"
 				],
 				"problemMatcher": "$msCompile",
@@ -160,7 +160,7 @@
 					"BrilliantSole_Unreal",
 					"Mac",
 					"Development",
-					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
 					"-waitmutex"
 				],
 				"problemMatcher": "$msCompile",
@@ -180,7 +180,7 @@
 					"BrilliantSole_Unreal",
 					"Mac",
 					"Development",
-					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
 					"-waitmutex",
 					"-clean"
 				],
@@ -198,7 +198,7 @@
 					"BrilliantSole_Unreal",
 					"Mac",
 					"Test",
-					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
 					"-waitmutex"
 				],
 				"problemMatcher": "$msCompile",
@@ -215,7 +215,7 @@
 					"BrilliantSole_Unreal",
 					"Mac",
 					"Test",
-					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
 					"-waitmutex"
 				],
 				"problemMatcher": "$msCompile",
@@ -235,7 +235,7 @@
 					"BrilliantSole_Unreal",
 					"Mac",
 					"Test",
-					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
 					"-waitmutex",
 					"-clean"
 				],
@@ -253,7 +253,7 @@
 					"BrilliantSole_Unreal",
 					"Mac",
 					"Shipping",
-					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
 					"-waitmutex"
 				],
 				"problemMatcher": "$msCompile",
@@ -270,7 +270,7 @@
 					"BrilliantSole_Unreal",
 					"Mac",
 					"Shipping",
-					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
 					"-waitmutex"
 				],
 				"problemMatcher": "$msCompile",
@@ -290,7 +290,1027 @@
 					"BrilliantSole_Unreal",
 					"Mac",
 					"Shipping",
-					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal IOS Debug Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_Unreal",
+					"IOS",
+					"Debug",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal IOS Debug Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_Unreal",
+					"IOS",
+					"Debug",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"BrilliantSole_Unreal IOS Debug Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal IOS Debug Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_Unreal",
+					"IOS",
+					"Debug",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal IOS DebugGame Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_Unreal",
+					"IOS",
+					"DebugGame",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal IOS DebugGame Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_Unreal",
+					"IOS",
+					"DebugGame",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"BrilliantSole_Unreal IOS DebugGame Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal IOS DebugGame Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_Unreal",
+					"IOS",
+					"DebugGame",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal IOS Development Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_Unreal",
+					"IOS",
+					"Development",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal IOS Development Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_Unreal",
+					"IOS",
+					"Development",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"BrilliantSole_Unreal IOS Development Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal IOS Development Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_Unreal",
+					"IOS",
+					"Development",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal IOS Test Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_Unreal",
+					"IOS",
+					"Test",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal IOS Test Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_Unreal",
+					"IOS",
+					"Test",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"BrilliantSole_Unreal IOS Test Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal IOS Test Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_Unreal",
+					"IOS",
+					"Test",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal IOS Shipping Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_Unreal",
+					"IOS",
+					"Shipping",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal IOS Shipping Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_Unreal",
+					"IOS",
+					"Shipping",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"BrilliantSole_Unreal IOS Shipping Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal IOS Shipping Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_Unreal",
+					"IOS",
+					"Shipping",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal Android Debug Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_Unreal",
+					"Android",
+					"Debug",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal Android Debug Cook+Deploy",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/RunUAT.sh",
+				"args": [
+					"BuildCookRun",
+					"-ScriptsForProject=/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-Project=/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-noP4",
+					"-ClientConfig=Debug",
+					"-ServerConfig=Debug",
+					"-NoCompileEditor",
+					"-utf8output",
+					"-Platform=Android",
+					"-TargetPlatform=Android",
+					"-ini:Game:[/Script/UnrealEd.ProjectPackagingSettings]:BlueprintNativizationMethod=Disabled",
+					"-Compressed",
+					"-IterativeCooking",
+					"-IterativeDeploy",
+					"-Cook",
+					"-Stage",
+					"-Deploy"
+				],
+				"dependsOn": [
+					"BrilliantSole_UnrealEditor Mac Development Build",
+					"BrilliantSole_Unreal Android Debug Build"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal Android Debug Cook",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/RunUAT.sh",
+				"args": [
+					"BuildCookRun",
+					"-ScriptsForProject=/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-Project=/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-noP4",
+					"-ClientConfig=Debug",
+					"-ServerConfig=Debug",
+					"-NoCompileEditor",
+					"-utf8output",
+					"-Platform=Android",
+					"-TargetPlatform=Android",
+					"-ini:Game:[/Script/UnrealEd.ProjectPackagingSettings]:BlueprintNativizationMethod=Disabled",
+					"-Compressed",
+					"-IterativeCooking",
+					"-IterativeDeploy",
+					"-Cook"
+				],
+				"dependsOn": [
+					"BrilliantSole_UnrealEditor Mac Development Build",
+					"BrilliantSole_Unreal Android Debug Build"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal Android Debug Deploy",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/RunUAT.sh",
+				"args": [
+					"BuildCookRun",
+					"-ScriptsForProject=/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-Project=/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-noP4",
+					"-ClientConfig=Debug",
+					"-ServerConfig=Debug",
+					"-NoCompileEditor",
+					"-utf8output",
+					"-Platform=Android",
+					"-TargetPlatform=Android",
+					"-ini:Game:[/Script/UnrealEd.ProjectPackagingSettings]:BlueprintNativizationMethod=Disabled",
+					"-Compressed",
+					"-IterativeCooking",
+					"-IterativeDeploy",
+					"-DeploySoToDevice",
+					"-SkipCook",
+					"-Stage",
+					"-Deploy"
+				],
+				"dependsOn": [
+					"BrilliantSole_Unreal Android Debug Build"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal Android Debug Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_Unreal",
+					"Android",
+					"Debug",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"BrilliantSole_Unreal Android Debug Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal Android Debug Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_Unreal",
+					"Android",
+					"Debug",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal Android DebugGame Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_Unreal",
+					"Android",
+					"DebugGame",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal Android DebugGame Cook+Deploy",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/RunUAT.sh",
+				"args": [
+					"BuildCookRun",
+					"-ScriptsForProject=/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-Project=/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-noP4",
+					"-ClientConfig=DebugGame",
+					"-ServerConfig=DebugGame",
+					"-NoCompileEditor",
+					"-utf8output",
+					"-Platform=Android",
+					"-TargetPlatform=Android",
+					"-ini:Game:[/Script/UnrealEd.ProjectPackagingSettings]:BlueprintNativizationMethod=Disabled",
+					"-Compressed",
+					"-IterativeCooking",
+					"-IterativeDeploy",
+					"-Cook",
+					"-Stage",
+					"-Deploy"
+				],
+				"dependsOn": [
+					"BrilliantSole_UnrealEditor Mac Development Build",
+					"BrilliantSole_Unreal Android DebugGame Build"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal Android DebugGame Cook",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/RunUAT.sh",
+				"args": [
+					"BuildCookRun",
+					"-ScriptsForProject=/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-Project=/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-noP4",
+					"-ClientConfig=DebugGame",
+					"-ServerConfig=DebugGame",
+					"-NoCompileEditor",
+					"-utf8output",
+					"-Platform=Android",
+					"-TargetPlatform=Android",
+					"-ini:Game:[/Script/UnrealEd.ProjectPackagingSettings]:BlueprintNativizationMethod=Disabled",
+					"-Compressed",
+					"-IterativeCooking",
+					"-IterativeDeploy",
+					"-Cook"
+				],
+				"dependsOn": [
+					"BrilliantSole_UnrealEditor Mac Development Build",
+					"BrilliantSole_Unreal Android DebugGame Build"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal Android DebugGame Deploy",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/RunUAT.sh",
+				"args": [
+					"BuildCookRun",
+					"-ScriptsForProject=/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-Project=/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-noP4",
+					"-ClientConfig=DebugGame",
+					"-ServerConfig=DebugGame",
+					"-NoCompileEditor",
+					"-utf8output",
+					"-Platform=Android",
+					"-TargetPlatform=Android",
+					"-ini:Game:[/Script/UnrealEd.ProjectPackagingSettings]:BlueprintNativizationMethod=Disabled",
+					"-Compressed",
+					"-IterativeCooking",
+					"-IterativeDeploy",
+					"-DeploySoToDevice",
+					"-SkipCook",
+					"-Stage",
+					"-Deploy"
+				],
+				"dependsOn": [
+					"BrilliantSole_Unreal Android DebugGame Build"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal Android DebugGame Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_Unreal",
+					"Android",
+					"DebugGame",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"BrilliantSole_Unreal Android DebugGame Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal Android DebugGame Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_Unreal",
+					"Android",
+					"DebugGame",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal Android Development Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_Unreal",
+					"Android",
+					"Development",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal Android Development Cook+Deploy",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/RunUAT.sh",
+				"args": [
+					"BuildCookRun",
+					"-ScriptsForProject=/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-Project=/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-noP4",
+					"-ClientConfig=Development",
+					"-ServerConfig=Development",
+					"-NoCompileEditor",
+					"-utf8output",
+					"-Platform=Android",
+					"-TargetPlatform=Android",
+					"-ini:Game:[/Script/UnrealEd.ProjectPackagingSettings]:BlueprintNativizationMethod=Disabled",
+					"-Compressed",
+					"-IterativeCooking",
+					"-IterativeDeploy",
+					"-Cook",
+					"-Stage",
+					"-Deploy"
+				],
+				"dependsOn": [
+					"BrilliantSole_UnrealEditor Mac Development Build",
+					"BrilliantSole_Unreal Android Development Build"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal Android Development Cook",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/RunUAT.sh",
+				"args": [
+					"BuildCookRun",
+					"-ScriptsForProject=/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-Project=/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-noP4",
+					"-ClientConfig=Development",
+					"-ServerConfig=Development",
+					"-NoCompileEditor",
+					"-utf8output",
+					"-Platform=Android",
+					"-TargetPlatform=Android",
+					"-ini:Game:[/Script/UnrealEd.ProjectPackagingSettings]:BlueprintNativizationMethod=Disabled",
+					"-Compressed",
+					"-IterativeCooking",
+					"-IterativeDeploy",
+					"-Cook"
+				],
+				"dependsOn": [
+					"BrilliantSole_UnrealEditor Mac Development Build",
+					"BrilliantSole_Unreal Android Development Build"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal Android Development Deploy",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/RunUAT.sh",
+				"args": [
+					"BuildCookRun",
+					"-ScriptsForProject=/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-Project=/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-noP4",
+					"-ClientConfig=Development",
+					"-ServerConfig=Development",
+					"-NoCompileEditor",
+					"-utf8output",
+					"-Platform=Android",
+					"-TargetPlatform=Android",
+					"-ini:Game:[/Script/UnrealEd.ProjectPackagingSettings]:BlueprintNativizationMethod=Disabled",
+					"-Compressed",
+					"-IterativeCooking",
+					"-IterativeDeploy",
+					"-DeploySoToDevice",
+					"-SkipCook",
+					"-Stage",
+					"-Deploy"
+				],
+				"dependsOn": [
+					"BrilliantSole_Unreal Android Development Build"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal Android Development Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_Unreal",
+					"Android",
+					"Development",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"BrilliantSole_Unreal Android Development Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal Android Development Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_Unreal",
+					"Android",
+					"Development",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal Android Test Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_Unreal",
+					"Android",
+					"Test",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal Android Test Cook+Deploy",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/RunUAT.sh",
+				"args": [
+					"BuildCookRun",
+					"-ScriptsForProject=/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-Project=/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-noP4",
+					"-ClientConfig=Test",
+					"-ServerConfig=Test",
+					"-NoCompileEditor",
+					"-utf8output",
+					"-Platform=Android",
+					"-TargetPlatform=Android",
+					"-ini:Game:[/Script/UnrealEd.ProjectPackagingSettings]:BlueprintNativizationMethod=Disabled",
+					"-Compressed",
+					"-IterativeCooking",
+					"-IterativeDeploy",
+					"-Cook",
+					"-Stage",
+					"-Deploy"
+				],
+				"dependsOn": [
+					"BrilliantSole_UnrealEditor Mac Development Build",
+					"BrilliantSole_Unreal Android Test Build"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal Android Test Cook",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/RunUAT.sh",
+				"args": [
+					"BuildCookRun",
+					"-ScriptsForProject=/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-Project=/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-noP4",
+					"-ClientConfig=Test",
+					"-ServerConfig=Test",
+					"-NoCompileEditor",
+					"-utf8output",
+					"-Platform=Android",
+					"-TargetPlatform=Android",
+					"-ini:Game:[/Script/UnrealEd.ProjectPackagingSettings]:BlueprintNativizationMethod=Disabled",
+					"-Compressed",
+					"-IterativeCooking",
+					"-IterativeDeploy",
+					"-Cook"
+				],
+				"dependsOn": [
+					"BrilliantSole_UnrealEditor Mac Development Build",
+					"BrilliantSole_Unreal Android Test Build"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal Android Test Deploy",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/RunUAT.sh",
+				"args": [
+					"BuildCookRun",
+					"-ScriptsForProject=/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-Project=/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-noP4",
+					"-ClientConfig=Test",
+					"-ServerConfig=Test",
+					"-NoCompileEditor",
+					"-utf8output",
+					"-Platform=Android",
+					"-TargetPlatform=Android",
+					"-ini:Game:[/Script/UnrealEd.ProjectPackagingSettings]:BlueprintNativizationMethod=Disabled",
+					"-Compressed",
+					"-IterativeCooking",
+					"-IterativeDeploy",
+					"-DeploySoToDevice",
+					"-SkipCook",
+					"-Stage",
+					"-Deploy"
+				],
+				"dependsOn": [
+					"BrilliantSole_Unreal Android Test Build"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal Android Test Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_Unreal",
+					"Android",
+					"Test",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"BrilliantSole_Unreal Android Test Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal Android Test Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_Unreal",
+					"Android",
+					"Test",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal Android Shipping Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_Unreal",
+					"Android",
+					"Shipping",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal Android Shipping Cook+Deploy",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/RunUAT.sh",
+				"args": [
+					"BuildCookRun",
+					"-ScriptsForProject=/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-Project=/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-noP4",
+					"-ClientConfig=Shipping",
+					"-ServerConfig=Shipping",
+					"-NoCompileEditor",
+					"-utf8output",
+					"-Platform=Android",
+					"-TargetPlatform=Android",
+					"-ini:Game:[/Script/UnrealEd.ProjectPackagingSettings]:BlueprintNativizationMethod=Disabled",
+					"-Compressed",
+					"-IterativeCooking",
+					"-IterativeDeploy",
+					"-Cook",
+					"-Stage",
+					"-Deploy"
+				],
+				"dependsOn": [
+					"BrilliantSole_UnrealEditor Mac Development Build",
+					"BrilliantSole_Unreal Android Shipping Build"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal Android Shipping Cook",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/RunUAT.sh",
+				"args": [
+					"BuildCookRun",
+					"-ScriptsForProject=/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-Project=/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-noP4",
+					"-ClientConfig=Shipping",
+					"-ServerConfig=Shipping",
+					"-NoCompileEditor",
+					"-utf8output",
+					"-Platform=Android",
+					"-TargetPlatform=Android",
+					"-ini:Game:[/Script/UnrealEd.ProjectPackagingSettings]:BlueprintNativizationMethod=Disabled",
+					"-Compressed",
+					"-IterativeCooking",
+					"-IterativeDeploy",
+					"-Cook"
+				],
+				"dependsOn": [
+					"BrilliantSole_UnrealEditor Mac Development Build",
+					"BrilliantSole_Unreal Android Shipping Build"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal Android Shipping Deploy",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/RunUAT.sh",
+				"args": [
+					"BuildCookRun",
+					"-ScriptsForProject=/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-Project=/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-noP4",
+					"-ClientConfig=Shipping",
+					"-ServerConfig=Shipping",
+					"-NoCompileEditor",
+					"-utf8output",
+					"-Platform=Android",
+					"-TargetPlatform=Android",
+					"-ini:Game:[/Script/UnrealEd.ProjectPackagingSettings]:BlueprintNativizationMethod=Disabled",
+					"-Compressed",
+					"-IterativeCooking",
+					"-IterativeDeploy",
+					"-DeploySoToDevice",
+					"-SkipCook",
+					"-Stage",
+					"-Deploy"
+				],
+				"dependsOn": [
+					"BrilliantSole_Unreal Android Shipping Build"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal Android Shipping Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_Unreal",
+					"Android",
+					"Shipping",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"BrilliantSole_Unreal Android Shipping Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/Users/Shared/Epic Games/UE_5.3"
+				}
+			},
+			{
+				"label": "BrilliantSole_Unreal Android Shipping Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Mac/Build.sh",
+				"args": [
+					"BrilliantSole_Unreal",
+					"Android",
+					"Shipping",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
 					"-waitmutex",
 					"-clean"
 				],
@@ -308,7 +1328,7 @@
 					"BrilliantSole_UnrealEditor",
 					"Mac",
 					"Debug",
-					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
 					"-waitmutex"
 				],
 				"problemMatcher": "$msCompile",
@@ -325,7 +1345,7 @@
 					"BrilliantSole_UnrealEditor",
 					"Mac",
 					"Debug",
-					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
 					"-waitmutex"
 				],
 				"problemMatcher": "$msCompile",
@@ -345,7 +1365,7 @@
 					"BrilliantSole_UnrealEditor",
 					"Mac",
 					"Debug",
-					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
 					"-waitmutex",
 					"-clean"
 				],
@@ -363,7 +1383,7 @@
 					"BrilliantSole_UnrealEditor",
 					"Mac",
 					"DebugGame",
-					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
 					"-waitmutex"
 				],
 				"problemMatcher": "$msCompile",
@@ -380,7 +1400,7 @@
 					"BrilliantSole_UnrealEditor",
 					"Mac",
 					"DebugGame",
-					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
 					"-waitmutex"
 				],
 				"problemMatcher": "$msCompile",
@@ -400,7 +1420,7 @@
 					"BrilliantSole_UnrealEditor",
 					"Mac",
 					"DebugGame",
-					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
 					"-waitmutex",
 					"-clean"
 				],
@@ -418,7 +1438,7 @@
 					"BrilliantSole_UnrealEditor",
 					"Mac",
 					"Development",
-					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
 					"-waitmutex"
 				],
 				"problemMatcher": "$msCompile",
@@ -435,7 +1455,7 @@
 					"BrilliantSole_UnrealEditor",
 					"Mac",
 					"Development",
-					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
 					"-waitmutex"
 				],
 				"problemMatcher": "$msCompile",
@@ -455,7 +1475,7 @@
 					"BrilliantSole_UnrealEditor",
 					"Mac",
 					"Development",
-					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject",
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
 					"-waitmutex",
 					"-clean"
 				],
@@ -473,7 +1493,7 @@
 			{
 				"name": "Launch BrilliantSole_Unreal (Debug)",
 				"request": "launch",
-				"program": "/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/Binaries/Mac/UnrealGame-Mac-Debug.app/Contents/MacOS/UnrealGame-Mac-Debug",
+				"program": "/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/Binaries/Mac/UnrealGame-Mac-Debug.app/Contents/MacOS/UnrealGame-Mac-Debug",
 				"preLaunchTask": "BrilliantSole_Unreal Mac Debug Build",
 				"args": [
 				],
@@ -483,7 +1503,7 @@
 			{
 				"name": "Launch BrilliantSole_Unreal (DebugGame)",
 				"request": "launch",
-				"program": "/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/Binaries/Mac/UnrealGame-Mac-DebugGame.app/Contents/MacOS/UnrealGame-Mac-DebugGame",
+				"program": "/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/Binaries/Mac/UnrealGame-Mac-DebugGame.app/Contents/MacOS/UnrealGame-Mac-DebugGame",
 				"preLaunchTask": "BrilliantSole_Unreal Mac DebugGame Build",
 				"args": [
 				],
@@ -493,7 +1513,7 @@
 			{
 				"name": "Launch BrilliantSole_Unreal (Development)",
 				"request": "launch",
-				"program": "/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/Binaries/Mac/UnrealGame.app/Contents/MacOS/UnrealGame",
+				"program": "/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/Binaries/Mac/UnrealGame.app/Contents/MacOS/UnrealGame",
 				"preLaunchTask": "BrilliantSole_Unreal Mac Development Build",
 				"args": [
 				],
@@ -503,7 +1523,7 @@
 			{
 				"name": "Launch BrilliantSole_Unreal (Test)",
 				"request": "launch",
-				"program": "/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/Binaries/Mac/UnrealGame-Mac-Test.app/Contents/MacOS/UnrealGame-Mac-Test",
+				"program": "/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/Binaries/Mac/UnrealGame-Mac-Test.app/Contents/MacOS/UnrealGame-Mac-Test",
 				"preLaunchTask": "BrilliantSole_Unreal Mac Test Build",
 				"args": [
 				],
@@ -513,7 +1533,7 @@
 			{
 				"name": "Launch BrilliantSole_Unreal (Shipping)",
 				"request": "launch",
-				"program": "/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/Binaries/Mac/UnrealGame-Mac-Shipping.app/Contents/MacOS/UnrealGame-Mac-Shipping",
+				"program": "/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/Binaries/Mac/UnrealGame-Mac-Shipping.app/Contents/MacOS/UnrealGame-Mac-Shipping",
 				"preLaunchTask": "BrilliantSole_Unreal Mac Shipping Build",
 				"args": [
 				],
@@ -526,7 +1546,7 @@
 				"program": "/Users/Shared/Epic Games/UE_5.3/Engine/Binaries/Mac/UnrealEditor-Mac-Debug.app/Contents/MacOS/UnrealEditor-Mac-Debug",
 				"preLaunchTask": "BrilliantSole_UnrealEditor Mac Debug Build",
 				"args": [
-					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject"
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject"
 				],
 				"cwd": "/Users/Shared/Epic Games/UE_5.3",
 				"type": "lldb"
@@ -537,7 +1557,7 @@
 				"program": "/Users/Shared/Epic Games/UE_5.3/Engine/Binaries/Mac/UnrealEditor-Mac-DebugGame.app/Contents/MacOS/UnrealEditor-Mac-DebugGame",
 				"preLaunchTask": "BrilliantSole_UnrealEditor Mac DebugGame Build",
 				"args": [
-					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject"
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject"
 				],
 				"cwd": "/Users/Shared/Epic Games/UE_5.3",
 				"type": "lldb"
@@ -548,7 +1568,7 @@
 				"program": "/Users/Shared/Epic Games/UE_5.3/Engine/Binaries/Mac/UnrealEditor.app/Contents/MacOS/UnrealEditor",
 				"preLaunchTask": "BrilliantSole_UnrealEditor Mac Development Build",
 				"args": [
-					"/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject"
+					"/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject"
 				],
 				"cwd": "/Users/Shared/Epic Games/UE_5.3",
 				"type": "lldb"
@@ -562,7 +1582,7 @@
 				"args": [
 					"-projectfiles",
 					"-vscode",
-					"-project=/Users/zakaton/Documents/Unreal Projects/BrilliantSole_Unreal 5.3/BrilliantSole_Unreal.uproject",
+					"-project=/Users/zakaton/Documents/GitHub/BrilliantSole_Unreal/BrilliantSole_Unreal.uproject",
 					"-game",
 					"-engine",
 					"-dotnet"

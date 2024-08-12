@@ -1,10 +1,10 @@
 /Saved
 /Content
+/DerivedDataCache
 /.git
 /.vscode
 /Intermediate
 /Plugins/BrilliantSoleSDK/Content
 /Plugins/BrilliantSoleSDK/Intermediate
-/Plugins/BleUtilities/
-
-.DS_Store
+/Plugins/BleUtilities/Content
+/Plugins/BleUtilities/Intermediate
