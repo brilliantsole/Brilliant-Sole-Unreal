@@ -16,14 +16,4 @@ public:
 
 	virtual void Initialize(FSubsystemCollectionBase &Collection) override;
 	virtual void Deinitialize() override;
-
-	UFUNCTION(BlueprintCallable, Category = "BS Ble Scanner")
-	AActor *GetScanner();
-
-private:
-	UPROPERTY()
-	AActor *SingletonScannerInstance;
-
-	UPROPERTY(EditDefaultsOnly, Category = "BS Ble Scanner")
-	TSubclassOf<AActor> BS_BleScannerBlueprint;
 };
