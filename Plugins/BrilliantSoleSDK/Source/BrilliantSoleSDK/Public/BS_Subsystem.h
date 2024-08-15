@@ -6,6 +6,8 @@
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "BS_Subsystem.generated.h"
 
+DEFINE_LOG_CATEGORY_STATIC(LogBS_Subsystem, Log, All);
+
 UCLASS()
 class BRILLIANTSOLESDK_API UBS_Subsystem : public UGameInstanceSubsystem
 {
@@ -16,4 +18,14 @@ public:
 
 	virtual void Initialize(FSubsystemCollectionBase &Collection) override;
 	virtual void Deinitialize() override;
+
+	UFUNCTION(BlueprintCallable, Category = "BS Subsystem")
+	AActor *GetBleManager()
+	{
+		return BleManagerSingleton;
+	}
+
+private:
+	AActor *CreateBlueprintInstance(const FString &BlueprintPath);
+	AActor *BleManagerSingleton;
 };
