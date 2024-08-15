@@ -14,14 +14,14 @@ class BRILLIANTSOLESDK_API UBS_BleUtils : public UBlueprintFunctionLibrary
 public:
 	// SERVICES
 	static const FString MainServiceUUID;
-	UFUNCTION(BlueprintPure, Category = "Brilliant Sole Ble Utils")
+	UFUNCTION(BlueprintPure, Category = "BS Ble Utils")
 	static const FString &GetMainServiceUUID()
 	{
 		return MainServiceUUID;
 	}
 
 	static const TArray<FString> ServiceUUIDs;
-	UFUNCTION(BlueprintPure, Category = "Brilliant Sole Ble Utils")
+	UFUNCTION(BlueprintPure, Category = "BS Ble Utils")
 	static const TArray<FString> GetServiceUUIDs()
 	{
 		return ServiceUUIDs;
@@ -30,13 +30,13 @@ public:
 
 	// CHARACTERISTICS
 	static const FString RxCharacteristicUUID;
-	UFUNCTION(BlueprintPure, Category = "Brilliant Sole Ble Utils")
+	UFUNCTION(BlueprintPure, Category = "BS Ble Utils")
 	static const FString &GetRxCharacteristicUUID()
 	{
 		return RxCharacteristicUUID;
 	}
 	static const FString TxCharacteristicUUID;
-	UFUNCTION(BlueprintPure, Category = "Brilliant Sole Ble Utils")
+	UFUNCTION(BlueprintPure, Category = "BS Ble Utils")
 	static const FString &GetTxCharacteristicUUID()
 	{
 		return TxCharacteristicUUID;

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Subsystems/GameInstanceSubsystem.h"
+#include "Logging/LogMacros.h"
 #include "BS_Subsystem.generated.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogBS_Subsystem, Log, All);
@@ -20,17 +21,23 @@ public:
 	virtual void Deinitialize() override;
 
 	UFUNCTION(BlueprintCallable, Category = "BS Subsystem")
-	AActor *GetBleManager() const
+	UObject *GetBleManager() const
 	{
 		return BleManagerSingleton;
 	}
 	UFUNCTION(BlueprintCallable, Category = "BS Subsystem")
-	void SetBleManager(AActor *NewBleManagerSingleton)
+	void SetBleManager(UObject *NewBleManagerSingleton)
 	{
+		if (BleManagerSingleton != nullptr)
+		{
+			UE_LOG(LogBS_Subsystem, Warning, TEXT("already assigned BleManagerSingleton"));
+			return;
+		}
 		BleManagerSingleton = NewBleManagerSingleton;
+		UE_LOG(LogBS_Subsystem, Log, TEXT("assigned BleManagerSingleton"));
 	}
 
 private:
 	UPROPERTY()
-	AActor *BleManagerSingleton;
+	UObject *BleManagerSingleton;
 };

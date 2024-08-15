@@ -18,5 +18,3 @@ void UBS_Subsystem::Deinitialize()
 {
     Super::Deinitialize();
 }
-
-//"/BrilliantSoleSDK/Blueprints/Ble/BS_BleManagerBlueprint.BS_BleManagerBlueprint_C"
