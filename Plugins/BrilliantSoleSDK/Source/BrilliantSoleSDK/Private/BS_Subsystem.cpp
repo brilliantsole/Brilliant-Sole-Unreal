@@ -6,7 +6,16 @@
 
 UBS_Subsystem::UBS_Subsystem()
 {
-    GetBleManager();
+    static ConstructorHelpers::FClassFinder<UObject> BleManagerClassFinder(TEXT("/Script/Engine.Blueprint'/BrilliantSoleSDK/Blueprints/Ble/BS_BleManagerBlueprint.BS_BleManagerBlueprint_C'"));
+    if (BleManagerClassFinder.Succeeded())
+    {
+        BleManagerClass = BleManagerClassFinder.Class;
+        UE_LOG(LogBS_Subsystem, Log, TEXT("found BleManagerClass"));
+    }
+    else
+    {
+        UE_LOG(LogBS_Subsystem, Error, TEXT("failed to find blueprint class"));
+    }
 }
 
 void UBS_Subsystem::Initialize(FSubsystemCollectionBase &Collection)
@@ -17,4 +26,26 @@ void UBS_Subsystem::Initialize(FSubsystemCollectionBase &Collection)
 void UBS_Subsystem::Deinitialize()
 {
     Super::Deinitialize();
+}
+
+UObject *UBS_Subsystem::GetBleManager()
+{
+    if (!BleManagerSingleton && BleManagerClass)
+    {
+        BleManagerSingleton = NewObject<UObject>(this, BleManagerClass);
+        UE_LOG(LogBS_Subsystem, Log, TEXT("Created new BleManager instance: %s"), *BleManagerSingleton->GetName());
+
+        FName MethodName("Initialize");
+        UFunction *InitalizeFunction = BleManagerSingleton->FindFunction(MethodName);
+        if (InitalizeFunction)
+        {
+            BleManagerSingleton->ProcessEvent(InitalizeFunction, nullptr);
+        }
+        else
+        {
+            UE_LOG(LogBS_Subsystem, Error, TEXT("Couldn't find Initialize function"));
+        }
+    }
+
+    return BleManagerSingleton;
 }

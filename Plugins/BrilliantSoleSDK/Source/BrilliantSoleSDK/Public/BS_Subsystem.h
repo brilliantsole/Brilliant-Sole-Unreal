@@ -21,10 +21,8 @@ public:
 	virtual void Deinitialize() override;
 
 	UFUNCTION(BlueprintCallable, Category = "BS Subsystem")
-	UObject *GetBleManager() const
-	{
-		return BleManagerSingleton;
-	}
+	UObject *GetBleManager();
+
 	UFUNCTION(BlueprintCallable, Category = "BS Subsystem")
 	void SetBleManager(UObject *NewBleManagerSingleton)
 	{
@@ -38,6 +36,9 @@ public:
 	}
 
 private:
+	UPROPERTY()
+	TSubclassOf<UObject> BleManagerClass;
+
 	UPROPERTY()
 	UObject *BleManagerSingleton;
 };
