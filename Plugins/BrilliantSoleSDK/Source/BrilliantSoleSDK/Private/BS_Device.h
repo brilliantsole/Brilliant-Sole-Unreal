@@ -1,19 +1,21 @@
-// Copyright 2024 Zack Qattan @ Brilliant Sole. All Rights Reserves
+// Copyright 2024 Zack Qattan @ Brilliant Sole. All Rights Reserved
 
 #pragma once
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "BS_BleManager.generated.h"
+#include "BS_Device.generated.h"
+
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_Device, Log, Warning);
 
 UCLASS()
-class BRILLIANTSOLESDK_API ABS_BleManager : public AActor
+class ABS_Device : public AActor
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this actor's properties
-	ABS_BleManager();
+	ABS_Device();
 
 protected:
 	// Called when the game starts or when spawned
