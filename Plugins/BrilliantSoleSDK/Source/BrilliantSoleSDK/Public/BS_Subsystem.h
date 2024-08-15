@@ -20,12 +20,17 @@ public:
 	virtual void Deinitialize() override;
 
 	UFUNCTION(BlueprintCallable, Category = "BS Subsystem")
-	AActor *GetBleManager()
+	AActor *GetBleManager() const
 	{
 		return BleManagerSingleton;
 	}
+	UFUNCTION(BlueprintCallable, Category = "BS Subsystem")
+	void SetBleManager(AActor *NewBleManagerSingleton)
+	{
+		BleManagerSingleton = NewBleManagerSingleton;
+	}
 
 private:
-	AActor *CreateBlueprintInstance(const FString &BlueprintPath);
+	UPROPERTY()
 	AActor *BleManagerSingleton;
 };

@@ -1,7 +1,5 @@
 // Copyright 2024 Zack Qattan @ Brilliant Sole. All Rights Reserved
 
-#include "BS_Device.h"
 
-UBS_Device::UBS_Device()
-{
-}
+#include "MyObject.h"
+

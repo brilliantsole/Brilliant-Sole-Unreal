@@ -3,23 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
 #include "BS_BleManager.generated.h"
 
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_BleManager, Log, Warning);
+
 UCLASS()
-class BRILLIANTSOLESDK_API ABS_BleManager : public AActor
+class BRILLIANTSOLESDK_API UBS_BleManager : public UObject
 {
 	GENERATED_BODY()
-
-public:
-	// Sets default values for this actor's properties
-	ABS_BleManager();
-
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-public:
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 };
