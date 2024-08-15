@@ -23,18 +23,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "BS Subsystem")
 	UObject *GetBleManager();
 
-	UFUNCTION(BlueprintCallable, Category = "BS Subsystem")
-	void SetBleManager(UObject *NewBleManagerSingleton)
-	{
-		if (BleManagerSingleton != nullptr)
-		{
-			UE_LOG(LogBS_Subsystem, Warning, TEXT("already assigned BleManagerSingleton"));
-			return;
-		}
-		BleManagerSingleton = NewBleManagerSingleton;
-		UE_LOG(LogBS_Subsystem, Log, TEXT("assigned BleManagerSingleton"));
-	}
-
 private:
 	UPROPERTY()
 	TSubclassOf<UObject> BleManagerClass;

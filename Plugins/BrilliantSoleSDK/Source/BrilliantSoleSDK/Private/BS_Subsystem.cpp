@@ -14,7 +14,7 @@ UBS_Subsystem::UBS_Subsystem()
     }
     else
     {
-        UE_LOG(LogBS_Subsystem, Error, TEXT("failed to find blueprint class"));
+        UE_LOG(LogBS_Subsystem, Error, TEXT("failed to find BleManagerClass"));
     }
 }
 
