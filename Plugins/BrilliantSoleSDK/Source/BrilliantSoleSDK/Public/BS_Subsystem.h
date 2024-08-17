@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "Logging/LogMacros.h"
+#include "Engine/World.h"
+#include "TimerManager.h"
 #include "BS_Subsystem.generated.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogBS_Subsystem, Log, All);
