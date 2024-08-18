@@ -6,7 +6,7 @@
 
 UBS_Subsystem::UBS_Subsystem()
 {
-    static ConstructorHelpers::FClassFinder<UObject> BleManagerClassFinder(TEXT("/Script/Engine.Blueprint'/BrilliantSoleSDK/Blueprints/Ble/BS_BleManagerBlueprint.BS_BleManagerBlueprint_C'"));
+    static ConstructorHelpers::FClassFinder<UObject> BleManagerClassFinder(TEXT("/Script/Engine.Blueprint'/BrilliantSoleSDK/Blueprints/Ble/BS_BleManagerBP.BS_BleManagerBP_C'"));
     if (BleManagerClassFinder.Succeeded())
     {
         BleManagerClass = BleManagerClassFinder.Class;

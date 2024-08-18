@@ -8,6 +8,8 @@
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_PressureSensorDataManager, Log, All);
 
+#define EBS_PressurePositionsMessage BS_MessageGetPressurePositions
+
 UCLASS()
 class UBS_PressureSensorDataManager : public UObject
 {

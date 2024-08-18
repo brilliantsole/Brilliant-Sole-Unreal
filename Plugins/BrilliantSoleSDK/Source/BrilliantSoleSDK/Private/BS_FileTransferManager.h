@@ -8,6 +8,18 @@
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_FileTransferManager, Log, All);
 
+#define EBS_FileTransferMessage BS_MessageGetMaxFileLength,       \
+								BS_MessageGetFileTransferType,    \
+								BS_MessageSetFileTransferType,    \
+								BS_MessageGetFileLength,          \
+								BS_MessageSetFileLength,          \
+								BS_MessageGetFileChecksum,        \
+								BS_MessageSetFileChecksum,        \
+								BS_MessageSetFileTransferCommand, \
+								BS_MessageGetFileTransferStatus,  \
+								BS_MessageGetFileTransferBlock,   \
+								BS_MessageSetFileTransferBlock
+
 UCLASS()
 class UBS_FileTransferManager : public UObject
 {

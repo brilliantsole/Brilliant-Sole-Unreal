@@ -8,6 +8,9 @@
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_SensorConfigurationManager, Log, All);
 
+#define EBS_SensorConfigurationMessage BS_MessageGetSensorConfiguration, \
+									   BS_MessageSetSensorConfiguration
+
 UCLASS()
 class UBS_SensorConfigurationManager : public UObject
 {

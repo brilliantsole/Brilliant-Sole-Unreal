@@ -8,6 +8,23 @@
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_TfliteManager, Log, All);
 
+#define EBS_TfliteMessage BS_MessageTfliteGetName,               \
+						  BS_MessageTfliteSetName,               \
+						  BS_MessageTfliteGetTask,               \
+						  BS_MessageTfliteSetTask,               \
+						  BS_MessageTfliteGetSampleRate,         \
+						  BS_MessageTfliteSetSampleRate,         \
+						  BS_MessageTfliteGetSensorTypes,        \
+						  BS_MessageTfliteSetSensorTypes,        \
+						  BS_MessageTfliteGetIsReady,            \
+						  BS_MessageTfliteGetCaptureDelay,       \
+						  BS_MessageTfliteSetCaptureDelay,       \
+						  BS_MessageTfliteGetThreshold,          \
+						  BS_MessageTfliteSetThreshold,          \
+						  BS_MessageTfliteGetInferencingEnabled, \
+						  BS_MessageTfliteSetInferencingEnabled, \
+						  BS_MessageTfliteInference
+
 UCLASS()
 class UBS_TfliteManager : public UObject
 {

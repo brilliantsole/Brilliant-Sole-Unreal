@@ -37,6 +37,6 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BS File Transfer")
 	UBS_FileTransferManager *FileTransferManager;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BS File Transfer")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BS Tflite")
 	UBS_TfliteManager *TfliteManager;
 };

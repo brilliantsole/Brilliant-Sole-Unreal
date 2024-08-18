@@ -8,6 +8,8 @@
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_VibrationManager, Log, All);
 
+#define EBS_VibrationMessage BS_MessageTriggerVibration
+
 UCLASS()
 class UBS_VibrationManager : public UObject
 {
