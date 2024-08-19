@@ -6,6 +6,7 @@
 #include "UObject/NoExportTypes.h"
 #include "BS_PressureSensorDataManager.h"
 #include "BS_MotionSensorDataManager.h"
+#include "BS_BaseManager.h"
 #include "BS_SensorDataManager.generated.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_SensorDataManager, Log, All);
@@ -14,7 +15,10 @@ DECLARE_LOG_CATEGORY_EXTERN(LogBS_SensorDataManager, Log, All);
 #define EBS_SensorDataMessge BS_MessageSensorData
 
 UCLASS()
-class UBS_SensorDataManager : public UObject
+class UBS_SensorDataManager : public UBS_BaseManager
 {
 	GENERATED_BODY()
+
+	public:
+	bool OnRxMessage(uint8 MessageType, const TArray<uint8> &Message) override;
 };

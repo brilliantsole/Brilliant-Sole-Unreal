@@ -39,4 +39,11 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BS Tflite")
 	UBS_TfliteManager *TfliteManager;
+
+	UFUNCTION(BlueprintCallable, Category = "BS ConnectionManager")
+	void OnRxMessage(const uint8 MessageType, const TArray<uint8> &Message);
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "BS ConnectionManager")
+	void SendTxMessage(const TArray<uint8> &Message, bool SendImmediately);
+	void SendTxMessage(const TArray<uint8> &Message);
 };

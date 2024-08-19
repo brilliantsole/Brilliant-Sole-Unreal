@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
+#include "BS_BaseManager.h"
 #include "BS_InformationManager.generated.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_InformationManager, Log, All);
@@ -17,7 +18,10 @@ DECLARE_LOG_CATEGORY_EXTERN(LogBS_InformationManager, Log, All);
 							   BS_MessageSetCurrentTime
 
 UCLASS()
-class UBS_InformationManager : public UObject
+class UBS_InformationManager : public UBS_BaseManager
 {
 	GENERATED_BODY()
+
+	public:
+	bool OnRxMessage(uint8 MessageType, const TArray<uint8> &Message) override;
 };

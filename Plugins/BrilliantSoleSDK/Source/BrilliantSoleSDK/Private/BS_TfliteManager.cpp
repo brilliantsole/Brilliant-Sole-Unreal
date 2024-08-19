@@ -4,3 +4,8 @@
 #include "Logging/StructuredLog.h"
 
 DEFINE_LOG_CATEGORY(LogBS_TfliteManager);
+
+bool UBS_TfliteManager::OnRxMessage(uint8 MessageType, const TArray<uint8> &Message)
+{
+    return false;
+}

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
+#include "BS_BaseManager.h"
 #include "BS_FileTransferManager.generated.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_FileTransferManager, Log, All);
@@ -21,7 +22,10 @@ DECLARE_LOG_CATEGORY_EXTERN(LogBS_FileTransferManager, Log, All);
 								BS_MessageSetFileTransferBlock
 
 UCLASS()
-class UBS_FileTransferManager : public UObject
+class UBS_FileTransferManager : public UBS_BaseManager
 {
 	GENERATED_BODY()
+
+	public:
+	bool OnRxMessage(uint8 MessageType, const TArray<uint8> &Message) override;
 };

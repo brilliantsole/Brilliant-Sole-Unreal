@@ -4,3 +4,8 @@
 #include "Logging/StructuredLog.h"
 
 DEFINE_LOG_CATEGORY(LogBS_MTU_Manager);
+
+bool UBS_MTU_Manager::OnRxMessage(uint8 MessageType, const TArray<uint8> &Message)
+{
+    return false;
+}

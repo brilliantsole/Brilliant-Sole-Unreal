@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
+#include "BS_BaseManager.h"
 #include "BS_TfliteManager.generated.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_TfliteManager, Log, All);
@@ -26,7 +27,10 @@ DECLARE_LOG_CATEGORY_EXTERN(LogBS_TfliteManager, Log, All);
 						  BS_MessageTfliteInference
 
 UCLASS()
-class UBS_TfliteManager : public UObject
+class UBS_TfliteManager : public UBS_BaseManager
 {
 	GENERATED_BODY()
+
+	public:
+	bool OnRxMessage(uint8 MessageType, const TArray<uint8> &Message) override;
 };

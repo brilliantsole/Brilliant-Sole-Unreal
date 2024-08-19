@@ -4,12 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
+#include "BS_BaseManager.h"
 #include "BS_DeviceInformationManager.generated.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_DeviceInformationManager, Log, All);
 
 UCLASS()
-class UBS_DeviceInformationManager : public UObject
+class UBS_DeviceInformationManager : public UBS_BaseManager
 {
 	GENERATED_BODY()
+
+public:
+	bool OnRxMessage(uint8 MessageType, const TArray<uint8> &Message) override;
 };
