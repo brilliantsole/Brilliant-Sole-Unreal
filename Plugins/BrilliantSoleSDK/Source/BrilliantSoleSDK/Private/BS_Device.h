@@ -3,8 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "BS_InformationManager.h"
 #include "BS_DeviceInformationManager.h"
+#include "BS_BatteryManager.h"
+#include "BS_InformationManager.h"
 #include "BS_SensorDataManager.h"
 #include "BS_VibrationManager.h"
 #include "BS_FileTransferManager.h"
@@ -24,6 +25,9 @@ public:
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BS Device Information")
 	UBS_DeviceInformationManager *DeviceInformationManager;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BS Battery")
+	UBS_BatteryManager *BatteryManager;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BS Information")
 	UBS_InformationManager *InformationManager;

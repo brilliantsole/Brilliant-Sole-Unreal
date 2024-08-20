@@ -13,7 +13,4 @@ UCLASS()
 class UBS_DeviceInformationManager : public UBS_BaseManager
 {
 	GENERATED_BODY()
-
-public:
-	bool OnRxMessage(uint8 MessageType, const TArray<uint8> &Message) override;
 };

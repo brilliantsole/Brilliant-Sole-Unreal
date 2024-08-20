@@ -4,8 +4,3 @@
 #include "Logging/StructuredLog.h"
 
 DEFINE_LOG_CATEGORY(LogBS_DeviceInformationManager);
-
-bool UBS_DeviceInformationManager::OnRxMessage(uint8 MessageType, const TArray<uint8> &Message)
-{
-    return false;
-}

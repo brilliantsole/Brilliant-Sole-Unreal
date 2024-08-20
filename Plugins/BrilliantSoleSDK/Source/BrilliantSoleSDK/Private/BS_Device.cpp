@@ -7,8 +7,8 @@ DEFINE_LOG_CATEGORY(LogBS_Device);
 
 UBS_Device::UBS_Device()
 {
-    DeviceInformationManager = CreateDefaultSubobject<UBS_DeviceInformationManager>(TEXT("DeviceInformationManager"));
-    DeviceInformationManager->SendTxMessage.BindUObject(this, &UBS_Device::SendTxMessage);
+    BatteryManager = CreateDefaultSubobject<UBS_BatteryManager>(TEXT("BatteryManager"));
+    BatteryManager->SendTxMessage.BindUObject(this, &UBS_Device::SendTxMessage);
     InformationManager = CreateDefaultSubobject<UBS_InformationManager>(TEXT("InformationManager"));
     InformationManager->SendTxMessage.BindUObject(this, &UBS_Device::SendTxMessage);
     SensorDataManager = CreateDefaultSubobject<UBS_SensorDataManager>(TEXT("SensorDataManager"));
@@ -25,7 +25,22 @@ void UBS_Device::OnRxMessage(uint8 MessageType, const TArray<uint8> &Message)
 {
     UE_LOG(LogBS_Device, Log, TEXT("message #%u (%u bytes)"), MessageType, Message.Num());
 
-    // FILL
+    if (InformationManager->OnRxMessage(MessageType, Message))
+    {
+        return;
+    }
+    else if (SensorDataManager->OnRxMessage(MessageType, Message))
+    {
+        return;
+    }
+    else if (FileTransferManager->OnRxMessage(MessageType, Message))
+    {
+        return;
+    }
+    else if (TfliteManager->OnRxMessage(MessageType, Message))
+    {
+        return;
+    }
 }
 
 void UBS_Device::SendTxMessage(const TArray<uint8> &Message)

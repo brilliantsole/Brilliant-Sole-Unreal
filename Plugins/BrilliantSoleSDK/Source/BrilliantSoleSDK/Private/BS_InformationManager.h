@@ -9,6 +9,7 @@
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_InformationManager, Log, All);
 
+#define EBS_MTU_Message BS_MessageGetMTU
 #define EBS_DeviceIdMessage BS_MessageGetId
 #define EBS_DeviceNameMessage BS_MessageGetName, \
 							  BS_MessageSetName

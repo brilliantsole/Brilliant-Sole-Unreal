@@ -3,7 +3,6 @@
 #pragma once
 
 #include "BS_BatteryManager.h"
-#include "BS_MTU_Manager.h"
 #include "BS_InformationManager.h"
 #include "BS_SensorConfigurationManager.h"
 #include "BS_SensorDataManager.h"
