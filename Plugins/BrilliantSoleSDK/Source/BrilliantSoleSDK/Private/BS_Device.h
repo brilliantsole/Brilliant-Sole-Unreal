@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "BS_ConnectionStatus.h"
+#include "BS_TxMessage.h"
 #include "BS_DeviceInformationManager.h"
 #include "BS_BatteryManager.h"
 #include "BS_InformationManager.h"
@@ -14,6 +16,8 @@
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_Device, Log, All);
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FConnectionStatusUpdateCallback, EBS_ConnectionStatus, ConnectionStatus);
+
 UCLASS()
 class UBS_Device : public UObject
 {
@@ -22,7 +26,15 @@ class UBS_Device : public UObject
 public:
 	UBS_Device();
 
+	UFUNCTION(BlueprintPure, Category = "BS Device")
+	EBS_ConnectionStatus GetConnectionStatus() const { return ConnectionStatus; }
+
+	UPROPERTY(BlueprintAssignable, Category = "BS Device")
+	FConnectionStatusUpdateCallback OnConnectionStatusUpdate;
+
 protected:
+	// MANAGERS
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BS Device Information")
 	UBS_DeviceInformationManager *DeviceInformationManager;
 
@@ -44,10 +56,34 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BS Tflite")
 	UBS_TfliteManager *TfliteManager;
 
+	// CONNECTION
+
+	UFUNCTION(BlueprintCallable, Category = "BS ConnectionManager")
+	void OnConnectionManagerConnectionStatusUpdate(EBS_ConnectionStatus NewConnectionManagerConnectionStatus);
+
+	// MESSAGING
+
 	UFUNCTION(BlueprintCallable, Category = "BS ConnectionManager")
 	void OnRxMessage(const uint8 MessageType, const TArray<uint8> &Message);
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "BS ConnectionManager")
-	void SendTxMessage(const TArray<uint8> &Message, bool SendImmediately);
-	void SendTxMessage(const TArray<uint8> &Message);
+	void SendTxData(const TArray<uint8> &Data);
+
+	UFUNCTION(BlueprintCallable, Category = "BS ConnectionManager")
+	void OnSendTxData();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BS ConnectionManager")
+	bool bIsSendingTxData = false;
+
+private:
+	EBS_ConnectionStatus ConnectionStatus = EBS_ConnectionStatus::NOT_CONNECTED;
+	void SetConnectionStatus(EBS_ConnectionStatus NewConnectionStatus);
+
+	void SendTxMessages(const TArray<FBS_TxMessage> &TxMessages, bool bSendImmediately = true);
+	void SendPendingTxMessages();
+
+	TArray<FBS_TxMessage> PendingTxMessages;
+	TArray<uint8> TxData;
+
+	void Reset();
 };

@@ -3,6 +3,7 @@
 #include "BS_Subsystem.h"
 #include "Engine/World.h"
 #include "UObject/ConstructorHelpers.h"
+#include "Logging/StructuredLog.h"
 
 UBS_Subsystem::UBS_Subsystem()
 {
@@ -10,11 +11,11 @@ UBS_Subsystem::UBS_Subsystem()
     if (BleManagerClassFinder.Succeeded())
     {
         BleManagerClass = BleManagerClassFinder.Class;
-        UE_LOG(LogBS_Subsystem, Log, TEXT("found BleManagerClass"));
+        UE_LOGFMT(LogBS_Subsystem, Log, "found BleManagerClass");
     }
     else
     {
-        UE_LOG(LogBS_Subsystem, Error, TEXT("failed to find BleManagerClass"));
+        UE_LOGFMT(LogBS_Subsystem, Error, "failed to find BleManagerClass");
     }
 }
 
@@ -33,7 +34,7 @@ UObject *UBS_Subsystem::GetBleManager()
     if (!BleManagerSingleton && BleManagerClass)
     {
         BleManagerSingleton = NewObject<UObject>(this, BleManagerClass);
-        UE_LOG(LogBS_Subsystem, Log, TEXT("Created new BleManager instance: %s"), *BleManagerSingleton->GetName());
+        UE_LOGFMT(LogBS_Subsystem, Log, "Created new BleManager instance: {0}", BleManagerSingleton->GetName());
 
         FName MethodName("Initialize");
         UFunction *InitalizeFunction = BleManagerSingleton->FindFunction(MethodName);
@@ -43,7 +44,7 @@ UObject *UBS_Subsystem::GetBleManager()
         }
         else
         {
-            UE_LOG(LogBS_Subsystem, Error, TEXT("Couldn't find Initialize function"));
+            UE_LOGFMT(LogBS_Subsystem, Error, "Couldn't find Initialize function");
         }
     }
 

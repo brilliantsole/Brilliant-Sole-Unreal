@@ -9,3 +9,8 @@ bool UBS_InformationManager::OnRxMessage(uint8 MessageType, const TArray<uint8> 
 {
     return false;
 }
+
+void UBS_InformationManager::Reset()
+{
+    MTU = 0;
+}

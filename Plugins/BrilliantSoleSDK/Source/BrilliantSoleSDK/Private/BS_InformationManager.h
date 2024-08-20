@@ -23,6 +23,13 @@ class UBS_InformationManager : public UBS_BaseManager
 {
 	GENERATED_BODY()
 
-	public:
+public:
 	bool OnRxMessage(uint8 MessageType, const TArray<uint8> &Message) override;
+
+	uint16 GetMTU() const { return MTU; }
+
+	void Reset() override;
+
+private:
+	uint16 MTU = 0;
 };

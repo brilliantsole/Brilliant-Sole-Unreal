@@ -16,7 +16,7 @@ void UBS_ParseUtils::ParseRxData(const TArray<uint8> &Data, FMessageCallback Mes
         const uint8 MessageDataLength = ByteParser::GetUint16(Data, Offset);
         Offset += 2;
 
-        UE_LOG(LogBS_ParseUtils, Log, TEXT("Message #%u (%u bytes)"), MessageType, MessageDataLength);
+        UE_LOGFMT(LogBS_ParseUtils, Log, "Message #{0} ({1} bytes)", MessageType, MessageDataLength);
 
         TArrayView<uint8> MessageData((uint8 *)(Data.GetData() + Offset), MessageDataLength);
         MessageCallback.ExecuteIfBound(MessageType, (TArray<uint8>)MessageData);
