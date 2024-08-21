@@ -9,8 +9,11 @@
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_BatteryManager, Log, All);
 
-DECLARE_DYNAMIC_DELEGATE_OneParam(FIsBatteryChargingCallback, bool, IsBatteryCharging);
-DECLARE_DYNAMIC_DELEGATE_OneParam(FBatteryCurrentCallback, float, BatteryCurrent);
+DECLARE_DELEGATE_OneParam(FIsBatteryChargingCallbackLocal, bool);
+DECLARE_DELEGATE_OneParam(FBatteryCurrentCallbackLocal, float);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FIsBatteryChargingCallback, bool, IsBatteryCharging);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FBatteryCurrentCallback, float, BatteryCurrent);
 
 #define EBS_BatteryMessage BS_MessageIsBatteryCharging, \
 						   BS_MessageGetBatteryCurrent
@@ -25,15 +28,11 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "BS Battery Manager")
 	bool GetIsBatterCharging() const { return bIsBatteryCharging; }
-
-	UPROPERTY(BlueprintReadWrite, Category = "BS Battery Manager")
-	FIsBatteryChargingCallback OnIsBatteryChargingUpdate;
+	FIsBatteryChargingCallbackLocal OnIsBatteryChargingUpdate;
 
 	UFUNCTION(BlueprintPure, Category = "BS Battery Manager")
 	float GetBatterCurrent() const { return BatteryCurrent; }
-
-	UPROPERTY(BlueprintReadWrite, Category = "BS Battery Manager")
-	FBatteryCurrentCallback OnBatteryCurrentUpdate;
+	FBatteryCurrentCallbackLocal OnBatteryCurrentUpdate;
 
 private:
 	bool bIsBatteryCharging = false;

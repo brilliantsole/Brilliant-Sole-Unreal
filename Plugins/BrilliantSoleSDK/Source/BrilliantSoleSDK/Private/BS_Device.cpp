@@ -10,6 +10,9 @@ UBS_Device::UBS_Device()
 {
     BatteryManager = CreateDefaultSubobject<UBS_BatteryManager>(TEXT("BatteryManager"));
     BatteryManager->SendTxMessages.BindUObject(this, &UBS_Device::SendTxMessages);
+    BatteryManager->OnIsBatteryChargingUpdate.BindUObject(this, &UBS_Device::OnIsBatteryChargingUpdate);
+    BatteryManager->OnBatteryCurrentUpdate.BindUObject(this, &UBS_Device::OnBatteryCurrentUpdate);
+
     InformationManager = CreateDefaultSubobject<UBS_InformationManager>(TEXT("InformationManager"));
     InformationManager->SendTxMessages.BindUObject(this, &UBS_Device::SendTxMessages);
     SensorDataManager = CreateDefaultSubobject<UBS_SensorDataManager>(TEXT("SensorDataManager"));

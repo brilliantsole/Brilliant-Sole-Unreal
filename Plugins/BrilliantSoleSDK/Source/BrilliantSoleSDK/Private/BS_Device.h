@@ -36,28 +36,28 @@ public:
 protected:
 	// MANAGERS
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BS Device Information")
+	UPROPERTY(BlueprintReadOnly, Category = "BS Device Information")
 	UBS_DeviceInformationManager *DeviceInformationManager;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BS Battery")
+	UPROPERTY(BlueprintReadOnly, Category = "BS Battery")
 	UBS_BatteryManager *BatteryManager;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BS Information")
+	UPROPERTY(BlueprintReadOnly, Category = "BS Information")
 	UBS_InformationManager *InformationManager;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BS Sensor Configuration")
+	UPROPERTY(BlueprintReadOnly, Category = "BS Sensor Configuration")
 	UBS_SensorConfigurationManager *SensorConfigurationManager;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BS Sensor Data")
+	UPROPERTY(BlueprintReadOnly, Category = "BS Sensor Data")
 	UBS_SensorDataManager *SensorDataManager;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BS Vibration")
+	UPROPERTY(BlueprintReadOnly, Category = "BS Vibration")
 	UBS_VibrationManager *VibrationManager;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BS File Transfer")
+	UPROPERTY(BlueprintReadOnly, Category = "BS File Transfer")
 	UBS_FileTransferManager *FileTransferManager;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BS Tflite")
+	UPROPERTY(BlueprintReadOnly, Category = "BS Tflite")
 	UBS_TfliteManager *TfliteManager;
 
 	// CONNECTION
@@ -79,6 +79,14 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BS ConnectionManager")
 	bool bIsSendingTxData = false;
 
+	// CALLBACKS
+
+	UPROPERTY(BlueprintAssignable, Category = "BS Battery")
+	FIsBatteryChargingCallback OnIsBatteryCharging;
+
+	UPROPERTY(BlueprintAssignable, Category = "BS Battery")
+	FBatteryCurrentCallback OnBatteryCurrent;
+
 private:
 	EBS_ConnectionStatus ConnectionStatus = EBS_ConnectionStatus::NOT_CONNECTED;
 	void SetConnectionStatus(EBS_ConnectionStatus NewConnectionStatus);
@@ -92,4 +100,9 @@ private:
 	void Reset();
 
 	static TArray<FBS_TxMessage> RequiredTxMessages;
+
+	// CALLBACKS
+
+	void OnBatteryCurrentUpdate(float BatteryCurrent) { OnBatteryCurrent.Broadcast(BatteryCurrent); }
+	void OnIsBatteryChargingUpdate(bool bIsBatteryCharging) { OnIsBatteryCharging.Broadcast(bIsBatteryCharging); }
 };
