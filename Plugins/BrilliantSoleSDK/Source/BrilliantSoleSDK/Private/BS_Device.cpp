@@ -14,6 +14,8 @@ UBS_Device::UBS_Device()
     InformationManager->SendTxMessages.BindUObject(this, &UBS_Device::SendTxMessages);
     SensorDataManager = CreateDefaultSubobject<UBS_SensorDataManager>(TEXT("SensorDataManager"));
     SensorDataManager->SendTxMessages.BindUObject(this, &UBS_Device::SendTxMessages);
+    SensorConfigurationManager = CreateDefaultSubobject<UBS_SensorConfigurationManager>(TEXT("SensorConfigurationManager"));
+    SensorConfigurationManager->SendTxMessages.BindUObject(this, &UBS_Device::SendTxMessages);
     VibrationManager = CreateDefaultSubobject<UBS_VibrationManager>(TEXT("VibrationManager"));
     VibrationManager->SendTxMessages.BindUObject(this, &UBS_Device::SendTxMessages);
     FileTransferManager = CreateDefaultSubobject<UBS_FileTransferManager>(TEXT("FileTransferManager"));
@@ -27,6 +29,7 @@ void UBS_Device::Reset()
     BatteryManager->Reset();
     InformationManager->Reset();
     SensorDataManager->Reset();
+    SensorConfigurationManager->Reset();
     VibrationManager->Reset();
     FileTransferManager->Reset();
     TfliteManager->Reset();
@@ -38,7 +41,7 @@ void UBS_Device::OnConnectionManagerConnectionStatusUpdate(EBS_ConnectionStatus 
     switch (NewConnectionManagerConnectionStatus)
     {
     case EBS_ConnectionStatus::CONNECTED:
-        SendTxMessages({FBS_TxMessage(BS_MessageGetMTU)});
+        SendTxMessages(UBS_Device::RequiredTxMessages);
         break;
     case EBS_ConnectionStatus::NOT_CONNECTED:
         Reset();
@@ -66,7 +69,15 @@ void UBS_Device::OnRxMessage(uint8 MessageType, const TArray<uint8> &Message)
 {
     UE_LOGFMT(LogBS_Device, Log, "message #{0} ({1} bytes)", MessageType, Message.Num());
 
-    if (InformationManager->OnRxMessage(MessageType, Message))
+    if (BatteryManager->OnRxMessage(MessageType, Message))
+    {
+        return;
+    }
+    else if (InformationManager->OnRxMessage(MessageType, Message))
+    {
+        return;
+    }
+    else if (SensorDataManager->OnRxMessage(MessageType, Message))
     {
         return;
     }
@@ -103,7 +114,7 @@ void UBS_Device::SendPendingTxMessages()
 
     TxData.Reset();
 
-    const auto MTU = InformationManager->GetMTU();
+    const auto MaxMessageLength = InformationManager->GetMaxTxMessageLength();
 
     uint8 PendingTxMessageIndex = 0;
     while (PendingTxMessageIndex < PendingTxMessages.Num())
@@ -112,7 +123,7 @@ void UBS_Device::SendPendingTxMessages()
 
         uint16 PendingTxMessageLength = PendingTxMessage.Num();
 
-        bool ShouldAppendTxMessage = MTU == 0 || TxData.Num() + PendingTxMessageLength <= MTU;
+        bool ShouldAppendTxMessage = MaxMessageLength == 0 || TxData.Num() + PendingTxMessageLength <= MaxMessageLength;
         if (ShouldAppendTxMessage)
         {
             UE_LOGFMT(LogBS_Device, Log, "Appending message #{0} ({1} bytes)", PendingTxMessage.Type, PendingTxMessageLength);
@@ -145,3 +156,31 @@ void UBS_Device::OnSendTxData()
     bIsSendingTxData = false;
     SendPendingTxMessages();
 }
+
+TArray<FBS_TxMessage> UBS_Device::RequiredTxMessages = {
+    {BS_MessageIsBatteryCharging},
+    {BS_MessageGetBatteryCurrent},
+
+    {BS_MessageGetId},
+    {BS_MessageGetName},
+    {BS_MessageGetType},
+    {BS_MessageGetCurrentTime},
+
+    {BS_MessageGetSensorConfiguration},
+    {BS_MessageGetSensorScalars},
+    {BS_MessageGetPressurePositions},
+
+    {BS_MessageGetMaxFileLength},
+    {BS_MessageGetFileTransferType},
+    {BS_MessageGetFileLength},
+    {BS_MessageGetFileChecksum},
+    {BS_MessageGetFileTransferStatus},
+
+    {BS_MessageTfliteGetName},
+    {BS_MessageTfliteGetTask},
+    {BS_MessageTfliteGetSampleRate},
+    {BS_MessageTfliteGetSensorTypes},
+    {BS_MessageTfliteGetIsReady},
+    {BS_MessageTfliteGetCaptureDelay},
+    {BS_MessageTfliteGetThreshold},
+    {BS_MessageTfliteGetInferencingEnabled}};

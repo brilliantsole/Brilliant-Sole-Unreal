@@ -13,27 +13,24 @@ bool UBS_InformationManager::OnRxMessage(uint8 MessageType, const TArray<uint8> 
     {
     case BS_MessageGetMTU:
         ParseMTU(Message);
-        return true;
         break;
     case BS_MessageGetId:
-        return true;
         break;
     case BS_MessageGetName:
     case BS_MessageSetName:
-        return true;
         break;
     case BS_MessageGetType:
     case BS_MessageSetType:
-        return true;
         break;
     case BS_MessageGetCurrentTime:
     case BS_MessageSetCurrentTime:
-        return true;
         break;
     default:
         return false;
         break;
     }
+
+    return true;
 }
 
 void UBS_InformationManager::Reset()

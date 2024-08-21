@@ -9,6 +9,7 @@
 #include "BS_BatteryManager.h"
 #include "BS_InformationManager.h"
 #include "BS_SensorDataManager.h"
+#include "BS_SensorConfigurationManager.h"
 #include "BS_VibrationManager.h"
 #include "BS_FileTransferManager.h"
 #include "BS_TfliteManager.h"
@@ -43,6 +44,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BS Information")
 	UBS_InformationManager *InformationManager;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BS Sensor Configuration")
+	UBS_SensorConfigurationManager *SensorConfigurationManager;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BS Sensor Data")
 	UBS_SensorDataManager *SensorDataManager;
@@ -86,4 +90,6 @@ private:
 	TArray<uint8> TxData;
 
 	void Reset();
+
+	static TArray<FBS_TxMessage> RequiredTxMessages;
 };

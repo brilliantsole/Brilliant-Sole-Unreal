@@ -27,6 +27,7 @@ public:
 	bool OnRxMessage(uint8 MessageType, const TArray<uint8> &Message) override;
 
 	uint16 GetMTU() const { return MTU; }
+	uint16 GetMaxTxMessageLength() const { return MTU == 0 ? 0 : MTU - 3; }
 
 	void Reset() override;
 
