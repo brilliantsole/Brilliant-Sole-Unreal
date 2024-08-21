@@ -7,11 +7,11 @@
 class ByteParser
 {
 public:
-    static uint16 GetUint16(const TArray<uint8> &Data, uint8 Offset);
-    static int16 GetInt16(const TArray<uint8> &Data, uint8 Offset);
+    static uint16 GetUint16(const TArray<uint8> &Data, uint8 Offset = 0);
+    static int16 GetInt16(const TArray<uint8> &Data, uint8 Offset = 0);
 
-    static uint32 GetUint32(const TArray<uint8> &Data, uint8 Offset);
+    static uint32 GetUint32(const TArray<uint8> &Data, uint8 Offset = 0);
 
-    static float GetFloat(const TArray<uint8> &Data, uint8 Offset);
-    static double GetDouble(const TArray<uint8> &Data, uint8 Offset);
+    static float GetFloat(const TArray<uint8> &Data, uint8 Offset = 0);
+    static double GetDouble(const TArray<uint8> &Data, uint8 Offset = 0);
 };

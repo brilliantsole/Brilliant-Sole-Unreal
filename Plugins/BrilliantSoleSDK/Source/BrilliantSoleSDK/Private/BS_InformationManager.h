@@ -32,4 +32,5 @@ public:
 
 private:
 	uint16 MTU = 0;
+	void ParseMTU(const TArray<uint8> &Message);
 };

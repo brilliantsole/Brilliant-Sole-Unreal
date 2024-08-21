@@ -9,3 +9,12 @@ FString UBleUtils::HexToUUID(const FString &InHexString)
 	return HexString;
 }
 ```
+
+and modify BleGoodiesDevice.java's `BleGoodiesDevice::connect` function:
+
+```
+public void connect() {
+	mConnection = mDevice.connectGatt(mActivity, false, getGattCallback());
+	mConnection.requestMtu(517);
+}
+```
