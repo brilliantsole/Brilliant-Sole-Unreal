@@ -8,6 +8,9 @@ DEFINE_LOG_CATEGORY(LogBS_Device);
 
 UBS_Device::UBS_Device()
 {
+
+    DeviceInformationManager = CreateDefaultSubobject<UBS_DeviceInformationManager>(TEXT("DeviceInformationManager"));
+
     BatteryManager = CreateDefaultSubobject<UBS_BatteryManager>(TEXT("BatteryManager"));
     BatteryManager->SendTxMessages.BindUObject(this, &UBS_Device::SendTxMessages);
     BatteryManager->OnIsBatteryChargingUpdate.BindUObject(this, &UBS_Device::OnIsBatteryChargingUpdate);
@@ -15,6 +18,12 @@ UBS_Device::UBS_Device()
 
     InformationManager = CreateDefaultSubobject<UBS_InformationManager>(TEXT("InformationManager"));
     InformationManager->SendTxMessages.BindUObject(this, &UBS_Device::SendTxMessages);
+    InformationManager->OnMTU_Update.BindUObject(this, &UBS_Device::OnMTU_Update);
+    InformationManager->OnIdUpdate.BindUObject(this, &UBS_Device::OnIdUpdate);
+    InformationManager->OnNameUpdate.BindUObject(this, &UBS_Device::OnNameUpdate);
+    InformationManager->OnTypeUpdate.BindUObject(this, &UBS_Device::OnTypeUpdate);
+    InformationManager->OnCurrentTimeUpdate.BindUObject(this, &UBS_Device::OnCurrentTimeUpdate);
+
     SensorDataManager = CreateDefaultSubobject<UBS_SensorDataManager>(TEXT("SensorDataManager"));
     SensorDataManager->SendTxMessages.BindUObject(this, &UBS_Device::SendTxMessages);
     SensorConfigurationManager = CreateDefaultSubobject<UBS_SensorConfigurationManager>(TEXT("SensorConfigurationManager"));
@@ -29,6 +38,8 @@ UBS_Device::UBS_Device()
 
 void UBS_Device::Reset()
 {
+
+    DeviceInformationManager->Reset();
     BatteryManager->Reset();
     InformationManager->Reset();
     SensorDataManager->Reset();

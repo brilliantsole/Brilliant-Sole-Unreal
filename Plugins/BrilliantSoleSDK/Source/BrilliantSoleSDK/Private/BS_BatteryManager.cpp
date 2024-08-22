@@ -36,3 +36,9 @@ void UBS_BatteryManager::ParseBatteryCurrent(const TArray<uint8> &Message)
     UE_LOGFMT(LogBS_BatteryManager, Log, "Battery Current: {0}mAh", BatteryCurrent);
     OnBatteryCurrentUpdate.ExecuteIfBound(BatteryCurrent);
 }
+
+void UBS_BatteryManager::Reset()
+{
+    bIsBatteryCharging = false;
+    BatteryCurrent = 0.0f;
+}

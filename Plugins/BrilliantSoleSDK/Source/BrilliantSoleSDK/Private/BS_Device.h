@@ -27,6 +27,11 @@ class UBS_Device : public UObject
 public:
 	UBS_Device();
 
+private:
+	void Reset();
+
+	// CONNECTION START
+public:
 	UFUNCTION(BlueprintPure, Category = "BS Device")
 	EBS_ConnectionStatus GetConnectionStatus() const { return ConnectionStatus; }
 
@@ -34,39 +39,16 @@ public:
 	FConnectionStatusUpdateCallback OnConnectionStatusUpdate;
 
 protected:
-	// MANAGERS
-
-	UPROPERTY(BlueprintReadOnly, Category = "BS Device Information")
-	UBS_DeviceInformationManager *DeviceInformationManager;
-
-	UPROPERTY(BlueprintReadOnly, Category = "BS Battery")
-	UBS_BatteryManager *BatteryManager;
-
-	UPROPERTY(BlueprintReadOnly, Category = "BS Information")
-	UBS_InformationManager *InformationManager;
-
-	UPROPERTY(BlueprintReadOnly, Category = "BS Sensor Configuration")
-	UBS_SensorConfigurationManager *SensorConfigurationManager;
-
-	UPROPERTY(BlueprintReadOnly, Category = "BS Sensor Data")
-	UBS_SensorDataManager *SensorDataManager;
-
-	UPROPERTY(BlueprintReadOnly, Category = "BS Vibration")
-	UBS_VibrationManager *VibrationManager;
-
-	UPROPERTY(BlueprintReadOnly, Category = "BS File Transfer")
-	UBS_FileTransferManager *FileTransferManager;
-
-	UPROPERTY(BlueprintReadOnly, Category = "BS Tflite")
-	UBS_TfliteManager *TfliteManager;
-
-	// CONNECTION
-
 	UFUNCTION(BlueprintCallable, Category = "BS ConnectionManager")
 	void OnConnectionManagerConnectionStatusUpdate(EBS_ConnectionStatus NewConnectionManagerConnectionStatus);
 
-	// MESSAGING
+private:
+	EBS_ConnectionStatus ConnectionStatus = EBS_ConnectionStatus::NOT_CONNECTED;
+	void SetConnectionStatus(EBS_ConnectionStatus NewConnectionStatus);
+	// CONNECTION END
 
+	// MESSAGING START
+protected:
 	UFUNCTION(BlueprintCallable, Category = "BS ConnectionManager")
 	void OnRxMessage(const uint8 MessageType, const TArray<uint8> &Message);
 
@@ -79,7 +61,36 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BS ConnectionManager")
 	bool bIsSendingTxData = false;
 
-	// CALLBACKS
+private:
+	void SendTxMessages(const TArray<FBS_TxMessage> &TxMessages, bool bSendImmediately = true);
+	void SendPendingTxMessages();
+
+	TArray<FBS_TxMessage> PendingTxMessages;
+	TArray<uint8> TxData;
+
+	static TArray<FBS_TxMessage> RequiredTxMessages;
+	// MESSAGING END
+
+	// DEVICE INFORMATION START
+public:
+protected:
+	UPROPERTY(BlueprintReadOnly, Category = "BS Device Information")
+	UBS_DeviceInformationManager *DeviceInformationManager;
+
+private:
+	// DEVICE INFORMATION END
+
+	// BATTERY START
+public:
+	UFUNCTION(BlueprintPure, Category = "BS Battery")
+	uint8 IsBatteryCharging() const { return BatteryManager->GetIsBatteryCharging(); }
+
+	UFUNCTION(BlueprintPure, Category = "BS Battery")
+	float BatteryCurrent() const { return BatteryManager->GetBatteryCurrent(); }
+
+protected:
+	UPROPERTY(BlueprintReadOnly, Category = "BS Battery")
+	UBS_BatteryManager *BatteryManager;
 
 	UPROPERTY(BlueprintAssignable, Category = "BS Battery")
 	FIsBatteryChargingCallback OnIsBatteryCharging;
@@ -88,21 +99,96 @@ protected:
 	FBatteryCurrentCallback OnBatteryCurrent;
 
 private:
-	EBS_ConnectionStatus ConnectionStatus = EBS_ConnectionStatus::NOT_CONNECTED;
-	void SetConnectionStatus(EBS_ConnectionStatus NewConnectionStatus);
-
-	void SendTxMessages(const TArray<FBS_TxMessage> &TxMessages, bool bSendImmediately = true);
-	void SendPendingTxMessages();
-
-	TArray<FBS_TxMessage> PendingTxMessages;
-	TArray<uint8> TxData;
-
-	void Reset();
-
-	static TArray<FBS_TxMessage> RequiredTxMessages;
-
-	// CALLBACKS
-
 	void OnBatteryCurrentUpdate(float BatteryCurrent) { OnBatteryCurrent.Broadcast(BatteryCurrent); }
 	void OnIsBatteryChargingUpdate(bool bIsBatteryCharging) { OnIsBatteryCharging.Broadcast(bIsBatteryCharging); }
+	// BATTERY END
+
+	// INFORMATION START
+public:
+	UFUNCTION(BlueprintPure, Category = "BS Information")
+	int32 MTU() const { return InformationManager->GetMTU(); }
+
+	UFUNCTION(BlueprintPure, Category = "BS Information")
+	FString Id() const { return InformationManager->GetId(); }
+
+	UFUNCTION(BlueprintPure, Category = "BS Information")
+	FString Name() const { return InformationManager->GetName(); }
+
+	UFUNCTION(BlueprintPure, Category = "BS Information")
+	EBS_DeviceType Type() const { return InformationManager->GetType(); }
+
+	UFUNCTION(BlueprintPure, Category = "BS Information")
+	float CurrentTime() const { return InformationManager->GetCurrentTime(); }
+
+protected:
+	UPROPERTY(BlueprintReadOnly, Category = "BS Information")
+	UBS_InformationManager *InformationManager;
+
+	UPROPERTY(BlueprintAssignable, Category = "BS Information")
+	FMTU_Callback OnMTU;
+
+	UPROPERTY(BlueprintAssignable, Category = "BS Information")
+	FIdCallback OnId;
+
+	UPROPERTY(BlueprintAssignable, Category = "BS Information")
+	FNameCallback OnName;
+
+	UPROPERTY(BlueprintAssignable, Category = "BS Information")
+	FTypeCallback OnType;
+
+	UPROPERTY(BlueprintAssignable, Category = "BS Information")
+	FCurrentTimeCallback OnCurrentTime;
+
+private:
+	void OnMTU_Update(uint16 MTU) { OnMTU.Broadcast(MTU); }
+	void OnIdUpdate(FString &Id) { OnId.Broadcast(Id); }
+	void OnNameUpdate(FString &Name) { OnName.Broadcast(Name); }
+	void OnTypeUpdate(EBS_DeviceType Type) { OnType.Broadcast(Type); }
+	void OnCurrentTimeUpdate(uint64 CurrentTime) { OnCurrentTime.Broadcast(CurrentTime); }
+	// INFORMATION END
+
+	// SENSOR CONFIGURATION START
+public:
+protected:
+	UPROPERTY(BlueprintReadOnly, Category = "BS Sensor Configuration")
+	UBS_SensorConfigurationManager *SensorConfigurationManager;
+
+private:
+	// SENSOR CONFIGURATION END
+
+	// SENSOR DATA START
+public:
+protected:
+	UPROPERTY(BlueprintReadOnly, Category = "BS Sensor Data")
+	UBS_SensorDataManager *SensorDataManager;
+
+private:
+	// SENSOR DATA END
+
+	// VIBRATION START
+public:
+protected:
+	UPROPERTY(BlueprintReadOnly, Category = "BS Vibration")
+	UBS_VibrationManager *VibrationManager;
+
+private:
+	// VIBRATION END
+
+	// FILE TRANSFER START
+public:
+protected:
+	UPROPERTY(BlueprintReadOnly, Category = "BS File Transfer")
+	UBS_FileTransferManager *FileTransferManager;
+
+private:
+	// FILE TRANSFER END
+
+	// TFLITE START
+public:
+protected:
+	UPROPERTY(BlueprintReadOnly, Category = "BS Tflite")
+	UBS_TfliteManager *TfliteManager;
+
+private:
+	// TFLITE END
 };

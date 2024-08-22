@@ -36,8 +36,8 @@ struct FBS_TxMessage
         Array.Add(Type);
 
         uint16 DataLength = DataNum();
-        Array.Add((DataLength >> 8) & 0xFF); // High byte
         Array.Add(DataLength & 0xFF);        // Low byte
+        Array.Add((DataLength >> 8) & 0xFF); // High byte
 
         if (DataLength > 0)
         {
