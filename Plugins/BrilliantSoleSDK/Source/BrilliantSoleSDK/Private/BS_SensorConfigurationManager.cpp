@@ -29,7 +29,6 @@ void UBS_SensorConfigurationManager::Reset()
 void UBS_SensorConfigurationManager::ParseSensorConfiguration(const TArray<uint8> &Message)
 {
     SensorConfiguration.Parse(Message);
-    UE_LOGFMT(LogBS_SensorConfigurationManager, Log, "Updated SensorConfiguration:\n{0}", SensorConfiguration.ToString());
     OnSensorConfigurationUpdate.ExecuteIfBound(SensorConfiguration);
 }
 
