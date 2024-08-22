@@ -67,11 +67,37 @@ void UBS_InformationManager::ParseName(const TArray<uint8> &Message)
     OnNameUpdate.ExecuteIfBound(Name);
 }
 
+void UBS_InformationManager::SetName(const FString &NewName)
+{
+    if (NewName == Name)
+    {
+        UE_LOGFMT(LogBS_InformationManager, Log, "Redundant Name - not setting");
+        return;
+    }
+    UE_LOGFMT(LogBS_InformationManager, Log, "Setting Name to {0}...", NewName);
+
+    const TArray<uint8> TxMessage = ByteParser::StringToArray(NewName);
+    SendTxMessages.ExecuteIfBound({{BS_MessageSetName, TxMessage}}, true);
+}
+
 void UBS_InformationManager::ParseType(const TArray<uint8> &Message)
 {
     Type = (EBS_DeviceType)Message[0];
     UE_LOGFMT(LogBS_InformationManager, Log, "Parsed Type: {0}", UEnum::GetValueAsString(Type));
     OnTypeUpdate.ExecuteIfBound(Type);
+}
+
+void UBS_InformationManager::SetType(const EBS_DeviceType NewType)
+{
+    if (NewType == Type)
+    {
+        UE_LOGFMT(LogBS_InformationManager, Log, "Redundant Type - not setting");
+        return;
+    }
+    UE_LOGFMT(LogBS_InformationManager, Log, "Setting Type to {0}...", UEnum::GetValueAsString(NewType));
+
+    const TArray<uint8> TxMessage = {static_cast<uint8>(NewType)};
+    SendTxMessages.ExecuteIfBound({{BS_MessageSetType, TxMessage}}, true);
 }
 
 void UBS_InformationManager::ParseCurrentTime(const TArray<uint8> &Message)
@@ -80,16 +106,21 @@ void UBS_InformationManager::ParseCurrentTime(const TArray<uint8> &Message)
     UE_LOGFMT(LogBS_InformationManager, Log, "Parsed CurrentTime: {0}", CurrentTime);
     if (CurrentTime == 0)
     {
-        FDateTime Now = FDateTime::UtcNow();
-        FDateTime UnixEpoch(1970, 1, 1);
-        FTimespan Timespan = Now - UnixEpoch;
-        uint64 Milliseconds = static_cast<uint64>(Timespan.GetTotalMilliseconds());
-        UE_LOGFMT(LogBS_InformationManager, Log, "Updating CurrentTime to {0}", Milliseconds);
-        const TArray<uint8> TxMessage = ByteParser::Uint64AsArray(Milliseconds);
-        SendTxMessages.ExecuteIfBound({{BS_MessageSetCurrentTime, TxMessage}}, true);
+        UpdateCurrentTime();
     }
     else
     {
         OnCurrentTimeUpdate.ExecuteIfBound(CurrentTime);
     }
+}
+
+void UBS_InformationManager::UpdateCurrentTime()
+{
+    FDateTime Now = FDateTime::UtcNow();
+    FDateTime UnixEpoch(1970, 1, 1);
+    FTimespan Timespan = Now - UnixEpoch;
+    uint64 Milliseconds = static_cast<uint64>(Timespan.GetTotalMilliseconds());
+    UE_LOGFMT(LogBS_InformationManager, Log, "Updating CurrentTime to {0}", Milliseconds);
+    const TArray<uint8> TxMessage = ByteParser::Uint64AsArray(Milliseconds);
+    SendTxMessages.ExecuteIfBound({{BS_MessageSetCurrentTime, TxMessage}}, true);
 }

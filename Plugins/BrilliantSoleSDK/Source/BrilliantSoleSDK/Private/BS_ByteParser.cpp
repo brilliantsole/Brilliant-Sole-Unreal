@@ -130,3 +130,11 @@ TArray<uint8> ByteParser::Uint64AsArray(const uint64 &Value)
     }
     return ByteArray;
 }
+
+TArray<uint8> ByteParser::StringToArray(const FString &String)
+{
+    TArray<uint8> ByteArray;
+    FTCHARToUTF8 UTF8String(*String);
+    ByteArray.Append(reinterpret_cast<const uint8 *>(UTF8String.Get()), UTF8String.Length());
+    return ByteArray;
+}

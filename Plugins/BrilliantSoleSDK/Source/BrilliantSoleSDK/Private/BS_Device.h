@@ -114,8 +114,14 @@ public:
 	UFUNCTION(BlueprintPure, Category = "BS Information")
 	FString Name() const { return InformationManager->GetName(); }
 
+	UFUNCTION(BlueprintCallable, Category = "BS Information")
+	void SetName(const FString &NewName) { InformationManager->SetName(NewName); }
+
 	UFUNCTION(BlueprintPure, Category = "BS Information")
 	EBS_DeviceType Type() const { return InformationManager->GetType(); }
+
+	UFUNCTION(BlueprintCallable, Category = "BS Information")
+	void SetType(const EBS_DeviceType NewType) { InformationManager->SetType(NewType); }
 
 	UFUNCTION(BlueprintPure, Category = "BS Information")
 	float CurrentTime() const { return InformationManager->GetCurrentTime(); }

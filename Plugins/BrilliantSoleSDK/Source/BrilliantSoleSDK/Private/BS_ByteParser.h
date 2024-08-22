@@ -17,6 +17,7 @@ public:
     static double GetDouble(const TArray<uint8> &Data, uint8 Offset = 0);
 
     static FString GetString(const TArray<uint8> &Data);
+    static TArray<uint8> StringToArray(const FString &String);
 
     static TArray<uint8> Uint64AsArray(const uint64 &Value);
 };

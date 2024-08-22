@@ -70,6 +70,8 @@ public:
 	const FString &GetName() const { return Name; }
 	FNameCallbackLocal OnNameUpdate;
 
+	void SetName(const FString &NewName);
+
 private:
 	FString Name;
 	void ParseName(const TArray<uint8> &Message);
@@ -79,6 +81,8 @@ private:
 public:
 	const EBS_DeviceType &GetType() const { return Type; }
 	FTypeCallbackLocal OnTypeUpdate;
+
+	void SetType(const EBS_DeviceType NewType);
 
 private:
 	EBS_DeviceType Type;
@@ -93,5 +97,7 @@ public:
 private:
 	uint64 CurrentTime;
 	void ParseCurrentTime(const TArray<uint8> &Message);
+
+	void UpdateCurrentTime();
 	// CURRENT TIME END
 };
