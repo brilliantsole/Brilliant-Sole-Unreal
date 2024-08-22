@@ -70,6 +70,8 @@ public:
 	const FString &GetName() const { return Name; }
 	FNameCallbackLocal OnNameUpdate;
 
+	static const uint8 MinNameLength;
+	static const uint8 MaxNameLength;
 	void SetName(const FString &NewName);
 
 private:

@@ -26,8 +26,11 @@ UBS_Device::UBS_Device()
 
     SensorDataManager = CreateDefaultSubobject<UBS_SensorDataManager>(TEXT("SensorDataManager"));
     SensorDataManager->SendTxMessages.BindUObject(this, &UBS_Device::SendTxMessages);
+
     SensorConfigurationManager = CreateDefaultSubobject<UBS_SensorConfigurationManager>(TEXT("SensorConfigurationManager"));
     SensorConfigurationManager->SendTxMessages.BindUObject(this, &UBS_Device::SendTxMessages);
+    SensorConfigurationManager->OnSensorConfigurationUpdate.BindUObject(this, &UBS_Device::OnSensorConfigurationUpdate);
+
     VibrationManager = CreateDefaultSubobject<UBS_VibrationManager>(TEXT("VibrationManager"));
     VibrationManager->SendTxMessages.BindUObject(this, &UBS_Device::SendTxMessages);
     FileTransferManager = CreateDefaultSubobject<UBS_FileTransferManager>(TEXT("FileTransferManager"));
@@ -91,7 +94,7 @@ void UBS_Device::OnRxMessage(uint8 MessageType, const TArray<uint8> &Message)
     {
         return;
     }
-    else if (SensorDataManager->OnRxMessage(MessageType, Message))
+    else if (SensorConfigurationManager->OnRxMessage(MessageType, Message))
     {
         return;
     }

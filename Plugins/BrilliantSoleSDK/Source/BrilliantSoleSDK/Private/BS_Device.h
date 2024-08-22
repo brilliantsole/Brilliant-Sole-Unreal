@@ -155,11 +155,18 @@ private:
 
 	// SENSOR CONFIGURATION START
 public:
+	UFUNCTION(BlueprintPure, Category = "BS Sensor Configuration")
+	FBS_SensorConfiguration SensorConfiguration() const { return SensorConfigurationManager->GetSensorConfiguration(); }
+
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "BS Sensor Configuration")
 	UBS_SensorConfigurationManager *SensorConfigurationManager;
 
+	UPROPERTY(BlueprintAssignable, Category = "BS Sensor Configuration")
+	FSensorConfigurationCallback OnSensorConfiguration;
+
 private:
+	void OnSensorConfigurationUpdate(FBS_SensorConfiguration &SensorConfiguration) { OnSensorConfiguration.Broadcast(SensorConfiguration); }
 	// SENSOR CONFIGURATION END
 
 	// SENSOR DATA START

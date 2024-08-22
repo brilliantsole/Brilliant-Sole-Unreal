@@ -67,11 +67,19 @@ void UBS_InformationManager::ParseName(const TArray<uint8> &Message)
     OnNameUpdate.ExecuteIfBound(Name);
 }
 
+const uint8 UBS_InformationManager::MinNameLength = 2;
+const uint8 UBS_InformationManager::MaxNameLength = 30;
 void UBS_InformationManager::SetName(const FString &NewName)
 {
     if (NewName == Name)
     {
-        UE_LOGFMT(LogBS_InformationManager, Log, "Redundant Name - not setting");
+        UE_LOGFMT(LogBS_InformationManager, Warning, "Redundant Name - not setting");
+        return;
+    }
+    const auto NewNameLength = NewName.Len();
+    if (NewNameLength < MinNameLength || NewNameLength > MaxNameLength)
+    {
+        UE_LOGFMT(LogBS_InformationManager, Warning, "Name must be between {0}-{1} characters long (got {2})", MinNameLength, MaxNameLength, NewNameLength);
         return;
     }
     UE_LOGFMT(LogBS_InformationManager, Log, "Setting Name to {0}...", NewName);
