@@ -29,10 +29,13 @@ public:
 	FBS_SensorConfiguration &GetSensorConfiguration() { return SensorConfiguration; }
 	FSensorConfigurationCallbackLocal OnSensorConfigurationUpdate;
 
+	void SetSensorConfiguration(const FBS_SensorConfiguration &NewSensorConfiguration);
+	void ClearSensorConfiguration();
+
 private:
 	void ParseSensorConfiguration(const TArray<uint8> &Message);
 	FBS_SensorConfiguration SensorConfiguration;
 
-	void SetSensorConfiguration(const FBS_SensorConfiguration &NewConfiguration);
-	void ClearSensorConfiguration();
+	static const FBS_SensorConfiguration ZeroSensorConfiguration;
+	static const FBS_SensorConfiguration InitializeZeroSensorConfiguration();
 };

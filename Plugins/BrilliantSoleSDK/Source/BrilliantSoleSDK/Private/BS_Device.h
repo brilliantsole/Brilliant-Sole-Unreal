@@ -45,6 +45,9 @@ protected:
 private:
 	EBS_ConnectionStatus ConnectionStatus = EBS_ConnectionStatus::NOT_CONNECTED;
 	void SetConnectionStatus(EBS_ConnectionStatus NewConnectionStatus);
+
+	void CheckIfFullyConnected();
+	TSet<uint8> ReceivedTxMessages;
 	// CONNECTION END
 
 	// MESSAGING START
@@ -68,7 +71,9 @@ private:
 	TArray<FBS_TxMessage> PendingTxMessages;
 	TArray<uint8> TxData;
 
-	static TArray<FBS_TxMessage> RequiredTxMessages;
+	static const TArray<uint8> RequiredTxMessageTypes;
+	static const TArray<FBS_TxMessage> RequiredTxMessages;
+	static const TArray<FBS_TxMessage> InitializeRequiredTxMessages();
 	// MESSAGING END
 
 	// DEVICE INFORMATION START
@@ -157,6 +162,12 @@ private:
 public:
 	UFUNCTION(BlueprintPure, Category = "BS Sensor Configuration")
 	FBS_SensorConfiguration SensorConfiguration() const { return SensorConfigurationManager->GetSensorConfiguration(); }
+
+	UFUNCTION(BlueprintCallable, Category = "BS Sensor Configuration")
+	void SetSensorConfiguration(const FBS_SensorConfiguration NewSensorConfiguration) { SensorConfigurationManager->SetSensorConfiguration(NewSensorConfiguration); }
+
+	UFUNCTION(BlueprintCallable, Category = "BS Sensor Configuration")
+	void ClearSensorConfiguration() { SensorConfigurationManager->ClearSensorConfiguration(); }
 
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "BS Sensor Configuration")

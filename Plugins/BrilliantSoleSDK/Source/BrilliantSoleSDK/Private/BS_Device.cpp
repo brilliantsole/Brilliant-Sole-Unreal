@@ -8,6 +8,7 @@ DEFINE_LOG_CATEGORY(LogBS_Device);
 
 UBS_Device::UBS_Device()
 {
+    ReceivedTxMessages.Reserve(RequiredTxMessageTypes.Num());
 
     DeviceInformationManager = CreateDefaultSubobject<UBS_DeviceInformationManager>(TEXT("DeviceInformationManager"));
 
@@ -41,6 +42,7 @@ UBS_Device::UBS_Device()
 
 void UBS_Device::Reset()
 {
+    ReceivedTxMessages.Reset();
 
     DeviceInformationManager->Reset();
     BatteryManager->Reset();
@@ -52,6 +54,7 @@ void UBS_Device::Reset()
     TfliteManager->Reset();
 }
 
+// CONNECTION START
 void UBS_Device::OnConnectionManagerConnectionStatusUpdate(EBS_ConnectionStatus NewConnectionManagerConnectionStatus)
 {
     UE_LOGFMT(LogBS_Device, Log, "ConnectionManager ConnectionStatus: {0}", UEnum::GetValueAsString(NewConnectionManagerConnectionStatus));
@@ -82,33 +85,74 @@ void UBS_Device::SetConnectionStatus(EBS_ConnectionStatus NewConnectionStatus)
     OnConnectionStatusUpdate.Broadcast(ConnectionStatus);
 }
 
+void UBS_Device::CheckIfFullyConnected()
+{
+    UE_LOGFMT(LogBS_Device, Log, "Checking if Fully Connected...");
+    if (ConnectionStatus != EBS_ConnectionStatus::CONNECTING)
+    {
+        UE_LOGFMT(LogBS_Device, Log, "Not Connecting, stopping now");
+        return;
+    }
+    if (InformationManager->GetCurrentTime() == 0)
+    {
+        UE_LOGFMT(LogBS_Device, Log, "CurrentTime is 0, stopping now");
+        return;
+    }
+
+    bool HasReceivedAllRequiredTxMessages = true;
+    for (uint8 TxMessageType : RequiredTxMessageTypes)
+    {
+        if (!ReceivedTxMessages.Contains(TxMessageType))
+        {
+            UE_LOGFMT(LogBS_Device, Log, "Doesn't contain TxMessageType #{0}", TxMessageType);
+            HasReceivedAllRequiredTxMessages = false;
+            break;
+        }
+    }
+    UE_LOGFMT(LogBS_Device, Log, "HasReceivedAllRequiredTxMessages? {0}", HasReceivedAllRequiredTxMessages);
+    if (!HasReceivedAllRequiredTxMessages)
+    {
+        return;
+    }
+    SetConnectionStatus(EBS_ConnectionStatus::CONNECTED);
+}
+
+// CONNECTION END
+
+// MESSAGING START
 void UBS_Device::OnRxMessage(uint8 MessageType, const TArray<uint8> &Message)
 {
     UE_LOGFMT(LogBS_Device, Log, "message #{0} ({1} bytes)", MessageType, Message.Num());
 
     if (BatteryManager->OnRxMessage(MessageType, Message))
     {
-        return;
+        UE_LOGFMT(LogBS_Device, Log, "Parsed BatteryManager Message");
     }
     else if (InformationManager->OnRxMessage(MessageType, Message))
     {
-        return;
+        UE_LOGFMT(LogBS_Device, Log, "Parsed InformationManager Message");
     }
     else if (SensorConfigurationManager->OnRxMessage(MessageType, Message))
     {
-        return;
+        UE_LOGFMT(LogBS_Device, Log, "Parsed SensorConfigurationManager Message");
     }
     else if (SensorDataManager->OnRxMessage(MessageType, Message))
     {
-        return;
+        UE_LOGFMT(LogBS_Device, Log, "Parsed SensorDataManager Message");
     }
     else if (FileTransferManager->OnRxMessage(MessageType, Message))
     {
-        return;
+        UE_LOGFMT(LogBS_Device, Log, "Parsed FileTransferManager Message");
     }
     else if (TfliteManager->OnRxMessage(MessageType, Message))
     {
-        return;
+        UE_LOGFMT(LogBS_Device, Log, "Parsed TfliteManager Message");
+    }
+
+    if (ConnectionStatus == EBS_ConnectionStatus::CONNECTING)
+    {
+        ReceivedTxMessages.Emplace(MessageType);
+        CheckIfFullyConnected();
     }
 }
 
@@ -174,30 +218,43 @@ void UBS_Device::OnSendTxData()
     SendPendingTxMessages();
 }
 
-TArray<FBS_TxMessage> UBS_Device::RequiredTxMessages = {
-    {BS_MessageIsBatteryCharging},
-    {BS_MessageGetBatteryCurrent},
+const TArray<uint8> UBS_Device::RequiredTxMessageTypes = {
+    BS_MessageIsBatteryCharging,
+    BS_MessageGetBatteryCurrent,
 
-    {BS_MessageGetId},
-    {BS_MessageGetName},
-    {BS_MessageGetType},
-    {BS_MessageGetCurrentTime},
+    BS_MessageGetId,
+    BS_MessageGetName,
+    BS_MessageGetType,
+    BS_MessageGetCurrentTime,
 
-    {BS_MessageGetSensorConfiguration},
-    {BS_MessageGetSensorScalars},
-    {BS_MessageGetPressurePositions},
+    BS_MessageGetSensorConfiguration,
+    BS_MessageGetSensorScalars,
+    BS_MessageGetPressurePositions,
 
-    {BS_MessageGetMaxFileLength},
-    {BS_MessageGetFileTransferType},
-    {BS_MessageGetFileLength},
-    {BS_MessageGetFileChecksum},
-    {BS_MessageGetFileTransferStatus},
+    BS_MessageGetMaxFileLength,
+    BS_MessageGetFileTransferType,
+    BS_MessageGetFileLength,
+    BS_MessageGetFileChecksum,
+    BS_MessageGetFileTransferStatus,
 
-    {BS_MessageTfliteGetName},
-    {BS_MessageTfliteGetTask},
-    {BS_MessageTfliteGetSampleRate},
-    {BS_MessageTfliteGetSensorTypes},
-    {BS_MessageTfliteGetIsReady},
-    {BS_MessageTfliteGetCaptureDelay},
-    {BS_MessageTfliteGetThreshold},
-    {BS_MessageTfliteGetInferencingEnabled}};
+    BS_MessageTfliteGetName,
+    BS_MessageTfliteGetTask,
+    BS_MessageTfliteGetSampleRate,
+    BS_MessageTfliteGetSensorTypes,
+    BS_MessageTfliteGetIsReady,
+    BS_MessageTfliteGetCaptureDelay,
+    BS_MessageTfliteGetThreshold,
+    BS_MessageTfliteGetInferencingEnabled};
+
+const TArray<FBS_TxMessage> UBS_Device::InitializeRequiredTxMessages()
+{
+    TArray<FBS_TxMessage> _RequiredTxMessages;
+    for (uint8 TxMessageType : UBS_Device::RequiredTxMessageTypes)
+    {
+        _RequiredTxMessages.Add({TxMessageType});
+    }
+    return _RequiredTxMessages;
+}
+const TArray<FBS_TxMessage> UBS_Device::RequiredTxMessages = UBS_Device::InitializeRequiredTxMessages();
+
+// MESSAGING END

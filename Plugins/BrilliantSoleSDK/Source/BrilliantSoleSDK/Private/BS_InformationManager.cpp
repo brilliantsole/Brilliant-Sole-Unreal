@@ -44,11 +44,12 @@ void UBS_InformationManager::Reset()
     Id = "";
     Name = "";
     Type = EBS_DeviceType::LEFT_INSOLE;
+    CurrentTime = 0;
 }
 
 void UBS_InformationManager::ParseMTU(const TArray<uint8> &Message)
 {
-    MTU = ByteParser::GetUint16(Message);
+    MTU = ByteParser::ParseAs<uint16>(Message);
     UE_LOGFMT(LogBS_InformationManager, Log, "Parsed MTU: {0}", MTU);
     OnMTU_Update.ExecuteIfBound(MTU);
 }
@@ -110,7 +111,7 @@ void UBS_InformationManager::SetType(const EBS_DeviceType NewType)
 
 void UBS_InformationManager::ParseCurrentTime(const TArray<uint8> &Message)
 {
-    CurrentTime = ByteParser::GetUint64(Message);
+    CurrentTime = ByteParser::ParseAs<uint64>(Message);
     UE_LOGFMT(LogBS_InformationManager, Log, "Parsed CurrentTime: {0}", CurrentTime);
     if (CurrentTime == 0)
     {
@@ -129,6 +130,6 @@ void UBS_InformationManager::UpdateCurrentTime()
     FTimespan Timespan = Now - UnixEpoch;
     uint64 Milliseconds = static_cast<uint64>(Timespan.GetTotalMilliseconds());
     UE_LOGFMT(LogBS_InformationManager, Log, "Updating CurrentTime to {0}", Milliseconds);
-    const TArray<uint8> TxMessage = ByteParser::Uint64AsArray(Milliseconds);
+    const TArray<uint8> TxMessage = ByteParser::ToByteArray(Milliseconds);
     SendTxMessages.ExecuteIfBound({{BS_MessageSetCurrentTime, TxMessage}}, true);
 }

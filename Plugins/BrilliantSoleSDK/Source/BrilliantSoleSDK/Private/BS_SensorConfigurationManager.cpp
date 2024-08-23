@@ -32,12 +32,25 @@ void UBS_SensorConfigurationManager::ParseSensorConfiguration(const TArray<uint8
     OnSensorConfigurationUpdate.ExecuteIfBound(SensorConfiguration);
 }
 
-void UBS_SensorConfigurationManager::SetSensorConfiguration(const FBS_SensorConfiguration &NewConfiguration)
+void UBS_SensorConfigurationManager::SetSensorConfiguration(const FBS_SensorConfiguration &NewSensorConfiguration)
 {
-    // FILL
+    const TArray<uint8> TxMessage = NewSensorConfiguration.ToArray();
+    SendTxMessages.ExecuteIfBound({{BS_MessageSetSensorConfiguration, TxMessage}}, true);
 }
 
 void UBS_SensorConfigurationManager::ClearSensorConfiguration()
 {
-    // FILL
+    SetSensorConfiguration(ZeroSensorConfiguration);
 }
+
+const FBS_SensorConfiguration UBS_SensorConfigurationManager::InitializeZeroSensorConfiguration()
+{
+    FBS_SensorConfiguration NewConfiguration;
+    for (uint8 SensorTypeIndex = 0; SensorTypeIndex < static_cast<uint8>(EBS_SensorType::COUNT); SensorTypeIndex++)
+    {
+        const EBS_SensorType SensorType = static_cast<EBS_SensorType>(SensorTypeIndex);
+        NewConfiguration.SensorRates.Add(SensorType, EBS_SensorRate::Value0);
+    }
+    return NewConfiguration;
+}
+const FBS_SensorConfiguration UBS_SensorConfigurationManager::ZeroSensorConfiguration = UBS_SensorConfigurationManager::InitializeZeroSensorConfiguration();

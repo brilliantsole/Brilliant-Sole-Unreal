@@ -6,7 +6,7 @@
 
 DEFINE_LOG_CATEGORY(LogBS_SensorConfiguration);
 
-FString FBS_SensorConfiguration::ToString()
+FString FBS_SensorConfiguration::ToString() const
 {
     FString String;
 
@@ -55,7 +55,7 @@ void FBS_SensorConfiguration::Parse(const TArray<uint8> &Message)
             continue;
         }
         const EBS_SensorType SensorType = static_cast<EBS_SensorType>(SensorTypeEnum);
-        uint16 RawSensorRate = ByteParser::GetUint16(Message, Index + 1);
+        uint16 RawSensorRate = ByteParser::ParseAs<uint16>(Message, Index + 1);
         UE_LOGFMT(LogBS_SensorConfiguration, Log, "RawSensorRate: {0}ms", RawSensorRate);
 
         EBS_SensorRate SensorRate = GetClosestSensorRate(RawSensorRate);
@@ -66,4 +66,17 @@ void FBS_SensorConfiguration::Parse(const TArray<uint8> &Message)
     }
 
     UE_LOGFMT(LogBS_SensorConfiguration, Log, "Updated SensorConfiguration:\n{0}", ToString());
+}
+
+const TArray<uint8> FBS_SensorConfiguration::ToArray() const
+{
+    TArray<uint8> ByteArray;
+    for (const TPair<EBS_SensorType, EBS_SensorRate> &Pair : SensorRates)
+    {
+        const uint8 SensorTypeEnum = static_cast<uint8>(Pair.Key);
+        ByteArray.Add(SensorTypeEnum);
+        const uint16 RawSensorRate = GetRawSensorRate(Pair.Value);
+        ByteArray.Append(ByteParser::ToByteArray(RawSensorRate));
+    }
+    return ByteArray;
 }
