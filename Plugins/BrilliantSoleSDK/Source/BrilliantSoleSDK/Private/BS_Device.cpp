@@ -78,6 +78,7 @@ void UBS_Device::SetConnectionStatus(EBS_ConnectionStatus NewConnectionStatus)
 {
     if (ConnectionStatus == NewConnectionStatus)
     {
+        UE_LOGFMT(LogBS_Device, Log, "Redundant ConnectionStatus {0} - not updating", UEnum::GetValueAsString(ConnectionStatus));
         return;
     }
     ConnectionStatus = NewConnectionStatus;
