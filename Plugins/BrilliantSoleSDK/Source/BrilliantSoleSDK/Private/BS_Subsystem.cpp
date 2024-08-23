@@ -7,6 +7,12 @@
 
 UBS_Subsystem::UBS_Subsystem()
 {
+    GetBleManagerClass();
+    GetDeviceManagerClass();
+}
+
+void UBS_Subsystem::GetBleManagerClass()
+{
     static ConstructorHelpers::FClassFinder<UObject> BleManagerClassFinder(TEXT("/Script/Engine.Blueprint'/BrilliantSoleSDK/Blueprints/Ble/BS_BleManagerBP.BS_BleManagerBP_C'"));
     if (BleManagerClassFinder.Succeeded())
     {
@@ -16,6 +22,20 @@ UBS_Subsystem::UBS_Subsystem()
     else
     {
         UE_LOGFMT(LogBS_Subsystem, Error, "failed to find BleManagerClass");
+    }
+}
+
+void UBS_Subsystem::GetDeviceManagerClass()
+{
+    static ConstructorHelpers::FClassFinder<UObject> DeviceManagerClassFinder(TEXT("/Script/Engine.Blueprint'/BrilliantSoleSDK/Blueprints/BS_DeviceManagerBP.BS_DeviceManagerBP_C'"));
+    if (DeviceManagerClassFinder.Succeeded())
+    {
+        DeviceManagerClass = DeviceManagerClassFinder.Class;
+        UE_LOGFMT(LogBS_Subsystem, Log, "found DeviceManagerClass");
+    }
+    else
+    {
+        UE_LOGFMT(LogBS_Subsystem, Error, "failed to find DeviceManagerClass");
     }
 }
 
@@ -49,4 +69,26 @@ UObject *UBS_Subsystem::GetBleManager()
     }
 
     return BleManagerSingleton;
+}
+
+UObject *UBS_Subsystem::GetDeviceManager()
+{
+    if (!DeviceManagerSingleton && DeviceManagerClass)
+    {
+        DeviceManagerSingleton = NewObject<UObject>(this, DeviceManagerClass);
+        UE_LOGFMT(LogBS_Subsystem, Log, "Created new DeviceManager instance: {0}", DeviceManagerSingleton->GetName());
+
+        FName MethodName("Initialize");
+        UFunction *InitalizeFunction = DeviceManagerSingleton->FindFunction(MethodName);
+        if (InitalizeFunction)
+        {
+            DeviceManagerSingleton->ProcessEvent(InitalizeFunction, nullptr);
+        }
+        else
+        {
+            UE_LOGFMT(LogBS_Subsystem, Error, "Couldn't find Initialize function");
+        }
+    }
+
+    return DeviceManagerSingleton;
 }

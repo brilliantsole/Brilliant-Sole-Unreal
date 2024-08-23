@@ -19,7 +19,7 @@ DECLARE_LOG_CATEGORY_EXTERN(LogBS_Device, Log, All);
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FConnectionStatusUpdateCallback, EBS_ConnectionStatus, ConnectionStatus);
 
-UCLASS()
+UCLASS(Abstract)
 class UBS_Device : public UObject
 {
 	GENERATED_BODY()

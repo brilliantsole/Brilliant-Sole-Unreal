@@ -22,13 +22,33 @@ public:
 	virtual void Initialize(FSubsystemCollectionBase &Collection) override;
 	virtual void Deinitialize() override;
 
+	// BLE MANAGER START
+public:
 	UFUNCTION(BlueprintCallable, Category = "BS Subsystem")
 	UObject *GetBleManager();
 
 private:
+	void GetBleManagerClass();
+
 	UPROPERTY()
 	TSubclassOf<UObject> BleManagerClass;
 
 	UPROPERTY()
 	UObject *BleManagerSingleton;
+	// BLE MANAGER END
+
+	// DEVICE MANAGER START
+public:
+	UFUNCTION(BlueprintCallable, Category = "BS Subsystem")
+	UObject *GetDeviceManager();
+
+private:
+	void GetDeviceManagerClass();
+
+	UPROPERTY()
+	TSubclassOf<UObject> DeviceManagerClass;
+
+	UPROPERTY()
+	UObject *DeviceManagerSingleton;
+	// DEVICE MANAGER END
 };
