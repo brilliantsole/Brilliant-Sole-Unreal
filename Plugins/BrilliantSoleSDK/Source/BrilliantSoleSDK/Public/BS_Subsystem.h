@@ -24,6 +24,7 @@ public:
 
 private:
 	UClass *GetClass(const FString &ClassPath);
+	UObject *CreateSingleton(UClass *SingletonClass);
 
 	// BLE MANAGER START
 public:

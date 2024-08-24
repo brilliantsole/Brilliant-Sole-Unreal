@@ -46,25 +46,33 @@ void UBS_Subsystem::Deinitialize()
     Super::Deinitialize();
 }
 
+UObject *UBS_Subsystem::CreateSingleton(UClass *SingletonClass)
+{
+    UObject *Singleton;
+
+    Singleton = NewObject<UObject>(this, SingletonClass);
+    UE_LOGFMT(LogBS_Subsystem, Log, "Created new Singleton instance: {0}", Singleton->GetName());
+
+    FName MethodName("Initialize");
+    UFunction *InitalizeFunction = Singleton->FindFunction(MethodName);
+    if (InitalizeFunction)
+    {
+        Singleton->ProcessEvent(InitalizeFunction, nullptr);
+    }
+    else
+    {
+        UE_LOGFMT(LogBS_Subsystem, Error, "Couldn't find Initialize function");
+    }
+
+    return Singleton;
+}
+
 UObject *UBS_Subsystem::GetBleManager()
 {
     if (!BleManagerSingleton && BleManagerClass)
     {
-        BleManagerSingleton = NewObject<UObject>(this, BleManagerClass);
-        UE_LOGFMT(LogBS_Subsystem, Log, "Created new BleManager instance: {0}", BleManagerSingleton->GetName());
-
-        FName MethodName("Initialize");
-        UFunction *InitalizeFunction = BleManagerSingleton->FindFunction(MethodName);
-        if (InitalizeFunction)
-        {
-            BleManagerSingleton->ProcessEvent(InitalizeFunction, nullptr);
-        }
-        else
-        {
-            UE_LOGFMT(LogBS_Subsystem, Error, "Couldn't find Initialize function");
-        }
+        BleManagerSingleton = CreateSingleton(BleManagerClass);
     }
-
     return BleManagerSingleton;
 }
 
@@ -72,20 +80,7 @@ UObject *UBS_Subsystem::GetDeviceManager()
 {
     if (!DeviceManagerSingleton && DeviceManagerClass)
     {
-        DeviceManagerSingleton = NewObject<UObject>(this, DeviceManagerClass);
-        UE_LOGFMT(LogBS_Subsystem, Log, "Created new DeviceManager instance: {0}", DeviceManagerSingleton->GetName());
-
-        FName MethodName("Initialize");
-        UFunction *InitalizeFunction = DeviceManagerSingleton->FindFunction(MethodName);
-        if (InitalizeFunction)
-        {
-            DeviceManagerSingleton->ProcessEvent(InitalizeFunction, nullptr);
-        }
-        else
-        {
-            UE_LOGFMT(LogBS_Subsystem, Error, "Couldn't find Initialize function");
-        }
+        DeviceManagerSingleton = CreateSingleton(DeviceManagerClass);
     }
-
     return DeviceManagerSingleton;
 }
