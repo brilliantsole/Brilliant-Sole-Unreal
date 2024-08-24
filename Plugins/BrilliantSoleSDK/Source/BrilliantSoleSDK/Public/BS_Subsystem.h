@@ -22,6 +22,9 @@ public:
 	virtual void Initialize(FSubsystemCollectionBase &Collection) override;
 	virtual void Deinitialize() override;
 
+private:
+	UClass *GetClass(const FString &ClassPath);
+
 	// BLE MANAGER START
 public:
 	UFUNCTION(BlueprintCallable, Category = "BS Subsystem")

@@ -11,32 +11,29 @@ UBS_Subsystem::UBS_Subsystem()
     GetDeviceManagerClass();
 }
 
-void UBS_Subsystem::GetBleManagerClass()
+UClass *UBS_Subsystem::GetClass(const FString &ClassPath)
 {
-    static ConstructorHelpers::FClassFinder<UObject> BleManagerClassFinder(TEXT("/Script/Engine.Blueprint'/BrilliantSoleSDK/Blueprints/Ble/BS_BleManagerBP.BS_BleManagerBP_C'"));
-    if (BleManagerClassFinder.Succeeded())
+    ConstructorHelpers::FClassFinder<UObject> ClassFinder(*ClassPath);
+    if (ClassFinder.Succeeded())
     {
-        BleManagerClass = BleManagerClassFinder.Class;
-        UE_LOGFMT(LogBS_Subsystem, Log, "found BleManagerClass");
+        UE_LOGFMT(LogBS_Subsystem, Log, "Found Class at path: {0}", ClassPath);
+        return ClassFinder.Class;
     }
     else
     {
-        UE_LOGFMT(LogBS_Subsystem, Error, "failed to find BleManagerClass");
+        UE_LOGFMT(LogBS_Subsystem, Error, "Failed to find Class at path: {0}", ClassPath);
+        return nullptr;
     }
+}
+
+void UBS_Subsystem::GetBleManagerClass()
+{
+    BleManagerClass = GetClass(TEXT("/Script/Engine.Blueprint'/BrilliantSoleSDK/Blueprints/Ble/BS_BleManagerBP.BS_BleManagerBP_C'"));
 }
 
 void UBS_Subsystem::GetDeviceManagerClass()
 {
-    static ConstructorHelpers::FClassFinder<UObject> DeviceManagerClassFinder(TEXT("/Script/Engine.Blueprint'/BrilliantSoleSDK/Blueprints/BS_DeviceManagerBP.BS_DeviceManagerBP_C'"));
-    if (DeviceManagerClassFinder.Succeeded())
-    {
-        DeviceManagerClass = DeviceManagerClassFinder.Class;
-        UE_LOGFMT(LogBS_Subsystem, Log, "found DeviceManagerClass");
-    }
-    else
-    {
-        UE_LOGFMT(LogBS_Subsystem, Error, "failed to find DeviceManagerClass");
-    }
+    DeviceManagerClass = GetClass(TEXT("/Script/Engine.Blueprint'/BrilliantSoleSDK/Blueprints/BS_DeviceManagerBP.BS_DeviceManagerBP_C'"));
 }
 
 void UBS_Subsystem::Initialize(FSubsystemCollectionBase &Collection)
