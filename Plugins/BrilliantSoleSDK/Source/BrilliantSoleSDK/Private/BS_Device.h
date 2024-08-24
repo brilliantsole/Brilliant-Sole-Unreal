@@ -28,20 +28,6 @@ class UBS_Device : public UObject
 public:
 	UBS_Device();
 
-	UFUNCTION(BlueprintCallable, Category = "BS Subsystem")
-	UBS_Subsystem *GetMySubsystem()
-	{
-		if (UGameInstance *GameInstance = GetWorld()->GetGameInstance())
-		{
-			return GameInstance->GetSubsystem<UBS_Subsystem>();
-		}
-		return nullptr;
-	}
-
-protected:
-	UFUNCTION(BlueprintImplementableEvent, Category = "BS Device")
-	void InitializeBP();
-
 private:
 	void Reset();
 

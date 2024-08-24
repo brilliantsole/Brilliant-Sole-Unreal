@@ -38,8 +38,6 @@ UBS_Device::UBS_Device()
     FileTransferManager->SendTxMessages.BindUObject(this, &UBS_Device::SendTxMessages);
     TfliteManager = CreateDefaultSubobject<UBS_TfliteManager>(TEXT("TfliteManager"));
     TfliteManager->SendTxMessages.BindUObject(this, &UBS_Device::SendTxMessages);
-
-    InitializeBP();
 }
 
 void UBS_Device::Reset()
