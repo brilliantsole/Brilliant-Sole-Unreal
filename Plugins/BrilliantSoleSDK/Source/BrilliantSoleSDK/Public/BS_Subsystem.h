@@ -36,4 +36,19 @@ private:
 	UPROPERTY()
 	UObject *BleManagerSingleton;
 	// BLE MANAGER END
+
+	// DEVICE MANAGER START
+public:
+	UFUNCTION(BlueprintCallable, Category = "BS Subsystem")
+	UObject *GetDeviceManager();
+
+private:
+	void GetDeviceManagerClass();
+
+	UPROPERTY()
+	TSubclassOf<UObject> DeviceManagerClass;
+
+	UPROPERTY()
+	UObject *DeviceManagerSingleton;
+	// DEVICE MANAGER END
 };

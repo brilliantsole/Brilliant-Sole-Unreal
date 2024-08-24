@@ -31,6 +31,19 @@ public:
 private:
 	void Reset();
 
+	// BS SUBSYSTEM START
+protected:
+	UFUNCTION(BlueprintImplementableEvent, Category = "BS Subsystem")
+	void InitializeBP();
+
+	UFUNCTION(BlueprintPure, Category = "BS Subsystem")
+	const UBS_Subsystem *BS_Subsystem() const { return _BS_Subsystem; }
+
+private:
+	void GetBS_Subsystem();
+	UBS_Subsystem *_BS_Subsystem;
+	// BS SUBSYSTEM END
+
 	// CONNECTION START
 public:
 	UFUNCTION(BlueprintPure, Category = "BS Device")

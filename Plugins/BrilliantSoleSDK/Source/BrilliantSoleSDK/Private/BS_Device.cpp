@@ -3,6 +3,10 @@
 #include "BS_Device.h"
 #include "Logging/StructuredLog.h"
 #include "BS_Message.h"
+#include "BS_Subsystem.h"
+#include "Engine/World.h"
+#include "Engine/GameInstance.h"
+#include "Kismet/GameplayStatics.h"
 
 DEFINE_LOG_CATEGORY(LogBS_Device);
 
@@ -38,6 +42,47 @@ UBS_Device::UBS_Device()
     FileTransferManager->SendTxMessages.BindUObject(this, &UBS_Device::SendTxMessages);
     TfliteManager = CreateDefaultSubobject<UBS_TfliteManager>(TEXT("TfliteManager"));
     TfliteManager->SendTxMessages.BindUObject(this, &UBS_Device::SendTxMessages);
+
+    GetBS_Subsystem();
+    InitializeBP();
+}
+
+void UBS_Device::GetBS_Subsystem()
+{
+    if (!HasAnyFlags(RF_ClassDefaultObject))
+    {
+        UWorld *World = GetWorld();
+        if (World)
+        {
+            UE_LOGFMT(LogBS_Device, Log, "World found");
+            UGameInstance *GameInstance = World->GetGameInstance();
+            if (GameInstance)
+            {
+                UE_LOGFMT(LogBS_Device, Log, "GameInstance found");
+                _BS_Subsystem = GameInstance->GetSubsystem<UBS_Subsystem>();
+                if (_BS_Subsystem)
+                {
+                    UE_LOGFMT(LogBS_Device, Log, "BS_Subsystem found");
+                }
+                else
+                {
+                    UE_LOGFMT(LogBS_Device, Error, "BS_Subsystem not found");
+                }
+            }
+            else
+            {
+                UE_LOGFMT(LogBS_Device, Error, "GameInstance not found");
+            }
+        }
+        else
+        {
+            UE_LOGFMT(LogBS_Device, Error, "World not found");
+        }
+    }
+    else
+    {
+        UE_LOGFMT(LogBS_Device, Log, "CDO constructor - skipping");
+    }
 }
 
 void UBS_Device::Reset()
