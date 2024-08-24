@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "BS_ConnectionStatus.h"
+#include "BS_Subsystem.h"
 #include "BS_TxMessage.h"
 #include "BS_DeviceInformationManager.h"
 #include "BS_BatteryManager.h"
@@ -26,6 +27,20 @@ class UBS_Device : public UObject
 
 public:
 	UBS_Device();
+
+	UFUNCTION(BlueprintCallable, Category = "BS Subsystem")
+	UBS_Subsystem *GetMySubsystem()
+	{
+		if (UGameInstance *GameInstance = GetWorld()->GetGameInstance())
+		{
+			return GameInstance->GetSubsystem<UBS_Subsystem>();
+		}
+		return nullptr;
+	}
+
+protected:
+	UFUNCTION(BlueprintImplementableEvent, Category = "BS Device")
+	void InitializeBP();
 
 private:
 	void Reset();
