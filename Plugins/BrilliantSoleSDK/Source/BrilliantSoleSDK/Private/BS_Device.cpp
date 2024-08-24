@@ -43,8 +43,11 @@ UBS_Device::UBS_Device()
     TfliteManager = CreateDefaultSubobject<UBS_TfliteManager>(TEXT("TfliteManager"));
     TfliteManager->SendTxMessages.BindUObject(this, &UBS_Device::SendTxMessages);
 
-    GetBS_Subsystem();
-    InitializeBP();
+    if (!HasAnyFlags(RF_ClassDefaultObject))
+    {
+        GetBS_Subsystem();
+        InitializeBP();
+    }
 }
 
 void UBS_Device::GetBS_Subsystem()
@@ -59,10 +62,11 @@ void UBS_Device::GetBS_Subsystem()
             if (GameInstance)
             {
                 UE_LOGFMT(LogBS_Device, Log, "GameInstance found");
-                _BS_Subsystem = GameInstance->GetSubsystem<UBS_Subsystem>();
-                if (_BS_Subsystem)
+                UBS_Subsystem *__BS_Subsystem = GameInstance->GetSubsystem<UBS_Subsystem>();
+                if (__BS_Subsystem)
                 {
                     UE_LOGFMT(LogBS_Device, Log, "BS_Subsystem found");
+                    _BS_Subsystem = __BS_Subsystem;
                 }
                 else
                 {
