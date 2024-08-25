@@ -178,10 +178,10 @@ private:
 	// SENSOR CONFIGURATION START
 public:
 	UFUNCTION(BlueprintPure, Category = "BS Sensor Configuration")
-	FBS_SensorConfiguration SensorConfiguration() const { return SensorConfigurationManager->GetSensorConfiguration(); }
+	const UBS_SensorConfiguration *SensorConfiguration() const { return SensorConfigurationManager->GetSensorConfiguration(); }
 
 	UFUNCTION(BlueprintCallable, Category = "BS Sensor Configuration")
-	void SetSensorConfiguration(const FBS_SensorConfiguration NewSensorConfiguration) { SensorConfigurationManager->SetSensorConfiguration(NewSensorConfiguration); }
+	void SetSensorConfiguration(const UBS_SensorConfiguration *NewSensorConfiguration) { SensorConfigurationManager->SetSensorConfiguration(NewSensorConfiguration); }
 
 	UFUNCTION(BlueprintCallable, Category = "BS Sensor Configuration")
 	void ClearSensorConfiguration() { SensorConfigurationManager->ClearSensorConfiguration(); }
@@ -194,7 +194,7 @@ protected:
 	FSensorConfigurationCallback OnSensorConfiguration;
 
 private:
-	void OnSensorConfigurationUpdate(FBS_SensorConfiguration &SensorConfiguration) { OnSensorConfiguration.Broadcast(SensorConfiguration); }
+	void OnSensorConfigurationUpdate(const UBS_SensorConfiguration *SensorConfiguration) { OnSensorConfiguration.Broadcast(SensorConfiguration); }
 	// SENSOR CONFIGURATION END
 
 	// SENSOR DATA START

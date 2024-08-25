@@ -10,8 +10,8 @@
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_SensorConfigurationManager, Log, All);
 
-DECLARE_DELEGATE_OneParam(FSensorConfigurationCallbackLocal, FBS_SensorConfiguration &);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSensorConfigurationCallback, FBS_SensorConfiguration &, SensorConfiguration);
+DECLARE_DELEGATE_OneParam(FSensorConfigurationCallbackLocal, const UBS_SensorConfiguration *);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSensorConfigurationCallback, const UBS_SensorConfiguration *, SensorConfiguration);
 
 #define EBS_SensorConfigurationMessage BS_MessageGetSensorConfiguration, \
 									   BS_MessageSetSensorConfiguration
@@ -22,20 +22,22 @@ class UBS_SensorConfigurationManager : public UBS_BaseManager
 	GENERATED_BODY()
 
 public:
+	UBS_SensorConfigurationManager();
+
 	bool OnRxMessage(uint8 MessageType, const TArray<uint8> &Message) override;
 	void Reset() override;
 
 public:
-	FBS_SensorConfiguration &GetSensorConfiguration() { return SensorConfiguration; }
+	const UBS_SensorConfiguration *GetSensorConfiguration() { return SensorConfiguration; }
 	FSensorConfigurationCallbackLocal OnSensorConfigurationUpdate;
 
-	void SetSensorConfiguration(const FBS_SensorConfiguration &NewSensorConfiguration);
+	const TArray<EBS_SensorType> &GetSensorTypes() { return SensorConfiguration->GetSensorTypes(); }
+
+	void SetSensorConfiguration(const UBS_SensorConfiguration *NewSensorConfiguration);
 	void ClearSensorConfiguration();
 
 private:
 	void ParseSensorConfiguration(const TArray<uint8> &Message);
-	FBS_SensorConfiguration SensorConfiguration;
-
-	static const FBS_SensorConfiguration ZeroSensorConfiguration;
-	static const FBS_SensorConfiguration InitializeZeroSensorConfiguration();
+	UBS_SensorConfiguration *SensorConfiguration;
+	UBS_SensorConfiguration *TempSensorConfiguration;
 };

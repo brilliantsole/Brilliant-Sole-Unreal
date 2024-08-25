@@ -23,7 +23,7 @@ enum class EBS_SensorType : uint8
     STEP_DETECTOR UMETA(DisplayName = "Step Detector"),
     DEVICE_ORIENTATION UMETA(DisplayName = "Device Orientation"),
 
-    BAROMETER UMETA(DisplayName = "BAROMETER"),
+    BAROMETER UMETA(DisplayName = "Barometer"),
 
     COUNT UMETA(Hidden)
 };
