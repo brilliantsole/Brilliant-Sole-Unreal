@@ -49,6 +49,9 @@ public:
 	UFUNCTION(BlueprintPure, Category = "BS Device")
 	EBS_ConnectionStatus GetConnectionStatus() const { return ConnectionStatus; }
 
+	UFUNCTION(BlueprintPure, Category = "BS Device")
+	bool IsConnected() const { return ConnectionStatus == EBS_ConnectionStatus::CONNECTED; }
+
 	UPROPERTY(BlueprintAssignable, Category = "BS Device")
 	FConnectionStatusUpdateCallback OnConnectionStatusUpdate;
 
