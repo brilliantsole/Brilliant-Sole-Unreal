@@ -31,6 +31,9 @@ public:
     EBS_SensorRate GetSensorRate(EBS_SensorType SensorType, bool &bContainsSensorType) const;
 
     UFUNCTION(BlueprintCallable, Category = "BS Sensor Configuration")
+    bool IsSensorRateNonZero(EBS_SensorType SensorType) const;
+
+    UFUNCTION(BlueprintCallable, Category = "BS Sensor Configuration")
     void SetSensorRate(EBS_SensorType SensorType, EBS_SensorRate SensorRate, bool &bDidUpdateSensorRate);
 
     UFUNCTION(BlueprintCallable, Category = "BS Sensor Configuration")

@@ -37,6 +37,8 @@ public:
 	EBS_SensorRate GetSensorRate(EBS_SensorType SensorType, bool &bContainsSensorType) const { return SensorConfiguration->GetSensorRate(SensorType, bContainsSensorType); }
 	const TMap<EBS_SensorType, EBS_SensorRate> &GetSensorRates() const { return SensorConfiguration->GetSensorRates(); }
 
+	bool IsSensorRateNonZero(EBS_SensorType SensorType) const { return SensorConfiguration->IsSensorRateNonZero(SensorType); }
+
 	void SetSensorRate(EBS_SensorType SensorType, EBS_SensorRate SensorRate, bool &bDidUpdateSensorRate);
 	void SetSensorRates(const TMap<EBS_SensorType, EBS_SensorRate> &NewSensorRates);
 

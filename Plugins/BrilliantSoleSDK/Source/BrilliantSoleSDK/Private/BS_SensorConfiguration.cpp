@@ -54,6 +54,13 @@ EBS_SensorRate UBS_SensorConfiguration::GetSensorRate(EBS_SensorType SensorType,
     return bContainsSensorType ? SensorRates[SensorType] : EBS_SensorRate::Value0;
 }
 
+bool UBS_SensorConfiguration::IsSensorRateNonZero(EBS_SensorType SensorType) const
+{
+    bool bContainsSensorType;
+    EBS_SensorRate SensorRate = GetSensorRate(SensorType, bContainsSensorType);
+    return SensorRate != EBS_SensorRate::Value0;
+}
+
 void UBS_SensorConfiguration::SetSensorRate(EBS_SensorType SensorType, EBS_SensorRate SensorRate, bool &bDidUpdateSensorRate)
 {
     if (!SensorRates.Contains(SensorType))
