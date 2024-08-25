@@ -15,6 +15,31 @@ void UBS_SensorConfiguration::Copy(const UBS_SensorConfiguration *Other)
     SensorRates = Other->GetSensorRates();
 }
 
+bool UBS_SensorConfiguration::IsEqualTo(const UBS_SensorConfiguration *Other)
+{
+    const TMap<EBS_SensorType, EBS_SensorRate> OtherSensorRates = Other->GetSensorRates();
+    if (SensorRates.Num() != OtherSensorRates.Num())
+    {
+        return false;
+    }
+
+    for (const TPair<EBS_SensorType, EBS_SensorRate> &Pair : SensorRates)
+    {
+        const EBS_SensorType SensorType = Pair.Key;
+        if (!OtherSensorRates.Contains(SensorType))
+        {
+            return false;
+        }
+
+        if (SensorRates[SensorType] != OtherSensorRates[SensorType])
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 void UBS_SensorConfiguration::Clear()
 {
     for (const TPair<EBS_SensorType, EBS_SensorRate> &Pair : SensorRates)
@@ -23,7 +48,7 @@ void UBS_SensorConfiguration::Clear()
     }
 }
 
-EBS_SensorRate UBS_SensorConfiguration::GetSensorRate(EBS_SensorType SensorType, bool &bContainsSensorType)
+EBS_SensorRate UBS_SensorConfiguration::GetSensorRate(EBS_SensorType SensorType, bool &bContainsSensorType) const
 {
     bContainsSensorType = SensorRates.Contains(SensorType);
     return bContainsSensorType ? SensorRates[SensorType] : EBS_SensorRate::Value0;

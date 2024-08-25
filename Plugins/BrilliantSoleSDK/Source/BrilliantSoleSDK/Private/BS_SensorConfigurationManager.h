@@ -31,10 +31,17 @@ public:
 	const UBS_SensorConfiguration *GetSensorConfiguration() { return SensorConfiguration; }
 	FSensorConfigurationCallbackLocal OnSensorConfigurationUpdate;
 
-	const TArray<EBS_SensorType> &GetSensorTypes() { return SensorConfiguration->GetSensorTypes(); }
-
 	void SetSensorConfiguration(const UBS_SensorConfiguration *NewSensorConfiguration);
 	void ClearSensorConfiguration();
+
+	EBS_SensorRate GetSensorRate(EBS_SensorType SensorType, bool &bContainsSensorType) const { return SensorConfiguration->GetSensorRate(SensorType, bContainsSensorType); }
+	const TMap<EBS_SensorType, EBS_SensorRate> &GetSensorRates() const { return SensorConfiguration->GetSensorRates(); }
+
+	void SetSensorRate(EBS_SensorType SensorType, EBS_SensorRate SensorRate, bool &bDidUpdateSensorRate);
+	void SetSensorRates(const TMap<EBS_SensorType, EBS_SensorRate> &NewSensorRates);
+
+	void ClearSensorRate(EBS_SensorType SensorType);
+	void ToggleSensorRate(EBS_SensorType SensorType, EBS_SensorRate SensorRate, EBS_SensorRate &UpdatedSensorRate);
 
 private:
 	void ParseSensorConfiguration(const TArray<uint8> &Message);

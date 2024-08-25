@@ -17,6 +17,7 @@ public:
     UBS_SensorConfiguration();
 
     void Copy(const UBS_SensorConfiguration *Other);
+    bool IsEqualTo(const UBS_SensorConfiguration *Other);
 
     // SENSOR RATES START
 public:
@@ -27,7 +28,7 @@ public:
     void Clear();
 
     UFUNCTION(BlueprintCallable, Category = "BS Sensor Configuration")
-    EBS_SensorRate GetSensorRate(EBS_SensorType SensorType, bool &bContainsSensorType);
+    EBS_SensorRate GetSensorRate(EBS_SensorType SensorType, bool &bContainsSensorType) const;
 
     UFUNCTION(BlueprintCallable, Category = "BS Sensor Configuration")
     void SetSensorRate(EBS_SensorType SensorType, EBS_SensorRate SensorRate, bool &bDidUpdateSensorRate);

@@ -186,6 +186,24 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "BS Sensor Configuration")
 	void ClearSensorConfiguration() { SensorConfigurationManager->ClearSensorConfiguration(); }
 
+	UFUNCTION(BlueprintCallable, Category = "BS Sensor Configuration")
+	EBS_SensorRate GetSensorRate(EBS_SensorType SensorType, bool &bContainsSensorType) const { return SensorConfigurationManager->GetSensorRate(SensorType, bContainsSensorType); }
+
+	UFUNCTION(BlueprintCallable, Category = "BS Sensor Configuration")
+	const TMap<EBS_SensorType, EBS_SensorRate> &GetSensorRates() const { return SensorConfigurationManager->GetSensorRates(); }
+
+	UFUNCTION(BlueprintCallable, Category = "BS Sensor Configuration")
+	void SetSensorRate(EBS_SensorType SensorType, EBS_SensorRate SensorRate, bool &bDidUpdateSensorRate) { return SensorConfigurationManager->SetSensorRate(SensorType, SensorRate, bDidUpdateSensorRate); }
+
+	UFUNCTION(BlueprintCallable, Category = "BS Sensor Configuration")
+	void SetSensorRates(const TMap<EBS_SensorType, EBS_SensorRate> &SensorRates) { return SensorConfigurationManager->SetSensorRates(SensorRates); }
+
+	UFUNCTION(BlueprintCallable, Category = "BS Sensor Configuration")
+	void ClearSensorRate(EBS_SensorType SensorType) { return SensorConfigurationManager->ClearSensorRate(SensorType); }
+
+	UFUNCTION(BlueprintCallable, Category = "BS Sensor Configuration")
+	void ToggleSensorRate(EBS_SensorType SensorType, EBS_SensorRate SensorRate, EBS_SensorRate &UpdatedSensorRate) { return SensorConfigurationManager->ToggleSensorRate(SensorType, SensorRate, UpdatedSensorRate); }
+
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "BS Sensor Configuration")
 	UBS_SensorConfigurationManager *SensorConfigurationManager;
