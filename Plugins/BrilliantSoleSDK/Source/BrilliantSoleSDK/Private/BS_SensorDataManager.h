@@ -6,6 +6,7 @@
 #include "UObject/NoExportTypes.h"
 #include "BS_PressureSensorDataManager.h"
 #include "BS_MotionSensorDataManager.h"
+#include "BS_SensorType.h"
 #include "BS_BaseManager.h"
 #include "BS_SensorDataManager.generated.h"
 
@@ -19,6 +20,21 @@ class UBS_SensorDataManager : public UBS_BaseManager
 {
 	GENERATED_BODY()
 
-	public:
+public:
+	UBS_SensorDataManager();
+
+public:
 	bool OnRxMessage(uint8 MessageType, const TArray<uint8> &Message) override;
+
+private:
+	UPROPERTY()
+	TMap<EBS_SensorType, float> SensorScalars;
+	void ParseSensorScalars(const TArray<uint8> &Message);
+	
+	void ParseSensorData(const TArray<uint8> &Message);
+
+	UPROPERTY()
+	UBS_PressureSensorDataManager *PressureSensorDataManager;
+	UPROPERTY()
+	UBS_MotionSensorDataManager *MotionSensorDataManager;
 };

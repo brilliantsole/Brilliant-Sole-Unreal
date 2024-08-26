@@ -4,3 +4,7 @@
 #include "Logging/StructuredLog.h"
 
 DEFINE_LOG_CATEGORY(LogBS_PressureSensorDataManager);
+
+void UBS_PressureSensorDataManager::ParsePressurePositions(const TArray<uint8> &Message) {
+    // FILL
+}

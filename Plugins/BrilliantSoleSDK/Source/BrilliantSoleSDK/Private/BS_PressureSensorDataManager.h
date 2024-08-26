@@ -14,4 +14,7 @@ UCLASS()
 class UBS_PressureSensorDataManager : public UObject
 {
 	GENERATED_BODY()
+
+public:
+	void ParsePressurePositions(const TArray<uint8> &Message);
 };

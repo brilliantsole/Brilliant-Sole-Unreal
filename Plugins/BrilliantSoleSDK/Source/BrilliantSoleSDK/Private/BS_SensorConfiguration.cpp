@@ -147,7 +147,6 @@ void UBS_SensorConfiguration::ToggleSensorRate(EBS_SensorType SensorType, EBS_Se
 
 void UBS_SensorConfiguration::UpdateSensorTypes()
 {
-
     if (!bSensorTypesNeedsUpdate)
     {
         return;
@@ -198,7 +197,6 @@ EBS_SensorRate UBS_SensorConfiguration::GetClosestSensorRate(uint16 RawSensorRat
 
 void UBS_SensorConfiguration::Parse(const TArray<uint8> &Message)
 {
-
     SensorRates.Empty();
 
     const uint8 MessageLength = Message.Num();

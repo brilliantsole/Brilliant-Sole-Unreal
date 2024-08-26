@@ -80,7 +80,6 @@ void UBS_SensorConfigurationManager::ClearSensorRate(EBS_SensorType SensorType)
 void UBS_SensorConfigurationManager::ToggleSensorRate(EBS_SensorType SensorType, EBS_SensorRate SensorRate, EBS_SensorRate &UpdatedSensorRate)
 {
     UE_LOGFMT(LogBS_SensorConfigurationManager, Log, "Toggling Sensor Rate {0} to {1}", UEnum::GetValueAsString(SensorType), UEnum::GetValueAsString(SensorRate));
-    // TempSensorConfiguration->Copy(SensorConfiguration);
     TempSensorConfiguration->Reset();
     TempSensorConfiguration->SetSensorRate(SensorType, SensorConfiguration->GetSensorRate(SensorType));
     TempSensorConfiguration->ToggleSensorRate(SensorType, SensorRate, UpdatedSensorRate);

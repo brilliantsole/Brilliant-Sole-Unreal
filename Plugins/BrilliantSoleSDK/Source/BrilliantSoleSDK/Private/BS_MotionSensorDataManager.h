@@ -12,4 +12,6 @@ UCLASS()
 class UBS_MotionSensorDataManager : public UObject
 {
 	GENERATED_BODY()
+
+public:
 };

@@ -54,7 +54,14 @@ private:
     // SENSOR TYPES START
 public:
     UFUNCTION(BlueprintPure, Category = "BS Sensor Configuration")
-    const TArray<EBS_SensorType> &GetSensorTypes() const { return SensorTypes; }
+    const TArray<EBS_SensorType> &GetSensorTypes()
+    {
+        if (bSensorTypesNeedsUpdate)
+        {
+            UpdateSensorTypes();
+        }
+        return SensorTypes;
+    }
 
 private:
     UPROPERTY()
