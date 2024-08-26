@@ -14,9 +14,6 @@ class BRILLIANTSOLESDK_API UBS_SensorConfiguration : public UObject
     GENERATED_BODY()
 
 public:
-    UBS_SensorConfiguration();
-    ~UBS_SensorConfiguration();
-
     void Copy(const UBS_SensorConfiguration *Other);
     bool IsEqualTo(const UBS_SensorConfiguration *Other);
 
@@ -30,12 +27,14 @@ public:
 
     UFUNCTION(BlueprintCallable, Category = "BS Sensor Configuration")
     EBS_SensorRate GetSensorRate(EBS_SensorType SensorType, bool &bContainsSensorType) const;
+    EBS_SensorRate GetSensorRate(EBS_SensorType SensorType) const;
 
     UFUNCTION(BlueprintCallable, Category = "BS Sensor Configuration")
     bool IsSensorRateNonZero(EBS_SensorType SensorType) const;
 
     UFUNCTION(BlueprintCallable, Category = "BS Sensor Configuration")
     void SetSensorRate(EBS_SensorType SensorType, EBS_SensorRate SensorRate, bool &bDidUpdateSensorRate);
+    void SetSensorRate(EBS_SensorType SensorType, EBS_SensorRate SensorRate);
 
     UFUNCTION(BlueprintCallable, Category = "BS Sensor Configuration")
     void SetSensorRates(const TMap<EBS_SensorType, EBS_SensorRate> &NewSensorRates);
@@ -45,6 +44,7 @@ public:
 
     UFUNCTION(BlueprintCallable, Category = "BS Sensor Configuration")
     void ToggleSensorRate(EBS_SensorType SensorType, EBS_SensorRate SensorRate, EBS_SensorRate &UpdatedSensorRate);
+    void ToggleSensorRate(EBS_SensorType SensorType, EBS_SensorRate SensorRate);
 
 private:
     UPROPERTY()

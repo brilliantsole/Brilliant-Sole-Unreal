@@ -188,13 +188,13 @@ public:
 	void ClearSensorConfiguration() { SensorConfigurationManager->ClearSensorConfiguration(); }
 
 	UFUNCTION(BlueprintCallable, Category = "BS Sensor Configuration")
-	EBS_SensorRate GetSensorRate(EBS_SensorType SensorType, bool &bContainsSensorType) { return SensorConfigurationManager->GetSensorRate(SensorType, bContainsSensorType); }
+	EBS_SensorRate GetSensorRate(EBS_SensorType SensorType, bool &bContainsSensorType) const { return SensorConfigurationManager->GetSensorRate(SensorType, bContainsSensorType); }
 
 	UFUNCTION(BlueprintCallable, Category = "BS Sensor Configuration")
-	bool IsSensorRateNonZero(EBS_SensorType SensorType) { return SensorConfigurationManager->IsSensorRateNonZero(SensorType); }
+	bool IsSensorRateNonZero(EBS_SensorType SensorType) const { return SensorConfigurationManager->IsSensorRateNonZero(SensorType); }
 
 	UFUNCTION(BlueprintCallable, Category = "BS Sensor Configuration")
-	const TMap<EBS_SensorType, EBS_SensorRate> &GetSensorRates()
+	const TMap<EBS_SensorType, EBS_SensorRate> &GetSensorRates() const
 	{
 		return SensorConfigurationManager->GetSensorRates();
 	}

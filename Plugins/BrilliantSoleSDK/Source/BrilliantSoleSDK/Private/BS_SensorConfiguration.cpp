@@ -6,28 +6,10 @@
 
 DEFINE_LOG_CATEGORY(LogBS_SensorConfiguration);
 
-UBS_SensorConfiguration::UBS_SensorConfiguration()
-{
-}
-
-UBS_SensorConfiguration::~UBS_SensorConfiguration()
-{
-}
-
 void UBS_SensorConfiguration::Copy(const UBS_SensorConfiguration *Other)
 {
     UE_LOGFMT(LogBS_SensorConfiguration, Log, "Copying SensorConfiguration...");
-
-    UE_LOGFMT(LogBS_SensorConfiguration, Log, "SensorRates size: {0}", SensorRates.Num());
-    SensorRates.Reset();
-    const TMap<EBS_SensorType, EBS_SensorRate> &OtherSensorRates = Other->GetSensorRates();
-    UE_LOGFMT(LogBS_SensorConfiguration, Log, "OtherSensorRates size: {0}", OtherSensorRates.Num());
-    for (const TPair<EBS_SensorType, EBS_SensorRate> &Pair : OtherSensorRates)
-    {
-        UE_LOGFMT(LogBS_SensorConfiguration, Log, "Copying {0}, {1}", UEnum::GetValueAsString(Pair.Key), UEnum::GetValueAsString(Pair.Value));
-        SensorRates.Add(Pair.Key) = Pair.Value;
-    }
-    UE_LOGFMT(LogBS_SensorConfiguration, Log, "Copied SensorConfiguration");
+    SensorRates = Other->GetSensorRates();
 }
 
 bool UBS_SensorConfiguration::IsEqualTo(const UBS_SensorConfiguration *Other)
@@ -71,6 +53,12 @@ EBS_SensorRate UBS_SensorConfiguration::GetSensorRate(EBS_SensorType SensorType,
     bContainsSensorType = SensorRates.Contains(SensorType);
     return bContainsSensorType ? SensorRates[SensorType] : EBS_SensorRate::Value0;
 }
+EBS_SensorRate UBS_SensorConfiguration::GetSensorRate(EBS_SensorType SensorType) const
+{
+
+    bool bContainsSensorType;
+    return GetSensorRate(SensorType, bContainsSensorType);
+}
 
 bool UBS_SensorConfiguration::IsSensorRateNonZero(EBS_SensorType SensorType) const
 {
@@ -82,21 +70,29 @@ bool UBS_SensorConfiguration::IsSensorRateNonZero(EBS_SensorType SensorType) con
 
 void UBS_SensorConfiguration::SetSensorRate(EBS_SensorType SensorType, EBS_SensorRate SensorRate, bool &bDidUpdateSensorRate)
 {
-
-    if (!SensorRates.Contains(SensorType))
+    if (SensorRates.Contains(SensorType))
     {
-        return;
-    }
-
-    if (SensorRates[SensorType] == SensorRate)
-    {
-        bDidUpdateSensorRate = false;
+        if (SensorRates[SensorType] == SensorRate)
+        {
+            bDidUpdateSensorRate = false;
+        }
+        else
+        {
+            SensorRates[SensorType] = SensorRate;
+            bDidUpdateSensorRate = true;
+        }
     }
     else
     {
-        SensorRates[SensorType] = SensorRate;
+        SensorRates.Add(SensorType, SensorRate);
         bDidUpdateSensorRate = true;
     }
+}
+void UBS_SensorConfiguration::SetSensorRate(EBS_SensorType SensorType, EBS_SensorRate SensorRate)
+{
+
+    bool bDidUpdateSensorRate;
+    return SetSensorRate(SensorType, SensorRate, bDidUpdateSensorRate);
 }
 
 void UBS_SensorConfiguration::SetSensorRates(const TMap<EBS_SensorType, EBS_SensorRate> &NewSensorRates)
@@ -142,6 +138,11 @@ void UBS_SensorConfiguration::ToggleSensorRate(EBS_SensorType SensorType, EBS_Se
     }
 
     UpdatedSensorRate = SensorRates[SensorType];
+}
+void UBS_SensorConfiguration::ToggleSensorRate(EBS_SensorType SensorType, EBS_SensorRate SensorRate)
+{
+    EBS_SensorRate UpdatedSensorRate;
+    return ToggleSensorRate(SensorType, SensorRate, UpdatedSensorRate);
 }
 
 void UBS_SensorConfiguration::UpdateSensorTypes()
