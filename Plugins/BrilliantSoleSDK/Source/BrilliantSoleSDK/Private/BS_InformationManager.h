@@ -51,6 +51,7 @@ public:
 	uint16 GetMaxTxMessageLength() const { return MTU == 0 ? 0 : MTU - 3; }
 
 private:
+	UPROPERTY()
 	uint16 MTU = 0;
 	void ParseMTU(const TArray<uint8> &Message);
 	// MTU END
@@ -61,6 +62,7 @@ public:
 	FIdCallbackLocal OnIdUpdate;
 
 private:
+	UPROPERTY()
 	FString Id;
 	void ParseId(const TArray<uint8> &Message);
 	// ID END
@@ -75,6 +77,7 @@ public:
 	void SetName(const FString &NewName);
 
 private:
+	UPROPERTY()
 	FString Name;
 	void ParseName(const TArray<uint8> &Message);
 	// NAME END
@@ -87,6 +90,7 @@ public:
 	void SetType(const EBS_DeviceType NewType);
 
 private:
+	UPROPERTY()
 	EBS_DeviceType Type;
 	void ParseType(const TArray<uint8> &Message);
 	// TYPE END
@@ -97,6 +101,7 @@ public:
 	FCurrentTimeCallbackLocal OnCurrentTimeUpdate;
 
 private:
+	UPROPERTY()
 	uint64 CurrentTime;
 	void ParseCurrentTime(const TArray<uint8> &Message);
 

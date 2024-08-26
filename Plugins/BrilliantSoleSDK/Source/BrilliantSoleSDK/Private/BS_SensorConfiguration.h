@@ -15,6 +15,7 @@ class BRILLIANTSOLESDK_API UBS_SensorConfiguration : public UObject
 
 public:
     UBS_SensorConfiguration();
+    ~UBS_SensorConfiguration();
 
     void Copy(const UBS_SensorConfiguration *Other);
     bool IsEqualTo(const UBS_SensorConfiguration *Other);
@@ -46,6 +47,7 @@ public:
     void ToggleSensorRate(EBS_SensorType SensorType, EBS_SensorRate SensorRate, EBS_SensorRate &UpdatedSensorRate);
 
 private:
+    UPROPERTY()
     TMap<EBS_SensorType, EBS_SensorRate> SensorRates;
     // SENSOR RATES END
 
@@ -55,7 +57,9 @@ public:
     const TArray<EBS_SensorType> &GetSensorTypes() const { return SensorTypes; }
 
 private:
+    UPROPERTY()
     TArray<EBS_SensorType> SensorTypes;
+    UPROPERTY()
     bool bSensorTypesNeedsUpdate = false;
     void UpdateSensorTypes();
     // SENSOR TYPES END

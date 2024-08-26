@@ -49,6 +49,7 @@ void UBS_InformationManager::Reset()
 
 void UBS_InformationManager::ParseMTU(const TArray<uint8> &Message)
 {
+    UE_LOGFMT(LogBS_InformationManager, Log, "Parsing MTU...");
     MTU = ByteParser::ParseAs<uint16>(Message);
     UE_LOGFMT(LogBS_InformationManager, Log, "Parsed MTU: {0}", MTU);
     OnMTU_Update.ExecuteIfBound(MTU);
@@ -56,6 +57,7 @@ void UBS_InformationManager::ParseMTU(const TArray<uint8> &Message)
 
 void UBS_InformationManager::ParseId(const TArray<uint8> &Message)
 {
+    UE_LOGFMT(LogBS_InformationManager, Log, "Parsing Id...");
     Id = ByteParser::GetString(Message);
     UE_LOGFMT(LogBS_InformationManager, Log, "Parsed Id: {0} ({1} bytes)", Id, Message.Num());
     OnIdUpdate.ExecuteIfBound(Id);
@@ -63,6 +65,7 @@ void UBS_InformationManager::ParseId(const TArray<uint8> &Message)
 
 void UBS_InformationManager::ParseName(const TArray<uint8> &Message)
 {
+    UE_LOGFMT(LogBS_InformationManager, Log, "Parsing Name...");
     Name = ByteParser::GetString(Message);
     UE_LOGFMT(LogBS_InformationManager, Log, "Parsed Name: {0}", Name);
     OnNameUpdate.ExecuteIfBound(Name);

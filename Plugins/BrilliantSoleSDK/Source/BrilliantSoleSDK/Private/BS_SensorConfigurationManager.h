@@ -47,6 +47,8 @@ public:
 
 private:
 	void ParseSensorConfiguration(const TArray<uint8> &Message);
+	UPROPERTY()
 	UBS_SensorConfiguration *SensorConfiguration;
+	UPROPERTY()
 	UBS_SensorConfiguration *TempSensorConfiguration;
 };

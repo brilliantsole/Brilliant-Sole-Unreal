@@ -30,6 +30,7 @@ public:
 
 private:
 	void Reset();
+	void LogMemoryUsage();
 
 	// BS SUBSYSTEM START
 protected:

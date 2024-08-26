@@ -34,9 +34,11 @@ public:
 	FBatteryCurrentCallbackLocal OnBatteryCurrentUpdate;
 
 private:
+	UPROPERTY()
 	bool bIsBatteryCharging = false;
 	void ParseIsBatteryCharging(const TArray<uint8> &Message);
 
+	UPROPERTY()
 	float BatteryCurrent = 0.0f;
 	void ParseBatteryCurrent(const TArray<uint8> &Message);
 };
