@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "Logging/StructuredLog.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogByteParser, Log, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_ByteParser, Log, All);
 
 class ByteParser
 {
@@ -28,7 +28,7 @@ public:
     {
         if (ByteArray.Num() < Offset + sizeof(T))
         {
-            UE_LOGFMT(LogByteParser, Error, "Byte array does not have enough bytes to parse the target type starting from the given Offset.");
+            UE_LOGFMT(LogBS_ByteParser, Error, "Byte array does not have enough bytes to parse the target type starting from the given Offset.");
             return T(); // Return default value of T if size mismatch
         }
 

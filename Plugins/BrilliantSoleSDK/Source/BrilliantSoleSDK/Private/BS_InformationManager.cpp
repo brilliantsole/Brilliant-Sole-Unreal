@@ -4,7 +4,7 @@
 #include "Logging/StructuredLog.h"
 #include "BS_ByteParser.h"
 #include "BS_Message.h"
-#include "Misc/DateTime.h"
+#include "BS_TimeUtils.h"
 
 DEFINE_LOG_CATEGORY(LogBS_InformationManager);
 
@@ -128,10 +128,7 @@ void UBS_InformationManager::ParseCurrentTime(const TArray<uint8> &Message)
 
 void UBS_InformationManager::UpdateCurrentTime()
 {
-    FDateTime Now = FDateTime::UtcNow();
-    FDateTime UnixEpoch(1970, 1, 1);
-    FTimespan Timespan = Now - UnixEpoch;
-    uint64 Milliseconds = static_cast<uint64>(Timespan.GetTotalMilliseconds());
+    uint64 Milliseconds = TimeUtils::GetMilliseconds();
     UE_LOGFMT(LogBS_InformationManager, Log, "Updating CurrentTime to {0}", Milliseconds);
     const TArray<uint8> TxMessage = ByteParser::ToByteArray(Milliseconds);
     SendTxMessages.ExecuteIfBound({{BS_MessageSetCurrentTime, TxMessage}}, true);

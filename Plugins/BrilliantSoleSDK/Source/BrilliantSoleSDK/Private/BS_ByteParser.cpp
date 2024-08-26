@@ -2,7 +2,7 @@
 
 #include "BS_ByteParser.h"
 
-DEFINE_LOG_CATEGORY(LogByteParser);
+DEFINE_LOG_CATEGORY(LogBS_ByteParser);
 
 FString ByteParser::GetString(const TArray<uint8> &Data)
 {

@@ -3,6 +3,7 @@
 #include "BS_SensorDataManager.h"
 #include "BS_Message.h"
 #include "BS_ByteParser.h"
+#include "BS_TimeUtils.h"
 #include "Logging/StructuredLog.h"
 
 DEFINE_LOG_CATEGORY(LogBS_SensorDataManager);
@@ -36,7 +37,7 @@ bool UBS_SensorDataManager::OnRxMessage(uint8 MessageType, const TArray<uint8> &
 
 void UBS_SensorDataManager::ParseSensorScalars(const TArray<uint8> &Message)
 {
-    SensorScalars.Empty();
+    SensorScalars.Reset();
 
     const uint8 MessageLength = Message.Num();
     for (uint8 Index = 0; Index < MessageLength; Index += 5)
@@ -59,5 +60,11 @@ void UBS_SensorDataManager::ParseSensorScalars(const TArray<uint8> &Message)
 
 void UBS_SensorDataManager::ParseSensorData(const TArray<uint8> &Message)
 {
-    // FILL
+    const uint8 MessageLength = Message.Num();
+    uint8 Index = 0;
+
+    uint64 Timestamp = TimeUtils::ParseTimestamp(Message);
+    Index += 2;
+
+    UE_LOGFMT(LogBS_SensorDataManager, Log, "Timestamp: {0}ms", Timestamp);
 }

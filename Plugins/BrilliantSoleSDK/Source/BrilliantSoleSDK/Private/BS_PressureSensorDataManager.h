@@ -17,4 +17,11 @@ class UBS_PressureSensorDataManager : public UObject
 
 public:
 	void ParsePressurePositions(const TArray<uint8> &Message);
+	const uint8 GetNumberOfPressurePositions() const { return PressurePositions.Num(); }
+
+private:
+	UPROPERTY()
+	TArray<FVector2D> PressurePositions;
+
+	static const float PressurePositionScalar;
 };
