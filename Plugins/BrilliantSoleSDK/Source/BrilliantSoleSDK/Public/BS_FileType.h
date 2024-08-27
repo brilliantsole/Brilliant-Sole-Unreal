@@ -11,3 +11,5 @@ enum class EBS_FileType : uint8
 
     COUNT UMETA(Hidden)
 };
+
+ENUM_RANGE_BY_COUNT(EBS_FileType, static_cast<int32>(EBS_FileType::COUNT))

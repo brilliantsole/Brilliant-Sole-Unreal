@@ -13,13 +13,13 @@ void UBS_ParseUtils::ParseRxData(const TArray<uint8> &Data, FMessageCallback Mes
     while (Offset < DataLength)
     {
         const uint8 MessageType = Data[Offset++];
-        const uint8 MessageDataLength = ByteParser::ParseAs<uint16>(Data, Offset);
+        const uint8 MessageDataLength = BS_ByteParser::ParseAs<uint16>(Data, Offset, true);
         Offset += 2;
 
         UE_LOGFMT(LogBS_ParseUtils, Log, "Message #{0} ({1} bytes)", MessageType, MessageDataLength);
 
-        TArrayView<uint8> MessageData((uint8 *)(Data.GetData() + Offset), MessageDataLength);
-        MessageCallback.ExecuteIfBound(MessageType, (TArray<uint8>)MessageData);
+        const TArrayView<uint8> MessageData((uint8 *)(Data.GetData() + Offset), MessageDataLength);
+        MessageCallback.ExecuteIfBound(MessageType, static_cast<TArray<uint8>>(MessageData));
 
         Offset += MessageDataLength;
     }

@@ -11,3 +11,5 @@ enum class EBS_InsoleSide : uint8
     RIGHT UMETA(DisplayName = "Right"),
     COUNT UMETA(Hidden)
 };
+
+ENUM_RANGE_BY_COUNT(EBS_InsoleSide, static_cast<int32>(EBS_InsoleSide::COUNT))

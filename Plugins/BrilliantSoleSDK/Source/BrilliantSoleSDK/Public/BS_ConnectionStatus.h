@@ -13,3 +13,5 @@ enum class EBS_ConnectionStatus : uint8
     DISCONNECTING UMETA(DisplayName = "Disconnecting"),
     COUNT UMETA(Hidden)
 };
+
+ENUM_RANGE_BY_COUNT(EBS_ConnectionStatus, static_cast<int32>(EBS_ConnectionStatus::COUNT))

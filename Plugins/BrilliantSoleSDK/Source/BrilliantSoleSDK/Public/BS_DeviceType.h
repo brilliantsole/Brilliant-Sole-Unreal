@@ -11,3 +11,5 @@ enum class EBS_DeviceType : uint8
     RIGHT_INSOLE UMETA(DisplayName = "Right Insole"),
     COUNT UMETA(Hidden)
 };
+
+ENUM_RANGE_BY_COUNT(EBS_DeviceType, static_cast<int32>(EBS_DeviceType::COUNT))

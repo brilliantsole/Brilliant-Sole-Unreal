@@ -4,7 +4,7 @@
 
 DEFINE_LOG_CATEGORY(LogBS_ByteParser);
 
-FString ByteParser::GetString(const TArray<uint8> &Data)
+FString BS_ByteParser::GetString(const TArray<uint8> &Data)
 {
     auto StringLength = Data.Num();
     FString String;
@@ -16,7 +16,7 @@ FString ByteParser::GetString(const TArray<uint8> &Data)
     return String;
 }
 
-TArray<uint8> ByteParser::StringToArray(const FString &String)
+TArray<uint8> BS_ByteParser::StringToArray(const FString &String)
 {
     TArray<uint8> ByteArray;
     FTCHARToUTF8 UTF8String(*String);

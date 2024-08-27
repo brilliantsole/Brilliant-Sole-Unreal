@@ -13,14 +13,27 @@ void UBS_PressureSensorDataManager::ParsePressurePositions(const TArray<uint8> &
     PressurePositions.Reset();
 
     const uint8 MessageLength = Message.Num();
-    for (uint8 Index = 0; Index < MessageLength; Index += 2)
+    for (uint8 Offset = 0; Offset < MessageLength; Offset += 2)
     {
-        float X = static_cast<float>(Message[Index]) / PressurePositionScalar;
-        float Y = static_cast<float>(Message[Index + 1]) / PressurePositionScalar;
+        float X = static_cast<float>(Message[Offset]) / PressurePositionScalar;
+        float Y = static_cast<float>(Message[Offset + 1]) / PressurePositionScalar;
         UE_LOGFMT(LogBS_PressureSensorDataManager, Log, "#{0}: {1}, {2}", PressurePositions.Num(), X, Y);
 
         PressurePositions.Add({X, Y});
     }
 
     UE_LOGFMT(LogBS_PressureSensorDataManager, Log, "PressurePositions updated");
+}
+
+bool UBS_PressureSensorDataManager::OnSensorDataMessage(EBS_SensorType SensorType, const TArray<uint8> &Message, const uint64 &Timestamp, const float &Scalar)
+{
+    switch (SensorType)
+    {
+    case EBS_SensorType::PRESSURE:
+        // FILL
+        break;
+    default:
+        return false;
+    }
+    return true;
 }

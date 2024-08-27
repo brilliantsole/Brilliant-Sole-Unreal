@@ -13,7 +13,8 @@
 		"typescript.tsc.autoDetect": "off",
 		"npm.autoDetect": "off",
 		"files.associations": {
-			"fft": "cpp"
+			"fft": "cpp",
+			"mprealsupport": "cpp"
 		}
 	},
 	"extensions": {

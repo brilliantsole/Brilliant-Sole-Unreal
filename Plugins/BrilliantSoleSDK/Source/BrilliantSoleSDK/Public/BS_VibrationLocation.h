@@ -11,3 +11,5 @@ enum class EBS_VibrationLocation : uint8
     REAR UMETA(DisplayName = "Rear"),
     COUNT UMETA(Hidden)
 };
+
+ENUM_RANGE_BY_COUNT(EBS_VibrationLocation, static_cast<int32>(EBS_VibrationLocation::COUNT))

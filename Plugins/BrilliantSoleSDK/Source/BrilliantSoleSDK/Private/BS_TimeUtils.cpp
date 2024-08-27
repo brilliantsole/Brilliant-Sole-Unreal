@@ -4,6 +4,7 @@
 #include "BS_ByteParser.h"
 #include "Misc/DateTime.h"
 #include <limits>
+#include "Math/UnrealMathUtility.h"
 #include "Logging/StructuredLog.h"
 
 DEFINE_LOG_CATEGORY(LogBS_TimeUtils);
@@ -19,15 +20,28 @@ uint64 TimeUtils::GetMilliseconds()
 
 uint64 TimeUtils::ParseTimestamp(const TArray<uint8> &Message)
 {
-    uint16 RawTimestamp = ByteParser::ParseAs<uint16>(Message, 0);
-    UE_LOGFMT(LogBS_TimeUtils, Log, "RawTimestamp:{0}", RawTimestamp);
+    const uint64 CurrentTimestamp = GetMilliseconds();
+    UE_LOGFMT(LogBS_TimeUtils, Log, "CurrentTimestamp: {0}ms", CurrentTimestamp);
 
-    uint64 Milliseconds = GetMilliseconds();
-    UE_LOGFMT(LogBS_TimeUtils, Log, "Milliseconds: {0}ms", Milliseconds);
-    Milliseconds -= Milliseconds % UINT16_MAX;
-    UE_LOGFMT(LogBS_TimeUtils, Log, "Milliseconds without lower 2 bytes: {0}ms", Milliseconds);
-    Milliseconds += RawTimestamp;
-    UE_LOGFMT(LogBS_TimeUtils, Log, "Milliseconds with RawTimestamp: {0}ms", Milliseconds);
+    uint16 RawTimestamp = BS_ByteParser::ParseAs<uint16>(Message, 0, true);
+    UE_LOGFMT(LogBS_TimeUtils, Log, "RawTimestamp: {0}ms", RawTimestamp);
 
-    return Milliseconds;
+    uint64 Timestamp = CurrentTimestamp - (CurrentTimestamp % UINT16_MAX);
+    Timestamp += RawTimestamp;
+
+    UE_LOGFMT(LogBS_TimeUtils, Log, "Temp Timestamp: {0}ms", Timestamp);
+
+    const uint64 TimestampDifference = FMath::Abs(CurrentTimestamp > Timestamp ? CurrentTimestamp - Timestamp : Timestamp - CurrentTimestamp);
+    UE_LOGFMT(LogBS_TimeUtils, Log, "TimestampDifference: {0}ms", TimestampDifference);
+
+    if (TimestampDifference > TimestampThreshold)
+    {
+        UE_LOGFMT(LogBS_TimeUtils, Log, "Correcting Timestamp Overflow");
+        Timestamp += UINT16_MAX * FMath::Sign(CurrentTimestamp - Timestamp);
+    }
+
+    UE_LOGFMT(LogBS_TimeUtils, Log, "Timestamp: {0}ms", Timestamp);
+    return Timestamp;
 }
+
+const uint64 TimeUtils::TimestampThreshold = 60000;

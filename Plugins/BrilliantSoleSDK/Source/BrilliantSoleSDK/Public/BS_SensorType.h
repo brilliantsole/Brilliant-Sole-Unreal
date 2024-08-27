@@ -19,11 +19,13 @@ enum class EBS_SensorType : uint8
 
     ORIENTATION UMETA(DisplayName = "Orientation"),
     ACTIVITY UMETA(DisplayName = "Activity"),
-    STEP_COUNTER UMETA(DisplayName = "Step Counter"),
-    STEP_DETECTOR UMETA(DisplayName = "Step Detector"),
+    STEP_COUNT UMETA(DisplayName = "Step Count"),
+    STEP_DETECTION UMETA(DisplayName = "Step Detection"),
     DEVICE_ORIENTATION UMETA(DisplayName = "Device Orientation"),
 
     BAROMETER UMETA(DisplayName = "Barometer"),
 
     COUNT UMETA(Hidden)
 };
+
+ENUM_RANGE_BY_COUNT(EBS_SensorType, static_cast<int32>(EBS_SensorType::COUNT))

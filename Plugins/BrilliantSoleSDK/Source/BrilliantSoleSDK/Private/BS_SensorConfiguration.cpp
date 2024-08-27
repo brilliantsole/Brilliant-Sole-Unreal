@@ -177,14 +177,8 @@ EBS_SensorRate UBS_SensorConfiguration::GetClosestSensorRate(uint16 RawSensorRat
     EBS_SensorRate SensorRate = EBS_SensorRate::Value0;
     if (RawSensorRate > 0)
     {
-        const UEnum *EBS_SensorRatePtr = StaticEnum<EBS_SensorRate>();
-        for (uint8 SensorRateIndex = 0; SensorRateIndex < EBS_SensorRatePtr->NumEnums(); SensorRateIndex++)
+        for (auto _SensorRate : TEnumRange<EBS_SensorRate>())
         {
-            if (!EBS_SensorRatePtr->IsValidEnumValue(SensorRateIndex))
-            {
-                continue;
-            }
-            const EBS_SensorRate _SensorRate = static_cast<EBS_SensorRate>(EBS_SensorRatePtr->GetValueByIndex(SensorRateIndex));
             const uint16 _RawSensorRate = GetRawSensorRate(_SensorRate);
             if (RawSensorRate >= _RawSensorRate)
             {
@@ -200,16 +194,16 @@ void UBS_SensorConfiguration::Parse(const TArray<uint8> &Message)
     SensorRates.Reset();
 
     const uint8 MessageLength = Message.Num();
-    for (uint8 Index = 0; Index < MessageLength; Index += 3)
+    for (uint8 Offset = 0; Offset < MessageLength; Offset += 3)
     {
-        const uint8 SensorTypeEnum = Message[Index];
+        const uint8 SensorTypeEnum = Message[Offset];
         if (SensorTypeEnum >= static_cast<uint8>(EBS_SensorType::COUNT))
         {
             UE_LOGFMT(LogBS_SensorConfiguration, Error, "invalid SensorTypeEnum {0}", SensorTypeEnum);
             continue;
         }
         const EBS_SensorType SensorType = static_cast<EBS_SensorType>(SensorTypeEnum);
-        uint16 RawSensorRate = ByteParser::ParseAs<uint16>(Message, Index + 1);
+        uint16 RawSensorRate = BS_ByteParser::ParseAs<uint16>(Message, Offset + 1, true);
         UE_LOGFMT(LogBS_SensorConfiguration, Log, "RawSensorRate: {0}ms", RawSensorRate);
 
         EBS_SensorRate SensorRate = GetClosestSensorRate(RawSensorRate);
@@ -233,7 +227,7 @@ const TArray<uint8> UBS_SensorConfiguration::ToArray() const
         const uint8 SensorTypeEnum = static_cast<uint8>(Pair.Key);
         ByteArray.Add(SensorTypeEnum);
         const uint16 RawSensorRate = GetRawSensorRate(Pair.Value);
-        ByteArray.Append(ByteParser::ToByteArray(RawSensorRate));
+        ByteArray.Append(BS_ByteParser::ToByteArray(RawSensorRate));
     }
     return ByteArray;
 }

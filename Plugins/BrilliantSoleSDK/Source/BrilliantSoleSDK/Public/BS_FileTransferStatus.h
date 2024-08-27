@@ -13,3 +13,5 @@ enum class EBS_FileTransferStatus : uint8
 
     COUNT UMETA(Hidden)
 };
+
+ENUM_RANGE_BY_COUNT(EBS_FileTransferStatus, static_cast<int32>(EBS_FileTransferStatus::COUNT))
