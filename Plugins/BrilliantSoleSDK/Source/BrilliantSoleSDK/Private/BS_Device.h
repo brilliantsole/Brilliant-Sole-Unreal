@@ -14,6 +14,7 @@
 #include "BS_VibrationManager.h"
 #include "BS_FileTransferManager.h"
 #include "BS_TfliteManager.h"
+#include "Logging/StructuredLog.h"
 #include "BS_Device.generated.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_Device, Log, All);
@@ -263,7 +264,11 @@ private:
 	void OnGyroscopeUpdate(const FVector &Vector, const uint64 &Timestamp) { OnGyroscope.Broadcast(Vector, Timestamp); }
 	void OnMagnetometerUpdate(const FVector &Vector, const uint64 &Timestamp) { OnMagnetometer.Broadcast(Vector, Timestamp); }
 	void OnGameRotationUpdate(const FQuat &Quaternion, const uint64 &Timestamp) { OnGameRotation.Broadcast(Quaternion, Timestamp); }
-	void OnRotationUpdate(const FQuat &Quaternion, const uint64 &Timestamp) { OnRotation.Broadcast(Quaternion, Timestamp); }
+	void OnRotationUpdate(const FQuat &Quaternion, const uint64 &Timestamp)
+	{
+		UE_LOGFMT(LogBS_Device, Log, "FUCK!!!ROTATION");
+		OnRotation.Broadcast(Quaternion, Timestamp);
+	}
 
 	void OnOrientationUpdate(const FRotator &Rotator, const uint64 &Timestamp) { OnOrientation.Broadcast(Rotator, Timestamp); }
 	void OnActivityUpdate(const TSet<EBS_Activity> &Activity, const uint64 &Timestamp) { OnActivity.Broadcast(Activity, Timestamp); }

@@ -42,7 +42,7 @@ UBS_Device::UBS_Device()
     SensorDataManager->OnGameRotationUpdate.BindUObject(this, &UBS_Device::OnGameRotationUpdate);
     SensorDataManager->OnRotationUpdate.BindUObject(this, &UBS_Device::OnRotationUpdate);
 
-    SensorDataManager->OnRotationUpdate.BindUObject(this, &UBS_Device::OnRotationUpdate);
+    SensorDataManager->OnOrientationUpdate.BindUObject(this, &UBS_Device::OnOrientationUpdate);
     SensorDataManager->OnActivityUpdate.BindUObject(this, &UBS_Device::OnActivityUpdate);
     SensorDataManager->OnStepCountUpdate.BindUObject(this, &UBS_Device::OnStepCountUpdate);
     SensorDataManager->OnStepDetectionUpdate.BindUObject(this, &UBS_Device::OnStepDetectionUpdate);

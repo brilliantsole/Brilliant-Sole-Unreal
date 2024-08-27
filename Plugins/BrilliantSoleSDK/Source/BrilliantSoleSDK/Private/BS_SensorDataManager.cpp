@@ -22,8 +22,8 @@ UBS_SensorDataManager::UBS_SensorDataManager()
     OnLinearAccelerationUpdate = MotionSensorDataManager->OnLinearAccelerationUpdate;
     OnGyroscopeUpdate = MotionSensorDataManager->OnGyroscopeUpdate;
     OnMagnetometerUpdate = MotionSensorDataManager->OnMagnetometerUpdate;
-    OnGameRotationUpdate = MotionSensorDataManager->OnGameRotationUpdate;
     OnRotationUpdate = MotionSensorDataManager->OnRotationUpdate;
+    OnGameRotationUpdate = MotionSensorDataManager->OnGameRotationUpdate;
 
     OnOrientationUpdate = MotionSensorDataManager->OnOrientationUpdate;
     OnActivityUpdate = MotionSensorDataManager->OnActivityUpdate;

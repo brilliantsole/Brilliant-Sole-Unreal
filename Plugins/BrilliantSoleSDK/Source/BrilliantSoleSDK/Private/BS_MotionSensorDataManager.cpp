@@ -110,10 +110,10 @@ void UBS_MotionSensorDataManager::ParseQuaternion(EBS_SensorType SensorType, con
     switch (SensorType)
     {
     case EBS_SensorType::GAME_ROTATION:
-        OnRotationUpdate.ExecuteIfBound(Quaternion, Timestamp);
+        OnGameRotationUpdate.ExecuteIfBound(Quaternion, Timestamp);
         break;
     case EBS_SensorType::ROTATION:
-        OnGameRotationUpdate.ExecuteIfBound(Quaternion, Timestamp);
+        OnRotationUpdate.ExecuteIfBound(Quaternion, Timestamp);
         break;
     default:
         UE_LOGFMT(LogBS_MotionSensorDataManager, Error, "Uncaught Quaternion SensorType {0}", UEnum::GetValueAsString(SensorType));

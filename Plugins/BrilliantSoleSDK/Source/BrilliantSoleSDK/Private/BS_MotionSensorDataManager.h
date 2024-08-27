@@ -12,25 +12,25 @@
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_MotionSensorDataManager, Log, All);
 
 DECLARE_DELEGATE_TwoParams(FVectorCallbackLocal, const FVector &, const uint64 &);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FVectorCallback, const FVector &, Vector, const uint64 &, Timestamp);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FVectorCallback, const FVector &, Vector, const float &, Timestamp);
 
 DECLARE_DELEGATE_TwoParams(FRotatorCallbackLocal, const FRotator &, const uint64 &);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FRotatorCallback, const FRotator &, Rotator, const uint64 &, Timestamp);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FRotatorCallback, const FRotator &, Rotator, const float &, Timestamp);
 
 DECLARE_DELEGATE_TwoParams(FQuaternionCallbackLocal, const FQuat &, const uint64 &);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FQuaternionCallback, const FQuat &, Quaternion, const uint64 &, Timestamp);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FQuaternionCallback, const FQuat &, Quaternion, const float &, Timestamp);
 
 DECLARE_DELEGATE_OneParam(FTimestampCallbackLocal, const uint64 &);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTimestampCallback, const uint64 &, Timestamp);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTimestampCallback, const float &, Timestamp);
 
 DECLARE_DELEGATE_TwoParams(FActivityCallbackLocal, const TSet<EBS_Activity> &, const uint64 &);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FActivityCallback, const TSet<EBS_Activity> &, Activity, const uint64 &, Timestamp);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FActivityCallback, const TSet<EBS_Activity> &, Activity, const float &, Timestamp);
 
 DECLARE_DELEGATE_TwoParams(FStepCountCallbackLocal, const uint32 &, const uint64 &);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FStepCountCallback, const uint32 &, StepCount, const uint64 &, Timestamp);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FStepCountCallback, const uint32 &, StepCount, const float &, Timestamp);
 
 DECLARE_DELEGATE_TwoParams(FDeviceOrientationCallbackLocal, const EBS_DeviceOrientation &, const uint64 &);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDeviceOrientationCallback, const EBS_DeviceOrientation &, DeviceOrientation, const uint64 &, Timestamp);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDeviceOrientationCallback, const EBS_DeviceOrientation &, DeviceOrientation, const float &, Timestamp);
 
 UCLASS()
 class UBS_MotionSensorDataManager : public UBS_BaseSensorDataManager
