@@ -34,6 +34,20 @@ UBS_Device::UBS_Device()
     SensorDataManager = CreateDefaultSubobject<UBS_SensorDataManager>(TEXT("SensorDataManager"));
     SensorDataManager->SendTxMessages.BindUObject(this, &UBS_Device::SendTxMessages);
 
+    SensorDataManager->OnAccelerationUpdate.BindUObject(this, &UBS_Device::OnAccelerationUpdate);
+    SensorDataManager->OnGravityUpdate.BindUObject(this, &UBS_Device::OnGravityUpdate);
+    SensorDataManager->OnLinearAccelerationUpdate.BindUObject(this, &UBS_Device::OnLinearAccelerationUpdate);
+    SensorDataManager->OnGyroscopeUpdate.BindUObject(this, &UBS_Device::OnGyroscopeUpdate);
+    SensorDataManager->OnMagnetometerUpdate.BindUObject(this, &UBS_Device::OnMagnetometerUpdate);
+    SensorDataManager->OnGameRotationUpdate.BindUObject(this, &UBS_Device::OnGameRotationUpdate);
+    SensorDataManager->OnRotationUpdate.BindUObject(this, &UBS_Device::OnRotationUpdate);
+
+    SensorDataManager->OnRotationUpdate.BindUObject(this, &UBS_Device::OnRotationUpdate);
+    SensorDataManager->OnActivityUpdate.BindUObject(this, &UBS_Device::OnActivityUpdate);
+    SensorDataManager->OnStepCountUpdate.BindUObject(this, &UBS_Device::OnStepCountUpdate);
+    SensorDataManager->OnStepDetectionUpdate.BindUObject(this, &UBS_Device::OnStepDetectionUpdate);
+    SensorDataManager->OnDeviceOrientationUpdate.BindUObject(this, &UBS_Device::OnDeviceOrientationUpdate);
+
     SensorConfigurationManager = CreateDefaultSubobject<UBS_SensorConfigurationManager>(TEXT("SensorConfigurationManager"));
     SensorConfigurationManager->SendTxMessages.BindUObject(this, &UBS_Device::SendTxMessages);
     SensorConfigurationManager->OnSensorConfigurationUpdate.BindUObject(this, &UBS_Device::OnSensorConfigurationUpdate);

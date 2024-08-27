@@ -59,19 +59,19 @@ void UBS_MotionSensorDataManager::ParseVector(EBS_SensorType SensorType, const T
     switch (SensorType)
     {
     case EBS_SensorType::ACCELERATION:
-        OnAccelerationCallback.ExecuteIfBound(Vector, Timestamp);
+        OnAccelerationUpdate.ExecuteIfBound(Vector, Timestamp);
         break;
     case EBS_SensorType::GRAVITY:
-        OnGravityCallback.ExecuteIfBound(Vector, Timestamp);
+        OnGravityUpdate.ExecuteIfBound(Vector, Timestamp);
         break;
     case EBS_SensorType::LINEAR_ACCELERATION:
-        OnLinearAccelerationCallback.ExecuteIfBound(Vector, Timestamp);
+        OnLinearAccelerationUpdate.ExecuteIfBound(Vector, Timestamp);
         break;
     case EBS_SensorType::GYROSCOPE:
-        OnGyroscopeCallback.ExecuteIfBound(Vector, Timestamp);
+        OnGyroscopeUpdate.ExecuteIfBound(Vector, Timestamp);
         break;
     case EBS_SensorType::MAGNETOMETER:
-        OnMagnetometerCallback.ExecuteIfBound(Vector, Timestamp);
+        OnMagnetometerUpdate.ExecuteIfBound(Vector, Timestamp);
         break;
     default:
         UE_LOGFMT(LogBS_MotionSensorDataManager, Error, "Uncaught Vector SensorType {0}", UEnum::GetValueAsString(SensorType));
@@ -110,10 +110,10 @@ void UBS_MotionSensorDataManager::ParseQuaternion(EBS_SensorType SensorType, con
     switch (SensorType)
     {
     case EBS_SensorType::GAME_ROTATION:
-        OnRotationCallback.ExecuteIfBound(Quaternion, Timestamp);
+        OnRotationUpdate.ExecuteIfBound(Quaternion, Timestamp);
         break;
     case EBS_SensorType::ROTATION:
-        OnGameRotationCallback.ExecuteIfBound(Quaternion, Timestamp);
+        OnGameRotationUpdate.ExecuteIfBound(Quaternion, Timestamp);
         break;
     default:
         UE_LOGFMT(LogBS_MotionSensorDataManager, Error, "Uncaught Quaternion SensorType {0}", UEnum::GetValueAsString(SensorType));
@@ -137,7 +137,7 @@ void UBS_MotionSensorDataManager::ParseOrientation(EBS_SensorType SensorType, co
     switch (SensorType)
     {
     case EBS_SensorType::ORIENTATION:
-        OnOrientationCallback.ExecuteIfBound(Rotator, Timestamp);
+        OnOrientationUpdate.ExecuteIfBound(Rotator, Timestamp);
         break;
     default:
         UE_LOGFMT(LogBS_MotionSensorDataManager, Error, "Uncaught Orientation SensorType {0}", UEnum::GetValueAsString(SensorType));
@@ -159,25 +159,25 @@ void UBS_MotionSensorDataManager::ParseActivity(EBS_SensorType SensorType, const
             Activity.Add(ActivityType);
         }
     }
-    OnActivityCallback.ExecuteIfBound(Activity, Timestamp);
+    OnActivityUpdate.ExecuteIfBound(Activity, Timestamp);
 }
 
 void UBS_MotionSensorDataManager::ParseStepCount(EBS_SensorType SensorType, const TArray<uint8> &Message, const uint64 &Timestamp)
 {
     const uint32 StepCount = BS_ByteParser::ParseAs<uint32>(Message);
     UE_LOGFMT(LogBS_MotionSensorDataManager, Log, "StepCount: {0}", StepCount);
-    OnStepCountCallback.ExecuteIfBound(StepCount, Timestamp);
+    OnStepCountUpdate.ExecuteIfBound(StepCount, Timestamp);
 }
 
 void UBS_MotionSensorDataManager::ParseStepDetection(EBS_SensorType SensorType, const TArray<uint8> &Message, const uint64 &Timestamp)
 {
     UE_LOGFMT(LogBS_MotionSensorDataManager, Log, "Step Detected");
-    OnStepDetectionCallback.ExecuteIfBound(Timestamp);
+    OnStepDetectionUpdate.ExecuteIfBound(Timestamp);
 }
 
 void UBS_MotionSensorDataManager::ParseDeviceOrientation(EBS_SensorType SensorType, const TArray<uint8> &Message, const uint64 &Timestamp)
 {
     const EBS_DeviceOrientation DeviceOrientation = static_cast<EBS_DeviceOrientation>(Message[0]);
     UE_LOGFMT(LogBS_MotionSensorDataManager, Log, "Device Orientation: {0}", UEnum::GetValueAsString(DeviceOrientation));
-    OnDeviceOrientationCallback.ExecuteIfBound(DeviceOrientation, Timestamp);
+    OnDeviceOrientationUpdate.ExecuteIfBound(DeviceOrientation, Timestamp);
 }

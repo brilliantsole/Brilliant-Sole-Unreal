@@ -223,13 +223,54 @@ private:
 	// SENSOR CONFIGURATION END
 
 	// SENSOR DATA START
-public:
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "BS Sensor Data")
 	UBS_SensorDataManager *SensorDataManager;
+	// SENSOR DATA END
+
+	// MOTION DATA START
+public:
+	UPROPERTY(BlueprintAssignable, Category = "BS Motion Data")
+	FVectorCallback OnAcceleration;
+	UPROPERTY(BlueprintAssignable, Category = "BS Motion Data")
+	FVectorCallback OnGravity;
+	UPROPERTY(BlueprintAssignable, Category = "BS Motion Data")
+	FVectorCallback OnLinearAcceleration;
+	UPROPERTY(BlueprintAssignable, Category = "BS Motion Data")
+	FVectorCallback OnGyroscope;
+	UPROPERTY(BlueprintAssignable, Category = "BS Motion Data")
+	FVectorCallback OnMagnetometer;
+	UPROPERTY(BlueprintAssignable, Category = "BS Motion Data")
+	FQuaternionCallback OnGameRotation;
+	UPROPERTY(BlueprintAssignable, Category = "BS Motion Data")
+	FQuaternionCallback OnRotation;
+
+	UPROPERTY(BlueprintAssignable, Category = "BS Motion Data")
+	FRotatorCallback OnOrientation;
+	UPROPERTY(BlueprintAssignable, Category = "BS Motion Data")
+	FActivityCallback OnActivity;
+	UPROPERTY(BlueprintAssignable, Category = "BS Motion Data")
+	FStepCountCallback OnStepCount;
+	UPROPERTY(BlueprintAssignable, Category = "BS Motion Data")
+	FTimestampCallback OnStepDetection;
+	UPROPERTY(BlueprintAssignable, Category = "BS Motion Data")
+	FDeviceOrientationCallback OnDeviceOrientation;
 
 private:
-	// SENSOR DATA END
+	void OnAccelerationUpdate(const FVector &Vector, const uint64 &Timestamp) { OnAcceleration.Broadcast(Vector, Timestamp); }
+	void OnGravityUpdate(const FVector &Vector, const uint64 &Timestamp) { OnGravity.Broadcast(Vector, Timestamp); }
+	void OnLinearAccelerationUpdate(const FVector &Vector, const uint64 &Timestamp) { OnLinearAcceleration.Broadcast(Vector, Timestamp); }
+	void OnGyroscopeUpdate(const FVector &Vector, const uint64 &Timestamp) { OnGyroscope.Broadcast(Vector, Timestamp); }
+	void OnMagnetometerUpdate(const FVector &Vector, const uint64 &Timestamp) { OnMagnetometer.Broadcast(Vector, Timestamp); }
+	void OnGameRotationUpdate(const FQuat &Quaternion, const uint64 &Timestamp) { OnGameRotation.Broadcast(Quaternion, Timestamp); }
+	void OnRotationUpdate(const FQuat &Quaternion, const uint64 &Timestamp) { OnRotation.Broadcast(Quaternion, Timestamp); }
+
+	void OnOrientationUpdate(const FRotator &Rotator, const uint64 &Timestamp) { OnOrientation.Broadcast(Rotator, Timestamp); }
+	void OnActivityUpdate(const TSet<EBS_Activity> &Activity, const uint64 &Timestamp) { OnActivity.Broadcast(Activity, Timestamp); }
+	void OnStepCountUpdate(const uint32 &StepCount, const uint64 &Timestamp) { OnStepCount.Broadcast(StepCount, Timestamp); }
+	void OnStepDetectionUpdate(const uint64 &Timestamp) { OnStepDetection.Broadcast(Timestamp); }
+	void OnDeviceOrientationUpdate(const EBS_DeviceOrientation &DeviceOrientation, const uint64 &Timestamp) { OnDeviceOrientation.Broadcast(DeviceOrientation, Timestamp); }
+	// MOTION DATA END
 
 	// VIBRATION START
 public:

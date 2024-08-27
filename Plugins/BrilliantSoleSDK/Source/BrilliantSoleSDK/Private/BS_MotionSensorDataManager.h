@@ -51,17 +51,17 @@ private:
 	void ParseDeviceOrientation(EBS_SensorType SensorType, const TArray<uint8> &Message, const uint64 &Timestamp);
 
 public:
-	FVectorCallbackLocal OnAccelerationCallback;
-	FVectorCallbackLocal OnGravityCallback;
-	FVectorCallbackLocal OnLinearAccelerationCallback;
-	FVectorCallbackLocal OnGyroscopeCallback;
-	FVectorCallbackLocal OnMagnetometerCallback;
-	FQuaternionCallbackLocal OnGameRotationCallback;
-	FQuaternionCallbackLocal OnRotationCallback;
+	FVectorCallbackLocal OnAccelerationUpdate;
+	FVectorCallbackLocal OnGravityUpdate;
+	FVectorCallbackLocal OnLinearAccelerationUpdate;
+	FVectorCallbackLocal OnGyroscopeUpdate;
+	FVectorCallbackLocal OnMagnetometerUpdate;
+	FQuaternionCallbackLocal OnGameRotationUpdate;
+	FQuaternionCallbackLocal OnRotationUpdate;
 
-	FRotatorCallbackLocal OnOrientationCallback;
-	FActivityCallbackLocal OnActivityCallback;
-	FStepCountCallbackLocal OnStepCountCallback;
-	FTimestampCallbackLocal OnStepDetectionCallback;
-	FDeviceOrientationCallbackLocal OnDeviceOrientationCallback;
+	FRotatorCallbackLocal OnOrientationUpdate;
+	FActivityCallbackLocal OnActivityUpdate;
+	FStepCountCallbackLocal OnStepCountUpdate;
+	FTimestampCallbackLocal OnStepDetectionUpdate;
+	FDeviceOrientationCallbackLocal OnDeviceOrientationUpdate;
 };

@@ -14,7 +14,23 @@ UBS_SensorDataManager::UBS_SensorDataManager()
     SensorScalars.Reserve(static_cast<uint8>(EBS_SensorType::COUNT));
 
     PressureSensorDataManager = CreateDefaultSubobject<UBS_PressureSensorDataManager>(TEXT("PressureSensorDataManager"));
+
     MotionSensorDataManager = CreateDefaultSubobject<UBS_MotionSensorDataManager>(TEXT("MotionSensorDataManager"));
+
+    OnAccelerationUpdate = MotionSensorDataManager->OnAccelerationUpdate;
+    OnGravityUpdate = MotionSensorDataManager->OnGravityUpdate;
+    OnLinearAccelerationUpdate = MotionSensorDataManager->OnLinearAccelerationUpdate;
+    OnGyroscopeUpdate = MotionSensorDataManager->OnGyroscopeUpdate;
+    OnMagnetometerUpdate = MotionSensorDataManager->OnMagnetometerUpdate;
+    OnGameRotationUpdate = MotionSensorDataManager->OnGameRotationUpdate;
+    OnRotationUpdate = MotionSensorDataManager->OnRotationUpdate;
+
+    OnOrientationUpdate = MotionSensorDataManager->OnOrientationUpdate;
+    OnActivityUpdate = MotionSensorDataManager->OnActivityUpdate;
+    OnStepCountUpdate = MotionSensorDataManager->OnStepCountUpdate;
+    OnStepDetectionUpdate = MotionSensorDataManager->OnStepDetectionUpdate;
+    OnDeviceOrientationUpdate = MotionSensorDataManager->OnDeviceOrientationUpdate;
+
     BarometerSensorDataManager = CreateDefaultSubobject<UBS_BarometerSensorDataManager>(TEXT("BarometerSensorDataManager"));
 }
 
