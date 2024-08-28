@@ -27,7 +27,7 @@ public:
 public:
 	bool OnRxMessage(uint8 MessageType, const TArray<uint8> &Message) override;
 
-private:
+public:
 	UPROPERTY()
 	TMap<EBS_SensorType, float> SensorScalars;
 	void ParseSensorScalars(const TArray<uint8> &Message);

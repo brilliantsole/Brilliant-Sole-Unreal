@@ -14,11 +14,19 @@ DEFINE_LOG_CATEGORY(LogBS_Device);
 
 UBS_Device::UBS_Device()
 {
+    UE_LOGFMT(LogBS_Device, Log, "Constructor: {0}", GetName());
+    if (HasAnyFlags(RF_ClassDefaultObject))
+    {
+        UE_LOGFMT(LogBS_Device, Log, "CDO - Skipping Constructor");
+        return;
+    }
+
     ReceivedTxMessages.Reserve(RequiredTxMessageTypes.Num());
 
     DeviceInformationManager = CreateDefaultSubobject<UBS_DeviceInformationManager>(TEXT("DeviceInformationManager"));
 
     BatteryManager = CreateDefaultSubobject<UBS_BatteryManager>(TEXT("BatteryManager"));
+
     BatteryManager->SendTxMessages.BindUObject(this, &UBS_Device::SendTxMessages);
     BatteryManager->OnIsBatteryChargingUpdate.BindUObject(this, &UBS_Device::OnIsBatteryChargingUpdate);
     BatteryManager->OnBatteryCurrentUpdate.BindUObject(this, &UBS_Device::OnBatteryCurrentUpdate);
@@ -40,7 +48,8 @@ UBS_Device::UBS_Device()
     SensorDataManager->OnGyroscopeUpdate.BindUObject(this, &UBS_Device::OnGyroscopeUpdate);
     SensorDataManager->OnMagnetometerUpdate.BindUObject(this, &UBS_Device::OnMagnetometerUpdate);
     SensorDataManager->OnGameRotationUpdate.BindUObject(this, &UBS_Device::OnGameRotationUpdate);
-    SensorDataManager->GetOnRotationUpdate().BindUObject(this, &UBS_Device::OnRotationUpdate);
+    // SensorDataManager->GetOnRotationUpdate().BindUObject(this, &UBS_Device::OnRotationUpdate);
+    SensorDataManager->MotionSensorDataManager->OnRotationUpdate.BindUObject(this, &UBS_Device::OnRotationUpdate);
 
     SensorDataManager->OnOrientationUpdate.BindUObject(this, &UBS_Device::OnOrientationUpdate);
     SensorDataManager->OnActivityUpdate.BindUObject(this, &UBS_Device::OnActivityUpdate);
@@ -58,12 +67,20 @@ UBS_Device::UBS_Device()
     FileTransferManager->SendTxMessages.BindUObject(this, &UBS_Device::SendTxMessages);
     TfliteManager = CreateDefaultSubobject<UBS_TfliteManager>(TEXT("TfliteManager"));
     TfliteManager->SendTxMessages.BindUObject(this, &UBS_Device::SendTxMessages);
+}
 
-    if (!HasAnyFlags(RF_ClassDefaultObject))
+void UBS_Device::PostInitProperties()
+{
+    Super::PostInitProperties();
+    UE_LOGFMT(LogBS_Device, Log, "PostInitProperties {0}", GetName());
+    if (HasAnyFlags(RF_ClassDefaultObject))
     {
-        GetBS_Subsystem();
-        InitializeBP();
+        UE_LOGFMT(LogBS_Device, Log, "CDO - Skipping");
+        return;
     }
+
+    GetBS_Subsystem();
+    InitializeBP();
 }
 
 void UBS_Device::LogMemoryUsage()
@@ -246,9 +263,16 @@ void UBS_Device::OnRxMessage(uint8 MessageType, const TArray<uint8> &Message)
 
 void UBS_Device::SendTxMessages(const TArray<FBS_TxMessage> &TxMessages, bool bSendImmediately)
 {
+    UE_LOGFMT(LogBS_Device, Log, "Requesting to send {0} bytes...", TxMessages.Num());
     PendingTxMessages.Append(TxMessages);
-    if (!bSendImmediately || bIsSendingTxData)
+    if (!bSendImmediately)
     {
+        UE_LOGFMT(LogBS_Device, Log, "Not sending data immediately");
+        return;
+    }
+    if (bIsSendingTxData)
+    {
+        UE_LOGFMT(LogBS_Device, Log, "Already sending data - will wait until new data is sent");
         return;
     }
     SendPendingTxMessages();
@@ -309,6 +333,8 @@ void UBS_Device::OnSendTxData()
 const TArray<uint8> UBS_Device::RequiredTxMessageTypes = {
     BS_MessageIsBatteryCharging,
     BS_MessageGetBatteryCurrent,
+
+    BS_MessageGetMTU,
 
     BS_MessageGetId,
     BS_MessageGetName,
