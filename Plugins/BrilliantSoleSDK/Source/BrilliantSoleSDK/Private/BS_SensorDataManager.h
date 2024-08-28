@@ -49,7 +49,7 @@ public:
 	FVectorCallbackLocal OnGyroscopeUpdate;
 	FVectorCallbackLocal OnMagnetometerUpdate;
 	FQuaternionCallbackLocal OnGameRotationUpdate;
-	FQuaternionCallbackLocal OnRotationUpdate;
+	FQuaternionCallbackLocal &GetOnRotationUpdate() { return MotionSensorDataManager->OnRotationUpdate; };
 
 	FRotatorCallbackLocal OnOrientationUpdate;
 	FActivityCallbackLocal OnActivityUpdate;

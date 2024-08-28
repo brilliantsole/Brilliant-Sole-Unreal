@@ -40,7 +40,7 @@ UBS_Device::UBS_Device()
     SensorDataManager->OnGyroscopeUpdate.BindUObject(this, &UBS_Device::OnGyroscopeUpdate);
     SensorDataManager->OnMagnetometerUpdate.BindUObject(this, &UBS_Device::OnMagnetometerUpdate);
     SensorDataManager->OnGameRotationUpdate.BindUObject(this, &UBS_Device::OnGameRotationUpdate);
-    SensorDataManager->OnRotationUpdate.BindUObject(this, &UBS_Device::OnRotationUpdate);
+    SensorDataManager->GetOnRotationUpdate().BindUObject(this, &UBS_Device::OnRotationUpdate);
 
     SensorDataManager->OnOrientationUpdate.BindUObject(this, &UBS_Device::OnOrientationUpdate);
     SensorDataManager->OnActivityUpdate.BindUObject(this, &UBS_Device::OnActivityUpdate);

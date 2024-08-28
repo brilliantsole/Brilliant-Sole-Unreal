@@ -14,7 +14,6 @@
 #include "BS_VibrationManager.h"
 #include "BS_FileTransferManager.h"
 #include "BS_TfliteManager.h"
-#include "Logging/StructuredLog.h"
 #include "BS_Device.generated.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_Device, Log, All);
@@ -112,15 +111,16 @@ public:
 	UFUNCTION(BlueprintPure, Category = "BS Battery")
 	float BatteryCurrent() const { return BatteryManager->GetBatteryCurrent(); }
 
-protected:
-	UPROPERTY(BlueprintReadOnly, Category = "BS Battery")
-	UBS_BatteryManager *BatteryManager;
-
+public:
 	UPROPERTY(BlueprintAssignable, Category = "BS Battery")
 	FIsBatteryChargingCallback OnIsBatteryCharging;
 
 	UPROPERTY(BlueprintAssignable, Category = "BS Battery")
 	FBatteryCurrentCallback OnBatteryCurrent;
+
+protected:
+	UPROPERTY(BlueprintReadOnly, Category = "BS Battery")
+	UBS_BatteryManager *BatteryManager;
 
 private:
 	void OnBatteryCurrentUpdate(float BatteryCurrent) { OnBatteryCurrent.Broadcast(BatteryCurrent); }
@@ -150,10 +150,7 @@ public:
 	UFUNCTION(BlueprintPure, Category = "BS Information")
 	float CurrentTime() const { return InformationManager->GetCurrentTime(); }
 
-protected:
-	UPROPERTY(BlueprintReadOnly, Category = "BS Information")
-	UBS_InformationManager *InformationManager;
-
+public:
 	UPROPERTY(BlueprintAssignable, Category = "BS Information")
 	FMTU_Callback OnMTU;
 
@@ -168,6 +165,10 @@ protected:
 
 	UPROPERTY(BlueprintAssignable, Category = "BS Information")
 	FCurrentTimeCallback OnCurrentTime;
+
+protected:
+	UPROPERTY(BlueprintReadOnly, Category = "BS Information")
+	UBS_InformationManager *InformationManager;
 
 private:
 	void OnMTU_Update(uint16 MTU) { OnMTU.Broadcast(MTU); }
@@ -266,7 +267,7 @@ private:
 	void OnGameRotationUpdate(const FQuat &Quaternion, const uint64 &Timestamp) { OnGameRotation.Broadcast(Quaternion, Timestamp); }
 	void OnRotationUpdate(const FQuat &Quaternion, const uint64 &Timestamp)
 	{
-		UE_LOGFMT(LogBS_Device, Log, "FUCK!!!ROTATION");
+		UE_LOG(LogBS_Device, Log, TEXT("OnRotationUpdate %u"), OnRotation.IsBound());
 		OnRotation.Broadcast(Quaternion, Timestamp);
 	}
 
