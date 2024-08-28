@@ -125,11 +125,7 @@ protected:
 	UBS_BatteryManager *BatteryManager;
 
 private:
-	void OnBatteryCurrentUpdate(float BatteryCurrent)
-	{
-		UE_LOGFMT(LogBS_Device, Log, "BatteryCurrent {0} by {1}", OnBatteryCurrent.IsBound(), GetName());
-		OnBatteryCurrent.Broadcast(BatteryCurrent);
-	}
+	void OnBatteryCurrentUpdate(float BatteryCurrent) { OnBatteryCurrent.Broadcast(BatteryCurrent); }
 	void OnIsBatteryChargingUpdate(bool bIsBatteryCharging) { OnIsBatteryCharging.Broadcast(bIsBatteryCharging); }
 	// BATTERY END
 
@@ -271,12 +267,7 @@ private:
 	void OnGyroscopeUpdate(const FVector &Vector, const uint64 &Timestamp) { OnGyroscope.Broadcast(Vector, Timestamp); }
 	void OnMagnetometerUpdate(const FVector &Vector, const uint64 &Timestamp) { OnMagnetometer.Broadcast(Vector, Timestamp); }
 	void OnGameRotationUpdate(const FQuat &Quaternion, const uint64 &Timestamp) { OnGameRotation.Broadcast(Quaternion, Timestamp); }
-	UFUNCTION()
-	void OnRotationUpdate(const FQuat &Quaternion, const uint64 &Timestamp)
-	{
-		UE_LOGFMT(LogBS_Device, Log, "OnRotationUpdate {0} by {1}", OnRotation.IsBound(), GetName());
-		OnRotation.Broadcast(Quaternion, Timestamp);
-	}
+	void OnRotationUpdate(const FQuat &Quaternion, const uint64 &Timestamp) { OnRotation.Broadcast(Quaternion, Timestamp); }
 
 	void OnOrientationUpdate(const FRotator &Rotator, const uint64 &Timestamp) { OnOrientation.Broadcast(Rotator, Timestamp); }
 	void OnActivityUpdate(const TSet<EBS_Activity> &Activity, const uint64 &Timestamp) { OnActivity.Broadcast(Activity, Timestamp); }

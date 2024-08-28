@@ -42,20 +42,19 @@ UBS_Device::UBS_Device()
     SensorDataManager = CreateDefaultSubobject<UBS_SensorDataManager>(TEXT("SensorDataManager"));
     SensorDataManager->SendTxMessages.BindUObject(this, &UBS_Device::SendTxMessages);
 
-    SensorDataManager->OnAccelerationUpdate.BindUObject(this, &UBS_Device::OnAccelerationUpdate);
-    SensorDataManager->OnGravityUpdate.BindUObject(this, &UBS_Device::OnGravityUpdate);
-    SensorDataManager->OnLinearAccelerationUpdate.BindUObject(this, &UBS_Device::OnLinearAccelerationUpdate);
-    SensorDataManager->OnGyroscopeUpdate.BindUObject(this, &UBS_Device::OnGyroscopeUpdate);
-    SensorDataManager->OnMagnetometerUpdate.BindUObject(this, &UBS_Device::OnMagnetometerUpdate);
-    SensorDataManager->OnGameRotationUpdate.BindUObject(this, &UBS_Device::OnGameRotationUpdate);
-    // SensorDataManager->GetOnRotationUpdate().BindUObject(this, &UBS_Device::OnRotationUpdate);
+    SensorDataManager->MotionSensorDataManager->OnAccelerationUpdate.BindUObject(this, &UBS_Device::OnAccelerationUpdate);
+    SensorDataManager->MotionSensorDataManager->OnGravityUpdate.BindUObject(this, &UBS_Device::OnGravityUpdate);
+    SensorDataManager->MotionSensorDataManager->OnLinearAccelerationUpdate.BindUObject(this, &UBS_Device::OnLinearAccelerationUpdate);
+    SensorDataManager->MotionSensorDataManager->OnGyroscopeUpdate.BindUObject(this, &UBS_Device::OnGyroscopeUpdate);
+    SensorDataManager->MotionSensorDataManager->OnMagnetometerUpdate.BindUObject(this, &UBS_Device::OnMagnetometerUpdate);
+    SensorDataManager->MotionSensorDataManager->OnGameRotationUpdate.BindUObject(this, &UBS_Device::OnGameRotationUpdate);
     SensorDataManager->MotionSensorDataManager->OnRotationUpdate.BindUObject(this, &UBS_Device::OnRotationUpdate);
 
-    SensorDataManager->OnOrientationUpdate.BindUObject(this, &UBS_Device::OnOrientationUpdate);
-    SensorDataManager->OnActivityUpdate.BindUObject(this, &UBS_Device::OnActivityUpdate);
-    SensorDataManager->OnStepCountUpdate.BindUObject(this, &UBS_Device::OnStepCountUpdate);
-    SensorDataManager->OnStepDetectionUpdate.BindUObject(this, &UBS_Device::OnStepDetectionUpdate);
-    SensorDataManager->OnDeviceOrientationUpdate.BindUObject(this, &UBS_Device::OnDeviceOrientationUpdate);
+    SensorDataManager->MotionSensorDataManager->OnOrientationUpdate.BindUObject(this, &UBS_Device::OnOrientationUpdate);
+    SensorDataManager->MotionSensorDataManager->OnActivityUpdate.BindUObject(this, &UBS_Device::OnActivityUpdate);
+    SensorDataManager->MotionSensorDataManager->OnStepCountUpdate.BindUObject(this, &UBS_Device::OnStepCountUpdate);
+    SensorDataManager->MotionSensorDataManager->OnStepDetectionUpdate.BindUObject(this, &UBS_Device::OnStepDetectionUpdate);
+    SensorDataManager->MotionSensorDataManager->OnDeviceOrientationUpdate.BindUObject(this, &UBS_Device::OnDeviceOrientationUpdate);
 
     SensorConfigurationManager = CreateDefaultSubobject<UBS_SensorConfigurationManager>(TEXT("SensorConfigurationManager"));
     SensorConfigurationManager->SendTxMessages.BindUObject(this, &UBS_Device::SendTxMessages);
@@ -154,6 +153,8 @@ void UBS_Device::Reset()
     VibrationManager->Reset();
     FileTransferManager->Reset();
     TfliteManager->Reset();
+
+    bIsSendingTxData = false;
 }
 
 // CONNECTION START

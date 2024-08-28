@@ -40,21 +40,4 @@ public:
 	UBS_MotionSensorDataManager *MotionSensorDataManager;
 	UPROPERTY()
 	UBS_BarometerSensorDataManager *BarometerSensorDataManager;
-
-	// MOTION CALLBACKS START
-public:
-	FVectorCallbackLocal OnAccelerationUpdate;
-	FVectorCallbackLocal OnGravityUpdate;
-	FVectorCallbackLocal OnLinearAccelerationUpdate;
-	FVectorCallbackLocal OnGyroscopeUpdate;
-	FVectorCallbackLocal OnMagnetometerUpdate;
-	FQuaternionCallbackLocal OnGameRotationUpdate;
-	FQuaternionCallbackLocal &GetOnRotationUpdate() { return MotionSensorDataManager->OnRotationUpdate; };
-
-	FRotatorCallbackLocal OnOrientationUpdate;
-	FActivityCallbackLocal OnActivityUpdate;
-	FStepCountCallbackLocal OnStepCountUpdate;
-	FTimestampCallbackLocal OnStepDetectionUpdate;
-	FDeviceOrientationCallbackLocal OnDeviceOrientationUpdate;
-	// MOTION CALLBACKS END
 };

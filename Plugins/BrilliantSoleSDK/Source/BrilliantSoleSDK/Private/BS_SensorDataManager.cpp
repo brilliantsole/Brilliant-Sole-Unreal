@@ -11,26 +11,17 @@ DEFINE_LOG_CATEGORY(LogBS_SensorDataManager);
 
 UBS_SensorDataManager::UBS_SensorDataManager()
 {
+    UE_LOGFMT(LogBS_SensorDataManager, Log, "Constructor: {0}", GetName());
+    if (HasAnyFlags(RF_ClassDefaultObject))
+    {
+        UE_LOGFMT(LogBS_SensorDataManager, Log, "CDO - Skipping Constructor");
+        return;
+    }
+
     SensorScalars.Reserve(static_cast<uint8>(EBS_SensorType::COUNT));
 
     PressureSensorDataManager = CreateDefaultSubobject<UBS_PressureSensorDataManager>(TEXT("PressureSensorDataManager"));
-
     MotionSensorDataManager = CreateDefaultSubobject<UBS_MotionSensorDataManager>(TEXT("MotionSensorDataManager"));
-
-    OnAccelerationUpdate = MotionSensorDataManager->OnAccelerationUpdate;
-    OnGravityUpdate = MotionSensorDataManager->OnGravityUpdate;
-    OnLinearAccelerationUpdate = MotionSensorDataManager->OnLinearAccelerationUpdate;
-    OnGyroscopeUpdate = MotionSensorDataManager->OnGyroscopeUpdate;
-    OnMagnetometerUpdate = MotionSensorDataManager->OnMagnetometerUpdate;
-    // OnRotationUpdate = MotionSensorDataManager->OnRotationUpdate;
-    OnGameRotationUpdate = MotionSensorDataManager->OnGameRotationUpdate;
-
-    OnOrientationUpdate = MotionSensorDataManager->OnOrientationUpdate;
-    OnActivityUpdate = MotionSensorDataManager->OnActivityUpdate;
-    OnStepCountUpdate = MotionSensorDataManager->OnStepCountUpdate;
-    OnStepDetectionUpdate = MotionSensorDataManager->OnStepDetectionUpdate;
-    OnDeviceOrientationUpdate = MotionSensorDataManager->OnDeviceOrientationUpdate;
-
     BarometerSensorDataManager = CreateDefaultSubobject<UBS_BarometerSensorDataManager>(TEXT("BarometerSensorDataManager"));
 }
 
