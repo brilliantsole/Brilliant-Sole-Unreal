@@ -15,13 +15,12 @@
 #include "BS_VibrationManager.h"
 #include "BS_FileTransferManager.h"
 #include "BS_TfliteManager.h"
+#include "BS_InsoleSide.h"
 #include "BS_Device.generated.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_Device, Log, All);
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FConnectionStatusUpdateCallback, EBS_ConnectionStatus, ConnectionStatus);
-
-UCLASS(Abstract)
+UCLASS(Abstract, BlueprintType)
 class UBS_Device : public UObject
 {
 	GENERATED_BODY()
@@ -55,8 +54,9 @@ public:
 	UFUNCTION(BlueprintPure, Category = "BS Device")
 	bool IsConnected() const { return ConnectionStatus == EBS_ConnectionStatus::CONNECTED; }
 
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBS_ConnectionStatusUpdateCallback, UBS_Device *, Device, EBS_ConnectionStatus, ConnectionStatus);
 	UPROPERTY(BlueprintAssignable, Category = "BS Device")
-	FConnectionStatusUpdateCallback OnConnectionStatusUpdate;
+	FBS_ConnectionStatusUpdateCallback OnConnectionStatusUpdate;
 
 protected:
 	UFUNCTION(BlueprintCallable, Category = "BS ConnectionManager")
@@ -114,19 +114,21 @@ public:
 	float BatteryCurrent() const { return BatteryManager->GetBatteryCurrent(); }
 
 public:
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBS_IsBatteryChargingCallback, UBS_Device *, Device, bool, IsBatteryCharging);
 	UPROPERTY(BlueprintAssignable, Category = "BS Battery")
-	FIsBatteryChargingCallback OnIsBatteryCharging;
+	FBS_IsBatteryChargingCallback OnIsBatteryCharging;
 
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBS_BatteryCurrentCallback, UBS_Device *, Device, float, BatteryCurrent);
 	UPROPERTY(BlueprintAssignable, Category = "BS Battery")
-	FBatteryCurrentCallback OnBatteryCurrent;
+	FBS_BatteryCurrentCallback OnBatteryCurrent;
 
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "BS Battery")
 	UBS_BatteryManager *BatteryManager;
 
 private:
-	void OnBatteryCurrentUpdate(float BatteryCurrent) { OnBatteryCurrent.Broadcast(BatteryCurrent); }
-	void OnIsBatteryChargingUpdate(bool bIsBatteryCharging) { OnIsBatteryCharging.Broadcast(bIsBatteryCharging); }
+	void OnBatteryCurrentUpdate(float BatteryCurrent) { OnBatteryCurrent.Broadcast(this, BatteryCurrent); }
+	void OnIsBatteryChargingUpdate(bool bIsBatteryCharging) { OnIsBatteryCharging.Broadcast(this, bIsBatteryCharging); }
 	// BATTERY END
 
 	// INFORMATION START
@@ -146,38 +148,70 @@ public:
 	UFUNCTION(BlueprintPure, Category = "BS Information")
 	EBS_DeviceType Type() const { return InformationManager->GetType(); }
 
+	UFUNCTION(BlueprintPure, Category = "BS Information")
+	bool IsInsole() const
+	{
+		switch (Type())
+		{
+		case EBS_DeviceType::LEFT_INSOLE:
+		case EBS_DeviceType::RIGHT_INSOLE:
+			return true;
+		}
+		return false;
+	}
+
+	UFUNCTION(BlueprintPure, Category = "BS Information")
+	EBS_InsoleSide InsoleSide() const
+	{
+		switch (Type())
+		{
+		case EBS_DeviceType::LEFT_INSOLE:
+			return EBS_InsoleSide::LEFT;
+		default:
+			return EBS_InsoleSide::RIGHT;
+		}
+	}
+
 	UFUNCTION(BlueprintCallable, Category = "BS Information")
-	void SetType(const EBS_DeviceType NewType) { InformationManager->SetType(NewType); }
+	void SetType(const EBS_DeviceType NewType)
+	{
+		InformationManager->SetType(NewType);
+	}
 
 	UFUNCTION(BlueprintPure, Category = "BS Information")
 	float CurrentTime() const { return InformationManager->GetCurrentTime(); }
 
 public:
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBS_MTU_Callback, UBS_Device *, Device, uint16, MTU);
 	UPROPERTY(BlueprintAssignable, Category = "BS Information")
-	FMTU_Callback OnMTU;
+	FBS_MTU_Callback OnMTU;
 
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBS_IdCallback, UBS_Device *, Device, FString &, Id);
 	UPROPERTY(BlueprintAssignable, Category = "BS Information")
-	FIdCallback OnId;
+	FBS_IdCallback OnId;
 
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBS_NameCallback, UBS_Device *, Device, FString &, Name);
 	UPROPERTY(BlueprintAssignable, Category = "BS Information")
-	FNameCallback OnName;
+	FBS_NameCallback OnName;
 
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBS_TypeCallback, UBS_Device *, Device, EBS_DeviceType, Type);
 	UPROPERTY(BlueprintAssignable, Category = "BS Information")
-	FTypeCallback OnType;
+	FBS_TypeCallback OnType;
 
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBS_CurrentTimeCallback, UBS_Device *, Device, float, CurrentTime);
 	UPROPERTY(BlueprintAssignable, Category = "BS Information")
-	FCurrentTimeCallback OnCurrentTime;
+	FBS_CurrentTimeCallback OnCurrentTime;
 
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "BS Information")
 	UBS_InformationManager *InformationManager;
 
 private:
-	void OnMTU_Update(uint16 MTU) { OnMTU.Broadcast(MTU); }
-	void OnIdUpdate(FString &Id) { OnId.Broadcast(Id); }
-	void OnNameUpdate(FString &Name) { OnName.Broadcast(Name); }
-	void OnTypeUpdate(EBS_DeviceType Type) { OnType.Broadcast(Type); }
-	void OnCurrentTimeUpdate(uint64 CurrentTime) { OnCurrentTime.Broadcast(CurrentTime); }
+	void OnMTU_Update(uint16 MTU) { OnMTU.Broadcast(this, MTU); }
+	void OnIdUpdate(FString &Id) { OnId.Broadcast(this, Id); }
+	void OnNameUpdate(FString &Name) { OnName.Broadcast(this, Name); }
+	void OnTypeUpdate(EBS_DeviceType Type) { OnType.Broadcast(this, Type); }
+	void OnCurrentTimeUpdate(uint64 CurrentTime) { OnCurrentTime.Broadcast(this, CurrentTime); }
 	// INFORMATION END
 
 	// SENSOR CONFIGURATION START
@@ -198,10 +232,7 @@ public:
 	bool IsSensorRateNonZero(EBS_SensorType SensorType) const { return SensorConfigurationManager->IsSensorRateNonZero(SensorType); }
 
 	UFUNCTION(BlueprintCallable, Category = "BS Sensor Configuration")
-	const TMap<EBS_SensorType, EBS_SensorRate> &GetSensorRates() const
-	{
-		return SensorConfigurationManager->GetSensorRates();
-	}
+	const TMap<EBS_SensorType, EBS_SensorRate> &GetSensorRates() const { return SensorConfigurationManager->GetSensorRates(); }
 
 	UFUNCTION(BlueprintCallable, Category = "BS Sensor Configuration")
 	void SetSensorRate(EBS_SensorType SensorType, EBS_SensorRate SensorRate, bool &bDidUpdateSensorRate) { return SensorConfigurationManager->SetSensorRate(SensorType, SensorRate, bDidUpdateSensorRate); }
@@ -215,15 +246,16 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "BS Sensor Configuration")
 	void ToggleSensorRate(EBS_SensorType SensorType, EBS_SensorRate SensorRate, EBS_SensorRate &UpdatedSensorRate) { return SensorConfigurationManager->ToggleSensorRate(SensorType, SensorRate, UpdatedSensorRate); }
 
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBS_SensorConfigurationCallback, UBS_Device *, Device, const UBS_SensorConfiguration *, SensorConfiguration);
+	UPROPERTY(BlueprintAssignable, Category = "BS Sensor Configuration")
+	FBS_SensorConfigurationCallback OnSensorConfiguration;
+
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "BS Sensor Configuration")
 	UBS_SensorConfigurationManager *SensorConfigurationManager;
 
-	UPROPERTY(BlueprintAssignable, Category = "BS Sensor Configuration")
-	FSensorConfigurationCallback OnSensorConfiguration;
-
 private:
-	void OnSensorConfigurationUpdate(const UBS_SensorConfiguration *SensorConfiguration) { OnSensorConfiguration.Broadcast(SensorConfiguration); }
+	void OnSensorConfigurationUpdate(const UBS_SensorConfiguration *SensorConfiguration) { OnSensorConfiguration.Broadcast(this, SensorConfiguration); }
 	// SENSOR CONFIGURATION END
 
 	// SENSOR DATA START
@@ -234,46 +266,54 @@ protected:
 
 	// MOTION DATA START
 public:
-	UPROPERTY(BlueprintAssignable, Category = "BS Motion Data")
-	FVectorCallback OnAcceleration;
-	UPROPERTY(BlueprintAssignable, Category = "BS Motion Data")
-	FVectorCallback OnGravity;
-	UPROPERTY(BlueprintAssignable, Category = "BS Motion Data")
-	FVectorCallback OnLinearAcceleration;
-	UPROPERTY(BlueprintAssignable, Category = "BS Motion Data")
-	FVectorCallback OnGyroscope;
-	UPROPERTY(BlueprintAssignable, Category = "BS Motion Data")
-	FVectorCallback OnMagnetometer;
-	UPROPERTY(BlueprintAssignable, Category = "BS Motion Data")
-	FQuaternionCallback OnGameRotation;
-	UPROPERTY(BlueprintAssignable, Category = "BS Motion Data")
-	FQuaternionCallback OnRotation;
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FBS_VectorCallback, UBS_Device *, Device, const FVector &, Vector, const float &, Timestamp);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FBS_RotatorCallback, UBS_Device *, Device, const FRotator &, Rotator, const float &, Timestamp);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FBS_QuaternionCallback, UBS_Device *, Device, const FQuat &, Quaternion, const float &, Timestamp);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBS_TimestampCallback, UBS_Device *, Device, const float &, Timestamp);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FBS_ActivityCallback, UBS_Device *, Device, const TSet<EBS_Activity> &, Activity, const float &, Timestamp);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FBS_StepCountCallback, UBS_Device *, Device, const uint32 &, StepCount, const float &, Timestamp);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FBS_DeviceOrientationCallback, UBS_Device *, Device, const EBS_DeviceOrientation &, DeviceOrientation, const float &, Timestamp);
 
 	UPROPERTY(BlueprintAssignable, Category = "BS Motion Data")
-	FRotatorCallback OnOrientation;
+	FBS_VectorCallback OnAcceleration;
 	UPROPERTY(BlueprintAssignable, Category = "BS Motion Data")
-	FActivityCallback OnActivity;
+	FBS_VectorCallback OnGravity;
 	UPROPERTY(BlueprintAssignable, Category = "BS Motion Data")
-	FStepCountCallback OnStepCount;
+	FBS_VectorCallback OnLinearAcceleration;
 	UPROPERTY(BlueprintAssignable, Category = "BS Motion Data")
-	FTimestampCallback OnStepDetection;
+	FBS_VectorCallback OnGyroscope;
 	UPROPERTY(BlueprintAssignable, Category = "BS Motion Data")
-	FDeviceOrientationCallback OnDeviceOrientation;
+	FBS_VectorCallback OnMagnetometer;
+	UPROPERTY(BlueprintAssignable, Category = "BS Motion Data")
+	FBS_QuaternionCallback OnGameRotation;
+	UPROPERTY(BlueprintAssignable, Category = "BS Motion Data")
+	FBS_QuaternionCallback OnRotation;
+
+	UPROPERTY(BlueprintAssignable, Category = "BS Motion Data")
+	FBS_RotatorCallback OnOrientation;
+	UPROPERTY(BlueprintAssignable, Category = "BS Motion Data")
+	FBS_ActivityCallback OnActivity;
+	UPROPERTY(BlueprintAssignable, Category = "BS Motion Data")
+	FBS_StepCountCallback OnStepCount;
+	UPROPERTY(BlueprintAssignable, Category = "BS Motion Data")
+	FBS_TimestampCallback OnStepDetection;
+	UPROPERTY(BlueprintAssignable, Category = "BS Motion Data")
+	FBS_DeviceOrientationCallback OnDeviceOrientation;
 
 private:
-	void OnAccelerationUpdate(const FVector &Vector, const uint64 &Timestamp) { OnAcceleration.Broadcast(Vector, Timestamp); }
-	void OnGravityUpdate(const FVector &Vector, const uint64 &Timestamp) { OnGravity.Broadcast(Vector, Timestamp); }
-	void OnLinearAccelerationUpdate(const FVector &Vector, const uint64 &Timestamp) { OnLinearAcceleration.Broadcast(Vector, Timestamp); }
-	void OnGyroscopeUpdate(const FVector &Vector, const uint64 &Timestamp) { OnGyroscope.Broadcast(Vector, Timestamp); }
-	void OnMagnetometerUpdate(const FVector &Vector, const uint64 &Timestamp) { OnMagnetometer.Broadcast(Vector, Timestamp); }
-	void OnGameRotationUpdate(const FQuat &Quaternion, const uint64 &Timestamp) { OnGameRotation.Broadcast(Quaternion, Timestamp); }
-	void OnRotationUpdate(const FQuat &Quaternion, const uint64 &Timestamp) { OnRotation.Broadcast(Quaternion, Timestamp); }
+	void OnAccelerationUpdate(const FVector &Vector, const uint64 &Timestamp) { OnAcceleration.Broadcast(this, Vector, Timestamp); }
+	void OnGravityUpdate(const FVector &Vector, const uint64 &Timestamp) { OnGravity.Broadcast(this, Vector, Timestamp); }
+	void OnLinearAccelerationUpdate(const FVector &Vector, const uint64 &Timestamp) { OnLinearAcceleration.Broadcast(this, Vector, Timestamp); }
+	void OnGyroscopeUpdate(const FVector &Vector, const uint64 &Timestamp) { OnGyroscope.Broadcast(this, Vector, Timestamp); }
+	void OnMagnetometerUpdate(const FVector &Vector, const uint64 &Timestamp) { OnMagnetometer.Broadcast(this, Vector, Timestamp); }
+	void OnGameRotationUpdate(const FQuat &Quaternion, const uint64 &Timestamp) { OnGameRotation.Broadcast(this, Quaternion, Timestamp); }
+	void OnRotationUpdate(const FQuat &Quaternion, const uint64 &Timestamp) { OnRotation.Broadcast(this, Quaternion, Timestamp); }
 
-	void OnOrientationUpdate(const FRotator &Rotator, const uint64 &Timestamp) { OnOrientation.Broadcast(Rotator, Timestamp); }
-	void OnActivityUpdate(const TSet<EBS_Activity> &Activity, const uint64 &Timestamp) { OnActivity.Broadcast(Activity, Timestamp); }
-	void OnStepCountUpdate(const uint32 &StepCount, const uint64 &Timestamp) { OnStepCount.Broadcast(StepCount, Timestamp); }
-	void OnStepDetectionUpdate(const uint64 &Timestamp) { OnStepDetection.Broadcast(Timestamp); }
-	void OnDeviceOrientationUpdate(const EBS_DeviceOrientation &DeviceOrientation, const uint64 &Timestamp) { OnDeviceOrientation.Broadcast(DeviceOrientation, Timestamp); }
+	void OnOrientationUpdate(const FRotator &Rotator, const uint64 &Timestamp) { OnOrientation.Broadcast(this, Rotator, Timestamp); }
+	void OnActivityUpdate(const TSet<EBS_Activity> &Activity, const uint64 &Timestamp) { OnActivity.Broadcast(this, Activity, Timestamp); }
+	void OnStepCountUpdate(const uint32 &StepCount, const uint64 &Timestamp) { OnStepCount.Broadcast(this, StepCount, Timestamp); }
+	void OnStepDetectionUpdate(const uint64 &Timestamp) { OnStepDetection.Broadcast(this, Timestamp); }
+	void OnDeviceOrientationUpdate(const EBS_DeviceOrientation &DeviceOrientation, const uint64 &Timestamp) { OnDeviceOrientation.Broadcast(this, DeviceOrientation, Timestamp); }
 	// MOTION DATA END
 
 	// VIBRATION START

@@ -10,20 +10,11 @@
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_InformationManager, Log, All);
 
-DECLARE_DELEGATE_OneParam(FMTU_CallbackLocal, uint16);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMTU_Callback, uint16, MTU);
-
-DECLARE_DELEGATE_OneParam(FIdCallbackLocal, FString &);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FIdCallback, FString &, Id);
-
-DECLARE_DELEGATE_OneParam(FNameCallbackLocal, FString &);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FNameCallback, FString &, Name);
-
-DECLARE_DELEGATE_OneParam(FTypeCallbackLocal, EBS_DeviceType);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTypeCallback, EBS_DeviceType, Type);
-
-DECLARE_DELEGATE_OneParam(FCurrentTimeCallbackLocal, uint64);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FCurrentTimeCallback, float, CurrentTime);
+DECLARE_DELEGATE_OneParam(FBS_MTU_CallbackLocal, uint16);
+DECLARE_DELEGATE_OneParam(FBS_IdCallbackLocal, FString &);
+DECLARE_DELEGATE_OneParam(FBS_NameCallbackLocal, FString &);
+DECLARE_DELEGATE_OneParam(FBS_TypeCallbackLocal, EBS_DeviceType);
+DECLARE_DELEGATE_OneParam(FBS_CurrentTimeCallbackLocal, uint64);
 
 #define EBS_MTU_Message BS_MessageGetMTU
 #define EBS_DeviceIdMessage BS_MessageGetId
@@ -46,7 +37,7 @@ public:
 	// MTU START
 public:
 	uint16 GetMTU() const { return MTU; }
-	FMTU_CallbackLocal OnMTU_Update;
+	FBS_MTU_CallbackLocal OnMTU_Update;
 
 	uint16 GetMaxTxMessageLength() const { return MTU == 0 ? 0 : MTU - 3; }
 
@@ -59,7 +50,7 @@ private:
 	// ID START
 public:
 	const FString &GetId() const { return Id; }
-	FIdCallbackLocal OnIdUpdate;
+	FBS_IdCallbackLocal OnIdUpdate;
 
 private:
 	UPROPERTY()
@@ -70,7 +61,7 @@ private:
 	// NAME START
 public:
 	const FString &GetName() const { return Name; }
-	FNameCallbackLocal OnNameUpdate;
+	FBS_NameCallbackLocal OnNameUpdate;
 
 	static const uint8 MinNameLength;
 	static const uint8 MaxNameLength;
@@ -85,7 +76,7 @@ private:
 	// TYPE START
 public:
 	const EBS_DeviceType &GetType() const { return Type; }
-	FTypeCallbackLocal OnTypeUpdate;
+	FBS_TypeCallbackLocal OnTypeUpdate;
 
 	void SetType(const EBS_DeviceType NewType);
 
@@ -98,7 +89,7 @@ private:
 	// CURRENT TIME START
 public:
 	const uint64 &GetCurrentTime() const { return CurrentTime; }
-	FCurrentTimeCallbackLocal OnCurrentTimeUpdate;
+	FBS_CurrentTimeCallbackLocal OnCurrentTimeUpdate;
 
 private:
 	UPROPERTY()

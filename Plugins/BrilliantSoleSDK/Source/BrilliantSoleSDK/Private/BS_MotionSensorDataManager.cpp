@@ -102,10 +102,9 @@ void UBS_MotionSensorDataManager::ParseQuaternion(EBS_SensorType SensorType, con
 
     UE_LOGFMT(LogBS_MotionSensorDataManager, Log, "X: {0}, Y: {1}, Z: {2}, W: {3}", X, Y, Z, W);
 
-    FQuat Quaternion(X, Y, Z, W);
+    FQuat Quaternion(-X, -Z, -W, -Y);
     Quaternion *= Scalar;
-
-    UE_LOGFMT(LogBS_MotionSensorDataManager, Log, "{0}: {1}", UEnum::GetValueAsString(SensorType), Quaternion.ToString());
+    FRotator Rotator = Quaternion.Rotator();
 
     switch (SensorType)
     {

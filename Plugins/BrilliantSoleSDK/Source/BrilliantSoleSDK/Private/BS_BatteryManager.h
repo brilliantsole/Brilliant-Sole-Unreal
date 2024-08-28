@@ -9,11 +9,8 @@
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_BatteryManager, Log, All);
 
-DECLARE_DELEGATE_OneParam(FIsBatteryChargingCallbackLocal, bool);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FIsBatteryChargingCallback, bool, IsBatteryCharging);
-
-DECLARE_DELEGATE_OneParam(FBatteryCurrentCallbackLocal, float);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FBatteryCurrentCallback, float, BatteryCurrent);
+DECLARE_DELEGATE_OneParam(FBS_IsBatteryChargingCallbackLocal, bool);
+DECLARE_DELEGATE_OneParam(FBS_BatteryCurrentCallbackLocal, float);
 
 #define EBS_BatteryMessage BS_MessageIsBatteryCharging, \
 						   BS_MessageGetBatteryCurrent
@@ -28,10 +25,10 @@ public:
 	bool OnRxMessage(uint8 MessageType, const TArray<uint8> &Message) override;
 
 	bool GetIsBatteryCharging() const { return bIsBatteryCharging; }
-	FIsBatteryChargingCallbackLocal OnIsBatteryChargingUpdate;
+	FBS_IsBatteryChargingCallbackLocal OnIsBatteryChargingUpdate;
 
 	float GetBatteryCurrent() const { return BatteryCurrent; }
-	FBatteryCurrentCallbackLocal OnBatteryCurrentUpdate;
+	FBS_BatteryCurrentCallbackLocal OnBatteryCurrentUpdate;
 
 private:
 	UPROPERTY()

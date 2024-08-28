@@ -186,7 +186,7 @@ void UBS_Device::SetConnectionStatus(EBS_ConnectionStatus NewConnectionStatus)
     }
     ConnectionStatus = NewConnectionStatus;
     UE_LOGFMT(LogBS_Device, Log, "ConnectionStatus Updated to {0}", UEnum::GetValueAsString(ConnectionStatus));
-    OnConnectionStatusUpdate.Broadcast(ConnectionStatus);
+    OnConnectionStatusUpdate.Broadcast(this, ConnectionStatus);
 }
 
 void UBS_Device::CheckIfFullyConnected()
@@ -321,7 +321,6 @@ void UBS_Device::SendPendingTxMessages()
     UE_LOGFMT(LogBS_Device, Log, "Sending {0} bytes", TxData.Num());
 
     SendTxData(TxData);
-    TxData.Reset();
 }
 
 void UBS_Device::OnSendTxData()

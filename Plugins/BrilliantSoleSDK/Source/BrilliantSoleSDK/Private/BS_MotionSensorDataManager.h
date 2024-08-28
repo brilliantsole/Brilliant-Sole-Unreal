@@ -11,26 +11,13 @@
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_MotionSensorDataManager, Log, All);
 
-DECLARE_DELEGATE_TwoParams(FVectorCallbackLocal, const FVector &, const uint64 &);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FVectorCallback, const FVector &, Vector, const float &, Timestamp);
-
-DECLARE_DELEGATE_TwoParams(FRotatorCallbackLocal, const FRotator &, const uint64 &);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FRotatorCallback, const FRotator &, Rotator, const float &, Timestamp);
-
-DECLARE_DELEGATE_TwoParams(FQuaternionCallbackLocal, const FQuat &, const uint64 &);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FQuaternionCallback, const FQuat &, Quaternion, const float &, Timestamp);
-
-DECLARE_DELEGATE_OneParam(FTimestampCallbackLocal, const uint64 &);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTimestampCallback, const float &, Timestamp);
-
-DECLARE_DELEGATE_TwoParams(FActivityCallbackLocal, const TSet<EBS_Activity> &, const uint64 &);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FActivityCallback, const TSet<EBS_Activity> &, Activity, const float &, Timestamp);
-
-DECLARE_DELEGATE_TwoParams(FStepCountCallbackLocal, const uint32 &, const uint64 &);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FStepCountCallback, const uint32 &, StepCount, const float &, Timestamp);
-
-DECLARE_DELEGATE_TwoParams(FDeviceOrientationCallbackLocal, const EBS_DeviceOrientation &, const uint64 &);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDeviceOrientationCallback, const EBS_DeviceOrientation &, DeviceOrientation, const float &, Timestamp);
+DECLARE_DELEGATE_TwoParams(FBS_VectorCallbackLocal, const FVector &, const uint64 &);
+DECLARE_DELEGATE_TwoParams(FBS_RotatorCallbackLocal, const FRotator &, const uint64 &);
+DECLARE_DELEGATE_TwoParams(FBS_QuaternionCallbackLocal, const FQuat &, const uint64 &);
+DECLARE_DELEGATE_OneParam(FBS_TimestampCallbackLocal, const uint64 &);
+DECLARE_DELEGATE_TwoParams(FBS_ActivityCallbackLocal, const TSet<EBS_Activity> &, const uint64 &);
+DECLARE_DELEGATE_TwoParams(FBS_StepCountCallbackLocal, const uint32 &, const uint64 &);
+DECLARE_DELEGATE_TwoParams(FBS_DeviceOrientationCallbackLocal, const EBS_DeviceOrientation &, const uint64 &);
 
 UCLASS()
 class UBS_MotionSensorDataManager : public UBS_BaseSensorDataManager
@@ -51,17 +38,17 @@ private:
 	void ParseDeviceOrientation(EBS_SensorType SensorType, const TArray<uint8> &Message, const uint64 &Timestamp);
 
 public:
-	FVectorCallbackLocal OnAccelerationUpdate;
-	FVectorCallbackLocal OnGravityUpdate;
-	FVectorCallbackLocal OnLinearAccelerationUpdate;
-	FVectorCallbackLocal OnGyroscopeUpdate;
-	FVectorCallbackLocal OnMagnetometerUpdate;
-	FQuaternionCallbackLocal OnGameRotationUpdate;
-	FQuaternionCallbackLocal OnRotationUpdate;
+	FBS_VectorCallbackLocal OnAccelerationUpdate;
+	FBS_VectorCallbackLocal OnGravityUpdate;
+	FBS_VectorCallbackLocal OnLinearAccelerationUpdate;
+	FBS_VectorCallbackLocal OnGyroscopeUpdate;
+	FBS_VectorCallbackLocal OnMagnetometerUpdate;
+	FBS_QuaternionCallbackLocal OnGameRotationUpdate;
+	FBS_QuaternionCallbackLocal OnRotationUpdate;
 
-	FRotatorCallbackLocal OnOrientationUpdate;
-	FActivityCallbackLocal OnActivityUpdate;
-	FStepCountCallbackLocal OnStepCountUpdate;
-	FTimestampCallbackLocal OnStepDetectionUpdate;
-	FDeviceOrientationCallbackLocal OnDeviceOrientationUpdate;
+	FBS_RotatorCallbackLocal OnOrientationUpdate;
+	FBS_ActivityCallbackLocal OnActivityUpdate;
+	FBS_StepCountCallbackLocal OnStepCountUpdate;
+	FBS_TimestampCallbackLocal OnStepDetectionUpdate;
+	FBS_DeviceOrientationCallbackLocal OnDeviceOrientationUpdate;
 };

@@ -10,8 +10,7 @@
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_SensorConfigurationManager, Log, All);
 
-DECLARE_DELEGATE_OneParam(FSensorConfigurationCallbackLocal, const UBS_SensorConfiguration *);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSensorConfigurationCallback, const UBS_SensorConfiguration *, SensorConfiguration);
+DECLARE_DELEGATE_OneParam(FBS_SensorConfigurationCallbackLocal, const UBS_SensorConfiguration *);
 
 #define EBS_SensorConfigurationMessage BS_MessageGetSensorConfiguration, \
 									   BS_MessageSetSensorConfiguration
@@ -29,7 +28,7 @@ public:
 
 public:
 	const UBS_SensorConfiguration *GetSensorConfiguration() { return SensorConfiguration; }
-	FSensorConfigurationCallbackLocal OnSensorConfigurationUpdate;
+	FBS_SensorConfigurationCallbackLocal OnSensorConfigurationUpdate;
 
 	void SetSensorConfiguration(const UBS_SensorConfiguration *NewSensorConfiguration);
 	void ClearSensorConfiguration();
