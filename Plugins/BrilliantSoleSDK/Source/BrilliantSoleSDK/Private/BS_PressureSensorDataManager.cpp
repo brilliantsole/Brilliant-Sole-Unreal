@@ -8,6 +8,26 @@ DEFINE_LOG_CATEGORY(LogBS_PressureSensorDataManager);
 
 const float UBS_PressureSensorDataManager::PressurePositionScalar = FMath::Pow(2.0f, 8.0f);
 
+bool UBS_PressureSensorDataManager::OnSensorDataMessage(EBS_SensorType SensorType, const TArray<uint8> &Message, const uint64 &Timestamp, const float &Scalar)
+{
+    switch (SensorType)
+    {
+    case EBS_SensorType::PRESSURE:
+        ParsePressure(SensorType, Message, Timestamp, Scalar);
+        break;
+    default:
+        return false;
+    }
+    return true;
+}
+
+void UBS_PressureSensorDataManager::ParsePressure(EBS_SensorType SensorType, const TArray<uint8> &Message, const uint64 &Timestamp, const float &Scalar)
+{
+    // FILL
+    // UE_LOGFMT(LogBS_PressureSensorDataManager, Log, "Pressure: {0}", Pressure);
+    // OnPressureUpdate.ExecuteIfBound(Pressure, Timestamp);
+}
+
 void UBS_PressureSensorDataManager::ParsePressurePositions(const TArray<uint8> &Message)
 {
     PressurePositions.Reset();
@@ -23,17 +43,4 @@ void UBS_PressureSensorDataManager::ParsePressurePositions(const TArray<uint8> &
     }
 
     UE_LOGFMT(LogBS_PressureSensorDataManager, Log, "PressurePositions updated");
-}
-
-bool UBS_PressureSensorDataManager::OnSensorDataMessage(EBS_SensorType SensorType, const TArray<uint8> &Message, const uint64 &Timestamp, const float &Scalar)
-{
-    switch (SensorType)
-    {
-    case EBS_SensorType::PRESSURE:
-        // FILL
-        break;
-    default:
-        return false;
-    }
-    return true;
 }

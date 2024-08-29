@@ -278,6 +278,13 @@ protected:
 	UBS_SensorDataManager *SensorDataManager;
 	// SENSOR DATA END
 
+	// PRESSURE DATA START
+public:
+	// FILL
+private:
+	// FILL
+	// PRESSURE DATA END
+
 	// MOTION DATA START
 public:
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FBS_VectorCallback, UBS_Device *, Device, const FVector &, Vector, const float &, Timestamp);
