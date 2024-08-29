@@ -82,26 +82,6 @@ void UBS_Device::PostInitProperties()
     InitializeBP();
 }
 
-void UBS_Device::LogMemoryUsage()
-{
-    const FPlatformMemoryStats Stats = FPlatformMemory::GetStats();
-
-    // Log total physical memory
-    UE_LOG(LogBS_Device, Log, TEXT("Total Physical Memory: %.2f MB"), Stats.TotalPhysical / (1024.0f * 1024.0f));
-
-    // Log used physical memory
-    UE_LOG(LogBS_Device, Log, TEXT("Used Physical Memory: %.2f MB"), Stats.UsedPhysical / (1024.0f * 1024.0f));
-
-    // Log total virtual memory
-    UE_LOG(LogBS_Device, Log, TEXT("Total Virtual Memory: %.2f MB"), Stats.TotalVirtual / (1024.0f * 1024.0f));
-
-    // Log used virtual memory
-    UE_LOG(LogBS_Device, Log, TEXT("Used Virtual Memory: %.2f MB"), Stats.UsedVirtual / (1024.0f * 1024.0f));
-
-    // Log page file usage
-    // UE_LOG(LogBS_Device, Log, TEXT("Page File Usage: %.2f MB"), Stats.UsedPageFile / (1024.0f * 1024.0f));
-}
-
 void UBS_Device::GetBS_Subsystem()
 {
     if (!HasAnyFlags(RF_ClassDefaultObject))
@@ -223,7 +203,19 @@ void UBS_Device::CheckIfFullyConnected()
 
 // CONNECTION END
 
+// PING START
+const FBS_TxMessage UBS_Device::PingTxMessage = {BS_MessageGetMTU};
+const TArray<uint8> UBS_Device::PingTxData = UBS_Device::InitializePingTxData();
+const TArray<uint8> UBS_Device::InitializePingTxData()
+{
+    TArray<uint8> _PingTxData;
+    PingTxMessage.AppendTo(_PingTxData);
+    return _PingTxData;
+}
+// PING STOP
+
 // MESSAGING START
+
 void UBS_Device::OnRxMessage(uint8 MessageType, const TArray<uint8> &Message)
 {
     UE_LOGFMT(LogBS_Device, Log, "message #{0} ({1} bytes)", MessageType, Message.Num());
@@ -252,8 +244,6 @@ void UBS_Device::OnRxMessage(uint8 MessageType, const TArray<uint8> &Message)
     {
         UE_LOGFMT(LogBS_Device, Log, "Parsed TfliteManager Message");
     }
-
-    // LogMemoryUsage();
 
     if (ConnectionStatus == EBS_ConnectionStatus::CONNECTING)
     {

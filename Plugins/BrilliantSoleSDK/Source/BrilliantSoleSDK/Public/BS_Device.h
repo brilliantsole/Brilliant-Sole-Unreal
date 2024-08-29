@@ -29,16 +29,8 @@ public:
 	UBS_Device();
 	void PostInitProperties();
 
-	// UFUNCTION(BlueprintCallable, Category = "BS UTILS")
-	// void IncrementQuaternionIndex() { SensorDataManager->MotionSensorDataManager->QuaternionPermutationIndex++; }
-	// UFUNCTION(BlueprintCallable, Category = "BS UTILS")
-	// void SetIncrementQuaternionIndex(int NewIndex) { SensorDataManager->MotionSensorDataManager->QuaternionPermutationIndex = NewIndex; }
-	// UFUNCTION(BlueprintPure, Category = "BS UTILS")
-	// const int QuaternionPermutationIndex() const { return SensorDataManager->MotionSensorDataManager->QuaternionPermutationIndex; }
-
 private:
 	void Reset();
-	void LogMemoryUsage();
 
 	// BS SUBSYSTEM START
 protected:
@@ -78,6 +70,7 @@ private:
 	// CONNECTION END
 
 	// MESSAGING START
+public:
 protected:
 	UFUNCTION(BlueprintCallable, Category = "BS ConnectionManager")
 	void OnRxMessage(const uint8 MessageType, const TArray<uint8> &Message);
@@ -95,13 +88,27 @@ private:
 	void SendTxMessages(const TArray<FBS_TxMessage> &TxMessages, bool bSendImmediately = true);
 	void SendPendingTxMessages();
 
+	void SendRequiredTxMessages() { SendTxMessages(UBS_Device::RequiredTxMessages); }
+
 	TArray<FBS_TxMessage> PendingTxMessages;
 	TArray<uint8> TxData;
 
 	static const TArray<uint8> RequiredTxMessageTypes;
 	static const TArray<FBS_TxMessage> RequiredTxMessages;
 	static const TArray<FBS_TxMessage> InitializeRequiredTxMessages();
+
 	// MESSAGING END
+
+	// PING START
+public:
+	UFUNCTION(BlueprintPure, Category = "BS ConnectionManager")
+	static const TArray<uint8> &GetPingTxData() { return PingTxData; }
+
+private:
+	static const FBS_TxMessage PingTxMessage;
+	static const TArray<uint8> InitializePingTxData();
+	static const TArray<uint8> PingTxData;
+	// PING END
 
 	// DEVICE INFORMATION START
 public:
