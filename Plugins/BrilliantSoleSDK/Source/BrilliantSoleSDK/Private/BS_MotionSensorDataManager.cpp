@@ -23,7 +23,7 @@ bool UBS_MotionSensorDataManager::OnSensorDataMessage(EBS_SensorType SensorType,
         break;
 
     case EBS_SensorType::ORIENTATION:
-        ParseOrientation(SensorType, Message, Timestamp, Scalar);
+        ParseRotator(SensorType, Message, Timestamp, Scalar);
         break;
     case EBS_SensorType::ACTIVITY:
         ParseActivity(SensorType, Message, Timestamp);
@@ -51,7 +51,7 @@ void UBS_MotionSensorDataManager::ParseVector(EBS_SensorType SensorType, const T
 
     UE_LOGFMT(LogBS_MotionSensorDataManager, Log, "X: {0}, Y: {1}, Z: {2}", X, Y, Z);
 
-    FVector Vector(X, Y, Z);
+    FVector Vector(-Z, Y, X);
     Vector *= Scalar;
 
     UE_LOGFMT(LogBS_MotionSensorDataManager, Log, "{0}: {1}", UEnum::GetValueAsString(SensorType), Vector.ToString());
@@ -81,16 +81,26 @@ void UBS_MotionSensorDataManager::ParseVector(EBS_SensorType SensorType, const T
 
 void UBS_MotionSensorDataManager::ParseRotator(EBS_SensorType SensorType, const TArray<uint8> &Message, const uint64 &Timestamp, const float &Scalar)
 {
-    const int16 X = BS_ByteParser::ParseAs<int16>(Message, 0);
-    const int16 Y = BS_ByteParser::ParseAs<int16>(Message, 2);
-    const int16 Z = BS_ByteParser::ParseAs<int16>(Message, 4);
+    const int16 Yaw = BS_ByteParser::ParseAs<int16>(Message, 0);
+    const int16 Pitch = BS_ByteParser::ParseAs<int16>(Message, 2);
+    const int16 Roll = BS_ByteParser::ParseAs<int16>(Message, 4);
 
-    UE_LOGFMT(LogBS_MotionSensorDataManager, Log, "X: {0}, Y: {1}, Z: {2}", X, Y, Z);
+    UE_LOGFMT(LogBS_MotionSensorDataManager, Log, "Yaw: {0}, Pitch: {1}, Roll: {2}", Yaw, Pitch, Roll);
 
-    FRotator Rotator(X, Y, Z);
+    FRotator Rotator(-Pitch, Yaw, -Roll);
     Rotator *= Scalar;
 
     UE_LOGFMT(LogBS_MotionSensorDataManager, Log, "{0}: {1}", UEnum::GetValueAsString(SensorType), Rotator.ToString());
+
+    switch (SensorType)
+    {
+    case EBS_SensorType::ORIENTATION:
+        OnOrientationUpdate.ExecuteIfBound(Rotator, Timestamp);
+        break;
+    default:
+        UE_LOGFMT(LogBS_MotionSensorDataManager, Error, "Uncaught Orientation SensorType {0}", UEnum::GetValueAsString(SensorType));
+        break;
+    }
 }
 
 void UBS_MotionSensorDataManager::ParseQuaternion(EBS_SensorType SensorType, const TArray<uint8> &Message, const uint64 &Timestamp, const float &Scalar)
@@ -117,30 +127,6 @@ void UBS_MotionSensorDataManager::ParseQuaternion(EBS_SensorType SensorType, con
         break;
     default:
         UE_LOGFMT(LogBS_MotionSensorDataManager, Error, "Uncaught Quaternion SensorType {0}", UEnum::GetValueAsString(SensorType));
-        break;
-    }
-}
-
-void UBS_MotionSensorDataManager::ParseOrientation(EBS_SensorType SensorType, const TArray<uint8> &Message, const uint64 &Timestamp, const float &Scalar)
-{
-    const int16 Yaw = BS_ByteParser::ParseAs<int16>(Message, 0);
-    const int16 Pitch = BS_ByteParser::ParseAs<int16>(Message, 2);
-    const int16 Roll = BS_ByteParser::ParseAs<int16>(Message, 4);
-
-    UE_LOGFMT(LogBS_MotionSensorDataManager, Log, "Yaw: {0}, Pitch: {1}, Roll: {2}", Yaw, Pitch, Roll);
-
-    FRotator Rotator(Pitch, Yaw, Roll);
-    Rotator *= Scalar;
-
-    UE_LOGFMT(LogBS_MotionSensorDataManager, Log, "{0}: {1}", UEnum::GetValueAsString(SensorType), Rotator.ToString());
-
-    switch (SensorType)
-    {
-    case EBS_SensorType::ORIENTATION:
-        OnOrientationUpdate.ExecuteIfBound(Rotator, Timestamp);
-        break;
-    default:
-        UE_LOGFMT(LogBS_MotionSensorDataManager, Error, "Uncaught Orientation SensorType {0}", UEnum::GetValueAsString(SensorType));
         break;
     }
 }
