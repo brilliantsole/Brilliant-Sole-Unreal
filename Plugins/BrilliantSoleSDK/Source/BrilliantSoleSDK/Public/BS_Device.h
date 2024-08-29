@@ -29,6 +29,13 @@ public:
 	UBS_Device();
 	void PostInitProperties();
 
+	// UFUNCTION(BlueprintCallable, Category = "BS UTILS")
+	// void IncrementQuaternionIndex() { SensorDataManager->MotionSensorDataManager->QuaternionPermutationIndex++; }
+	// UFUNCTION(BlueprintCallable, Category = "BS UTILS")
+	// void SetIncrementQuaternionIndex(int NewIndex) { SensorDataManager->MotionSensorDataManager->QuaternionPermutationIndex = NewIndex; }
+	// UFUNCTION(BlueprintPure, Category = "BS UTILS")
+	// const int QuaternionPermutationIndex() const { return SensorDataManager->MotionSensorDataManager->QuaternionPermutationIndex; }
+
 private:
 	void Reset();
 	void LogMemoryUsage();
