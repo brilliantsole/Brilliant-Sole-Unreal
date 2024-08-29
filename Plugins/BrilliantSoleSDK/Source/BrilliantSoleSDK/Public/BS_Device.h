@@ -330,6 +330,18 @@ private:
 	void OnDeviceOrientationUpdate(const EBS_DeviceOrientation &DeviceOrientation, const uint64 &Timestamp) { OnDeviceOrientation.Broadcast(this, DeviceOrientation, Timestamp); }
 	// MOTION DATA END
 
+	// BAROMETER DATA START
+public:
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FBS_BarometerCallback, UBS_Device *, Device, const float &, Barometer, const float &, Timestamp);
+
+	UPROPERTY(BlueprintAssignable, Category = "BS Barometer Data")
+	FBS_BarometerCallback OnBarometer;
+
+private:
+	void OnBarometerUpdate(const float &Barometer, const uint64 &Timestamp) { OnBarometer.Broadcast(this, Barometer, Timestamp); }
+
+	// BAROMETER DATA END
+
 	// VIBRATION START
 public:
 protected:

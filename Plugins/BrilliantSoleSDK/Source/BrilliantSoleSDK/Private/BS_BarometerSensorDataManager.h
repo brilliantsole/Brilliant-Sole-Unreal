@@ -9,6 +9,8 @@
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_BarometerSensorDataManager, Log, All);
 
+DECLARE_DELEGATE_TwoParams(FBS_BarometerCallbackLocal, const float &, const uint64 &);
+
 UCLASS()
 class UBS_BarometerSensorDataManager : public UBS_BaseSensorDataManager
 {
@@ -16,4 +18,10 @@ class UBS_BarometerSensorDataManager : public UBS_BaseSensorDataManager
 
 public:
 	bool OnSensorDataMessage(EBS_SensorType SensorType, const TArray<uint8> &Message, const uint64 &Timestamp, const float &Scalar) override;
+
+private:
+	void ParseBarometer(EBS_SensorType SensorType, const TArray<uint8> &Message, const uint64 &Timestamp, const float &Scalar);
+
+public:
+	FBS_BarometerCallbackLocal OnBarometerUpdate;
 };
