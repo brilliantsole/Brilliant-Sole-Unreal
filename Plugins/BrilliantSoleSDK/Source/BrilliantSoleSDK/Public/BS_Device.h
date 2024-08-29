@@ -281,6 +281,9 @@ protected:
 	// PRESSURE DATA START
 public:
 	// FILL
+	UFUNCTION(BlueprintPure, Category = "BS Pressure Data")
+	uint8 NumberOfPressureSensors() const { return SensorDataManager->PressureSensorDataManager->GetNumberOfPressureSensors(); }
+
 private:
 	// FILL
 	// PRESSURE DATA END

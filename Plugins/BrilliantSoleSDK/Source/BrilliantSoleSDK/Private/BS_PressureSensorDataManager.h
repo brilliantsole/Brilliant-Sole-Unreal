@@ -5,12 +5,12 @@
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
 #include "BS_BaseSensorDataManager.h"
-#include "BS_Pressure.h"
+#include "BS_PressureData.h"
 #include "BS_PressureSensorDataManager.generated.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_PressureSensorDataManager, Log, All);
 
-DECLARE_DELEGATE_TwoParams(FBS_PressureCallbackLocal, const FBS_Pressure &, const uint64 &);
+DECLARE_DELEGATE_TwoParams(FBS_PressureCallbackLocal, const FBS_PressureData &, const uint64 &);
 
 #define EBS_PressurePositionsMessage BS_MessageGetPressurePositions
 
@@ -31,7 +31,7 @@ public:
 	// PRESSURE POSITIONS START
 public:
 	void ParsePressurePositions(const TArray<uint8> &Message);
-	const uint8 GetNumberOfPressurePositions() const { return PressurePositions.Num(); }
+	const uint8 GetNumberOfPressureSensors() const { return PressurePositions.Num(); }
 
 private:
 	UPROPERTY()

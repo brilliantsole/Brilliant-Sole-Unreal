@@ -2,6 +2,7 @@
 
 #include "BS_PressureSensorDataManager.h"
 #include "Logging/StructuredLog.h"
+#include "BS_ByteParser.h"
 #include "Math/UnrealMathUtility.h"
 
 DEFINE_LOG_CATEGORY(LogBS_PressureSensorDataManager);
@@ -23,9 +24,9 @@ bool UBS_PressureSensorDataManager::OnSensorDataMessage(EBS_SensorType SensorTyp
 
 void UBS_PressureSensorDataManager::ParsePressure(EBS_SensorType SensorType, const TArray<uint8> &Message, const uint64 &Timestamp, const float &Scalar)
 {
-    // FILL
-    // UE_LOGFMT(LogBS_PressureSensorDataManager, Log, "Pressure: {0}", Pressure);
-    // OnPressureUpdate.ExecuteIfBound(Pressure, Timestamp);
+    FBS_PressureData PressureData;
+    PressureData.Parse(Message, Scalar, PressurePositions);
+    OnPressureUpdate.ExecuteIfBound(PressureData, Timestamp);
 }
 
 void UBS_PressureSensorDataManager::ParsePressurePositions(const TArray<uint8> &Message)
@@ -37,7 +38,7 @@ void UBS_PressureSensorDataManager::ParsePressurePositions(const TArray<uint8> &
     {
         float X = static_cast<float>(Message[Offset]) / PressurePositionScalar;
         float Y = static_cast<float>(Message[Offset + 1]) / PressurePositionScalar;
-        UE_LOGFMT(LogBS_PressureSensorDataManager, Log, "#{0}: {1}, {2}", PressurePositions.Num(), X, Y);
+        UE_LOGFMT(LogBS_PressureSensorDataManager, Log, "PressurePosition #{0}: {1}, {2}", PressurePositions.Num(), X, Y);
 
         PressurePositions.Add({X, Y});
     }
