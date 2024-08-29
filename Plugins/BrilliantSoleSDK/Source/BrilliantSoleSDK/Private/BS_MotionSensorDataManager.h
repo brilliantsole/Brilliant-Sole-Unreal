@@ -24,12 +24,6 @@ class UBS_MotionSensorDataManager : public UBS_BaseSensorDataManager
 {
 	GENERATED_BODY()
 
-	// UBS_MotionSensorDataManager()
-	// {
-	// 	TempArray1.SetNum(4);
-	// 	TempArray2.SetNum(4);
-	// }
-
 public:
 	bool OnSensorDataMessage(EBS_SensorType SensorType, const TArray<uint8> &Message, const uint64 &Timestamp, const float &Scalar) override;
 
@@ -57,18 +51,4 @@ public:
 	FBS_StepCountCallbackLocal OnStepCountUpdate;
 	FBS_TimestampCallbackLocal OnStepDetectionUpdate;
 	FBS_DeviceOrientationCallbackLocal OnDeviceOrientationUpdate;
-
-	// public:
-	// 	UPROPERTY()
-	// 	uint16 QuaternionPermutationIndex = 83;
-	// 	TArray<double> TempArray1;
-	// 	TArray<double> TempArray2;
-	// 	void SetQuat(FQuat &Quat, double W, double X, double Y, double Z);
-	// 	void SetRotator(FRotator &Rotator, const FVector &Vector);
-	// 	static const TArray<TArray<int8>> QuaternionPermutations;
-	// 	static const TArray<TArray<int8>> InitializeQuaternionPermutations();
-	// 	static void GeneratePermutations(TArray<uint8> &Input, int32 StartIndex, TArray<TArray<uint8>> &OutPermutations);
-	// 	static void GenerateSignedCombinations(const TArray<uint8> &Input, TArray<TArray<int8>> &OutSignedCombinations);
-	// 	static TArray<TArray<int8>> GenerateSignedPermutations(const TArray<uint8> &Input);
-	// 	void PermuteQuaternion(FQuat &Quat);
 };

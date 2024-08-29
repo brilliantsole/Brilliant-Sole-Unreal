@@ -6,7 +6,7 @@
 
 DEFINE_LOG_CATEGORY(LogBS_ParseUtils);
 
-void UBS_ParseUtils::ParseRxData(const TArray<uint8> &Data, FMessageCallback MessageCallback)
+void UBS_ParseUtils::ParseRxData(const TArray<uint8> &Data, FBS_MessageCallback MessageCallback)
 {
     const auto DataLength = Data.Num();
     uint8 Offset = 0;

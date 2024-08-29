@@ -8,7 +8,7 @@
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_ParseUtils, Log, All);
 
-DECLARE_DYNAMIC_DELEGATE_TwoParams(FMessageCallback, uint8, MessageType, const TArray<uint8> &, Message);
+DECLARE_DYNAMIC_DELEGATE_TwoParams(FBS_MessageCallback, uint8, MessageType, const TArray<uint8> &, Message);
 
 UCLASS()
 class UBS_ParseUtils : public UBlueprintFunctionLibrary
@@ -17,5 +17,5 @@ class UBS_ParseUtils : public UBlueprintFunctionLibrary
 
 public:
 	UFUNCTION(BlueprintCallable, Category = "BS Parse Utils")
-	static void ParseRxData(const TArray<uint8> &Data, FMessageCallback MessageCallback);
+	static void ParseRxData(const TArray<uint8> &Data, FBS_MessageCallback MessageCallback);
 };
