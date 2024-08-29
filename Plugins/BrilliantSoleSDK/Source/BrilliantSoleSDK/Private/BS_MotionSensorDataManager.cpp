@@ -51,7 +51,7 @@ void UBS_MotionSensorDataManager::ParseVector(EBS_SensorType SensorType, const T
 
     UE_LOGFMT(LogBS_MotionSensorDataManager, Log, "X: {0}, Y: {1}, Z: {2}", X, Y, Z);
 
-    FVector Vector(-Z, Y, X);
+    FVector Vector(-Z, X, Y);
     Vector *= Scalar;
 
     UE_LOGFMT(LogBS_MotionSensorDataManager, Log, "{0}: {1}", UEnum::GetValueAsString(SensorType), Vector.ToString());

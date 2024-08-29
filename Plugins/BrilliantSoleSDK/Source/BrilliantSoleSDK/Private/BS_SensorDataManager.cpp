@@ -71,43 +71,51 @@ void UBS_SensorDataManager::ParseSensorScalars(const TArray<uint8> &Message)
 void UBS_SensorDataManager::ParseSensorData(const TArray<uint8> &Message)
 {
     uint8 Offset = 0;
+    const uint16 MessageLength = Message.Num();
+    UE_LOGFMT(LogBS_SensorDataManager, Log, "MessageLength: {0}", MessageLength);
 
     uint64 Timestamp = TimeUtils::ParseTimestamp(Message);
     Offset += 2;
-
     UE_LOGFMT(LogBS_SensorDataManager, Log, "Timestamp: {0}ms", Timestamp);
 
-    const uint8 SensorTypeEnum = Message[Offset++];
-    if (SensorTypeEnum >= static_cast<uint8>(EBS_SensorType::COUNT))
+    while (Offset < MessageLength)
     {
-        UE_LOGFMT(LogBS_SensorDataManager, Error, "Invalid SensorTypeEnum {0}", SensorTypeEnum);
-        return;
-    }
-    const EBS_SensorType SensorType = static_cast<EBS_SensorType>(SensorTypeEnum);
-    UE_LOGFMT(LogBS_SensorDataManager, Log, "SensorType: {0}", UEnum::GetValueAsString(SensorType));
+        const uint8 SensorTypeEnum = Message[Offset++];
+        if (SensorTypeEnum >= static_cast<uint8>(EBS_SensorType::COUNT))
+        {
+            UE_LOGFMT(LogBS_SensorDataManager, Error, "Invalid SensorTypeEnum {0}", SensorTypeEnum);
+            return;
+        }
+        const EBS_SensorType SensorType = static_cast<EBS_SensorType>(SensorTypeEnum);
+        UE_LOGFMT(LogBS_SensorDataManager, Log, "SensorType: {0}", UEnum::GetValueAsString(SensorType));
 
-    float Scalar = SensorScalars.Contains(SensorType) ? SensorScalars[SensorType] : 1.0f;
-    UE_LOGFMT(LogBS_SensorDataManager, Log, "Scalar: {0}", Scalar);
+        float Scalar = SensorScalars.Contains(SensorType) ? SensorScalars[SensorType] : 1.0f;
+        UE_LOGFMT(LogBS_SensorDataManager, Log, "Scalar: {0}", Scalar);
 
-    const uint16 SensorDataMessageLength = BS_ByteParser::ParseAs<uint16>(Message, Offset, true);
-    Offset += 2;
+        const uint8 SensorDataMessageLength = Message[Offset++];
 
-    const TArrayView<uint8> SensorDataMessage((uint8 *)(Message.GetData() + Offset), SensorDataMessageLength);
+        UE_LOGFMT(LogBS_SensorDataManager, Log, "SensorDataMessageLength: {0}", SensorDataMessageLength);
 
-    if (PressureSensorDataManager->OnSensorDataMessage(SensorType, static_cast<TArray<uint8>>(SensorDataMessage), Timestamp, Scalar))
-    {
-        UE_LOGFMT(LogBS_SensorDataManager, Log, "Parsed PressureSensorDataManager Message");
-    }
-    else if (MotionSensorDataManager->OnSensorDataMessage(SensorType, static_cast<TArray<uint8>>(SensorDataMessage), Timestamp, Scalar))
-    {
-        UE_LOGFMT(LogBS_SensorDataManager, Log, "Parsed MotionSensorDataManager Message");
-    }
-    else if (BarometerSensorDataManager->OnSensorDataMessage(SensorType, static_cast<TArray<uint8>>(SensorDataMessage), Timestamp, Scalar))
-    {
-        UE_LOGFMT(LogBS_SensorDataManager, Log, "Parsed BarometerSensorDataManager Message");
-    }
-    else
-    {
-        UE_LOGFMT(LogBS_SensorDataManager, Error, "Unable to Parse {0} Message", UEnum::GetValueAsString(SensorType));
+        // I have no idea why I have to add 1 here...
+        const TArrayView<uint8> SensorDataMessage((uint8 *)(Message.GetData() + Offset + 1), SensorDataMessageLength);
+
+        if (PressureSensorDataManager->OnSensorDataMessage(SensorType, static_cast<TArray<uint8>>(SensorDataMessage), Timestamp, Scalar))
+        {
+            UE_LOGFMT(LogBS_SensorDataManager, Log, "Parsed PressureSensorDataManager Message");
+        }
+        else if (MotionSensorDataManager->OnSensorDataMessage(SensorType, static_cast<TArray<uint8>>(SensorDataMessage), Timestamp, Scalar))
+        {
+            UE_LOGFMT(LogBS_SensorDataManager, Log, "Parsed MotionSensorDataManager Message");
+        }
+        else if (BarometerSensorDataManager->OnSensorDataMessage(SensorType, static_cast<TArray<uint8>>(SensorDataMessage), Timestamp, Scalar))
+        {
+            UE_LOGFMT(LogBS_SensorDataManager, Log, "Parsed BarometerSensorDataManager Message");
+        }
+        else
+        {
+            UE_LOGFMT(LogBS_SensorDataManager, Error, "Unable to Parse {0} Message", UEnum::GetValueAsString(SensorType));
+        }
+
+        Offset += SensorDataMessageLength;
     }
 }
