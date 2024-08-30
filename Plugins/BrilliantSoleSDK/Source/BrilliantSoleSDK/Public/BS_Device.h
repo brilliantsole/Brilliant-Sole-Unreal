@@ -280,15 +280,18 @@ protected:
 
 	// PRESSURE DATA START
 public:
-	// FILL
 	UFUNCTION(BlueprintPure, Category = "BS Pressure Data")
 	uint8 NumberOfPressureSensors() const { return SensorDataManager->PressureSensorDataManager->GetNumberOfPressureSensors(); }
 
 	UFUNCTION(BlueprintCallable, Category = "BS Pressure Data")
 	void ResetPressure() { SensorDataManager->PressureSensorDataManager->Reset(); }
 
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FBS_PressureCallback, UBS_Device *, Device, const FBS_PressureData &, PressureData, const float &, Timestamp);
+	UPROPERTY(BlueprintAssignable, Category = "BS Pressure Data")
+	FBS_PressureCallback OnPressure;
+
 private:
-	// FILL
+	void OnPressureUpdate(const FBS_PressureData &PressureData, const uint64 &Timestamp) { OnPressure.Broadcast(this, PressureData, Timestamp); }
 	// PRESSURE DATA END
 
 	// MOTION DATA START

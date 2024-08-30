@@ -42,6 +42,8 @@ UBS_Device::UBS_Device()
     SensorDataManager = CreateDefaultSubobject<UBS_SensorDataManager>(TEXT("SensorDataManager"));
     SensorDataManager->SendTxMessages.BindUObject(this, &UBS_Device::SendTxMessages);
 
+    SensorDataManager->PressureSensorDataManager->OnPressureUpdate.BindUObject(this, &UBS_Device::OnPressureUpdate);
+
     SensorDataManager->MotionSensorDataManager->OnAccelerationUpdate.BindUObject(this, &UBS_Device::OnAccelerationUpdate);
     SensorDataManager->MotionSensorDataManager->OnGravityUpdate.BindUObject(this, &UBS_Device::OnGravityUpdate);
     SensorDataManager->MotionSensorDataManager->OnLinearAccelerationUpdate.BindUObject(this, &UBS_Device::OnLinearAccelerationUpdate);
@@ -55,6 +57,8 @@ UBS_Device::UBS_Device()
     SensorDataManager->MotionSensorDataManager->OnStepCountUpdate.BindUObject(this, &UBS_Device::OnStepCountUpdate);
     SensorDataManager->MotionSensorDataManager->OnStepDetectionUpdate.BindUObject(this, &UBS_Device::OnStepDetectionUpdate);
     SensorDataManager->MotionSensorDataManager->OnDeviceOrientationUpdate.BindUObject(this, &UBS_Device::OnDeviceOrientationUpdate);
+
+    SensorDataManager->BarometerSensorDataManager->OnBarometerUpdate.BindUObject(this, &UBS_Device::OnBarometerUpdate);
 
     SensorConfigurationManager = CreateDefaultSubobject<UBS_SensorConfigurationManager>(TEXT("SensorConfigurationManager"));
     SensorConfigurationManager->SendTxMessages.BindUObject(this, &UBS_Device::SendTxMessages);

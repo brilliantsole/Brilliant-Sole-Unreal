@@ -12,7 +12,7 @@
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_PressureSensorDataManager, Log, All);
 
-DECLARE_DELEGATE_TwoParams(FBS_PressureCallbackLocal, const FBS_PressureData &, const uint64 &);
+DECLARE_DELEGATE_TwoParams(FBS_PressureDataCallbackLocal, const FBS_PressureData &, const uint64 &);
 
 #define EBS_PressurePositionsMessage BS_MessageGetPressurePositions
 
@@ -28,7 +28,7 @@ private:
 	void ParsePressure(EBS_SensorType SensorType, const TArray<uint8> &Message, const uint64 &Timestamp, const float &Scalar);
 
 public:
-	FBS_PressureCallbackLocal OnPressureUpdate;
+	FBS_PressureDataCallbackLocal OnPressureUpdate;
 
 private:
 	TArray<FBS_Range> PressureSensorRanges;
