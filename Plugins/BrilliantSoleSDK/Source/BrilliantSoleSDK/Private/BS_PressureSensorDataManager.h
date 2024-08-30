@@ -40,11 +40,14 @@ public:
 	// PRESSURE POSITIONS START
 public:
 	void ParsePressurePositions(const TArray<uint8> &Message);
-	const uint8 GetNumberOfPressureSensors() const { return PressurePositions.Num(); }
+	const uint8 GetNumberOfPressureSensors() const { return NumberOfPressureSensors; }
 
 private:
 	UPROPERTY()
 	TArray<FVector2D> PressurePositions;
 	static const float PressurePositionScalar;
+
+	UPROPERTY()
+	uint8 NumberOfPressureSensors;
 	// PRESSURE POSITIONS END
 };

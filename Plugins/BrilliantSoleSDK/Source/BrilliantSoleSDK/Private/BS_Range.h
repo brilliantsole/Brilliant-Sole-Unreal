@@ -37,7 +37,7 @@ public:
         Min = FMath::Min(Min, Value);
         Max = FMath::Max(Max, Value);
         Span = Max - Min;
-        UE_LOGFMT(LogBS_Range, Log, "Updated Range to {0}", ToString());
+        UE_LOGFMT(LogTemp, Log, "Updated Range to {0}", *ToString());
     }
 
     float GetNormalization(float Value)

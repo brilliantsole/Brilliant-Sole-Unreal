@@ -29,7 +29,7 @@ public:
     {
         X.Update(Value.X);
         Y.Update(Value.Y);
-        UE_LOGFMT(LogBS_Range, Log, "Updated CenterOfPressureRange to {0}", ToString());
+        UE_LOGFMT(LogTemp, Log, "Updated CenterOfPressureRange to {0}", *ToString());
     }
 
     FVector2D GetNormalization(FVector2D Value)
