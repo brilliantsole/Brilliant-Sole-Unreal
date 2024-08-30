@@ -34,7 +34,7 @@ public:
 
     FVector2D GetNormalization(FVector2D Value)
     {
-        return {X.GetNormalization(Value.X), Y.GetNormalization(Value.Y)};
+        return {X.GetNormalization(Value.X, false), Y.GetNormalization(Value.Y, false)};
     }
 
     FVector2D UpdateAndGetNormalization(FVector2D Value)

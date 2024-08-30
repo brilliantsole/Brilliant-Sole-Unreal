@@ -56,7 +56,7 @@ void UBS_PressureSensorDataManager::ParsePressure(EBS_SensorType SensorType, con
         UE_LOGFMT(LogBS_PressureSensorDataManager, Log, "ScaledValue #{0}: {1}", Index, ScaledValue);
 
         FBS_Range &Range = PressureSensorRanges[Index];
-        const float NormalizedValue = Range.UpdateAndGetNormalization(ScaledValue);
+        const float NormalizedValue = Range.UpdateAndGetNormalization(ScaledValue, true);
 
         const float WeightedValue = 0.0f;
 

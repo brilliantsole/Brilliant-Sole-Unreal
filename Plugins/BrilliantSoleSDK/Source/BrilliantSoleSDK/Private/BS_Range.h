@@ -40,20 +40,25 @@ public:
         UE_LOGFMT(LogTemp, Log, "Updated Range to {0}", *ToString());
     }
 
-    float GetNormalization(float Value)
+    float GetNormalization(float Value, bool bWeightBySpan)
     {
         if (Span == 0)
         {
             return 0.0f;
         }
         float Interpolation = (Value - Min) / Span;
-        return Interpolation * Span;
+
+        if (bWeightBySpan)
+        {
+            Interpolation *= Span;
+        }
+        return Interpolation;
     }
 
-    float UpdateAndGetNormalization(float Value)
+    float UpdateAndGetNormalization(float Value, bool bWeightBySpan)
     {
         Update(Value);
-        return GetNormalization(Value);
+        return GetNormalization(Value, bWeightBySpan);
     }
 
     FString ToString() const
