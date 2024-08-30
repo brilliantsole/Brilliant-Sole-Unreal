@@ -6,6 +6,8 @@
 #include "UObject/NoExportTypes.h"
 #include "BS_BaseSensorDataManager.h"
 #include "BS_PressureData.h"
+#include "BS_Range.h"
+#include "BS_CenterOfPressureRange.h"
 #include "BS_PressureSensorDataManager.generated.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_PressureSensorDataManager, Log, All);
@@ -27,6 +29,13 @@ private:
 
 public:
 	FBS_PressureCallbackLocal OnPressureUpdate;
+
+private:
+	TArray<FBS_Range> PressureSensorRanges;
+	FBS_CenterOfPressureRange CenterOfPressureRange;
+
+public:
+	void Reset();
 
 	// PRESSURE POSITIONS START
 public:

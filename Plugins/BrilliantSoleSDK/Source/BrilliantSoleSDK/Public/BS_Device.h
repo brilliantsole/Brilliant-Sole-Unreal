@@ -284,6 +284,9 @@ public:
 	UFUNCTION(BlueprintPure, Category = "BS Pressure Data")
 	uint8 NumberOfPressureSensors() const { return SensorDataManager->PressureSensorDataManager->GetNumberOfPressureSensors(); }
 
+	UFUNCTION(BlueprintCallable, Category = "BS Pressure Data")
+	void ResetPressure() { SensorDataManager->PressureSensorDataManager->Reset(); }
+
 private:
 	// FILL
 	// PRESSURE DATA END

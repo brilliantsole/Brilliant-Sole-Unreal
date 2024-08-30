@@ -27,4 +27,11 @@ public:
 
     UPROPERTY(BlueprintReadOnly, Category = "BS Pressure Sensor Data")
     float WeightedValue;
+
+public:
+    FString ToString() const
+    {
+        return FString::Printf(TEXT("Position: (%f, %f), RawValue: %d, ScaledValue: %f, NormalizedValue: %f, WeightedValue: %f"),
+                               Position.X, Position.Y, RawValue, ScaledValue, NormalizedValue, WeightedValue);
+    }
 };

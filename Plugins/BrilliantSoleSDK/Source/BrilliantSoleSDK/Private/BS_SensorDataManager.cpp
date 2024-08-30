@@ -25,6 +25,11 @@ UBS_SensorDataManager::UBS_SensorDataManager()
     BarometerSensorDataManager = CreateDefaultSubobject<UBS_BarometerSensorDataManager>(TEXT("BarometerSensorDataManager"));
 }
 
+void UBS_SensorDataManager::Reset()
+{
+    PressureSensorDataManager->Reset();
+}
+
 bool UBS_SensorDataManager::OnRxMessage(uint8 MessageType, const TArray<uint8> &Message)
 {
     switch (MessageType)

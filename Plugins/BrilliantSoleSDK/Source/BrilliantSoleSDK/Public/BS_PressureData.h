@@ -28,7 +28,4 @@ public:
 
     UPROPERTY(BlueprintReadOnly, Category = "BS Pressure Data")
     FVector2D NormalizedCenterOfPressure;
-
-public:
-    void Parse(const TArray<uint8> &Message, const float &Scalar, const TArray<FVector2D> &PressurePositions);
 };

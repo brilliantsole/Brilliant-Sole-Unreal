@@ -23,6 +23,7 @@ class UBS_SensorDataManager : public UBS_BaseManager
 
 public:
 	UBS_SensorDataManager();
+	void Reset() override;
 
 public:
 	bool OnRxMessage(uint8 MessageType, const TArray<uint8> &Message) override;
