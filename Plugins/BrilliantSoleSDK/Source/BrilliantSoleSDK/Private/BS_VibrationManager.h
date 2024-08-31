@@ -3,9 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UObject/NoExportTypes.h"
 #include "BS_BaseManager.h"
-#include "BS_BaseVibrationConfiguration.h"
+#include "BS_VibrationConfiguration.h"
 #include "BS_VibrationManager.generated.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_VibrationManager, Log, All);
@@ -18,5 +17,5 @@ class UBS_VibrationManager : public UBS_BaseManager
 	GENERATED_BODY()
 
 public:
-	void TriggerVibration(const TArray<UBS_BaseVibrationConfiguration> &VibrationConfigurations);
+	void TriggerVibration(const TArray<FBS_VibrationConfiguration> &VibrationConfigurations);
 };

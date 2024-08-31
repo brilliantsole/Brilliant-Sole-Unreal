@@ -2,7 +2,6 @@
 
 #include "BS_BaseVibrationConfiguration.h"
 #include "Logging/StructuredLog.h"
-#include "BS_ByteParser.h"
 
 DEFINE_LOG_CATEGORY(LogBS_BaseVibrationConfiguration);
 

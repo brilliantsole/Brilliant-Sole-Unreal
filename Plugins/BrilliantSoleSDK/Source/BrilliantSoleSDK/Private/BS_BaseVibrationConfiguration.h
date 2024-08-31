@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "UObject/NoExportTypes.h"
 #include "BS_VibrationType.h"
 #include "BS_VibrationLocation.h"
 #include "BS_VibrationWaveformEffect.h"

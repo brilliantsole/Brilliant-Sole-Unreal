@@ -1,7 +1,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UObject/NoExportTypes.h"
 #include "BS_SensorType.h"
 #include "BS_SensorRate.h"
 #include "BS_SensorConfiguration.generated.h"

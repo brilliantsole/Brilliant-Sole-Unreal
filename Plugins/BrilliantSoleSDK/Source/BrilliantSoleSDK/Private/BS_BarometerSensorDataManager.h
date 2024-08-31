@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UObject/NoExportTypes.h"
 #include "BS_BaseSensorDataManager.h"
 #include "BS_BarometerSensorDataManager.generated.h"
 

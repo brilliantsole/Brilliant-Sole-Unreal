@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UObject/NoExportTypes.h"
 #include "BS_BaseManager.h"
 #include "BS_DeviceType.h"
 #include "BS_InformationManager.generated.h"

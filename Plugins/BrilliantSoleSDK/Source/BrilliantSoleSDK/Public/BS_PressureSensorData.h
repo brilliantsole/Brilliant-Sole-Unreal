@@ -7,7 +7,7 @@
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_PressureSensorData, Log, All);
 
-USTRUCT(BlueprintType)
+USTRUCT(BlueprintType, meta = (ShowOnlyInnerProperties, FullyExpand = "true"))
 struct FBS_PressureSensorData
 {
     GENERATED_BODY()

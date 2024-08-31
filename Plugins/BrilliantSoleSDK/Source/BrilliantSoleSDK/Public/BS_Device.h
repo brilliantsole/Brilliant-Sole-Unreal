@@ -360,6 +360,9 @@ private:
 
 	// VIBRATION START
 public:
+	UFUNCTION(BlueprintCallable, Category = "BS Vibration")
+	void TriggerVibration(const TArray<FBS_VibrationConfiguration> &VibrationConfigurations) { VibrationManager->TriggerVibration(VibrationConfigurations); }
+
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "BS Vibration")
 	UBS_VibrationManager *VibrationManager;

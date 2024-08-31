@@ -6,11 +6,11 @@
 
 DEFINE_LOG_CATEGORY(LogBS_VibrationManager);
 
-void UBS_VibrationManager::TriggerVibration(const TArray<UBS_BaseVibrationConfiguration> &VibrationConfigurations)
+void UBS_VibrationManager::TriggerVibration(const TArray<FBS_VibrationConfiguration> &VibrationConfigurations)
 {
     UE_LOGFMT(LogBS_VibrationManager, Log, "Triggering Vibration...");
     TArray<uint8> TxMessage;
-    for (const UBS_BaseVibrationConfiguration &VibrationConfiguration : VibrationConfigurations)
+    for (const FBS_VibrationConfiguration &VibrationConfiguration : VibrationConfigurations)
     {
         TxMessage.Append(VibrationConfiguration.ToArray());
     }
