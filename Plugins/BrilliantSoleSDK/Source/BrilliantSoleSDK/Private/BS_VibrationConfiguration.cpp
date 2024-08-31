@@ -21,13 +21,13 @@ const TArray<uint8> FBS_VibrationConfiguration::GetVibrationData() const
     return {};
 }
 
-const TArray<uint8> FBS_VibrationConfiguration::WaveformEffectSegmentsToArray() const
+const TArray<uint8> FBS_VibrationConfiguration::WaveformEffectSequenceToArray() const
 {
     // FILL
     return {};
 }
 
-const TArray<uint8> FBS_VibrationConfiguration::WaveformSegmentsToArray() const
+const TArray<uint8> FBS_VibrationConfiguration::WaveformSequenceToArray() const
 {
     // FILL
     return {};

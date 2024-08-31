@@ -26,27 +26,27 @@ public:
     // WAVEFORM EFFECT START
 public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BS Vibration Waveform Effect Configuration", meta = (EditCondition = "VibrationType==EBS_VibrationType::WAVEFORM_EFFECT", EditConditionHides, ToolTip = "Max 8 Segments"))
-    TArray<FBS_VibrationWaveformEffectSegment> WaveformEffectSegments;
+    TArray<FBS_VibrationWaveformEffectSegment> WaveformEffectSequence;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BS Vibration Waveform Effect Configuration", meta = (EditCondition = "VibrationType==EBS_VibrationType::WAVEFORM_EFFECT", DisplayName = "Loop Count", EditConditionHides, ClampMin = "0", ClampMax = "6", UIMin = "0", UIMax = "6"))
     uint8 WaveformEffectLoopCount;
 
 private:
-    static const uint8 VibrationWaveformEffectConfigurationMaxSegments = 8;
-    static const uint8 VibrationWaveformEffectConfigurationMaxLoopCount = 6;
+    static const uint8 MaxWaveformEffectSegments = 8;
+    static const uint8 MaxWaveformEffectSequenceLoopCount = 6;
 
-    const TArray<uint8> WaveformEffectSegmentsToArray() const;
+    const TArray<uint8> WaveformEffectSequenceToArray() const;
     // WAVEFORM EFFECT END
 
     // WAVEFORM START
 public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BS Vibration Waveform Configuration", meta = (EditCondition = "VibrationType==EBS_VibrationType::WAVEFORM", EditConditionHides, ToolTip = "Max 20 Segments"))
-    TArray<FBS_VibrationWaveformSegment> WaveformSegments;
+    TArray<FBS_VibrationWaveformSegment> WaveformSequence;
 
 private:
-    static const uint8 VibrationWaveformConfigurationMaxWaveformSegments = 20;
+    static const uint8 MaxWaveformSegments = 20;
 
-    const TArray<uint8> WaveformSegmentsToArray() const;
+    const TArray<uint8> WaveformSequenceToArray() const;
     // WAVEFORM END
 
 public:
