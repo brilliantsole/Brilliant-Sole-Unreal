@@ -14,3 +14,5 @@ enum class EBS_DeviceOrientation : uint8
     UNKNWON UMETA(DisplayName = "Unknown"),
     COUNT UMETA(Hidden)
 };
+
+ENUM_RANGE_BY_COUNT(EBS_DeviceOrientation, static_cast<int32>(EBS_DeviceOrientation::COUNT))
