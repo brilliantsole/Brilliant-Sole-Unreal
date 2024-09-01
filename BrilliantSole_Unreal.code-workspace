@@ -15,7 +15,8 @@
 		"files.associations": {
 			"fft": "cpp",
 			"mprealsupport": "cpp",
-			"alignedvector3": "cpp"
+			"alignedvector3": "cpp",
+			"variant": "cpp"
 		}
 	},
 	"extensions": {

@@ -12,7 +12,21 @@ void UBS_VibrationManager::TriggerVibration(const TArray<FBS_VibrationConfigurat
     TArray<uint8> TxMessage;
     for (const FBS_VibrationConfiguration &VibrationConfiguration : VibrationConfigurations)
     {
-        TxMessage.Append(VibrationConfiguration.ToArray());
+        const TArray<uint8> VibrationConfigurationArray = VibrationConfiguration.ToArray();
+        const uint8 VibrationConfigurationArrayLength = VibrationConfigurationArray.Num();
+        if (VibrationConfigurationArrayLength == 0)
+        {
+            UE_LOGFMT(LogBS_VibrationManager, Warning, "Empty VibrationConfigurationArray - Skipping");
+            continue;
+        }
+        TxMessage.Append(VibrationConfigurationArray);
+    }
+
+    const uint8 TxMessageLength = TxMessage.Num();
+    if (TxMessageLength == 0)
+    {
+        UE_LOGFMT(LogBS_VibrationManager, Warning, "Empty TxMessageLength - Skipping");
+        return;
     }
 
     SendTxMessages.ExecuteIfBound({{BS_MessageTriggerVibration, TxMessage}}, true);

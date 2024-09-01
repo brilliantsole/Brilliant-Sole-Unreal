@@ -258,7 +258,7 @@ void UBS_Device::OnRxMessage(uint8 MessageType, const TArray<uint8> &Message)
 
 void UBS_Device::SendTxMessages(const TArray<FBS_TxMessage> &TxMessages, bool bSendImmediately)
 {
-    UE_LOGFMT(LogBS_Device, Log, "Requesting to send {0} bytes...", TxMessages.Num());
+    UE_LOGFMT(LogBS_Device, Log, "Requesting to send {0} Messages...", TxMessages.Num());
     PendingTxMessages.Append(TxMessages);
     if (!bSendImmediately)
     {
