@@ -27,7 +27,7 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BS Vibration Waveform Effect Segment", meta = (EditCondition = "Type==EBS_VibrationWaveformEffectSegmentType::Effect", EditConditionHides))
     EBS_VibrationWaveformEffect Effect;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BS Vibration Waveform Effect Segment", meta = (DisplayName = "Delay (ms)", EditCondition = "Type==EBS_VibrationWaveformEffectSegmentType::Delay", EditConditionHides, ToolTip = "0 - 1270ms", ClampMin = "0", ClampMax = "1270", UIMin = "0", UIMax = "1270"))
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BS Vibration Waveform Effect Segment", meta = (DisplayName = "Delay (ms)", EditCondition = "Type==EBS_VibrationWaveformEffectSegmentType::Delay", EditConditionHides, ToolTip = "0 - 1270ms", ClampMin = "0", ClampMax = "1270", UIMin = "0", UIMax = "1270", Delta = 10, Multiple = 10))
     int32 Delay;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BS Vibration Waveform Effect Segment", meta = (ClampMin = "0", ClampMax = "3", UIMin = "0", UIMax = "3"))
