@@ -16,6 +16,7 @@
 #include "BS_FileTransferManager.h"
 #include "BS_TfliteManager.h"
 #include "BS_InsoleSide.h"
+#include "BS_MathUtils.h"
 #include "BS_Device.generated.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_Device, Log, All);
@@ -200,11 +201,11 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "BS Information")
 	FBS_MTU_Callback OnMTU;
 
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBS_IdCallback, UBS_Device *, Device, FString &, Id);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBS_IdCallback, UBS_Device *, Device, const FString &, Id);
 	UPROPERTY(BlueprintAssignable, Category = "BS Information")
 	FBS_IdCallback OnId;
 
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBS_NameCallback, UBS_Device *, Device, FString &, Name);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBS_NameCallback, UBS_Device *, Device, const FString &, Name);
 	UPROPERTY(BlueprintAssignable, Category = "BS Information")
 	FBS_NameCallback OnName;
 
@@ -222,8 +223,8 @@ protected:
 
 private:
 	void OnMTU_Update(uint16 MTU) { OnMTU.Broadcast(this, MTU); }
-	void OnIdUpdate(FString &Id) { OnId.Broadcast(this, Id); }
-	void OnNameUpdate(FString &Name) { OnName.Broadcast(this, Name); }
+	void OnIdUpdate(const FString &Id) { OnId.Broadcast(this, Id); }
+	void OnNameUpdate(const FString &Name) { OnName.Broadcast(this, Name); }
 	void OnTypeUpdate(EBS_DeviceType Type) { OnType.Broadcast(this, Type); }
 	void OnCurrentTimeUpdate(uint64 CurrentTime) { OnCurrentTime.Broadcast(this, CurrentTime); }
 	// INFORMATION END
@@ -240,10 +241,10 @@ public:
 	void ClearSensorConfiguration() { SensorConfigurationManager->ClearSensorConfiguration(); }
 
 	UFUNCTION(BlueprintCallable, Category = "BS Sensor Configuration")
-	EBS_SensorRate GetSensorRate(EBS_SensorType SensorType, bool &bContainsSensorType) const { return SensorConfigurationManager->GetSensorRate(SensorType, bContainsSensorType); }
+	const EBS_SensorRate GetSensorRate(EBS_SensorType SensorType, bool &bContainsSensorType) const { return SensorConfigurationManager->GetSensorRate(SensorType, bContainsSensorType); }
 
 	UFUNCTION(BlueprintCallable, Category = "BS Sensor Configuration")
-	bool IsSensorRateNonZero(EBS_SensorType SensorType) const { return SensorConfigurationManager->IsSensorRateNonZero(SensorType); }
+	const bool IsSensorRateNonZero(EBS_SensorType SensorType) const { return SensorConfigurationManager->IsSensorRateNonZero(SensorType); }
 
 	UFUNCTION(BlueprintCallable, Category = "BS Sensor Configuration")
 	const TMap<EBS_SensorType, EBS_SensorRate> &GetSensorRates() const { return SensorConfigurationManager->GetSensorRates(); }
@@ -281,7 +282,7 @@ protected:
 	// PRESSURE DATA START
 public:
 	UFUNCTION(BlueprintPure, Category = "BS Pressure Data")
-	uint8 NumberOfPressureSensors() const { return SensorDataManager->PressureSensorDataManager->GetNumberOfPressureSensors(); }
+	const uint8 NumberOfPressureSensors() const { return SensorDataManager->PressureSensorDataManager->GetNumberOfPressureSensors(); }
 
 	UFUNCTION(BlueprintCallable, Category = "BS Pressure Data")
 	void ResetPressure() { SensorDataManager->PressureSensorDataManager->Reset(); }
@@ -381,10 +382,104 @@ private:
 
 	// TFLITE START
 public:
+	UFUNCTION(BlueprintPure, Category = "BS Tflite")
+	const FString &GetTfliteName() const { return TfliteManager->GetName(); }
+
+	UFUNCTION(BlueprintCallable, Category = "BS Tflite")
+	void SetTfliteName(const FString &NewName) { return TfliteManager->SetName(NewName); }
+
+	UFUNCTION(BlueprintPure, Category = "BS Tflite")
+	const EBS_TfliteTask GetTfliteTask() const { return TfliteManager->GetTask(); }
+
+	UFUNCTION(BlueprintCallable, Category = "BS Tflite")
+	void SetTfliteTask(const EBS_TfliteTask NewTask) { return TfliteManager->SetTask(NewTask); }
+
+	UFUNCTION(BlueprintPure, Category = "BS Tflite")
+	const EBS_SensorRate GetTfliteSampleRate() const { return TfliteManager->GetSampleRate(); }
+
+	UFUNCTION(BlueprintCallable, Category = "BS Tflite")
+	void SetTfliteSampleRate(const EBS_SensorRate NewSampleRate) { return TfliteManager->SetSampleRate(NewSampleRate); }
+
+	UFUNCTION(BlueprintPure, Category = "BS Tflite")
+	const TArray<EBS_SensorType> &GetTfliteSensorTypes() const { return TfliteManager->GetSensorTypes(); }
+
+	UFUNCTION(BlueprintCallable, Category = "BS Tflite")
+	void SetTfliteSensorTypes(const TArray<EBS_SensorType> &NewSensorTypes) { return TfliteManager->SetSensorTypes(NewSensorTypes); }
+
+	UFUNCTION(BlueprintPure, Category = "BS Tflite")
+	const bool GetTfliteIsReady() const { return TfliteManager->GetIsReady(); }
+
+	UFUNCTION(BlueprintPure, Category = "BS Tflite")
+	const int32 GetTfliteCaptureDelay() const { return TfliteManager->GetCaptureDelay(); }
+
+	UFUNCTION(BlueprintCallable, Category = "BS Tflite")
+	void SetTfliteCaptureDelay(const int32 NewCaptureDelay) { return TfliteManager->SetCaptureDelay(BS_MathUtils::ClampToRange<uint16>(NewCaptureDelay)); }
+
+	UFUNCTION(BlueprintPure, Category = "BS Tflite")
+	const float GetTfliteThreshold() const { return TfliteManager->GetThreshold(); }
+
+	UFUNCTION(BlueprintCallable, Category = "BS Tflite")
+	void SetTfliteThreshold(const float NewThreshold) { return TfliteManager->SetThreshold(NewThreshold); }
+
+	UFUNCTION(BlueprintPure, Category = "BS Tflite")
+	const bool GetTfliteInferencingEnabled() const { return TfliteManager->GetInferencingEnabled(); }
+
+	UFUNCTION(BlueprintCallable, Category = "BS Tflite")
+	void SetTfliteInferencingEnabled(const bool NewInferencingEnabled) { return TfliteManager->SetInferencingEnabled(NewInferencingEnabled); }
+
+	UFUNCTION(BlueprintCallable, Category = "BS Tflite")
+	void ToggleTfliteInferencingEnabled() { return TfliteManager->ToggleInferencingEnabled(); }
+
+public:
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBS_TfliteNameCallback, UBS_Device *, Device, const FString &, Name);
+	UPROPERTY(BlueprintAssignable, Category = "BS Tflite")
+	FBS_TfliteNameCallback OnTfliteName;
+
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBS_TfliteTaskCallback, UBS_Device *, Device, EBS_TfliteTask, Task);
+	UPROPERTY(BlueprintAssignable, Category = "BS Tflite")
+	FBS_TfliteTaskCallback OnTfliteTask;
+
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBS_TfliteSampleRateCallback, UBS_Device *, Device, EBS_SensorRate, SampleRate);
+	UPROPERTY(BlueprintAssignable, Category = "BS Tflite")
+	FBS_TfliteSampleRateCallback OnTfliteSampleRate;
+
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBS_TfliteSensorTypesCallback, UBS_Device *, Device, const TArray<EBS_SensorType> &, SensorTypes);
+	UPROPERTY(BlueprintAssignable, Category = "BS Tflite")
+	FBS_TfliteSensorTypesCallback OnTfliteSensorTypes;
+
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBS_TfliteIsReadyCallback, UBS_Device *, Device, bool, IsReady);
+	UPROPERTY(BlueprintAssignable, Category = "BS Tflite")
+	FBS_TfliteIsReadyCallback OnTfliteIsReady;
+
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBS_TfliteCaptureDelayCallback, UBS_Device *, Device, uint16, CaptureDelay);
+	UPROPERTY(BlueprintAssignable, Category = "BS Tflite")
+	FBS_TfliteCaptureDelayCallback OnTfliteCaptureDelay;
+
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBS_TfliteThresholdCallback, UBS_Device *, Device, float, Threshold);
+	UPROPERTY(BlueprintAssignable, Category = "BS Tflite")
+	FBS_TfliteThresholdCallback OnTfliteThreshold;
+
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBS_TfliteInferencingEnabledCallback, UBS_Device *, Device, bool, InferencingEnabled);
+	UPROPERTY(BlueprintAssignable, Category = "BS Tflite")
+	FBS_TfliteInferencingEnabledCallback OnTfliteInferencingEnabled;
+
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FBS_TfliteInferenceCallback, UBS_Device *, Device, const TArray<float> &, Inference, const float &, Timestamp);
+	UPROPERTY(BlueprintAssignable, Category = "BS Tflite")
+	FBS_TfliteInferenceCallback OnTfliteInference;
+
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "BS Tflite")
 	UBS_TfliteManager *TfliteManager;
 
 private:
+	void OnTfliteNameUpdate(const FString &Name) { OnTfliteName.Broadcast(this, Name); }
+	void OnTfliteTaskUpdate(EBS_TfliteTask Task) { OnTfliteTask.Broadcast(this, Task); }
+	void OnTfliteSampleRateUpdate(EBS_SensorRate SampleRate) { OnTfliteSampleRate.Broadcast(this, SampleRate); }
+	void OnTfliteSensorTypesUpdate(const TArray<EBS_SensorType> &SensorTypes) { OnTfliteSensorTypes.Broadcast(this, SensorTypes); }
+	void OnTfliteIsReadyUpdate(bool IsReady) { OnTfliteIsReady.Broadcast(this, IsReady); }
+	void OnTfliteCaptureDelayUpdate(uint16 CaptureDelay) { OnTfliteCaptureDelay.Broadcast(this, CaptureDelay); }
+	void OnTfliteThresholdUpdate(float Threshold) { OnTfliteThreshold.Broadcast(this, Threshold); }
+	void OnTfliteInferencingEnabledUpdate(bool InferencingEnabled) { OnTfliteInferencingEnabled.Broadcast(this, InferencingEnabled); }
+	void OnTfliteInferenceUpdate(const TArray<float> &Inference, const uint64 &Timestamp) { OnTfliteInference.Broadcast(this, Inference, Timestamp); }
 	// TFLITE END
 };

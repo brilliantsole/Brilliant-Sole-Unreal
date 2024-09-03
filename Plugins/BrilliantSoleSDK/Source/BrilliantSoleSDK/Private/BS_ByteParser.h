@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Logging/StructuredLog.h"
+#include "Algo/Reverse.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_ByteParser, Log, All);
 
@@ -11,15 +12,23 @@ class BS_ByteParser
 {
 public:
     template <typename T>
-    static TArray<uint8> ToByteArray(const T &Value)
+    static TArray<uint8> ToByteArray(const T &Value, bool bIsLittleEndian = false)
     {
         TArray<uint8> ByteArray;
         const uint8 Size = sizeof(T);
         ByteArray.SetNumZeroed(Size);
-        for (uint8 i = 0; i < Size; i++)
+
+        // for (uint8 i = 0; i < Size; i++)
+        // {
+        //     ByteArray[i] = (Value >> (i * 8)) & 0xFF;
+        // }
+
+        FMemory::Memcpy(ByteArray.GetData(), &Value, Size);
+        if (bIsLittleEndian && !PLATFORM_LITTLE_ENDIAN)
         {
-            ByteArray[i] = (Value >> (i * 8)) & 0xFF;
+            Algo::Reverse(ByteArray);
         }
+
         return ByteArray;
     }
 

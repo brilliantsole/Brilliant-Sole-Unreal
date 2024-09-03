@@ -7,5 +7,11 @@ DEFINE_LOG_CATEGORY(LogBS_FileTransferManager);
 
 bool UBS_FileTransferManager::OnRxMessage(uint8 MessageType, const TArray<uint8> &Message)
 {
-    return false;
+    switch (MessageType)
+    {
+        // FILL
+    default:
+        return false;
+    }
+    return true;
 }

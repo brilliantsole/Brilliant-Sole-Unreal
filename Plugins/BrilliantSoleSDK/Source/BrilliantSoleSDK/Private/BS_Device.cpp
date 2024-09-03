@@ -66,10 +66,22 @@ UBS_Device::UBS_Device()
 
     VibrationManager = CreateDefaultSubobject<UBS_VibrationManager>(TEXT("VibrationManager"));
     VibrationManager->SendTxMessages.BindUObject(this, &UBS_Device::SendTxMessages);
+
     FileTransferManager = CreateDefaultSubobject<UBS_FileTransferManager>(TEXT("FileTransferManager"));
     FileTransferManager->SendTxMessages.BindUObject(this, &UBS_Device::SendTxMessages);
+
     TfliteManager = CreateDefaultSubobject<UBS_TfliteManager>(TEXT("TfliteManager"));
     TfliteManager->SendTxMessages.BindUObject(this, &UBS_Device::SendTxMessages);
+
+    TfliteManager->OnNameUpdate.BindUObject(this, &UBS_Device::OnTfliteNameUpdate);
+    TfliteManager->OnTaskUpdate.BindUObject(this, &UBS_Device::OnTfliteTaskUpdate);
+    TfliteManager->OnSampleRateUpdate.BindUObject(this, &UBS_Device::OnTfliteSampleRateUpdate);
+    TfliteManager->OnSensorTypesUpdate.BindUObject(this, &UBS_Device::OnTfliteSensorTypesUpdate);
+    TfliteManager->OnIsReadyUpdate.BindUObject(this, &UBS_Device::OnTfliteIsReadyUpdate);
+    TfliteManager->OnCaptureDelayUpdate.BindUObject(this, &UBS_Device::OnTfliteCaptureDelayUpdate);
+    TfliteManager->OnThresholdUpdate.BindUObject(this, &UBS_Device::OnTfliteThresholdUpdate);
+    TfliteManager->OnInferencingEnabledUpdate.BindUObject(this, &UBS_Device::OnTfliteInferencingEnabledUpdate);
+    TfliteManager->OnInferenceUpdate.BindUObject(this, &UBS_Device::OnTfliteInferenceUpdate);
 }
 
 void UBS_Device::PostInitProperties()

@@ -4,9 +4,22 @@
 
 #include "CoreMinimal.h"
 #include "BS_BaseManager.h"
+#include "BS_TfliteTask.h"
+#include "BS_SensorType.h"
+#include "BS_SensorRate.h"
 #include "BS_TfliteManager.generated.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_TfliteManager, Log, All);
+
+DECLARE_DELEGATE_OneParam(FBS_TfliteNameCallbackLocal, const FString &);
+DECLARE_DELEGATE_OneParam(FBS_TfliteTaskCallbackLocal, EBS_TfliteTask);
+DECLARE_DELEGATE_OneParam(FBS_TfliteSampleRateCallbackLocal, EBS_SensorRate);
+DECLARE_DELEGATE_OneParam(FBS_TfliteSensorTypesCallbackLocal, const TArray<EBS_SensorType> &);
+DECLARE_DELEGATE_OneParam(FBS_TfliteIsReadyCallbackLocal, bool);
+DECLARE_DELEGATE_OneParam(FBS_TfliteCaptureDelayCallbackLocal, uint16);
+DECLARE_DELEGATE_OneParam(FBS_TfliteThresholdCallbackLocal, float);
+DECLARE_DELEGATE_OneParam(FBS_TfliteInferencingEnabledCallbackLocal, bool);
+DECLARE_DELEGATE_TwoParams(FBS_TfliteInferenceCallbackLocal, const TArray<float> &, const uint64 &);
 
 #define EBS_TfliteMessage BS_MessageTfliteGetName,               \
 						  BS_MessageTfliteSetName,               \
@@ -30,6 +43,121 @@ class UBS_TfliteManager : public UBS_BaseManager
 {
 	GENERATED_BODY()
 
-	public:
+public:
 	bool OnRxMessage(uint8 MessageType, const TArray<uint8> &Message) override;
+	void Reset() override;
+
+	// NAME START
+public:
+	const FString &GetName() const { return Name; }
+	FBS_TfliteNameCallbackLocal OnNameUpdate;
+
+	static const uint8 MinNameLength;
+	static const uint8 MaxNameLength;
+	void SetName(const FString &NewName);
+
+private:
+	UPROPERTY()
+	FString Name;
+	void ParseName(const TArray<uint8> &Message);
+	// NAME END
+
+	// TASK START
+public:
+	const EBS_TfliteTask &GetTask() const { return Task; }
+	FBS_TfliteTaskCallbackLocal OnTaskUpdate;
+
+	void SetTask(const EBS_TfliteTask NewTask);
+
+private:
+	UPROPERTY()
+	EBS_TfliteTask Task;
+	void ParseTask(const TArray<uint8> &Message);
+	// TASK END
+
+	// SAMPLE RATE START
+public:
+	EBS_SensorRate GetSampleRate() const { return SampleRate; }
+	FBS_TfliteSampleRateCallbackLocal OnSampleRateUpdate;
+
+	void SetSampleRate(const EBS_SensorRate NewSampleRate);
+
+private:
+	UPROPERTY()
+	EBS_SensorRate SampleRate = EBS_SensorRate::Value0;
+	void ParseSampleRate(const TArray<uint8> &Message);
+	// SAMPLE RATE END
+
+	// SENSOR TYPES START
+public:
+	const TArray<EBS_SensorType> &GetSensorTypes() const { return SensorTypes; }
+	FBS_TfliteSensorTypesCallbackLocal OnSensorTypesUpdate;
+
+	void SetSensorTypes(const TArray<EBS_SensorType> &NewSensorTypes);
+
+private:
+	UPROPERTY()
+	TArray<EBS_SensorType> SensorTypes;
+	bool IsSensorTypeValid(const EBS_SensorType SensorType);
+	void ParseSensorTypes(const TArray<uint8> &Message);
+	// SENSOR TYPES END
+
+	// IS READY START
+public:
+	bool GetIsReady() const { return IsReady; }
+	FBS_TfliteIsReadyCallbackLocal OnIsReadyUpdate;
+
+private:
+	UPROPERTY()
+	bool IsReady = false;
+	void ParseIsReady(const TArray<uint8> &Message);
+	// IS READY END
+
+	// CAPTURE DELAY START
+public:
+	uint16 GetCaptureDelay() const { return CaptureDelay; }
+	FBS_TfliteCaptureDelayCallbackLocal OnCaptureDelayUpdate;
+
+	void SetCaptureDelay(const uint16 NewCaptureDelay);
+
+private:
+	UPROPERTY()
+	uint16 CaptureDelay = 0;
+	void ParseCaptureDelay(const TArray<uint8> &Message);
+	// CAPTURE DELAY END
+
+	// THRESHOLD START
+public:
+	float GetThreshold() const { return Threshold; }
+	FBS_TfliteThresholdCallbackLocal OnThresholdUpdate;
+
+	void SetThreshold(const float NewThreshold);
+
+private:
+	UPROPERTY()
+	float Threshold = 0.0f;
+	void ParseThreshold(const TArray<uint8> &Message);
+	// THRESHOLD END
+
+	// INFERENCING ENABLED START
+public:
+	bool GetInferencingEnabled() const { return InferencingEnabled; }
+	FBS_TfliteInferencingEnabledCallbackLocal OnInferencingEnabledUpdate;
+
+	void SetInferencingEnabled(const bool NewInferencingEnabled);
+	void ToggleInferencingEnabled() { SetInferencingEnabled(!InferencingEnabled); }
+
+private:
+	UPROPERTY()
+	bool InferencingEnabled = false;
+	void ParseInferencingEnabled(const TArray<uint8> &Message);
+	// INFERENCING ENABLED END
+
+	// INFERENCE START
+public:
+	FBS_TfliteInferenceCallbackLocal OnInferenceUpdate;
+
+private:
+	void ParseInference(const TArray<uint8> &Message);
+	// INFERENCE END
 };

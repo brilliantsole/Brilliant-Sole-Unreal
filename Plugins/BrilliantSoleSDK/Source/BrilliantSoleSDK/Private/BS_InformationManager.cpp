@@ -47,6 +47,7 @@ void UBS_InformationManager::Reset()
     CurrentTime = 0;
 }
 
+// MTU START
 void UBS_InformationManager::ParseMTU(const TArray<uint8> &Message)
 {
     UE_LOGFMT(LogBS_InformationManager, Log, "Parsing MTU...");
@@ -54,7 +55,9 @@ void UBS_InformationManager::ParseMTU(const TArray<uint8> &Message)
     UE_LOGFMT(LogBS_InformationManager, Log, "Parsed MTU: {0}", MTU);
     OnMTU_Update.ExecuteIfBound(MTU);
 }
+// MTU END
 
+// ID START
 void UBS_InformationManager::ParseId(const TArray<uint8> &Message)
 {
     UE_LOGFMT(LogBS_InformationManager, Log, "Parsing Id...");
@@ -62,7 +65,9 @@ void UBS_InformationManager::ParseId(const TArray<uint8> &Message)
     UE_LOGFMT(LogBS_InformationManager, Log, "Parsed Id: {0} ({1} bytes)", Id, Message.Num());
     OnIdUpdate.ExecuteIfBound(Id);
 }
+// ID END
 
+// NAME START
 void UBS_InformationManager::ParseName(const TArray<uint8> &Message)
 {
     UE_LOGFMT(LogBS_InformationManager, Log, "Parsing Name...");
@@ -91,7 +96,9 @@ void UBS_InformationManager::SetName(const FString &NewName)
     const TArray<uint8> TxMessage = BS_ByteParser::StringToArray(NewName);
     SendTxMessages.ExecuteIfBound({{BS_MessageSetName, TxMessage}}, true);
 }
+// NAME END
 
+// TYPE START
 void UBS_InformationManager::ParseType(const TArray<uint8> &Message)
 {
     Type = static_cast<EBS_DeviceType>(Message[0]);
@@ -111,7 +118,9 @@ void UBS_InformationManager::SetType(const EBS_DeviceType NewType)
     const TArray<uint8> TxMessage = {static_cast<uint8>(NewType)};
     SendTxMessages.ExecuteIfBound({{BS_MessageSetType, TxMessage}}, true);
 }
+// TYPE END
 
+// CURRENT TIME START
 void UBS_InformationManager::ParseCurrentTime(const TArray<uint8> &Message)
 {
     CurrentTime = BS_ByteParser::ParseAs<uint64>(Message, 0, true);
@@ -133,3 +142,4 @@ void UBS_InformationManager::UpdateCurrentTime()
     const TArray<uint8> TxMessage = BS_ByteParser::ToByteArray(Milliseconds);
     SendTxMessages.ExecuteIfBound({{BS_MessageSetCurrentTime, TxMessage}}, true);
 }
+// CURRENT TIME END

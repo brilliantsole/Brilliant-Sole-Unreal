@@ -76,7 +76,7 @@ public:
     void Reset() { SensorRates.Reset(); }
 
     static EBS_SensorRate GetClosestSensorRate(uint16 RawSensorRate);
-    static uint16 GetRawSensorRate(EBS_SensorRate SensorRate) { return static_cast<uint16>(SensorRate) * 10; }
+    static uint16 GetRawSensorRate(EBS_SensorRate SensorRate) { return static_cast<uint16>(SensorRate); }
 
     void Parse(const TArray<uint8> &Message);
 

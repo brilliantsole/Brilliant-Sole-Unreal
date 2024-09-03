@@ -10,8 +10,8 @@
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_InformationManager, Log, All);
 
 DECLARE_DELEGATE_OneParam(FBS_MTU_CallbackLocal, uint16);
-DECLARE_DELEGATE_OneParam(FBS_IdCallbackLocal, FString &);
-DECLARE_DELEGATE_OneParam(FBS_NameCallbackLocal, FString &);
+DECLARE_DELEGATE_OneParam(FBS_IdCallbackLocal, const FString &);
+DECLARE_DELEGATE_OneParam(FBS_NameCallbackLocal, const FString &);
 DECLARE_DELEGATE_OneParam(FBS_TypeCallbackLocal, EBS_DeviceType);
 DECLARE_DELEGATE_OneParam(FBS_CurrentTimeCallbackLocal, uint64);
 

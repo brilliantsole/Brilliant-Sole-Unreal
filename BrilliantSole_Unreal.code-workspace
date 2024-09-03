@@ -13,10 +13,7 @@
 		"typescript.tsc.autoDetect": "off",
 		"npm.autoDetect": "off",
 		"files.associations": {
-			"fft": "cpp",
-			"mprealsupport": "cpp",
-			"alignedvector3": "cpp",
-			"variant": "cpp"
+			"fft": "cpp"
 		}
 	},
 	"extensions": {
