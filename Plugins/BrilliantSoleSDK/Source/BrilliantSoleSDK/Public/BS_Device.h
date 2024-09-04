@@ -386,25 +386,25 @@ public:
 	const FString &GetTfliteName() const { return TfliteManager->GetName(); }
 
 	UFUNCTION(BlueprintCallable, Category = "BS Tflite")
-	void SetTfliteName(const FString &NewName) { return TfliteManager->SetName(NewName); }
+	void SetTfliteName(const FString &NewName, bool bSendImmediately = true) { return TfliteManager->SetName(NewName, bSendImmediately); }
 
 	UFUNCTION(BlueprintPure, Category = "BS Tflite")
 	const EBS_TfliteTask GetTfliteTask() const { return TfliteManager->GetTask(); }
 
 	UFUNCTION(BlueprintCallable, Category = "BS Tflite")
-	void SetTfliteTask(const EBS_TfliteTask NewTask) { return TfliteManager->SetTask(NewTask); }
+	void SetTfliteTask(const EBS_TfliteTask NewTask, bool bSendImmediately = true) { return TfliteManager->SetTask(NewTask, bSendImmediately); }
 
 	UFUNCTION(BlueprintPure, Category = "BS Tflite")
 	const EBS_SensorRate GetTfliteSampleRate() const { return TfliteManager->GetSampleRate(); }
 
 	UFUNCTION(BlueprintCallable, Category = "BS Tflite")
-	void SetTfliteSampleRate(const EBS_SensorRate NewSampleRate) { return TfliteManager->SetSampleRate(NewSampleRate); }
+	void SetTfliteSampleRate(const EBS_SensorRate NewSampleRate, bool bSendImmediately = true) { return TfliteManager->SetSampleRate(NewSampleRate, bSendImmediately); }
 
 	UFUNCTION(BlueprintPure, Category = "BS Tflite")
 	const TArray<EBS_SensorType> &GetTfliteSensorTypes() const { return TfliteManager->GetSensorTypes(); }
 
 	UFUNCTION(BlueprintCallable, Category = "BS Tflite")
-	void SetTfliteSensorTypes(const TArray<EBS_SensorType> &NewSensorTypes) { return TfliteManager->SetSensorTypes(NewSensorTypes); }
+	void SetTfliteSensorTypes(const TArray<EBS_SensorType> &NewSensorTypes, bool bSendImmediately = true) { return TfliteManager->SetSensorTypes(NewSensorTypes, bSendImmediately); }
 
 	UFUNCTION(BlueprintPure, Category = "BS Tflite")
 	const bool GetTfliteIsReady() const { return TfliteManager->GetIsReady(); }
@@ -413,13 +413,13 @@ public:
 	const int32 GetTfliteCaptureDelay() const { return TfliteManager->GetCaptureDelay(); }
 
 	UFUNCTION(BlueprintCallable, Category = "BS Tflite")
-	void SetTfliteCaptureDelay(const int32 NewCaptureDelay) { return TfliteManager->SetCaptureDelay(BS_MathUtils::ClampToRange<uint16>(NewCaptureDelay)); }
+	void SetTfliteCaptureDelay(const int32 NewCaptureDelay, bool bSendImmediately = true) { return TfliteManager->SetCaptureDelay(BS_MathUtils::ClampToRange<uint16>(NewCaptureDelay), bSendImmediately); }
 
 	UFUNCTION(BlueprintPure, Category = "BS Tflite")
 	const float GetTfliteThreshold() const { return TfliteManager->GetThreshold(); }
 
 	UFUNCTION(BlueprintCallable, Category = "BS Tflite")
-	void SetTfliteThreshold(const float NewThreshold) { return TfliteManager->SetThreshold(NewThreshold); }
+	void SetTfliteThreshold(const float NewThreshold,bool bSendImmediately = true) { return TfliteManager->SetThreshold(NewThreshold, bSendImmediately); }
 
 	UFUNCTION(BlueprintPure, Category = "BS Tflite")
 	const bool GetTfliteInferencingEnabled() const { return TfliteManager->GetInferencingEnabled(); }

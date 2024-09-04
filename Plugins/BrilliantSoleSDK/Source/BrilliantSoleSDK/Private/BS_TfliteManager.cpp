@@ -76,7 +76,7 @@ void UBS_TfliteManager::ParseName(const TArray<uint8> &Message)
 
 const uint8 UBS_TfliteManager::MinNameLength = 0;
 const uint8 UBS_TfliteManager::MaxNameLength = 30;
-void UBS_TfliteManager::SetName(const FString &NewName)
+void UBS_TfliteManager::SetName(const FString &NewName, bool bSendImmediately)
 {
     if (NewName == Name)
     {
@@ -92,7 +92,7 @@ void UBS_TfliteManager::SetName(const FString &NewName)
     UE_LOGFMT(LogBS_TfliteManager, Log, "Setting Name to {0}...", NewName);
 
     const TArray<uint8> TxMessage = BS_ByteParser::StringToArray(NewName);
-    SendTxMessages.ExecuteIfBound({{BS_MessageTfliteSetName, TxMessage}}, true);
+    SendTxMessages.ExecuteIfBound({{BS_MessageTfliteSetName, TxMessage}}, bSendImmediately);
 }
 // NAME END
 
@@ -104,7 +104,7 @@ void UBS_TfliteManager::ParseTask(const TArray<uint8> &Message)
     OnTaskUpdate.ExecuteIfBound(Task);
 }
 
-void UBS_TfliteManager::SetTask(const EBS_TfliteTask NewTask)
+void UBS_TfliteManager::SetTask(const EBS_TfliteTask NewTask, bool bSendImmediately)
 {
     if (NewTask == Task)
     {
@@ -114,7 +114,7 @@ void UBS_TfliteManager::SetTask(const EBS_TfliteTask NewTask)
     UE_LOGFMT(LogBS_TfliteManager, Log, "Setting Task to {0}...", UEnum::GetValueAsString(NewTask));
 
     const TArray<uint8> TxMessage = {static_cast<uint8>(NewTask)};
-    SendTxMessages.ExecuteIfBound({{BS_MessageTfliteSetTask, TxMessage}}, true);
+    SendTxMessages.ExecuteIfBound({{BS_MessageTfliteSetTask, TxMessage}}, bSendImmediately);
 }
 // TASK END
 
@@ -133,12 +133,17 @@ void UBS_TfliteManager::ParseSampleRate(const TArray<uint8> &Message)
     OnSampleRateUpdate.ExecuteIfBound(SampleRate);
 }
 
-void UBS_TfliteManager::SetSampleRate(const EBS_SensorRate NewSampleRate)
+void UBS_TfliteManager::SetSampleRate(const EBS_SensorRate NewSampleRate, bool bSendImmediately)
 {
+    if (NewSampleRate == SampleRate)
+    {
+        UE_LOGFMT(LogBS_TfliteManager, Log, "Redundant SampleRate - not setting");
+        return;
+    }
     const uint16 NewRawSampleRate = UBS_SensorConfiguration::GetRawSensorRate(NewSampleRate);
     UE_LOGFMT(LogBS_TfliteManager, Log, "Updating SampleRate to {0}, NewRawSampleRate: {1}ms", UEnum::GetValueAsString(NewSampleRate), NewRawSampleRate);
     const TArray<uint8> TxMessage = BS_ByteParser::ToByteArray(NewRawSampleRate);
-    SendTxMessages.ExecuteIfBound({{BS_MessageTfliteSetSampleRate, TxMessage}}, true);
+    SendTxMessages.ExecuteIfBound({{BS_MessageTfliteSetSampleRate, TxMessage}}, bSendImmediately);
 }
 // SAMPLE RATE END
 
@@ -180,7 +185,7 @@ void UBS_TfliteManager::ParseSensorTypes(const TArray<uint8> &Message)
     OnSensorTypesUpdate.ExecuteIfBound(SensorTypes);
 }
 
-void UBS_TfliteManager::SetSensorTypes(const TArray<EBS_SensorType> &NewSensorTypes)
+void UBS_TfliteManager::SetSensorTypes(const TArray<EBS_SensorType> &NewSensorTypes, bool bSendImmediately)
 {
     UE_LOGFMT(LogBS_TfliteManager, Log, "Updating SensorTypes...");
 
@@ -197,7 +202,7 @@ void UBS_TfliteManager::SetSensorTypes(const TArray<EBS_SensorType> &NewSensorTy
         TxMessage.Add(static_cast<uint8>(SensorType));
     }
 
-    SendTxMessages.ExecuteIfBound({{BS_MessageTfliteSetSensorTypes, TxMessage}}, true);
+    SendTxMessages.ExecuteIfBound({{BS_MessageTfliteSetSensorTypes, TxMessage}}, bSendImmediately);
 }
 // SENSOR TYPES END
 
@@ -220,11 +225,16 @@ void UBS_TfliteManager::ParseCaptureDelay(const TArray<uint8> &Message)
     OnCaptureDelayUpdate.ExecuteIfBound(CaptureDelay);
 }
 
-void UBS_TfliteManager::SetCaptureDelay(const uint16 NewCaptureDelay)
+void UBS_TfliteManager::SetCaptureDelay(const uint16 NewCaptureDelay, bool bSendImmediately)
 {
+    if (NewCaptureDelay == CaptureDelay)
+    {
+        UE_LOGFMT(LogBS_TfliteManager, Log, "Redundant CaptureDelay - not setting");
+        return;
+    }
     UE_LOGFMT(LogBS_TfliteManager, Log, "Updating CaptureDelay to {0}", NewCaptureDelay);
     const TArray<uint8> TxMessage = BS_ByteParser::ToByteArray(NewCaptureDelay);
-    SendTxMessages.ExecuteIfBound({{BS_MessageTfliteSetCaptureDelay, TxMessage}}, true);
+    SendTxMessages.ExecuteIfBound({{BS_MessageTfliteSetCaptureDelay, TxMessage}}, bSendImmediately);
 }
 // CAPTURE DELAY END
 
@@ -237,11 +247,16 @@ void UBS_TfliteManager::ParseThreshold(const TArray<uint8> &Message)
     OnThresholdUpdate.ExecuteIfBound(Threshold);
 }
 
-void UBS_TfliteManager::SetThreshold(const float NewThreshold)
+void UBS_TfliteManager::SetThreshold(const float NewThreshold, bool bSendImmediately)
 {
+    if (NewThreshold == Threshold)
+    {
+        UE_LOGFMT(LogBS_TfliteManager, Log, "Redundant Threshold - not setting");
+        return;
+    }
     UE_LOGFMT(LogBS_TfliteManager, Log, "Updating Threshold to {0}", NewThreshold);
     const TArray<uint8> TxMessage = BS_ByteParser::ToByteArray(NewThreshold);
-    SendTxMessages.ExecuteIfBound({{BS_MessageTfliteSetThreshold, TxMessage}}, true);
+    SendTxMessages.ExecuteIfBound({{BS_MessageTfliteSetThreshold, TxMessage}}, bSendImmediately);
 }
 // THRESHOLD END
 

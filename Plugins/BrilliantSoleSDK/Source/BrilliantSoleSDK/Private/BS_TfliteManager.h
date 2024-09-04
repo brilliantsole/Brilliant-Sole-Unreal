@@ -45,7 +45,7 @@ public:
 
 	static const uint8 MinNameLength;
 	static const uint8 MaxNameLength;
-	void SetName(const FString &NewName);
+	void SetName(const FString &NewName, bool bSendImmediately);
 
 private:
 	UPROPERTY()
@@ -59,7 +59,7 @@ public:
 	DECLARE_DELEGATE_OneParam(FBS_TfliteTaskCallbackLocal, EBS_TfliteTask);
 	FBS_TfliteTaskCallbackLocal OnTaskUpdate;
 
-	void SetTask(const EBS_TfliteTask NewTask);
+	void SetTask(const EBS_TfliteTask NewTask, bool bSendImmediately);
 
 private:
 	UPROPERTY()
@@ -73,7 +73,7 @@ public:
 	DECLARE_DELEGATE_OneParam(FBS_TfliteSampleRateCallbackLocal, EBS_SensorRate);
 	FBS_TfliteSampleRateCallbackLocal OnSampleRateUpdate;
 
-	void SetSampleRate(const EBS_SensorRate NewSampleRate);
+	void SetSampleRate(const EBS_SensorRate NewSampleRate, bool bSendImmediately);
 
 private:
 	UPROPERTY()
@@ -87,7 +87,7 @@ public:
 	DECLARE_DELEGATE_OneParam(FBS_TfliteSensorTypesCallbackLocal, const TArray<EBS_SensorType> &);
 	FBS_TfliteSensorTypesCallbackLocal OnSensorTypesUpdate;
 
-	void SetSensorTypes(const TArray<EBS_SensorType> &NewSensorTypes);
+	void SetSensorTypes(const TArray<EBS_SensorType> &NewSensorTypes, bool bSendImmediately);
 
 private:
 	UPROPERTY()
@@ -114,7 +114,7 @@ public:
 	DECLARE_DELEGATE_OneParam(FBS_TfliteCaptureDelayCallbackLocal, uint16);
 	FBS_TfliteCaptureDelayCallbackLocal OnCaptureDelayUpdate;
 
-	void SetCaptureDelay(const uint16 NewCaptureDelay);
+	void SetCaptureDelay(const uint16 NewCaptureDelay, bool bSendImmediately);
 
 private:
 	UPROPERTY()
@@ -128,7 +128,7 @@ public:
 	DECLARE_DELEGATE_OneParam(FBS_TfliteThresholdCallbackLocal, float);
 	FBS_TfliteThresholdCallbackLocal OnThresholdUpdate;
 
-	void SetThreshold(const float NewThreshold);
+	void SetThreshold(const float NewThreshold, bool bSendImmediately);
 
 private:
 	UPROPERTY()
