@@ -11,16 +11,6 @@
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_TfliteManager, Log, All);
 
-DECLARE_DELEGATE_OneParam(FBS_TfliteNameCallbackLocal, const FString &);
-DECLARE_DELEGATE_OneParam(FBS_TfliteTaskCallbackLocal, EBS_TfliteTask);
-DECLARE_DELEGATE_OneParam(FBS_TfliteSampleRateCallbackLocal, EBS_SensorRate);
-DECLARE_DELEGATE_OneParam(FBS_TfliteSensorTypesCallbackLocal, const TArray<EBS_SensorType> &);
-DECLARE_DELEGATE_OneParam(FBS_TfliteIsReadyCallbackLocal, bool);
-DECLARE_DELEGATE_OneParam(FBS_TfliteCaptureDelayCallbackLocal, uint16);
-DECLARE_DELEGATE_OneParam(FBS_TfliteThresholdCallbackLocal, float);
-DECLARE_DELEGATE_OneParam(FBS_TfliteInferencingEnabledCallbackLocal, bool);
-DECLARE_DELEGATE_TwoParams(FBS_TfliteInferenceCallbackLocal, const TArray<float> &, const uint64 &);
-
 #define EBS_TfliteMessage BS_MessageTfliteGetName,               \
 						  BS_MessageTfliteSetName,               \
 						  BS_MessageTfliteGetTask,               \
@@ -50,6 +40,7 @@ public:
 	// NAME START
 public:
 	const FString &GetName() const { return Name; }
+	DECLARE_DELEGATE_OneParam(FBS_TfliteNameCallbackLocal, const FString &);
 	FBS_TfliteNameCallbackLocal OnNameUpdate;
 
 	static const uint8 MinNameLength;
@@ -65,6 +56,7 @@ private:
 	// TASK START
 public:
 	const EBS_TfliteTask &GetTask() const { return Task; }
+	DECLARE_DELEGATE_OneParam(FBS_TfliteTaskCallbackLocal, EBS_TfliteTask);
 	FBS_TfliteTaskCallbackLocal OnTaskUpdate;
 
 	void SetTask(const EBS_TfliteTask NewTask);
@@ -78,6 +70,7 @@ private:
 	// SAMPLE RATE START
 public:
 	EBS_SensorRate GetSampleRate() const { return SampleRate; }
+	DECLARE_DELEGATE_OneParam(FBS_TfliteSampleRateCallbackLocal, EBS_SensorRate);
 	FBS_TfliteSampleRateCallbackLocal OnSampleRateUpdate;
 
 	void SetSampleRate(const EBS_SensorRate NewSampleRate);
@@ -91,6 +84,7 @@ private:
 	// SENSOR TYPES START
 public:
 	const TArray<EBS_SensorType> &GetSensorTypes() const { return SensorTypes; }
+	DECLARE_DELEGATE_OneParam(FBS_TfliteSensorTypesCallbackLocal, const TArray<EBS_SensorType> &);
 	FBS_TfliteSensorTypesCallbackLocal OnSensorTypesUpdate;
 
 	void SetSensorTypes(const TArray<EBS_SensorType> &NewSensorTypes);
@@ -105,6 +99,7 @@ private:
 	// IS READY START
 public:
 	bool GetIsReady() const { return IsReady; }
+	DECLARE_DELEGATE_OneParam(FBS_TfliteIsReadyCallbackLocal, bool);
 	FBS_TfliteIsReadyCallbackLocal OnIsReadyUpdate;
 
 private:
@@ -116,6 +111,7 @@ private:
 	// CAPTURE DELAY START
 public:
 	uint16 GetCaptureDelay() const { return CaptureDelay; }
+	DECLARE_DELEGATE_OneParam(FBS_TfliteCaptureDelayCallbackLocal, uint16);
 	FBS_TfliteCaptureDelayCallbackLocal OnCaptureDelayUpdate;
 
 	void SetCaptureDelay(const uint16 NewCaptureDelay);
@@ -129,6 +125,7 @@ private:
 	// THRESHOLD START
 public:
 	float GetThreshold() const { return Threshold; }
+	DECLARE_DELEGATE_OneParam(FBS_TfliteThresholdCallbackLocal, float);
 	FBS_TfliteThresholdCallbackLocal OnThresholdUpdate;
 
 	void SetThreshold(const float NewThreshold);
@@ -142,6 +139,7 @@ private:
 	// INFERENCING ENABLED START
 public:
 	bool GetInferencingEnabled() const { return InferencingEnabled; }
+	DECLARE_DELEGATE_OneParam(FBS_TfliteInferencingEnabledCallbackLocal, bool);
 	FBS_TfliteInferencingEnabledCallbackLocal OnInferencingEnabledUpdate;
 
 	void SetInferencingEnabled(const bool NewInferencingEnabled);
@@ -155,6 +153,7 @@ private:
 
 	// INFERENCE START
 public:
+	DECLARE_DELEGATE_TwoParams(FBS_TfliteInferenceCallbackLocal, const TArray<float> &, const uint64 &);
 	FBS_TfliteInferenceCallbackLocal OnInferenceUpdate;
 
 private:
