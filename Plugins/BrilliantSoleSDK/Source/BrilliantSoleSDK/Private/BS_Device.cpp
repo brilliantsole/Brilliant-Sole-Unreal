@@ -70,6 +70,12 @@ UBS_Device::UBS_Device()
     FileTransferManager = CreateDefaultSubobject<UBS_FileTransferManager>(TEXT("FileTransferManager"));
     FileTransferManager->SendTxMessages.BindUObject(this, &UBS_Device::SendTxMessages);
 
+    FileTransferManager->OnFileTransferStatusUpdate.BindUObject(this, &UBS_Device::OnFileTransferStatusUpdate);
+    FileTransferManager->OnMaxFileLengthUpdate.BindUObject(this, &UBS_Device::OnMaxFileLengthUpdate);
+    FileTransferManager->OnFileReceived.BindUObject(this, &UBS_Device::OnFileReceivedUpdate);
+    FileTransferManager->OnFileTransferProgress.BindUObject(this, &UBS_Device::OnFileTransferProgressUpdate);
+    FileTransferManager->OnFileTransferComplete.BindUObject(this, &UBS_Device::OnFileTransferCompleteUpdate);
+
     TfliteManager = CreateDefaultSubobject<UBS_TfliteManager>(TEXT("TfliteManager"));
     TfliteManager->SendTxMessages.BindUObject(this, &UBS_Device::SendTxMessages);
 

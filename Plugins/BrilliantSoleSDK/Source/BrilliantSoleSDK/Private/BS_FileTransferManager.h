@@ -6,6 +6,7 @@
 #include "BS_BaseManager.h"
 #include "BS_FileTransferCommand.h"
 #include "BS_FileTransferStatus.h"
+#include "BS_FileTransferDirection.h"
 #include "BS_FileType.h"
 #include "Misc/Crc.h"
 #include "BS_FileTransferManager.generated.h"
@@ -97,6 +98,15 @@ public:
 	const EBS_FileTransferStatus GetFileTransferStatus() const { return FileTransferStatus; }
 	DECLARE_DELEGATE_OneParam(FBS_FileTransferStatusCallbackLocal, EBS_FileTransferStatus);
 	FBS_FileTransferStatusCallbackLocal OnFileTransferStatusUpdate;
+
+	DECLARE_DELEGATE_ThreeParams(FBS_FileTransferProgressLocal, EBS_FileType, EBS_FileTransferDirection, float);
+	FBS_FileTransferProgressLocal OnFileTransferProgress;
+
+	DECLARE_DELEGATE_TwoParams(FBS_FileReceivedLocal, EBS_FileType, const TArray<uint8> &Message);
+	FBS_FileReceivedLocal OnFileReceived;
+
+	DECLARE_DELEGATE_TwoParams(FBS_FileTransferCompleteLocal, EBS_FileType, EBS_FileTransferDirection);
+	FBS_FileTransferCompleteLocal OnFileTransferComplete;
 
 private:
 	UPROPERTY()

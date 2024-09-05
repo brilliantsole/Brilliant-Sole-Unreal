@@ -392,14 +392,38 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "BS File Transfer")
 	void SendFile(const EBS_FileType FileType, const TArray<uint8> &File) { FileTransferManager->SendFile(FileType, File); }
 
+public:
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBS_FileTransferStatusCallback, UBS_Device *, Device, EBS_FileTransferStatus, FileTransferStatus);
+	UPROPERTY(BlueprintAssignable, Category = "BS File Transfer")
+	FBS_FileTransferStatusCallback OnFileTransferStatus;
+
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBS_FileTransferMaxFileLengthCallback, UBS_Device *, Device, int32, MaxFileLength);
+	UPROPERTY(BlueprintAssignable, Category = "BS File Transfer")
+	FBS_FileTransferMaxFileLengthCallback OnMaxFileLength;
+
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FBS_FileTransferFileReceivedCallback, UBS_Device *, Device, EBS_FileType, FileType, const TArray<uint8> &, File);
+	UPROPERTY(BlueprintAssignable, Category = "BS File Transfer")
+	FBS_FileTransferFileReceivedCallback OnFileReceived;
+
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FBS_FileTransferProgressCallback, UBS_Device *, Device, EBS_FileType, FileType, EBS_FileTransferDirection, FileTransferDirection, float, Progress);
+	UPROPERTY(BlueprintAssignable, Category = "BS File Transfer")
+	FBS_FileTransferProgressCallback OnFileTransferProgress;
+
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FBS_FileTransferCompleteCallback, UBS_Device *, Device, EBS_FileType, FileType, EBS_FileTransferDirection, FileTransferDirection);
+	UPROPERTY(BlueprintAssignable, Category = "BS File Transfer")
+	FBS_FileTransferCompleteCallback OnFileTransferComplete;
+
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "BS File Transfer")
 	UBS_FileTransferManager *FileTransferManager;
 
 private:
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBS_FileTransferStatusCallback, UBS_Device *, Device, EBS_FileTransferStatus, FileTransferStatus);
-	UPROPERTY(BlueprintAssignable, Category = "BS File Transfer")
-	FBS_FileTransferStatusCallback OnFileTransferStatus;
+	void OnFileTransferStatusUpdate(const EBS_FileTransferStatus FileTransferStatus) { OnFileTransferStatus.Broadcast(this, FileTransferStatus); }
+	void OnMaxFileLengthUpdate(const uint32 MaxFileLength) { OnMaxFileLength.Broadcast(this, MaxFileLength); }
+	void OnFileReceivedUpdate(const EBS_FileType FileType, const TArray<uint8> &File) { OnFileReceived.Broadcast(this, FileType, File); }
+	void OnFileTransferProgressUpdate(const EBS_FileType FileType, EBS_FileTransferDirection FileTransferDirection, float Progress) { OnFileTransferProgress.Broadcast(this, FileType, FileTransferDirection, Progress); }
+	void OnFileTransferCompleteUpdate(const EBS_FileType FileType, EBS_FileTransferDirection FileTransferDirection) { OnFileTransferComplete.Broadcast(this, FileType, FileTransferDirection); }
+
 	// FILE TRANSFER END
 
 	// TFLITE START
