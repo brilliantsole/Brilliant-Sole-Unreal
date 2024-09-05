@@ -222,7 +222,11 @@ protected:
 	UBS_InformationManager *InformationManager;
 
 private:
-	void OnMTU_Update(uint16 MTU) { OnMTU.Broadcast(this, MTU); }
+	void OnMTU_Update(uint16 MTU)
+	{
+		FileTransferManager->MTU = MTU;
+		OnMTU.Broadcast(this, MTU);
+	}
 	void OnIdUpdate(const FString &Id) { OnId.Broadcast(this, Id); }
 	void OnNameUpdate(const FString &Name) { OnName.Broadcast(this, Name); }
 	void OnTypeUpdate(EBS_DeviceType Type) { OnType.Broadcast(this, Type); }
@@ -373,11 +377,29 @@ private:
 
 	// FILE TRANSFER START
 public:
+	UFUNCTION(BlueprintPure, Category = "BS File Transfer")
+	const int32 GetMaxFileLength() const { return FileTransferManager->GetMaxFileLength(); }
+
+	UFUNCTION(BlueprintPure, Category = "BS File Transfer")
+	const EBS_FileTransferStatus GetFileTransferStatus() const { return FileTransferManager->GetFileTransferStatus(); }
+
+	UFUNCTION(BlueprintCallable, Category = "BS File Transfer")
+	void CancelFileTransfer() { FileTransferManager->CancelFileTransfer(); }
+
+	UFUNCTION(BlueprintCallable, Category = "BS File Transfer")
+	void ReceiveFile(const EBS_FileType FileType) { FileTransferManager->ReceiveFile(FileType); }
+
+	UFUNCTION(BlueprintCallable, Category = "BS File Transfer")
+	void SendFile(const EBS_FileType FileType, const TArray<uint8> &File) { FileTransferManager->SendFile(FileType, File); }
+
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "BS File Transfer")
 	UBS_FileTransferManager *FileTransferManager;
 
 private:
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBS_FileTransferStatusCallback, UBS_Device *, Device, EBS_FileTransferStatus, FileTransferStatus);
+	UPROPERTY(BlueprintAssignable, Category = "BS File Transfer")
+	FBS_FileTransferStatusCallback OnFileTransferStatus;
 	// FILE TRANSFER END
 
 	// TFLITE START
@@ -419,7 +441,7 @@ public:
 	const float GetTfliteThreshold() const { return TfliteManager->GetThreshold(); }
 
 	UFUNCTION(BlueprintCallable, Category = "BS Tflite")
-	void SetTfliteThreshold(const float NewThreshold,bool bSendImmediately = true) { return TfliteManager->SetThreshold(NewThreshold, bSendImmediately); }
+	void SetTfliteThreshold(const float NewThreshold, bool bSendImmediately = true) { return TfliteManager->SetThreshold(NewThreshold, bSendImmediately); }
 
 	UFUNCTION(BlueprintPure, Category = "BS Tflite")
 	const bool GetTfliteInferencingEnabled() const { return TfliteManager->GetInferencingEnabled(); }

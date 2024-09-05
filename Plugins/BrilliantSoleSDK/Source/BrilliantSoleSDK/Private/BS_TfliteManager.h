@@ -69,7 +69,7 @@ private:
 
 	// SAMPLE RATE START
 public:
-	EBS_SensorRate GetSampleRate() const { return SampleRate; }
+	const EBS_SensorRate GetSampleRate() const { return SampleRate; }
 	DECLARE_DELEGATE_OneParam(FBS_TfliteSampleRateCallbackLocal, EBS_SensorRate);
 	FBS_TfliteSampleRateCallbackLocal OnSampleRateUpdate;
 
@@ -98,7 +98,7 @@ private:
 
 	// IS READY START
 public:
-	bool GetIsReady() const { return IsReady; }
+	const bool GetIsReady() const { return IsReady; }
 	DECLARE_DELEGATE_OneParam(FBS_TfliteIsReadyCallbackLocal, bool);
 	FBS_TfliteIsReadyCallbackLocal OnIsReadyUpdate;
 
@@ -110,7 +110,7 @@ private:
 
 	// CAPTURE DELAY START
 public:
-	uint16 GetCaptureDelay() const { return CaptureDelay; }
+	const uint16 GetCaptureDelay() const { return CaptureDelay; }
 	DECLARE_DELEGATE_OneParam(FBS_TfliteCaptureDelayCallbackLocal, uint16);
 	FBS_TfliteCaptureDelayCallbackLocal OnCaptureDelayUpdate;
 
@@ -124,7 +124,7 @@ private:
 
 	// THRESHOLD START
 public:
-	float GetThreshold() const { return Threshold; }
+	const float GetThreshold() const { return Threshold; }
 	DECLARE_DELEGATE_OneParam(FBS_TfliteThresholdCallbackLocal, float);
 	FBS_TfliteThresholdCallbackLocal OnThresholdUpdate;
 
@@ -138,7 +138,7 @@ private:
 
 	// INFERENCING ENABLED START
 public:
-	bool GetInferencingEnabled() const { return InferencingEnabled; }
+	const bool GetInferencingEnabled() const { return InferencingEnabled; }
 	DECLARE_DELEGATE_OneParam(FBS_TfliteInferencingEnabledCallbackLocal, bool);
 	FBS_TfliteInferencingEnabledCallbackLocal OnInferencingEnabledUpdate;
 
