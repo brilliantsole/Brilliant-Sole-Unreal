@@ -8,7 +8,6 @@ UENUM(BlueprintType)
 enum class EBS_FileType : uint8
 {
     TFLITE UMETA(DisplayName = "Tflite"),
-
     COUNT UMETA(Hidden)
 };
 

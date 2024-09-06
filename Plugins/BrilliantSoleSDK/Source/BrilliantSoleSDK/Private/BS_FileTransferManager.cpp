@@ -265,6 +265,9 @@ void UBS_FileTransferManager::ParseFileTransferBlock(const TArray<uint8> &Messag
         UE_LOGFMT(LogBS_FileTransferManager, Warning, "Cannot parse file block when not receiving");
         return;
     }
+
+    UE_LOGFMT(LogBS_FileTransferManager, Log, "Received File Block of {0} bytes", Message.Num());
+
     // FILL
 }
 // FILE BLOCK END

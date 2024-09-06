@@ -387,10 +387,10 @@ public:
 	void CancelFileTransfer() { FileTransferManager->CancelFileTransfer(); }
 
 	UFUNCTION(BlueprintCallable, Category = "BS File Transfer")
-	void ReceiveFile(const EBS_FileType FileType) { FileTransferManager->ReceiveFile(FileType); }
+	void SendFile(const EBS_FileType FileType, const TArray<uint8> &File) { FileTransferManager->SendFile(FileType, File); }
 
 	UFUNCTION(BlueprintCallable, Category = "BS File Transfer")
-	void SendFile(const EBS_FileType FileType, const TArray<uint8> &File) { FileTransferManager->SendFile(FileType, File); }
+	void ReceiveFile(const EBS_FileType FileType) { FileTransferManager->ReceiveFile(FileType); }
 
 public:
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBS_FileTransferStatusCallback, UBS_Device *, Device, EBS_FileTransferStatus, FileTransferStatus);
