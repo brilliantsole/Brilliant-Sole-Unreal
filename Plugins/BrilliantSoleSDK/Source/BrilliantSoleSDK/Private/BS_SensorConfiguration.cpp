@@ -194,7 +194,7 @@ void UBS_SensorConfiguration::Parse(const TArray<uint8> &Message)
     SensorRates.Reset();
 
     const uint8 MessageLength = Message.Num();
-    for (uint8 Offset = 0; Offset < MessageLength; Offset += 3)
+    for (uint16 Offset = 0; Offset < MessageLength; Offset += 3)
     {
         const uint8 SensorTypeEnum = Message[Offset];
         if (SensorTypeEnum >= static_cast<uint8>(EBS_SensorType::COUNT))

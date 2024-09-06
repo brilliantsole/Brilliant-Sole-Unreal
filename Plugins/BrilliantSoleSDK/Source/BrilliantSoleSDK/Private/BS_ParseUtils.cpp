@@ -9,13 +9,15 @@ DEFINE_LOG_CATEGORY(LogBS_ParseUtils);
 void UBS_ParseUtils::ParseRxData(const TArray<uint8> &Data, FBS_MessageCallback MessageCallback)
 {
     const auto DataLength = Data.Num();
-    uint8 Offset = 0;
+    uint16 Offset = 0;
+
+    UE_LOGFMT(LogBS_ParseUtils, Log, "Parsing {0} bytes...", DataLength);
+
     while (Offset < DataLength)
     {
         const uint8 MessageType = Data[Offset++];
         const uint8 MessageDataLength = BS_ByteParser::ParseAs<uint16>(Data, Offset, true);
         Offset += 2;
-        UE_LOGFMT(LogBS_ParseUtils, Log, "MessageDataLength: {0}", MessageDataLength);
 
         UE_LOGFMT(LogBS_ParseUtils, Log, "Message #{0} ({1} bytes)", MessageType, MessageDataLength);
 
@@ -23,5 +25,6 @@ void UBS_ParseUtils::ParseRxData(const TArray<uint8> &Data, FBS_MessageCallback 
         MessageCallback.ExecuteIfBound(MessageType, static_cast<TArray<uint8>>(MessageData));
 
         Offset += MessageDataLength;
+        UE_LOGFMT(LogBS_ParseUtils, Log, "New Offset: {0}/{1}", Offset, DataLength);
     }
 }

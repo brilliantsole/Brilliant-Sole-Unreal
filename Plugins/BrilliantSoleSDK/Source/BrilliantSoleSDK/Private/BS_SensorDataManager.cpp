@@ -75,7 +75,7 @@ void UBS_SensorDataManager::ParseSensorScalars(const TArray<uint8> &Message)
 
 void UBS_SensorDataManager::ParseSensorData(const TArray<uint8> &Message)
 {
-    uint8 Offset = 0;
+    uint16 Offset = 0;
     const uint16 MessageLength = Message.Num();
     UE_LOGFMT(LogBS_SensorDataManager, Log, "MessageLength: {0}", MessageLength);
 

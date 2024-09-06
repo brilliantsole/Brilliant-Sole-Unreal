@@ -80,7 +80,7 @@ void UBS_TfliteManager::SetName(const FString &NewName, bool bSendImmediately)
 {
     if (NewName == Name)
     {
-        UE_LOGFMT(LogBS_TfliteManager, Warning, "Redundant Name - not setting");
+        UE_LOGFMT(LogBS_TfliteManager, Log, "Redundant Name - not setting");
         return;
     }
     const auto NewNameLength = NewName.Len();
