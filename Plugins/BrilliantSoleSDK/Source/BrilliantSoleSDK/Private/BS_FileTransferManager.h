@@ -35,6 +35,7 @@ class UBS_FileTransferManager : public UBS_BaseManager
 public:
 	bool OnRxMessage(uint8 MessageType, const TArray<uint8> &Message) override;
 	void Reset() override;
+	void OnSendTxData() override;
 
 	// MAX FILE LENGTH START
 public:
@@ -126,9 +127,17 @@ public:
 private:
 	uint32 GetCRC32(const TArray<uint8> &Data);
 
-	const TArray<uint8> *FileToSend = nullptr;
+	UPROPERTY()
+	TArray<uint8> FileToSend;
+	UPROPERTY()
+	TArray<uint8> FileBlockToSend;
+	UPROPERTY()
+	uint32 BytesTransferred = 0;
 
-	void SendFileBlock(const TArray<uint8> &FileBlock);
+	UPROPERTY()
+	bool bWaitingToSendMoreData = false;
+
+	void SendFileBlock(bool bSendImmediately);
 
 	void ParseFileTransferBlock(const TArray<uint8> &Message);
 	// FILE BLOCK END

@@ -6,9 +6,6 @@
 #include "BS_Subsystem.h"
 #include "Engine/World.h"
 #include "Engine/GameInstance.h"
-#include "Kismet/GameplayStatics.h"
-#include "HAL/PlatformMemory.h"
-#include "Misc/OutputDeviceDebug.h"
 
 DEFINE_LOG_CATEGORY(LogBS_Device);
 
@@ -339,6 +336,16 @@ void UBS_Device::OnSendTxData()
 {
     UE_LOGFMT(LogBS_Device, Log, "sent tx data");
     bIsSendingTxData = false;
+
+    DeviceInformationManager->OnSendTxData();
+    BatteryManager->OnSendTxData();
+    InformationManager->OnSendTxData();
+    SensorDataManager->OnSendTxData();
+    SensorConfigurationManager->OnSendTxData();
+    VibrationManager->OnSendTxData();
+    FileTransferManager->OnSendTxData();
+    TfliteManager->OnSendTxData();
+
     SendPendingTxMessages();
 }
 
