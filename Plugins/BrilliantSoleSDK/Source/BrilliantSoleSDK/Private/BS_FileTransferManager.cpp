@@ -49,6 +49,7 @@ void UBS_FileTransferManager::Reset()
     FileChecksum = 0;
     FileTransferStatus = EBS_FileTransferStatus::IDLE;
     FileToSend.Empty();
+    FileToReceive.Empty();
     FileBlockToSend.Reset();
     BytesTransferred = 0;
     bWaitingToSendMoreData = false;
@@ -102,6 +103,11 @@ void UBS_FileTransferManager::ParseFileLength(const TArray<uint8> &Message)
     FileLength = BS_ByteParser::ParseAs<uint32>(Message, 0, true);
     UE_LOGFMT(LogBS_FileTransferManager, Log, "Parsed FileLength: {0}", FileLength);
     OnFileLengthUpdate.ExecuteIfBound(FileLength);
+
+    if (FileTransferStatus == EBS_FileTransferStatus::RECEIVING)
+    {
+        FileToReceive.Reset(FileLength);
+    }
 }
 
 void UBS_FileTransferManager::SetFileLength(const uint32 NewFileLength, bool bSendImmediately)
@@ -266,8 +272,34 @@ void UBS_FileTransferManager::ParseFileTransferBlock(const TArray<uint8> &Messag
         return;
     }
 
-    UE_LOGFMT(LogBS_FileTransferManager, Log, "Received File Block of {0} bytes", Message.Num());
+    const uint16 FileBlockLength = Message.Num();
+    UE_LOGFMT(LogBS_FileTransferManager, Log, "Received File Block of {0} bytes", FileBlockLength);
 
-    // FILL
+    uint16 CurrentFileLength = FileToReceive.Num();
+    uint16 NewFileLength = CurrentFileLength + FileBlockLength;
+    UE_LOGFMT(LogBS_FileTransferManager, Log, "Updating FileToReceive from {0} to {1} bytes...", CurrentFileLength, NewFileLength);
+    if (NewFileLength > FileLength)
+    {
+        UE_LOGFMT(LogBS_FileTransferManager, Log, "New File length {0} is larger than expected File Length {1}", NewFileLength, FileLength);
+        CancelFileTransfer();
+        return;
+    }
+    FileToReceive.Append(Message);
+    CurrentFileLength = FileToReceive.Num();
+    UE_LOGFMT(LogBS_FileTransferManager, Log, "FileToReceive length: {0}/{1} bytes", CurrentFileLength, FileLength);
+
+    if (CurrentFileLength == FileLength)
+    {
+        UE_LOGFMT(LogBS_FileTransferManager, Log, "Finished Receiving File");
+        const uint32 ReceivedFileChecksum = GetCRC32(FileToReceive);
+        if (ReceivedFileChecksum != FileChecksum)
+        {
+            UE_LOGFMT(LogBS_FileTransferManager, Error, "File Checksums don't match - expected {0}, got {1}", FileChecksum, ReceivedFileChecksum);
+            return;
+        }
+        UE_LOGFMT(LogBS_FileTransferManager, Log, "File Checksums match, {0}", FileChecksum);
+        OnFileTransferComplete.ExecuteIfBound(FileType, EBS_FileTransferDirection::RECEIVING);
+        OnFileReceived.ExecuteIfBound(FileType, FileToReceive);
+    }
 }
 // FILE BLOCK END

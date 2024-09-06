@@ -130,6 +130,8 @@ private:
 	UPROPERTY()
 	TArray<uint8> FileToSend;
 	UPROPERTY()
+	TArray<uint8> FileToReceive;
+	UPROPERTY()
 	TArray<uint8> FileBlockToSend;
 	UPROPERTY()
 	uint32 BytesTransferred = 0;
