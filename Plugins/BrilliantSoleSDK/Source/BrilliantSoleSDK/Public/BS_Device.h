@@ -476,6 +476,13 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "BS Tflite")
 	void ToggleTfliteInferencingEnabled() { return TfliteManager->ToggleInferencingEnabled(); }
 
+	UFUNCTION(BlueprintCallable, Category = "BS Tflite")
+	void SendTfliteModel(const FBS_TfliteConfiguration &TfliteConfiguration, const TArray<uint8> &File)
+	{
+		TfliteManager->SetConfiguration(TfliteConfiguration, false);
+		FileTransferManager->SendFile(EBS_FileType::TFLITE, File);
+	}
+
 public:
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBS_TfliteNameCallback, UBS_Device *, Device, const FString &, Name);
 	UPROPERTY(BlueprintAssignable, Category = "BS Tflite")

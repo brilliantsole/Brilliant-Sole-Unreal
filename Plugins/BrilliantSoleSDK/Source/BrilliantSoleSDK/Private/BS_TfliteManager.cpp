@@ -5,6 +5,7 @@
 #include "BS_ByteParser.h"
 #include "BS_Message.h"
 #include "BS_TimeUtils.h"
+#include "BS_MathUtils.h"
 #include "BS_SensorConfiguration.h"
 
 DEFINE_LOG_CATEGORY(LogBS_TfliteManager);
@@ -63,6 +64,17 @@ void UBS_TfliteManager::Reset()
     CaptureDelay = 0;
     Threshold = 0.0f;
     InferencingEnabled = false;
+}
+
+void UBS_TfliteManager::SetConfiguration(const FBS_TfliteConfiguration &TfliteConfiguration, bool bSendImmediately)
+{
+    UE_LOGFMT(LogBS_TfliteManager, Log, "Setting Configuration...");
+    SetName(TfliteConfiguration.Name, false);
+    SetTask(TfliteConfiguration.Task, false);
+    SetSensorTypes(TfliteConfiguration.GetSensorTypes(), false);
+    SetSampleRate(TfliteConfiguration.SampleRate, false);
+    SetCaptureDelay(BS_MathUtils::ClampToRange<uint16>(TfliteConfiguration.CaptureDelay), false);
+    SetThreshold(TfliteConfiguration.Threshold, bSendImmediately);
 }
 
 // NAME START

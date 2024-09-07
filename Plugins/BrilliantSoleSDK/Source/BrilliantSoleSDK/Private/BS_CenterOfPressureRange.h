@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Logging/StructuredLog.h"
 #include "BS_Range.h"
 #include "BS_CenterOfPressureRange.generated.h"
 

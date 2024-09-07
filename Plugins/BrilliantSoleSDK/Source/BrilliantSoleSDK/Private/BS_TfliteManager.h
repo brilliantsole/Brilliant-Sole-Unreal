@@ -7,6 +7,7 @@
 #include "BS_TfliteTask.h"
 #include "BS_SensorType.h"
 #include "BS_SensorRate.h"
+#include "BS_TfliteConfiguration.h"
 #include "BS_TfliteManager.generated.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_TfliteManager, Log, All);
@@ -36,6 +37,9 @@ class UBS_TfliteManager : public UBS_BaseManager
 public:
 	bool OnRxMessage(uint8 MessageType, const TArray<uint8> &Message) override;
 	void Reset() override;
+
+public:
+	void SetConfiguration(const FBS_TfliteConfiguration &TfliteConfiguration, bool bSendImmediately);
 
 	// NAME START
 public:
