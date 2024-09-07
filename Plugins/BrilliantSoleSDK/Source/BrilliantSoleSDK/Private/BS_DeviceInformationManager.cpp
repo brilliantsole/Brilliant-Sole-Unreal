@@ -4,3 +4,8 @@
 #include "Logging/StructuredLog.h"
 
 DEFINE_LOG_CATEGORY(LogBS_DeviceInformationManager);
+
+void UBS_DeviceInformationManager::Reset()
+{
+    // FILL
+}

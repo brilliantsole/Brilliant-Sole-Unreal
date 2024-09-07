@@ -12,4 +12,7 @@ UCLASS()
 class UBS_DeviceInformationManager : public UBS_BaseManager
 {
 	GENERATED_BODY()
+
+public:
+	void Reset() override;
 };
