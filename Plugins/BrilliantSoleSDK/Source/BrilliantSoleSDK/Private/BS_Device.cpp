@@ -142,6 +142,9 @@ void UBS_Device::GetBS_Subsystem()
 
 void UBS_Device::Reset()
 {
+    BatteryLevel = 0;
+    bDidGetBatteryLevel = false;
+
     ReceivedTxMessages.Reset();
 
     DeviceInformationManager->Reset();
@@ -155,6 +158,16 @@ void UBS_Device::Reset()
 
     bIsSendingTxData = false;
 }
+
+// BATTERY LEVEL START
+void UBS_Device::OnBatteryLevelUpdate(uint8 NewBatteryLevel)
+{
+    BatteryLevel = NewBatteryLevel;
+    bDidGetBatteryLevel = true;
+    UE_LOGFMT(LogBS_Device, Log, "BatteryLevel: {0}%", BatteryLevel);
+    OnBatteryLevel.Broadcast(this, BatteryLevel);
+}
+// BATTERY LEVEL END
 
 // CONNECTION START
 void UBS_Device::OnConnectionManagerConnectionStatusUpdate(EBS_ConnectionStatus NewConnectionManagerConnectionStatus)
@@ -191,6 +204,11 @@ void UBS_Device::SetConnectionStatus(EBS_ConnectionStatus NewConnectionStatus)
 void UBS_Device::CheckIfFullyConnected()
 {
     UE_LOGFMT(LogBS_Device, Log, "Checking if Fully Connected...");
+    if (!bDidGetBatteryLevel)
+    {
+        UE_LOGFMT(LogBS_Device, Log, "Didn't get BatteryLevel, stopping now");
+        return;
+    }
     if (ConnectionStatus != EBS_ConnectionStatus::CONNECTING)
     {
         UE_LOGFMT(LogBS_Device, Log, "Not Connecting, stopping now");

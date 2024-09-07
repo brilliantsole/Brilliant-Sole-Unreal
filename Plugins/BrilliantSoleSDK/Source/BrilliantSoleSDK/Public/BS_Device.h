@@ -46,6 +46,24 @@ private:
 	UBS_Subsystem *_BS_Subsystem;
 	// BS SUBSYSTEM END
 
+	// BATTERY LEVEL CHARACTERISTIC START
+public:
+	UFUNCTION(BlueprintPure, Category = "BS Battery Level")
+	uint8 GetBatteryLevel() const { return BatteryLevel; }
+
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBS_BatteryLevelUpdateCallback, UBS_Device *, Device, uint8, BatteryLevel);
+	UPROPERTY(BlueprintAssignable, Category = "BS Battery Level")
+	FBS_BatteryLevelUpdateCallback OnBatteryLevel;
+
+protected:
+	UFUNCTION(BlueprintCallable, Category = "BS Battery Level")
+	void OnBatteryLevelUpdate(uint8 NewBatteryLevel);
+
+private:
+	bool bDidGetBatteryLevel = false;
+	uint8 BatteryLevel = 0;
+	// BATTERY LEVEL CHARACTERISTIC END
+
 	// CONNECTION START
 public:
 	UFUNCTION(BlueprintPure, Category = "BS Device")
