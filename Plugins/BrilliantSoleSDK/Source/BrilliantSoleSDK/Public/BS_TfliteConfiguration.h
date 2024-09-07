@@ -57,7 +57,7 @@ public:
                     SensorTypes.Add(EBS_SensorType::MAGNETOMETER);
                     break;
                 default:
-                    UE_LOGFMT(LogTemp, Warning, "Uncaught TfliteSensorType {0}", UEnum::GetValueAsString(TfliteSensorType));
+                    UE_LOGFMT(LogTemp, Log, "Skipping TfliteSensorType {0} (Raw {1})", UEnum::GetValueAsString(TfliteSensorType), TfliteSensorTypeBitFlag);
                     break;
                 }
             }

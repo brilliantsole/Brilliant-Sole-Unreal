@@ -4,7 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "BS_BleCharacteristic.h"
 #include "BS_BleUtils.generated.h"
+
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_BleUtils, Log, All);
 
 UCLASS()
 class BRILLIANTSOLESDK_API UBS_BleUtils : public UBlueprintFunctionLibrary
@@ -99,4 +102,7 @@ public:
 	{
 		return SoftwareRevisionCharacteristicUUID;
 	}
+
+	UFUNCTION(BlueprintCallable, Category = "BS Ble Utils")
+	static const EBS_BleCharacteristic GetBleCharacteristic(const FString &CharacteristicUUID);
 };

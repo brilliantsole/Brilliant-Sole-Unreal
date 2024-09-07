@@ -1,6 +1,7 @@
 // Copyright 2024 Zack Qattan @ Brilliant Sole. All Rights Reserved
 
 #include "BS_BleUtils.h"
+#include "Logging/StructuredLog.h"
 
 #define BS_BLE_UUID_PREFIX "ea6da725-"
 #define BS_BLE_UUID_SUFFIX "-4f9b-893d-c3913e33b39f"
@@ -9,6 +10,8 @@
 #define BLE_UUID_PREFIX "0000"
 #define BLE_UUID_SUFFIX "-0000-1000-8000-00805f9b34fb"
 #define BLE_GENERATE_UUID(val) (BLE_UUID_PREFIX val BLE_UUID_SUFFIX)
+
+DEFINE_LOG_CATEGORY(LogBS_BleUtils);
 
 // SERVICES
 const FString UBS_BleUtils::MainServiceUUID = BS_BLE_GENERATE_UUID("0000");
@@ -22,10 +25,10 @@ const TArray<FString> UBS_BleUtils::InitializeServiceUUIDs()
 }
 
 // CHARACTERISTICS
+const FString UBS_BleUtils::BatteryLevelCharacteristicUUID = BLE_GENERATE_UUID("2a19");
+
 const FString UBS_BleUtils::RxCharacteristicUUID = BS_BLE_GENERATE_UUID("1000");
 const FString UBS_BleUtils::TxCharacteristicUUID = BS_BLE_GENERATE_UUID("1001");
-
-const FString UBS_BleUtils::BatteryLevelCharacteristicUUID = BLE_GENERATE_UUID("2a19");
 
 const FString UBS_BleUtils::ManufacturerNameStringCharacteristicUUID = BLE_GENERATE_UUID("2a29");
 const FString UBS_BleUtils::ModelNumberStringCharacteristicUUID = BLE_GENERATE_UUID("2a24");
@@ -33,3 +36,48 @@ const FString UBS_BleUtils::SerialNumberStringCharacteristicUUID = BLE_GENERATE_
 const FString UBS_BleUtils::HardwareRevisionStringCharacteristicUUID = BLE_GENERATE_UUID("2a27");
 const FString UBS_BleUtils::FirmwareRevisionCharacteristicUUID = BLE_GENERATE_UUID("2a26");
 const FString UBS_BleUtils::SoftwareRevisionCharacteristicUUID = BLE_GENERATE_UUID("2a28");
+
+const EBS_BleCharacteristic UBS_BleUtils::GetBleCharacteristic(const FString &CharacteristicUUID)
+{
+    if (CharacteristicUUID == BatteryLevelCharacteristicUUID)
+    {
+        return EBS_BleCharacteristic::BATTERY_LEVEL;
+    }
+    else if (CharacteristicUUID == RxCharacteristicUUID)
+    {
+        return EBS_BleCharacteristic::RX;
+    }
+    else if (CharacteristicUUID == TxCharacteristicUUID)
+    {
+        return EBS_BleCharacteristic::TX;
+    }
+    else if (CharacteristicUUID == ManufacturerNameStringCharacteristicUUID)
+    {
+        return EBS_BleCharacteristic::MANUFACTURER_NAME_STRING;
+    }
+    else if (CharacteristicUUID == ModelNumberStringCharacteristicUUID)
+    {
+        return EBS_BleCharacteristic::MODEL_NUMBER_STRING;
+    }
+    else if (CharacteristicUUID == SerialNumberStringCharacteristicUUID)
+    {
+        return EBS_BleCharacteristic::SERIAL_NUMBER_STRING;
+    }
+    else if (CharacteristicUUID == HardwareRevisionStringCharacteristicUUID)
+    {
+        return EBS_BleCharacteristic::HARDWARE_REVISION_STRING;
+    }
+    else if (CharacteristicUUID == FirmwareRevisionCharacteristicUUID)
+    {
+        return EBS_BleCharacteristic::FIRMWARE_REVISION_STRING;
+    }
+    else if (CharacteristicUUID == SoftwareRevisionCharacteristicUUID)
+    {
+        return EBS_BleCharacteristic::SOFTWARE_REVISION_STRING;
+    }
+    else
+    {
+        UE_LOGFMT(LogBS_BleUtils, Error, "Uncaught CharacteristicUUID {0}", CharacteristicUUID);
+        return EBS_BleCharacteristic::NONE;
+    }
+}
