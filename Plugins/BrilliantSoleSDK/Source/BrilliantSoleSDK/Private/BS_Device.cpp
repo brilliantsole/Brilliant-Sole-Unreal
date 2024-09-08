@@ -20,8 +20,6 @@ UBS_Device::UBS_Device()
 
     ReceivedTxMessages.Reserve(RequiredTxMessageTypes.Num());
 
-    DeviceInformationManager = CreateDefaultSubobject<UBS_DeviceInformationManager>(TEXT("DeviceInformationManager"));
-
     BatteryManager = CreateDefaultSubobject<UBS_BatteryManager>(TEXT("BatteryManager"));
 
     BatteryManager->SendTxMessages.BindUObject(this, &UBS_Device::SendTxMessages);
@@ -147,7 +145,8 @@ void UBS_Device::Reset()
 
     ReceivedTxMessages.Reset();
 
-    DeviceInformationManager->Reset();
+    DeviceInformation.Reset();
+
     BatteryManager->Reset();
     InformationManager->Reset();
     SensorDataManager->Reset();
@@ -207,6 +206,11 @@ void UBS_Device::CheckIfFullyConnected()
     if (!bDidGetBatteryLevel)
     {
         UE_LOGFMT(LogBS_Device, Log, "Didn't get BatteryLevel, stopping now");
+        return;
+    }
+    if (!DeviceInformation.GetDidGetAllInformation())
+    {
+        UE_LOGFMT(LogBS_Device, Log, "Didn't get Device Information, stopping now");
         return;
     }
     if (ConnectionStatus != EBS_ConnectionStatus::CONNECTING)
@@ -355,7 +359,6 @@ void UBS_Device::OnSendTxData()
     UE_LOGFMT(LogBS_Device, Log, "sent tx data");
     bIsSendingTxData = false;
 
-    DeviceInformationManager->OnSendTxData();
     BatteryManager->OnSendTxData();
     InformationManager->OnSendTxData();
     SensorDataManager->OnSendTxData();

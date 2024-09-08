@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "BS_BleCharacteristic.h"
+#include "BS_DeviceInformationType.h"
 #include "BS_BleUtils.generated.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_BleUtils, Log, All);
@@ -103,6 +104,15 @@ public:
 		return SoftwareRevisionCharacteristicUUID;
 	}
 
-	UFUNCTION(BlueprintCallable, Category = "BS Ble Utils")
+	UFUNCTION(BlueprintPure, Category = "BS Ble Utils")
 	static const EBS_BleCharacteristic GetBleCharacteristic(const FString &CharacteristicUUID);
+
+	UFUNCTION(BlueprintPure, Category = "BS Ble Utils")
+	static const EBS_DeviceInformationType GetDeviceInformationType(const EBS_BleCharacteristic DeviceInformationCharacteristic);
+
+	UFUNCTION(BlueprintPure, Category = "BS Ble Utils")
+	static const EBS_BleCharacteristic GetDeviceInformationCharacteristic(const EBS_DeviceInformationType DeviceInformationType);
+
+	UFUNCTION(BlueprintPure, Category = "BS Ble Utils")
+	static const FString &GetDeviceInformationCharacteristicUUID(const EBS_DeviceInformationType DeviceInformationType);
 };

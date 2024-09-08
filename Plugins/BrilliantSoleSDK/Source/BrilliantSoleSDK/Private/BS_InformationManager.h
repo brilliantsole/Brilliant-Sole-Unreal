@@ -9,12 +9,6 @@
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_InformationManager, Log, All);
 
-DECLARE_DELEGATE_OneParam(FBS_MTU_CallbackLocal, uint16);
-DECLARE_DELEGATE_OneParam(FBS_IdCallbackLocal, const FString &);
-DECLARE_DELEGATE_OneParam(FBS_NameCallbackLocal, const FString &);
-DECLARE_DELEGATE_OneParam(FBS_TypeCallbackLocal, EBS_DeviceType);
-DECLARE_DELEGATE_OneParam(FBS_CurrentTimeCallbackLocal, uint64);
-
 #define EBS_MTU_Message BS_MessageGetMTU
 #define EBS_DeviceIdMessage BS_MessageGetId
 #define EBS_DeviceNameMessage BS_MessageGetName, \
@@ -36,6 +30,7 @@ public:
 	// MTU START
 public:
 	uint16 GetMTU() const { return MTU; }
+	DECLARE_DELEGATE_OneParam(FBS_MTU_CallbackLocal, uint16);
 	FBS_MTU_CallbackLocal OnMTU_Update;
 
 	uint16 GetMaxTxMessageLength() const { return MTU == 0 ? 0 : MTU - 3; }
@@ -48,6 +43,7 @@ private:
 
 	// ID START
 public:
+	DECLARE_DELEGATE_OneParam(FBS_IdCallbackLocal, const FString &);
 	const FString &GetId() const { return Id; }
 	FBS_IdCallbackLocal OnIdUpdate;
 
@@ -60,6 +56,7 @@ private:
 	// NAME START
 public:
 	const FString &GetName() const { return Name; }
+	DECLARE_DELEGATE_OneParam(FBS_NameCallbackLocal, const FString &);
 	FBS_NameCallbackLocal OnNameUpdate;
 
 	static const uint8 MinNameLength;
@@ -75,6 +72,7 @@ private:
 	// TYPE START
 public:
 	const EBS_DeviceType &GetType() const { return Type; }
+	DECLARE_DELEGATE_OneParam(FBS_TypeCallbackLocal, EBS_DeviceType);
 	FBS_TypeCallbackLocal OnTypeUpdate;
 
 	void SetType(const EBS_DeviceType NewType);
@@ -88,6 +86,7 @@ private:
 	// CURRENT TIME START
 public:
 	const uint64 &GetCurrentTime() const { return CurrentTime; }
+	DECLARE_DELEGATE_OneParam(FBS_CurrentTimeCallbackLocal, uint64);
 	FBS_CurrentTimeCallbackLocal OnCurrentTimeUpdate;
 
 private:

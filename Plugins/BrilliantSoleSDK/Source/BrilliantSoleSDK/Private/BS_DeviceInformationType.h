@@ -5,11 +5,9 @@
 #include "CoreMinimal.h"
 
 UENUM(BlueprintType)
-enum class EBS_BleCharacteristic : uint8
+enum class EBS_DeviceInformationType : uint8
 {
-    NONE UMETA(Hidden),
-
-    BATTERY_LEVEL UMETA(DisplayName = "Battery Level"),
+    NONE UMETA(DisplayName = "None"),
 
     MANUFACTURER_NAME UMETA(DisplayName = "Manufacturer Name"),
     MODEL_NUMBER UMETA(DisplayName = "Model Number"),
@@ -18,10 +16,7 @@ enum class EBS_BleCharacteristic : uint8
     FIRMWARE_REVISION UMETA(DisplayName = "Firmware Revision"),
     SOFTWARE_REVISION UMETA(DisplayName = "Software Revision"),
 
-    RX UMETA(DisplayName = "Rx"),
-    TX UMETA(DisplayName = "Tx"),
-
     COUNT UMETA(Hidden)
 };
 
-ENUM_RANGE_BY_COUNT(EBS_BleCharacteristic, static_cast<int32>(EBS_BleCharacteristic::COUNT))
+ENUM_RANGE_BY_COUNT(EBS_DeviceInformationType, static_cast<int32>(EBS_DeviceInformationType::COUNT))

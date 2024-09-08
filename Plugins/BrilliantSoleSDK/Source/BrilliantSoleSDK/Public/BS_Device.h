@@ -5,9 +5,9 @@
 #include "CoreMinimal.h"
 #include "Logging/StructuredLog.h"
 #include "BS_ConnectionStatus.h"
+#include "BS_DeviceInformation.h"
 #include "BS_Subsystem.h"
 #include "BS_TxMessage.h"
-#include "BS_DeviceInformationManager.h"
 #include "BS_BatteryManager.h"
 #include "BS_InformationManager.h"
 #include "BS_SensorDataManager.h"
@@ -46,7 +46,7 @@ private:
 	UBS_Subsystem *_BS_Subsystem;
 	// BS SUBSYSTEM END
 
-	// BATTERY LEVEL CHARACTERISTIC START
+	// BATTERY LEVEL START
 public:
 	UFUNCTION(BlueprintPure, Category = "BS Battery Level")
 	uint8 GetBatteryLevel() const { return BatteryLevel; }
@@ -62,7 +62,20 @@ protected:
 private:
 	bool bDidGetBatteryLevel = false;
 	uint8 BatteryLevel = 0;
-	// BATTERY LEVEL CHARACTERISTIC END
+	// BATTERY LEVEL END
+
+	// DEVICE INFORMATION START
+public:
+	UFUNCTION(BlueprintPure, Category = "BS Device Information")
+	FBS_DeviceInformation GetDeviceInformation() const { return DeviceInformation; }
+
+protected:
+	UFUNCTION(BlueprintCallable, Category = "BS Device Information")
+	void OnDeviceInformationValue(const EBS_DeviceInformationType DeviceInformationType, const TArray<uint8> &Value) { DeviceInformation.SetValue(DeviceInformationType, Value); };
+
+private:
+	FBS_DeviceInformation DeviceInformation;
+	// DEVICE INFORMATION END
 
 	// CONNECTION START
 public:
@@ -128,15 +141,6 @@ private:
 	static const TArray<uint8> InitializePingTxData();
 	static const TArray<uint8> PingTxData;
 	// PING END
-
-	// DEVICE INFORMATION START
-public:
-protected:
-	UPROPERTY(BlueprintReadOnly, Category = "BS Device Information")
-	UBS_DeviceInformationManager *DeviceInformationManager;
-
-private:
-	// DEVICE INFORMATION END
 
 	// BATTERY START
 public:
