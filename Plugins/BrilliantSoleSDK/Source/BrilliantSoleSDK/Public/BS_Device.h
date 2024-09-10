@@ -21,7 +21,7 @@
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_Device, Log, All);
 
-UCLASS(Abstract, BlueprintType)
+UCLASS(Abstract, BlueprintType, Blueprintable)
 class UBS_Device : public UObject
 {
 	GENERATED_BODY()

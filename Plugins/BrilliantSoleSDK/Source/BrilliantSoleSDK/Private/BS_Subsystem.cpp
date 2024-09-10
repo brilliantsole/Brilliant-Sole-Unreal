@@ -11,6 +11,17 @@ UBS_Subsystem::UBS_Subsystem()
     GetDeviceManagerClass();
 }
 
+void UBS_Subsystem::Initialize(FSubsystemCollectionBase &Collection)
+{
+    Super::Initialize(Collection);
+}
+
+void UBS_Subsystem::Deinitialize()
+{
+    Super::Deinitialize();
+}
+
+// HELPERS START
 UClass *UBS_Subsystem::GetClass(const FString &ClassPath)
 {
     ConstructorHelpers::FClassFinder<UObject> ClassFinder(*ClassPath);
@@ -26,34 +37,24 @@ UClass *UBS_Subsystem::GetClass(const FString &ClassPath)
     }
 }
 
-void UBS_Subsystem::GetBleManagerClass()
-{
-    BleManagerClass = GetClass(TEXT("/Script/Engine.Blueprint'/BrilliantSoleSDK/Blueprints/Ble/BS_BleManagerBP.BS_BleManagerBP_C'"));
-}
-
-void UBS_Subsystem::GetDeviceManagerClass()
-{
-    DeviceManagerClass = GetClass(TEXT("/Script/Engine.Blueprint'/BrilliantSoleSDK/Blueprints/BS_DeviceManagerBP.BS_DeviceManagerBP_C'"));
-}
-
-void UBS_Subsystem::Initialize(FSubsystemCollectionBase &Collection)
-{
-    Super::Initialize(Collection);
-}
-
-void UBS_Subsystem::Deinitialize()
-{
-    Super::Deinitialize();
-}
-
-UObject *UBS_Subsystem::CreateSingleton(UClass *SingletonClass)
+UObject *UBS_Subsystem::CreateSingleton(UClass *SingletonClass, bool bInitialize)
 {
     UObject *Singleton;
 
     Singleton = NewObject<UObject>(this, SingletonClass);
     UE_LOGFMT(LogBS_Subsystem, Log, "Created new Singleton instance: {0}", Singleton->GetName());
 
-    FName MethodName("Initialize");
+    if (bInitialize)
+    {
+        CallFunction(Singleton, "Initialize");
+    }
+
+    return Singleton;
+}
+
+void UBS_Subsystem::CallFunction(UObject *Singleton, FString FunctionName)
+{
+    FName MethodName(FunctionName);
     UFunction *InitalizeFunction = Singleton->FindFunction(MethodName);
     if (InitalizeFunction)
     {
@@ -63,24 +64,38 @@ UObject *UBS_Subsystem::CreateSingleton(UClass *SingletonClass)
     {
         UE_LOGFMT(LogBS_Subsystem, Error, "Couldn't find Initialize function");
     }
+}
+// HELPERS END
 
-    return Singleton;
+// BLE MANAGER START
+void UBS_Subsystem::GetBleManagerClass()
+{
+    BleManagerClass = GetClass(TEXT("/Script/Engine.Blueprint'/BrilliantSoleSDK/Blueprints/Ble/BS_BleManagerBP.BS_BleManagerBP_C'"));
 }
 
 UObject *UBS_Subsystem::GetBleManager()
 {
     if (!BleManagerSingleton && BleManagerClass)
     {
-        BleManagerSingleton = CreateSingleton(BleManagerClass);
+        BleManagerSingleton = CreateSingleton(BleManagerClass, true);
     }
     return BleManagerSingleton;
+}
+
+// BLE MANAGER END
+
+// DEVICE MANAGER START
+void UBS_Subsystem::GetDeviceManagerClass()
+{
+    DeviceManagerClass = GetClass(TEXT("/Script/Engine.Blueprint'/BrilliantSoleSDK/Blueprints/BS_DeviceManagerBP.BS_DeviceManagerBP_C'"));
 }
 
 UObject *UBS_Subsystem::GetDeviceManager()
 {
     if (!DeviceManagerSingleton && DeviceManagerClass)
     {
-        DeviceManagerSingleton = CreateSingleton(DeviceManagerClass);
+        DeviceManagerSingleton = CreateSingleton(DeviceManagerClass, true);
     }
     return DeviceManagerSingleton;
 }
+// DEVICE MANAGER END

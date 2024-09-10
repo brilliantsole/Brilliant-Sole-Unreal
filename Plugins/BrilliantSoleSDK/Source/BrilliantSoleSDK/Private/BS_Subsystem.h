@@ -22,9 +22,12 @@ public:
 	virtual void Initialize(FSubsystemCollectionBase &Collection) override;
 	virtual void Deinitialize() override;
 
+	// HELPERS START
 private:
 	UClass *GetClass(const FString &ClassPath);
-	UObject *CreateSingleton(UClass *SingletonClass);
+	UObject *CreateSingleton(UClass *SingletonClass, bool bInitialize);
+	void CallFunction(UObject *Singleton, FString FunctionName);
+	// HELPERS END
 
 	// BLE MANAGER START
 public:

@@ -75,20 +75,20 @@ void UBS_DevicePair::Reset()
     SensorDataManager->Reset();
 }
 
-// IS SHARED START
-void UBS_DevicePair::SetIsShared(bool bNewIsShared)
+// IS SINGLETON START
+void UBS_DevicePair::SetIsSingleton(bool bNewIsSingleton)
 {
-    if (bIsShared == bNewIsShared)
+    if (bIsSingleton == bNewIsSingleton)
     {
-        UE_LOGFMT(LogBS_DevicePair, Log, "redundant bIsShared assignment - skipping");
+        UE_LOGFMT(LogBS_DevicePair, Log, "redundant bIsSingleton assignment - skipping");
         return;
     }
 
-    bIsShared = bNewIsShared;
-    UE_LOGFMT(LogBS_DevicePair, Log, "Updated bIsShared to {0}", bIsShared);
-    OnIsSharedUpdate(bIsShared);
+    bIsSingleton = bNewIsSingleton;
+    UE_LOGFMT(LogBS_DevicePair, Log, "Updated bIsSingleton to {0}", bIsSingleton);
+    OnIsSingletonUpdate(bIsSingleton);
 }
-// IS SHARED END
+// IS SINGLETON END
 
 // DEVICES START
 bool UBS_DevicePair::VerifyDevice(const UBS_Device *Device)

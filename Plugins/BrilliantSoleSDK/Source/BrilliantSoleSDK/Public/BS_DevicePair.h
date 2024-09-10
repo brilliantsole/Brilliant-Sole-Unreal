@@ -10,7 +10,7 @@
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_DevicePair, Log, All);
 
-UCLASS(Abstract, BlueprintType)
+UCLASS(Abstract, BlueprintType, Blueprintable)
 class UBS_DevicePair : public UObject
 {
     GENERATED_BODY()
@@ -35,17 +35,18 @@ private:
     UBS_Subsystem *_BS_Subsystem;
     // BS SUBSYSTEM END
 
-    // IS SHARED START
+    // IS SINGLETON START
 public:
-    void SetIsShared(bool bNewIsShared);
+    UFUNCTION(BlueprintCallable, Category = "BS Device Pair")
+    void SetIsSingleton(bool bNewIsSingleton);
 
 protected:
     UFUNCTION(BlueprintImplementableEvent, Category = "BS Device Pair")
-    void OnIsSharedUpdate(bool IsShared);
+    void OnIsSingletonUpdate(bool IsSingleton);
 
 private:
-    bool bIsShared;
-    // IS SHARED END
+    bool bIsSingleton;
+    // IS SINGLETON END
 
     // DEVICES START
 public:
