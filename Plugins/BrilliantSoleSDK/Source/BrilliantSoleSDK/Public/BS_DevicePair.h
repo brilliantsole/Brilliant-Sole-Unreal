@@ -119,6 +119,28 @@ private:
     }
     // DEVICE CONNECTION LISTENERS END
 
+    // SENSOR CONFIGURATION START
+public:
+    UFUNCTION(BlueprintCallable, Category = "BS Device Pair Sensor Configuration")
+    void SetSensorConfiguration(const UBS_SensorConfiguration *NewSensorConfiguration);
+
+    UFUNCTION(BlueprintCallable, Category = "BS Device Pair Sensor Configuration")
+    void ClearSensorConfiguration();
+
+    UFUNCTION(BlueprintCallable, Category = "BS Device Pair Sensor Configuration")
+    void SetSensorRate(EBS_SensorType SensorType, EBS_SensorRate SensorRate, bool &bDidUpdateSensorRate);
+
+    UFUNCTION(BlueprintCallable, Category = "BS Device Pair Sensor Configuration")
+    void SetSensorRates(const TMap<EBS_SensorType, EBS_SensorRate> &SensorRates);
+
+    UFUNCTION(BlueprintCallable, Category = "BS Device Pair Sensor Configuration")
+    void ClearSensorRate(EBS_SensorType SensorType);
+
+    UFUNCTION(BlueprintCallable, Category = "BS Device Pair Sensor Configuration")
+    void ToggleSensorRate(EBS_SensorType SensorType, EBS_SensorRate SensorRate, EBS_SensorRate &UpdatedSensorRate);
+
+    // SENSOR CONFIGURATION END
+
     // DEVICE MOTION DATA LISTENERS START
 public:
     DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(FBS_DevicePairDeviceVectorCallback, UBS_DevicePair *, DevicePair, EBS_InsoleSide, Side, UBS_Device *, Device, const FVector &, Vector, const float &, Timestamp);

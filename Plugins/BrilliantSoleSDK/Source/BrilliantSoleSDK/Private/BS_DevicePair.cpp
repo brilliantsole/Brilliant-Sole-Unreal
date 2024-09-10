@@ -279,6 +279,52 @@ void UBS_DevicePair::RemoveDeviceListeners(UBS_Device *Device)
 }
 // DEVICE LISTENERS END
 
+// SENSOR CONFIGURATION START
+void UBS_DevicePair::SetSensorConfiguration(const UBS_SensorConfiguration *NewSensorConfiguration)
+{
+    for (const TPair<EBS_InsoleSide, UBS_Device *> &Pair : Devices)
+    {
+        Pair.Value->SetSensorConfiguration(NewSensorConfiguration);
+    }
+}
+void UBS_DevicePair::ClearSensorConfiguration()
+{
+    for (const TPair<EBS_InsoleSide, UBS_Device *> &Pair : Devices)
+    {
+        Pair.Value->ClearSensorConfiguration();
+    }
+}
+void UBS_DevicePair::SetSensorRate(EBS_SensorType SensorType, EBS_SensorRate SensorRate, bool &bDidUpdateSensorRate)
+{
+    for (const TPair<EBS_InsoleSide, UBS_Device *> &Pair : Devices)
+    {
+        Pair.Value->SetSensorRate(SensorType, SensorRate, bDidUpdateSensorRate);
+    }
+}
+void UBS_DevicePair::SetSensorRates(const TMap<EBS_SensorType, EBS_SensorRate> &SensorRates)
+{
+    for (const TPair<EBS_InsoleSide, UBS_Device *> &Pair : Devices)
+    {
+        Pair.Value->SetSensorRates(SensorRates);
+    }
+}
+void UBS_DevicePair::ClearSensorRate(EBS_SensorType SensorType)
+{
+    for (const TPair<EBS_InsoleSide, UBS_Device *> &Pair : Devices)
+    {
+        Pair.Value->ClearSensorRate(SensorType);
+    }
+}
+void UBS_DevicePair::ToggleSensorRate(EBS_SensorType SensorType, EBS_SensorRate SensorRate, EBS_SensorRate &UpdatedSensorRate)
+{
+    for (const TPair<EBS_InsoleSide, UBS_Device *> &Pair : Devices)
+    {
+        Pair.Value->ToggleSensorRate(SensorType, SensorRate, UpdatedSensorRate);
+    }
+}
+
+// SENSOR CONFIGURATION END
+
 // PRESSURE START
 
 // PRESSURE END
