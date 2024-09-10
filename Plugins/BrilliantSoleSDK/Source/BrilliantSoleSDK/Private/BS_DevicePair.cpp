@@ -247,6 +247,8 @@ void UBS_DevicePair::AddDeviceListeners(UBS_Device *Device)
     Device->OnBarometer.AddDynamic(this, &UBS_DevicePair::OnDeviceBarometerUpdate);
 
     Device->OnPressure.AddDynamic(this, &UBS_DevicePair::OnDevicePressureUpdate);
+
+    Device->OnTfliteInference.AddDynamic(this, &UBS_DevicePair::OnDeviceTfliteInferenceUpdate);
 }
 void UBS_DevicePair::RemoveDeviceListeners(UBS_Device *Device)
 {
@@ -276,6 +278,8 @@ void UBS_DevicePair::RemoveDeviceListeners(UBS_Device *Device)
     Device->OnBarometer.RemoveDynamic(this, &UBS_DevicePair::OnDeviceBarometerUpdate);
 
     Device->OnPressure.RemoveDynamic(this, &UBS_DevicePair::OnDevicePressureUpdate);
+
+    Device->OnTfliteInference.RemoveDynamic(this, &UBS_DevicePair::OnDeviceTfliteInferenceUpdate);
 }
 // DEVICE LISTENERS END
 
@@ -328,3 +332,23 @@ void UBS_DevicePair::ToggleSensorRate(EBS_SensorType SensorType, EBS_SensorRate 
 // PRESSURE START
 
 // PRESSURE END
+
+// VIBRATION START
+void UBS_DevicePair::TriggerVibration(const TArray<FBS_VibrationConfiguration> &VibrationConfigurations)
+{
+    for (const TPair<EBS_InsoleSide, UBS_Device *> &Pair : Devices)
+    {
+        Pair.Value->TriggerVibration(VibrationConfigurations);
+    }
+}
+// VIBRATION END
+
+// TFLITE START
+void UBS_DevicePair::SetTfliteInferencingEnabled(const bool NewInferencingEnabled)
+{
+    for (const TPair<EBS_InsoleSide, UBS_Device *> &Pair : Devices)
+    {
+        Pair.Value->SetTfliteInferencingEnabled(NewInferencingEnabled);
+    }
+}
+// TFLITE END

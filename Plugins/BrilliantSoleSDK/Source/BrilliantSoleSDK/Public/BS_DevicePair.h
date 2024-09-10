@@ -232,9 +232,26 @@ private:
     }
     // PRESSURE END
 
-    // TFLITE START
-    // TFLITE END
+    // VIBRATION START
+public:
+    UFUNCTION(BlueprintCallable, Category = "BS Device Pair Vibration")
+    void TriggerVibration(const TArray<FBS_VibrationConfiguration> &VibrationConfigurations);
+    // VIBRATION END
 
-    // FILE TRANSFER START
-    // FILE TRANSFER END
+    // TFLITE START
+public:
+    DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(FBS_DevicePairDeviceTfliteInferenceCallback, UBS_DevicePair *, DevicePair, EBS_InsoleSide, Side, UBS_Device *, Device, const TArray<float> &, Inference, const float &, Timestamp);
+    UPROPERTY(BlueprintAssignable, Category = "BS Device Pair Tflite")
+    FBS_DevicePairDeviceTfliteInferenceCallback OnDeviceTfliteInference;
+
+    UFUNCTION(BlueprintCallable, Category = "BS Device Pair Tflite")
+    void SetTfliteInferencingEnabled(const bool NewInferencingEnabled);
+
+private:
+    UFUNCTION()
+    void OnDeviceTfliteInferenceUpdate(UBS_Device *Device, const TArray<float> &Inference, const float &Timestamp)
+    {
+        OnDeviceTfliteInference.Broadcast(this, Device->InsoleSide(), Device, Inference, Timestamp);
+    }
+    // TFLITE END
 };
