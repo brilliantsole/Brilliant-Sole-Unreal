@@ -119,6 +119,11 @@ void UBS_DevicePair::AddDevice(UBS_Device *Device)
         UE_LOGFMT(LogBS_DevicePair, Log, "Redundant Device Assignment");
         return;
     }
+    if (Devices.Contains(InsoleSide))
+    {
+        UE_LOGFMT(LogBS_DevicePair, Log, "Removing existing {0} Device...", UEnum::GetValueAsString(InsoleSide));
+        RemoveDeviceBySide(InsoleSide);
+    }
 
     UE_LOGFMT(LogBS_DevicePair, Log, "Adding {0} Device \"{1}\"", UEnum::GetValueAsString(InsoleSide), Device->GetName());
     Devices.Emplace(InsoleSide, Device);
@@ -221,7 +226,27 @@ void UBS_DevicePair::AddDeviceListeners(UBS_Device *Device)
         return;
     }
     UE_LOGFMT(LogBS_DevicePair, Log, "AddDeviceListeners to \"{0}\"", Device->Name());
-    Device->OnPressure.AddDynamic(this, &UBS_DevicePair::OnDevicePressure);
+
+    Device->OnConnectionStatusUpdate.AddDynamic(this, &UBS_DevicePair::_OnDeviceConnectionStatusUpdate);
+    Device->OnIsConnectedUpdate.AddDynamic(this, &UBS_DevicePair::_OnDeviceIsConnectedUpdate);
+
+    Device->OnAcceleration.AddDynamic(this, &UBS_DevicePair::OnDeviceAccelerationUpdate);
+    Device->OnGravity.AddDynamic(this, &UBS_DevicePair::OnDeviceGravityUpdate);
+    Device->OnLinearAcceleration.AddDynamic(this, &UBS_DevicePair::OnDeviceLinearAccelerationUpdate);
+    Device->OnGyroscope.AddDynamic(this, &UBS_DevicePair::OnDeviceGyroscopeUpdate);
+    Device->OnMagnetometer.AddDynamic(this, &UBS_DevicePair::OnDeviceMagnetometerUpdate);
+    Device->OnGameRotation.AddDynamic(this, &UBS_DevicePair::OnDeviceGameRotationUpdate);
+    Device->OnRotation.AddDynamic(this, &UBS_DevicePair::OnDeviceRotationUpdate);
+
+    Device->OnOrientation.AddDynamic(this, &UBS_DevicePair::OnDeviceOrientationUpdate);
+    Device->OnActivity.AddDynamic(this, &UBS_DevicePair::OnDeviceActivityUpdate);
+    Device->OnStepCount.AddDynamic(this, &UBS_DevicePair::OnDeviceStepCountUpdate);
+    Device->OnStepDetection.AddDynamic(this, &UBS_DevicePair::OnDeviceStepDetectionUpdate);
+    Device->OnDeviceOrientation.AddDynamic(this, &UBS_DevicePair::OnDeviceDeviceOrientationUpdate);
+
+    Device->OnBarometer.AddDynamic(this, &UBS_DevicePair::OnDeviceBarometerUpdate);
+
+    Device->OnPressure.AddDynamic(this, &UBS_DevicePair::OnDevicePressureUpdate);
 }
 void UBS_DevicePair::RemoveDeviceListeners(UBS_Device *Device)
 {
@@ -230,13 +255,30 @@ void UBS_DevicePair::RemoveDeviceListeners(UBS_Device *Device)
         return;
     }
     UE_LOGFMT(LogBS_DevicePair, Log, "RemoveDeviceListeners from \"{0}\"", Device->Name());
-    Device->OnPressure.RemoveDynamic(this, &UBS_DevicePair::OnDevicePressure);
+
+    Device->OnConnectionStatusUpdate.RemoveDynamic(this, &UBS_DevicePair::_OnDeviceConnectionStatusUpdate);
+    Device->OnIsConnectedUpdate.RemoveDynamic(this, &UBS_DevicePair::_OnDeviceIsConnectedUpdate);
+
+    Device->OnAcceleration.AddDynamic(this, &UBS_DevicePair::OnDeviceAccelerationUpdate);
+    Device->OnGravity.AddDynamic(this, &UBS_DevicePair::OnDeviceGravityUpdate);
+    Device->OnLinearAcceleration.AddDynamic(this, &UBS_DevicePair::OnDeviceLinearAccelerationUpdate);
+    Device->OnGyroscope.AddDynamic(this, &UBS_DevicePair::OnDeviceGyroscopeUpdate);
+    Device->OnMagnetometer.AddDynamic(this, &UBS_DevicePair::OnDeviceMagnetometerUpdate);
+    Device->OnGameRotation.AddDynamic(this, &UBS_DevicePair::OnDeviceGameRotationUpdate);
+    Device->OnRotation.AddDynamic(this, &UBS_DevicePair::OnDeviceRotationUpdate);
+
+    Device->OnOrientation.AddDynamic(this, &UBS_DevicePair::OnDeviceOrientationUpdate);
+    Device->OnActivity.AddDynamic(this, &UBS_DevicePair::OnDeviceActivityUpdate);
+    Device->OnStepCount.AddDynamic(this, &UBS_DevicePair::OnDeviceStepCountUpdate);
+    Device->OnStepDetection.AddDynamic(this, &UBS_DevicePair::OnDeviceStepDetectionUpdate);
+    Device->OnDeviceOrientation.AddDynamic(this, &UBS_DevicePair::OnDeviceDeviceOrientationUpdate);
+
+    Device->OnBarometer.RemoveDynamic(this, &UBS_DevicePair::OnDeviceBarometerUpdate);
+
+    Device->OnPressure.RemoveDynamic(this, &UBS_DevicePair::OnDevicePressureUpdate);
 }
 // DEVICE LISTENERS END
 
 // PRESSURE START
-void UBS_DevicePair::OnDevicePressure(UBS_Device *Device, const FBS_PressureData &PressureData, const float &Timestamp)
-{
-    // FILL
-}
+
 // PRESSURE END

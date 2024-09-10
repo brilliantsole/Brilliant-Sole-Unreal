@@ -198,6 +198,16 @@ void UBS_Device::SetConnectionStatus(EBS_ConnectionStatus NewConnectionStatus)
     ConnectionStatus = NewConnectionStatus;
     UE_LOGFMT(LogBS_Device, Log, "ConnectionStatus Updated to {0}", UEnum::GetValueAsString(ConnectionStatus));
     OnConnectionStatusUpdate.Broadcast(this, ConnectionStatus);
+
+    switch (ConnectionStatus)
+    {
+    case EBS_ConnectionStatus::CONNECTED:
+    case EBS_ConnectionStatus::NOT_CONNECTED:
+        OnIsConnectedUpdate.Broadcast(this, IsConnected());
+        break;
+    default:
+        break;
+    }
 }
 
 void UBS_Device::CheckIfFullyConnected()

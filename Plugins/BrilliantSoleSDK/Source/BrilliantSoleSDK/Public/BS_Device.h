@@ -89,6 +89,10 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "BS Device")
 	FBS_ConnectionStatusUpdateCallback OnConnectionStatusUpdate;
 
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBS_IsConnectedUpdateCallback, UBS_Device *, Device, bool, IsConnected);
+	UPROPERTY(BlueprintAssignable, Category = "BS Device")
+	FBS_IsConnectedUpdateCallback OnIsConnectedUpdate;
+
 protected:
 	UFUNCTION(BlueprintCallable, Category = "BS ConnectionManager")
 	void OnConnectionManagerConnectionStatusUpdate(EBS_ConnectionStatus NewConnectionManagerConnectionStatus);
