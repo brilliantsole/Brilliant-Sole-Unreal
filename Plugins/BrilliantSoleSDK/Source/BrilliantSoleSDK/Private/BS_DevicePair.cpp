@@ -120,6 +120,7 @@ void UBS_DevicePair::AddDevice(UBS_Device *Device)
         return;
     }
 
+    UE_LOGFMT(LogBS_DevicePair, Log, "Adding {0} Device \"{1}\"", UEnum::GetValueAsString(InsoleSide), Device->GetName());
     Devices.Emplace(InsoleSide, Device);
     AddDeviceListeners(Device);
     UpdateHasAllDevices();
@@ -147,7 +148,7 @@ void UBS_DevicePair::RemoveDevice(UBS_Device *Device)
         return;
     }
 
-    UE_LOGFMT(LogBS_DevicePair, Log, "Removing Device \"{0}\"", Device->GetName());
+    UE_LOGFMT(LogBS_DevicePair, Log, "Removing {0} Device \"{1}\"", UEnum::GetValueAsString(InsoleSide), Device->GetName());
     RemoveDeviceListeners(Device);
     Devices.Remove(InsoleSide);
     UpdateHasAllDevices();
@@ -219,7 +220,7 @@ void UBS_DevicePair::AddDeviceListeners(UBS_Device *Device)
     {
         return;
     }
-    UE_LOGFMT(LogBS_DevicePair, Log, "AddDeviceListeners to \"{0}\"", Device->GetName());
+    UE_LOGFMT(LogBS_DevicePair, Log, "AddDeviceListeners to \"{0}\"", Device->Name());
     Device->OnPressure.AddDynamic(this, &UBS_DevicePair::OnDevicePressure);
 }
 void UBS_DevicePair::RemoveDeviceListeners(UBS_Device *Device)
@@ -228,7 +229,7 @@ void UBS_DevicePair::RemoveDeviceListeners(UBS_Device *Device)
     {
         return;
     }
-    UE_LOGFMT(LogBS_DevicePair, Log, "RemoveDeviceListeners from \"{0}\"", Device->GetName());
+    UE_LOGFMT(LogBS_DevicePair, Log, "RemoveDeviceListeners from \"{0}\"", Device->Name());
     Device->OnPressure.RemoveDynamic(this, &UBS_DevicePair::OnDevicePressure);
 }
 // DEVICE LISTENERS END

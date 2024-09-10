@@ -99,6 +99,7 @@ private:
 
     // PRESSURE START
 private:
+    UFUNCTION()
     void OnDevicePressure(UBS_Device *Device, const FBS_PressureData &PressureData, const float &Timestamp);
     // PRESSURE END
 };
