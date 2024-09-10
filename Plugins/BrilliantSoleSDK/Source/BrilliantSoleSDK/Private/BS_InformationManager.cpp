@@ -62,7 +62,7 @@ void UBS_InformationManager::ParseId(const TArray<uint8> &Message)
 {
     UE_LOGFMT(LogBS_InformationManager, Log, "Parsing Id...");
     Id = BS_ByteParser::GetString(Message);
-    UE_LOGFMT(LogBS_InformationManager, Log, "Parsed Id: {0} ({1} bytes)", Id, Message.Num());
+    UE_LOGFMT(LogBS_InformationManager, Log, "Parsed Id: \"{0}\" ({1} bytes)", Id, Message.Num());
     OnIdUpdate.ExecuteIfBound(Id);
 }
 // ID END
@@ -72,7 +72,7 @@ void UBS_InformationManager::ParseName(const TArray<uint8> &Message)
 {
     UE_LOGFMT(LogBS_InformationManager, Log, "Parsing Name...");
     Name = BS_ByteParser::GetString(Message);
-    UE_LOGFMT(LogBS_InformationManager, Log, "Parsed Name: {0}", Name);
+    UE_LOGFMT(LogBS_InformationManager, Log, "Parsed Name: \"{0}\"", Name);
     OnNameUpdate.ExecuteIfBound(Name);
 }
 
@@ -91,7 +91,7 @@ void UBS_InformationManager::SetName(const FString &NewName)
         UE_LOGFMT(LogBS_InformationManager, Warning, "Name must be between {0}-{1} characters long (got {2})", MinNameLength, MaxNameLength, NewNameLength);
         return;
     }
-    UE_LOGFMT(LogBS_InformationManager, Log, "Setting Name to {0}...", NewName);
+    UE_LOGFMT(LogBS_InformationManager, Log, "Setting Name to \"{0}\"...", NewName);
 
     const TArray<uint8> TxMessage = BS_ByteParser::StringToArray(NewName);
     SendTxMessages.ExecuteIfBound({{BS_MessageSetName, TxMessage}}, true);
