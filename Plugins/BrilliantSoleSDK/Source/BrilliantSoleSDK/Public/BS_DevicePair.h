@@ -209,4 +209,10 @@ private:
         // FILL - update center of pressure
     }
     // PRESSURE END
+
+    // TFLITE START
+    // TFLITE END
+
+    // FILE TRANSFER START
+    // FILE TRANSFER END
 };
