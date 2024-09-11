@@ -220,16 +220,19 @@ private:
     // PRESSURE START
 public:
     DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(FBS_DevicePairDevicePressureCallback, UBS_DevicePair *, DevicePair, EBS_InsoleSide, Side, UBS_Device *, Device, const FBS_PressureData &, PressureData, const float &, Timestamp);
-    UPROPERTY(BlueprintAssignable, Category = "BS Device Pair")
+    UPROPERTY(BlueprintAssignable, Category = "BS Device Pair Pressure")
     FBS_DevicePairDevicePressureCallback OnDevicePressure;
+
+    DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FBS_DevicePairPressureCallback, UBS_DevicePair *, DevicePair, const FBS_DevicePairPressureData &, PressureData, const float &, Timestamp);
+    UPROPERTY(BlueprintAssignable, Category = "BS Device Pair Pressure")
+    FBS_DevicePairPressureCallback OnPressure;
 
 private:
     UFUNCTION()
-    void OnDevicePressureUpdate(UBS_Device *Device, const FBS_PressureData &PressureData, const float &Timestamp)
-    {
-        OnDevicePressure.Broadcast(this, Device->InsoleSide(), Device, PressureData, Timestamp);
-        // FILL - update center of pressure
-    }
+    void OnDevicePressureUpdate(UBS_Device *Device, const FBS_PressureData &PressureData, const float &Timestamp);
+
+    UFUNCTION()
+    void OnPressureUpdate(const FBS_DevicePairPressureData &PressureData, const float &Timestamp) { OnPressure.Broadcast(this, PressureData, Timestamp); }
     // PRESSURE END
 
     // VIBRATION START

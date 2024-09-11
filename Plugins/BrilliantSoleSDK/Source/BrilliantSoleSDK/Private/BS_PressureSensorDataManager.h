@@ -30,7 +30,9 @@ public:
 	FBS_PressureDataCallbackLocal OnPressureUpdate;
 
 private:
+	UPROPERTY()
 	TArray<FBS_Range> PressureSensorRanges;
+	UPROPERTY()
 	FBS_CenterOfPressureRange CenterOfPressureRange;
 
 public:

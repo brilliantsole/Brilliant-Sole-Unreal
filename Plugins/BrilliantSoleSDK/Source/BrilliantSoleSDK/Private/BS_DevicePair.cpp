@@ -129,6 +129,7 @@ void UBS_DevicePair::AddDevice(UBS_Device *Device)
     Devices.Emplace(InsoleSide, Device);
     AddDeviceListeners(Device);
     UpdateHasAllDevices();
+    UpdateIsFullyConnected();
 }
 void UBS_DevicePair::RemoveDeviceBySide(const EBS_InsoleSide InsoleSide)
 {
@@ -330,7 +331,14 @@ void UBS_DevicePair::ToggleSensorRate(EBS_SensorType SensorType, EBS_SensorRate 
 // SENSOR CONFIGURATION END
 
 // PRESSURE START
-
+void UBS_DevicePair::OnDevicePressureUpdate(UBS_Device *Device, const FBS_PressureData &PressureData, const float &Timestamp)
+{
+    OnDevicePressure.Broadcast(this, Device->InsoleSide(), Device, PressureData, Timestamp);
+    if (bIsFullyConnected)
+    {
+        SensorDataManager->PressureSensorDataManager->OnDevicePressureData(Device->InsoleSide(), PressureData, Timestamp);
+    }
+}
 // PRESSURE END
 
 // VIBRATION START
