@@ -50,7 +50,7 @@ void UBS_DevicePairPressureSensorDataManager::OnDevicePressureData(EBS_InsoleSid
             const float NormalizedSumWeight = _DevicePressureData.NormalizedSum / PressureData.NormalizedSum;
             if (NormalizedSumWeight > 0)
             {
-                PressureData.CenterOfPressure.Y = _DevicePressureData.NormalizedCenterOfPressure.Y * NormalizedSumWeight;
+                PressureData.CenterOfPressure.Y += _DevicePressureData.NormalizedCenterOfPressure.Y * NormalizedSumWeight;
                 if (_InsoleSide == EBS_InsoleSide::RIGHT)
                 {
                     PressureData.CenterOfPressure.X = NormalizedSumWeight;
