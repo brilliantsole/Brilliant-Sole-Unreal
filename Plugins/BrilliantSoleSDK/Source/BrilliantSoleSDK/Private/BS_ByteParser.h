@@ -33,7 +33,7 @@ public:
     }
 
     template <typename T>
-    static T ParseAs(const TArray<uint8> &ByteArray, uint8 Offset = 0, bool bIsLittleEndian = false)
+    static T ParseAs(const TArray<uint8> &ByteArray, uint16 Offset = 0, bool bIsLittleEndian = false)
     {
         if (ByteArray.Num() < Offset + sizeof(T))
         {
@@ -53,6 +53,6 @@ public:
         return ParsedValue;
     }
 
-    static FString GetString(const TArray<uint8> &Data);
+    static FString GetString(const TArray<uint8> &ByteArray);
     static TArray<uint8> StringToArray(const FString &String);
 };

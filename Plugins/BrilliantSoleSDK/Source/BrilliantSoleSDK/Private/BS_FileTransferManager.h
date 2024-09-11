@@ -25,7 +25,8 @@ DECLARE_DELEGATE_OneParam(FBS_FileTransferFileLengthCallbackLocal, uint32);
 								BS_MessageSetFileTransferCommand, \
 								BS_MessageGetFileTransferStatus,  \
 								BS_MessageGetFileTransferBlock,   \
-								BS_MessageSetFileTransferBlock
+								BS_MessageSetFileTransferBlock,   \
+								BS_MessageFileBytesTransferred
 
 UCLASS()
 class UBS_FileTransferManager : public UBS_BaseManager
@@ -35,7 +36,6 @@ class UBS_FileTransferManager : public UBS_BaseManager
 public:
 	bool OnRxMessage(uint8 MessageType, const TArray<uint8> &Message) override;
 	void Reset() override;
-	void OnSendTxData() override;
 
 	// MAX FILE LENGTH START
 public:
@@ -142,5 +142,6 @@ private:
 	void SendFileBlock(bool bSendImmediately);
 
 	void ParseFileTransferBlock(const TArray<uint8> &Message);
+	void ParseFileBytesTransferred(const TArray<uint8> &Message);
 	// FILE BLOCK END
 };
