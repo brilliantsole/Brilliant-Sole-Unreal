@@ -15,6 +15,7 @@ UBS_DevicePair::UBS_DevicePair()
     }
 
     SensorDataManager = CreateDefaultSubobject<UBS_DevicePairSensorDataManager>(TEXT("SensorDataManager"));
+    SensorDataManager->PressureSensorDataManager->OnPressureUpdate.BindUObject(this, &UBS_DevicePair::OnPressureUpdate);
 }
 
 void UBS_DevicePair::PostInitProperties()
