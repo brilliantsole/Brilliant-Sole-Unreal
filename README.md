@@ -18,3 +18,43 @@ public void connect() {
 	mConnection.requestMtu(517);
 }
 ```
+
+and modify IOS BleDevice.cpp's `UBleDevice::GetCharacteristic` function:
+
+```
+if ([Characteristic.UUID isEqual:CharacteristicCBUUID])
+{
+	TargetCharacteristic = Characteristic;
+	break;
+}
+if ([[Characteristic.UUID.UUIDString lowercaseString] isEqualToString:[CharacteristicCBUUID.UUIDString lowercaseString]])
+{
+	TargetCharacteristic = Characteristic;
+	break;
+}
+```
+
+and modify UBleDevice::WriteCharacteristic:
+
+```
+void UBleDevice::WriteCharacteristic(const FString &ServiceUUID, const FString &CharacteristicUUID, const TArray<uint8> &Data)
+{
+	CBCharacteristic *Characteristic = GetCharacteristic(ServiceUUID, CharacteristicUUID);
+	if (Characteristic)
+	{
+		[Device writeValue:[NSData dataWithBytes:(void *)Data.GetData() length:Data.Num()]
+			forCharacteristic:Characteristic
+						 type:CBCharacteristicWriteWithoutResponse];
+	}
+}
+```
+
+to this:
+
+```
+if ([[Characteristic.UUID.UUIDString lowercaseString] isEqualToString:[CharacteristicCBUUID.UUIDString lowercaseString]])
+{
+	TargetCharacteristic = Characteristic;
+	break;
+}
+```

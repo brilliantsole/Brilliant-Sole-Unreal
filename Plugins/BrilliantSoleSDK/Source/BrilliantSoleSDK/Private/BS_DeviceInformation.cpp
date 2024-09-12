@@ -9,12 +9,12 @@ DEFINE_LOG_CATEGORY(LogBS_DeviceInformation);
 void FBS_DeviceInformation::UpdateDidGetAllInformation()
 {
     bool bNewDidGetAllInformation = true;
-    bNewDidGetAllInformation = bNewDidGetAllInformation || ManufacturerName == "";
-    bNewDidGetAllInformation = bNewDidGetAllInformation || ModelNumber == "";
-    bNewDidGetAllInformation = bNewDidGetAllInformation || SerialNumber == "";
-    bNewDidGetAllInformation = bNewDidGetAllInformation || HardwareRevision == "";
-    bNewDidGetAllInformation = bNewDidGetAllInformation || FirmwareRevision == "";
-    bNewDidGetAllInformation = bNewDidGetAllInformation || SoftwareRevision == "";
+    bNewDidGetAllInformation = bNewDidGetAllInformation && ManufacturerName != "";
+    bNewDidGetAllInformation = bNewDidGetAllInformation && ModelNumber != "";
+    bNewDidGetAllInformation = bNewDidGetAllInformation && SerialNumber != "";
+    bNewDidGetAllInformation = bNewDidGetAllInformation && HardwareRevision != "";
+    bNewDidGetAllInformation = bNewDidGetAllInformation && FirmwareRevision != "";
+    bNewDidGetAllInformation = bNewDidGetAllInformation && SoftwareRevision != "";
 
     UE_LOGFMT(LogBS_DeviceInformation, Log, "bNewDidGetAllInformation: {0}", bNewDidGetAllInformation);
 
