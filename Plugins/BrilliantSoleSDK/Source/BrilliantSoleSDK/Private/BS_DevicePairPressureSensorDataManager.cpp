@@ -20,7 +20,7 @@ bool UBS_DevicePairPressureSensorDataManager::HasAllData() const
     return bHasAllData;
 }
 
-void UBS_DevicePairPressureSensorDataManager::OnDevicePressureData(EBS_InsoleSide InsoleSide, const FBS_PressureData &DevicePressureData, const float &Timestamp)
+void UBS_DevicePairPressureSensorDataManager::OnDevicePressureData(EBS_InsoleSide InsoleSide, const FBS_PressureData &DevicePressureData, const int64 &Timestamp)
 {
     UE_LOGFMT(LogBS_DevicePairPressureSensorDataManager, Log, "Received Pressure Data from {0}", UEnum::GetValueAsString(InsoleSide));
     DevicesPressureData.Emplace(InsoleSide, DevicePressureData);

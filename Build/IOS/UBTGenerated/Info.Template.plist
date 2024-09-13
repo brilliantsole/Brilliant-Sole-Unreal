@@ -49,10 +49,6 @@
       <key __line="14">NSBluetoothPeripheralUsageDescription</key>
       <string __line="15">$(PRODUCT_NAME) uses bluetooth to find nearby devices.</string>
     </dict>
-    <key>NSBluetoothAlwaysUsageDescription</key>
-    <string>We need access to Bluetooth to communicate with devices.</string>
-    <key>NSBluetoothPeripheralUsageDescription</key>
-    <string>We need access to Bluetooth to communicate with devices.</string>
     <key __line="12">NSBluetoothAlwaysUsageDescription</key>
     <string __line="13">$(PRODUCT_NAME) uses bluetooth to find nearby devices.</string>
     <key __line="14">NSBluetoothPeripheralUsageDescription</key>

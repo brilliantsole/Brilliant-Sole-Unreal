@@ -317,7 +317,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "BS Pressure Data")
 	void ResetPressure() { SensorDataManager->PressureSensorDataManager->Reset(); }
 
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FBS_PressureCallback, UBS_Device *, Device, const FBS_PressureData &, PressureData, const float &, Timestamp);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FBS_PressureCallback, UBS_Device *, Device, const FBS_PressureData &, PressureData, const int64 &, Timestamp);
 	UPROPERTY(BlueprintAssignable, Category = "BS Pressure Data")
 	FBS_PressureCallback OnPressure;
 
@@ -327,13 +327,13 @@ private:
 
 	// MOTION DATA START
 public:
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FBS_VectorCallback, UBS_Device *, Device, const FVector &, Vector, const float &, Timestamp);
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FBS_RotatorCallback, UBS_Device *, Device, const FRotator &, Rotator, const float &, Timestamp);
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FBS_QuaternionCallback, UBS_Device *, Device, const FQuat &, Quaternion, const float &, Timestamp);
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBS_TimestampCallback, UBS_Device *, Device, const float &, Timestamp);
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FBS_ActivityCallback, UBS_Device *, Device, const TSet<EBS_Activity> &, Activity, const float &, Timestamp);
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FBS_StepCountCallback, UBS_Device *, Device, const uint32 &, StepCount, const float &, Timestamp);
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FBS_DeviceOrientationCallback, UBS_Device *, Device, const EBS_DeviceOrientation &, DeviceOrientation, const float &, Timestamp);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FBS_VectorCallback, UBS_Device *, Device, const FVector &, Vector, const int64 &, Timestamp);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FBS_RotatorCallback, UBS_Device *, Device, const FRotator &, Rotator, const int64 &, Timestamp);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FBS_QuaternionCallback, UBS_Device *, Device, const FQuat &, Quaternion, const int64 &, Timestamp);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBS_TimestampCallback, UBS_Device *, Device, const int64 &, Timestamp);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FBS_ActivityCallback, UBS_Device *, Device, const TSet<EBS_Activity> &, Activity, const int64 &, Timestamp);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FBS_StepCountCallback, UBS_Device *, Device, const uint32 &, StepCount, const int64 &, Timestamp);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FBS_DeviceOrientationCallback, UBS_Device *, Device, const EBS_DeviceOrientation &, DeviceOrientation, const int64 &, Timestamp);
 
 	UPROPERTY(BlueprintAssignable, Category = "BS Motion Data")
 	FBS_VectorCallback OnAcceleration;
@@ -379,7 +379,7 @@ private:
 
 	// BAROMETER DATA START
 public:
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FBS_BarometerCallback, UBS_Device *, Device, const float &, Barometer, const float &, Timestamp);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FBS_BarometerCallback, UBS_Device *, Device, const float &, Barometer, const int64 &, Timestamp);
 
 	UPROPERTY(BlueprintAssignable, Category = "BS Barometer Data")
 	FBS_BarometerCallback OnBarometer;
@@ -542,7 +542,7 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "BS Tflite")
 	FBS_TfliteInferencingEnabledCallback OnTfliteInferencingEnabled;
 
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FBS_TfliteInferenceCallback, UBS_Device *, Device, const TArray<float> &, Inference, const float &, Timestamp);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FBS_TfliteInferenceCallback, UBS_Device *, Device, const TArray<float> &, Inference, const int64 &, Timestamp);
 	UPROPERTY(BlueprintAssignable, Category = "BS Tflite")
 	FBS_TfliteInferenceCallback OnTfliteInference;
 

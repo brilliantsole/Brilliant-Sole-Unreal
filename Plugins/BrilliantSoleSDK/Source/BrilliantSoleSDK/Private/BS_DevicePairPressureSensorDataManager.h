@@ -11,7 +11,7 @@
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_DevicePairPressureSensorDataManager, Log, All);
 
-DECLARE_DELEGATE_TwoParams(FBS_DevicePairPressureDataCallbackLocal, const FBS_DevicePairPressureData &, const float &);
+DECLARE_DELEGATE_TwoParams(FBS_DevicePairPressureDataCallbackLocal, const FBS_DevicePairPressureData &, const int64 &);
 
 UCLASS()
 class UBS_DevicePairPressureSensorDataManager : public UObject
@@ -27,7 +27,7 @@ public:
 	FBS_DevicePairPressureDataCallbackLocal OnPressureUpdate;
 
 public:
-	void OnDevicePressureData(EBS_InsoleSide InsoleSide, const FBS_PressureData &DevicePressureData, const float &Timestamp);
+	void OnDevicePressureData(EBS_InsoleSide InsoleSide, const FBS_PressureData &DevicePressureData, const int64 &Timestamp);
 
 private:
 	UPROPERTY()
