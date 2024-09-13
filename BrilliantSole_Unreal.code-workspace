@@ -29,7 +29,8 @@
 			"*.ipp": "cpp",
 			"future": "cpp",
 			"string": "cpp",
-			"string_view": "cpp"
+			"string_view": "cpp",
+			"ios": "cpp"
 		}
 	},
 	"extensions": {
