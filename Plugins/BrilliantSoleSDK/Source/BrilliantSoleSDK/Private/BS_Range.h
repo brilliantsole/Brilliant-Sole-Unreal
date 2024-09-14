@@ -6,7 +6,7 @@
 #include "Logging/StructuredLog.h"
 #include "BS_Range.generated.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogBS_Range, Log, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_Range, Verbose, All);
 
 USTRUCT()
 struct FBS_Range
@@ -37,7 +37,7 @@ public:
         Min = FMath::Min(Min, Value);
         Max = FMath::Max(Max, Value);
         Span = Max - Min;
-        UE_LOGFMT(LogTemp, Log, "Updated Range to {0}", *ToString());
+        UE_LOGFMT(LogTemp, Verbose, "Updated Range to {0}", *ToString());
     }
 
     float GetNormalization(float Value, bool bWeightBySpan)

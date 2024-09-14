@@ -61,9 +61,9 @@ void UBS_FileTransferManager::Reset()
 // MAX FILE LENGTH START
 void UBS_FileTransferManager::ParseMaxFileLength(const TArray<uint8> &Message)
 {
-    UE_LOGFMT(LogBS_FileTransferManager, Log, "Parsing MaxFileLength...");
+    UE_LOGFMT(LogBS_FileTransferManager, Verbose, "Parsing MaxFileLength...");
     MaxFileLength = BS_ByteParser::ParseAs<uint32>(Message, 0, true);
-    UE_LOGFMT(LogBS_FileTransferManager, Log, "Parsed MaxFileLength: {0}", MaxFileLength);
+    UE_LOGFMT(LogBS_FileTransferManager, Verbose, "Parsed MaxFileLength: {0}", MaxFileLength);
     OnMaxFileLengthUpdate.ExecuteIfBound(MaxFileLength);
 }
 // MAX FILE LENGTH END
@@ -72,7 +72,7 @@ void UBS_FileTransferManager::ParseMaxFileLength(const TArray<uint8> &Message)
 void UBS_FileTransferManager::ParseFileType(const TArray<uint8> &Message)
 {
     FileType = static_cast<EBS_FileType>(Message[0]);
-    UE_LOGFMT(LogBS_FileTransferManager, Log, "Parsed FileType: {0}", UEnum::GetValueAsString(FileType));
+    UE_LOGFMT(LogBS_FileTransferManager, Verbose, "Parsed FileType: {0}", UEnum::GetValueAsString(FileType));
     OnFileTypeUpdate.ExecuteIfBound(FileType);
 }
 
@@ -80,10 +80,10 @@ void UBS_FileTransferManager::SetFileType(const EBS_FileType NewFileType, bool b
 {
     if (NewFileType == FileType)
     {
-        UE_LOGFMT(LogBS_FileTransferManager, Log, "Redundant FileType - not setting");
+        UE_LOGFMT(LogBS_FileTransferManager, Verbose, "Redundant FileType - not setting");
         return;
     }
-    UE_LOGFMT(LogBS_FileTransferManager, Log, "Setting FileType to {0}...", UEnum::GetValueAsString(NewFileType));
+    UE_LOGFMT(LogBS_FileTransferManager, Verbose, "Setting FileType to {0}...", UEnum::GetValueAsString(NewFileType));
 
     const TArray<uint8> TxMessage = {static_cast<uint8>(NewFileType)};
     SendTxMessages.ExecuteIfBound({{BS_MessageSetFileTransferType, TxMessage}}, bSendImmediately);
@@ -93,9 +93,9 @@ void UBS_FileTransferManager::SetFileType(const EBS_FileType NewFileType, bool b
 // FILE LENGTH START
 void UBS_FileTransferManager::ParseFileLength(const TArray<uint8> &Message)
 {
-    UE_LOGFMT(LogBS_FileTransferManager, Log, "Parsing FileLength...");
+    UE_LOGFMT(LogBS_FileTransferManager, Verbose, "Parsing FileLength...");
     FileLength = BS_ByteParser::ParseAs<uint32>(Message, 0, true);
-    UE_LOGFMT(LogBS_FileTransferManager, Log, "Parsed FileLength: {0}", FileLength);
+    UE_LOGFMT(LogBS_FileTransferManager, Verbose, "Parsed FileLength: {0}", FileLength);
     OnFileLengthUpdate.ExecuteIfBound(FileLength);
 
     if (FileTransferStatus == EBS_FileTransferStatus::RECEIVING)
@@ -108,10 +108,10 @@ void UBS_FileTransferManager::SetFileLength(const uint32 NewFileLength, bool bSe
 {
     if (NewFileLength == FileLength)
     {
-        UE_LOGFMT(LogBS_FileTransferManager, Log, "Redundant FileLength - not setting");
+        UE_LOGFMT(LogBS_FileTransferManager, Verbose, "Redundant FileLength - not setting");
         return;
     }
-    UE_LOGFMT(LogBS_FileTransferManager, Log, "Updating FileLength to {0}", NewFileLength);
+    UE_LOGFMT(LogBS_FileTransferManager, Verbose, "Updating FileLength to {0}", NewFileLength);
     const TArray<uint8> TxMessage = BS_ByteParser::ToByteArray(NewFileLength);
     SendTxMessages.ExecuteIfBound({{BS_MessageSetFileLength, TxMessage}}, bSendImmediately);
 }
@@ -120,9 +120,9 @@ void UBS_FileTransferManager::SetFileLength(const uint32 NewFileLength, bool bSe
 // FILE CHECKSUM START
 void UBS_FileTransferManager::ParseFileChecksum(const TArray<uint8> &Message)
 {
-    UE_LOGFMT(LogBS_FileTransferManager, Log, "Parsing FileChecksum...");
+    UE_LOGFMT(LogBS_FileTransferManager, Verbose, "Parsing FileChecksum...");
     FileChecksum = BS_ByteParser::ParseAs<uint32>(Message, 0, true);
-    UE_LOGFMT(LogBS_FileTransferManager, Log, "Parsed FileChecksum: {0}", FileChecksum);
+    UE_LOGFMT(LogBS_FileTransferManager, Verbose, "Parsed FileChecksum: {0}", FileChecksum);
     OnFileChecksumUpdate.ExecuteIfBound(FileChecksum);
 }
 
@@ -130,10 +130,10 @@ void UBS_FileTransferManager::SetFileChecksum(const uint32 NewFileChecksum, bool
 {
     if (NewFileChecksum == FileChecksum)
     {
-        UE_LOGFMT(LogBS_FileTransferManager, Log, "Redundant FileChecksum - not setting");
+        UE_LOGFMT(LogBS_FileTransferManager, Verbose, "Redundant FileChecksum - not setting");
         return;
     }
-    UE_LOGFMT(LogBS_FileTransferManager, Log, "Updating FileChecksum to {0}", NewFileChecksum);
+    UE_LOGFMT(LogBS_FileTransferManager, Verbose, "Updating FileChecksum to {0}", NewFileChecksum);
     const TArray<uint8> TxMessage = BS_ByteParser::ToByteArray(NewFileChecksum);
     SendTxMessages.ExecuteIfBound({{BS_MessageSetFileChecksum, TxMessage}}, bSendImmediately);
 }
@@ -142,7 +142,7 @@ void UBS_FileTransferManager::SetFileChecksum(const uint32 NewFileChecksum, bool
 // FILE TRANSFER COMMAND START
 void UBS_FileTransferManager::SetFileTransferCommand(const EBS_FileTransferCommand NewFileTransferCommand, bool bSendImmediately)
 {
-    UE_LOGFMT(LogBS_FileTransferManager, Log, "Setting FileTransferCommand to {0}...", UEnum::GetValueAsString(NewFileTransferCommand));
+    UE_LOGFMT(LogBS_FileTransferManager, Verbose, "Setting FileTransferCommand to {0}...", UEnum::GetValueAsString(NewFileTransferCommand));
 
     const TArray<uint8> TxMessage = {static_cast<uint8>(NewFileTransferCommand)};
     SendTxMessages.ExecuteIfBound({{BS_MessageSetFileTransferCommand, TxMessage}}, bSendImmediately);
@@ -153,14 +153,14 @@ void UBS_FileTransferManager::SetFileTransferCommand(const EBS_FileTransferComma
 void UBS_FileTransferManager::ParseFileTransferStatus(const TArray<uint8> &Message)
 {
     FileTransferStatus = static_cast<EBS_FileTransferStatus>(Message[0]);
-    UE_LOGFMT(LogBS_FileTransferManager, Log, "Parsed FileTransferStatus: {0}", UEnum::GetValueAsString(FileTransferStatus));
+    UE_LOGFMT(LogBS_FileTransferManager, Verbose, "Parsed FileTransferStatus: {0}", UEnum::GetValueAsString(FileTransferStatus));
     OnFileTransferStatusUpdate.ExecuteIfBound(FileTransferStatus);
 
     BytesTransferred = 0;
 
     if (FileTransferStatus == EBS_FileTransferStatus::SENDING)
     {
-        UE_LOGFMT(LogBS_FileTransferManager, Log, "Starting to send file...");
+        UE_LOGFMT(LogBS_FileTransferManager, Verbose, "Starting to send file...");
         SendFileBlock(true);
     }
 }
@@ -171,7 +171,7 @@ void UBS_FileTransferManager::ParseFileTransferStatus(const TArray<uint8> &Messa
 uint32 UBS_FileTransferManager::GetCRC32(const TArray<uint8> &Data)
 {
     const uint32 Checksum = FCrc::MemCrc32(Data.GetData(), Data.Num());
-    UE_LOGFMT(LogBS_FileTransferManager, Log, "Checksum: {0}", Checksum);
+    UE_LOGFMT(LogBS_FileTransferManager, Verbose, "Checksum: {0}", Checksum);
     return Checksum;
 }
 
@@ -183,7 +183,7 @@ void UBS_FileTransferManager::SendFile(const EBS_FileType NewFileType, const TAr
         return;
     }
 
-    UE_LOGFMT(LogBS_FileTransferManager, Log, "Requestig to send File with {0} bytes...", File.Num());
+    UE_LOGFMT(LogBS_FileTransferManager, Verbose, "Requestig to send File with {0} bytes...", File.Num());
 
     FileToSend = File;
 
@@ -206,7 +206,7 @@ void UBS_FileTransferManager::CancelFileTransfer()
 {
     if (FileTransferStatus == EBS_FileTransferStatus::IDLE)
     {
-        UE_LOGFMT(LogBS_FileTransferManager, Log, "Already Idle");
+        UE_LOGFMT(LogBS_FileTransferManager, Verbose, "Already Idle");
         return;
     }
     SetFileTransferCommand(EBS_FileTransferCommand::CANCEL);
@@ -228,15 +228,15 @@ void UBS_FileTransferManager::SendFileBlock(bool bSendImmediately)
     const uint32 FileToSendLength = FileToSend.Num();
 
     const uint32 RemainingBytes = FileToSendLength - BytesTransferred;
-    UE_LOGFMT(LogBS_FileTransferManager, Log, "RemainingBytes: {0}", RemainingBytes);
+    UE_LOGFMT(LogBS_FileTransferManager, Verbose, "RemainingBytes: {0}", RemainingBytes);
 
     const float FileTransferProgress = static_cast<float>(BytesTransferred) / static_cast<float>(FileToSendLength);
-    UE_LOGFMT(LogBS_FileTransferManager, Log, "FileTransferProgress: {0}%", FileTransferProgress * 100.0f);
+    UE_LOGFMT(LogBS_FileTransferManager, Verbose, "FileTransferProgress: {0}%", FileTransferProgress * 100.0f);
     OnFileTransferProgress.ExecuteIfBound(FileType, EBS_FileTransferDirection::SENDING, FileTransferProgress);
 
     if (RemainingBytes == 0)
     {
-        UE_LOGFMT(LogBS_FileTransferManager, Log, "File Transfer Complete");
+        UE_LOGFMT(LogBS_FileTransferManager, Verbose, "File Transfer Complete");
         OnFileTransferComplete.ExecuteIfBound(FileType, EBS_FileTransferDirection::SENDING);
         bWaitingToSendMoreData = false;
         return;
@@ -246,7 +246,7 @@ void UBS_FileTransferManager::SendFileBlock(bool bSendImmediately)
 
     const uint32 MaxMessageLength = MTU - 3 - 3;
     const uint32 FileBlockLength = FMath::Min(RemainingBytes, MaxMessageLength);
-    UE_LOGFMT(LogBS_FileTransferManager, Log, "MaxMessageLength: {0}, FileBlockLength: {1}", MaxMessageLength, FileBlockLength);
+    UE_LOGFMT(LogBS_FileTransferManager, Verbose, "MaxMessageLength: {0}, FileBlockLength: {1}", MaxMessageLength, FileBlockLength);
 
     FileBlockToSend.SetNumUninitialized(FileBlockLength);
     uint8 *FileToSendPtr = FileToSend.GetData() + BytesTransferred;
@@ -254,7 +254,7 @@ void UBS_FileTransferManager::SendFileBlock(bool bSendImmediately)
     FMemory::Memcpy(FileBlockToSendPtr, FileToSendPtr, FileBlockLength * sizeof(uint8));
 
     BytesTransferred += FileBlockLength;
-    UE_LOGFMT(LogBS_FileTransferManager, Log, "BytesTransferred: {0}", BytesTransferred);
+    UE_LOGFMT(LogBS_FileTransferManager, Verbose, "BytesTransferred: {0}", BytesTransferred);
 
     SendTxMessages.ExecuteIfBound({{BS_MessageSetFileTransferBlock, FileBlockToSend}}, bSendImmediately);
 }
@@ -267,31 +267,31 @@ void UBS_FileTransferManager::ParseFileTransferBlock(const TArray<uint8> &Messag
     }
 
     const uint16 FileBlockLength = Message.Num();
-    UE_LOGFMT(LogBS_FileTransferManager, Log, "Received File Block of {0} bytes", FileBlockLength);
+    UE_LOGFMT(LogBS_FileTransferManager, Verbose, "Received File Block of {0} bytes", FileBlockLength);
 
     uint32 CurrentFileLength = FileToReceive.Num();
     uint32 NewFileLength = CurrentFileLength + FileBlockLength;
-    UE_LOGFMT(LogBS_FileTransferManager, Log, "Updating FileToReceive from {0} to {1} bytes...", CurrentFileLength, NewFileLength);
+    UE_LOGFMT(LogBS_FileTransferManager, Verbose, "Updating FileToReceive from {0} to {1} bytes...", CurrentFileLength, NewFileLength);
     if (NewFileLength > FileLength)
     {
-        UE_LOGFMT(LogBS_FileTransferManager, Log, "New File length {0} is larger than expected File Length {1}", NewFileLength, FileLength);
+        UE_LOGFMT(LogBS_FileTransferManager, Verbose, "New File length {0} is larger than expected File Length {1}", NewFileLength, FileLength);
         CancelFileTransfer();
         return;
     }
     FileToReceive.Append(Message);
     CurrentFileLength = FileToReceive.Num();
-    UE_LOGFMT(LogBS_FileTransferManager, Log, "FileToReceive length: {0}/{1} bytes", CurrentFileLength, FileLength);
+    UE_LOGFMT(LogBS_FileTransferManager, Verbose, "FileToReceive length: {0}/{1} bytes", CurrentFileLength, FileLength);
 
     if (CurrentFileLength == FileLength)
     {
-        UE_LOGFMT(LogBS_FileTransferManager, Log, "Finished Receiving File");
+        UE_LOGFMT(LogBS_FileTransferManager, Verbose, "Finished Receiving File");
         const uint32 ReceivedFileChecksum = GetCRC32(FileToReceive);
         if (ReceivedFileChecksum != FileChecksum)
         {
             UE_LOGFMT(LogBS_FileTransferManager, Error, "File Checksums don't match - expected {0}, got {1}", FileChecksum, ReceivedFileChecksum);
             return;
         }
-        UE_LOGFMT(LogBS_FileTransferManager, Log, "File Checksums match, {0}", FileChecksum);
+        UE_LOGFMT(LogBS_FileTransferManager, Verbose, "File Checksums match, {0}", FileChecksum);
         OnFileTransferComplete.ExecuteIfBound(FileType, EBS_FileTransferDirection::RECEIVING);
         OnFileReceived.ExecuteIfBound(FileType, FileToReceive);
     }
@@ -315,7 +315,7 @@ void UBS_FileTransferManager::ParseFileBytesTransferred(const TArray<uint8> &Mes
     }
 
     uint32 CurrentBytesTransferred = BS_ByteParser::ParseAs<uint32>(Message, 0, true);
-    UE_LOGFMT(LogBS_FileTransferManager, Log, "CurrentBytesTransferred: {0}", CurrentBytesTransferred);
+    UE_LOGFMT(LogBS_FileTransferManager, Verbose, "CurrentBytesTransferred: {0}", CurrentBytesTransferred);
 
     if (BytesTransferred != CurrentBytesTransferred)
     {
@@ -324,7 +324,7 @@ void UBS_FileTransferManager::ParseFileBytesTransferred(const TArray<uint8> &Mes
         return;
     }
 
-    UE_LOGFMT(LogBS_FileTransferManager, Log, "Sending more File Blocks...");
+    UE_LOGFMT(LogBS_FileTransferManager, Verbose, "Sending more File Blocks...");
     SendFileBlock(true);
 }
 

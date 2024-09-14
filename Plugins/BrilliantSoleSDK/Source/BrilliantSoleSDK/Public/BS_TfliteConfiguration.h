@@ -10,7 +10,7 @@
 #include "Logging/StructuredLog.h"
 #include "BS_TfliteConfiguration.generated.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogBS_TfliteConfiguration, Log, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_TfliteConfiguration, Verbose, All);
 
 USTRUCT(BlueprintType, meta = (ShowOnlyInnerProperties, FullyExpand = "true"))
 struct FBS_TfliteConfiguration
@@ -37,12 +37,12 @@ public:
             const uint8 TfliteSensorTypeBitFlag = static_cast<uint8>(TfliteSensorType);
             if (SensorTypesBitmask & TfliteSensorTypeBitFlag)
             {
-                UE_LOGFMT(LogTemp, Log, "Found TfliteSensorType {0}", UEnum::GetValueAsString(TfliteSensorType));
+                UE_LOGFMT(LogTemp, Verbose, "Found TfliteSensorType {0}", UEnum::GetValueAsString(TfliteSensorType));
                 switch (TfliteSensorType)
                 {
                 case EBS_TfliteSensorTypeBitFlag::NONE:
                 case EBS_TfliteSensorTypeBitFlag::COUNT:
-                    UE_LOGFMT(LogTemp, Log, "Skipping {0}", UEnum::GetValueAsString(TfliteSensorType));
+                    UE_LOGFMT(LogTemp, Verbose, "Skipping {0}", UEnum::GetValueAsString(TfliteSensorType));
                     break;
                 case EBS_TfliteSensorTypeBitFlag::PRESSURE:
                     SensorTypes.Add(EBS_SensorType::PRESSURE);
@@ -57,7 +57,7 @@ public:
                     SensorTypes.Add(EBS_SensorType::MAGNETOMETER);
                     break;
                 default:
-                    UE_LOGFMT(LogTemp, Log, "Skipping TfliteSensorType {0} (Raw {1})", UEnum::GetValueAsString(TfliteSensorType), TfliteSensorTypeBitFlag);
+                    UE_LOGFMT(LogTemp, Verbose, "Skipping TfliteSensorType {0} (Raw {1})", UEnum::GetValueAsString(TfliteSensorType), TfliteSensorTypeBitFlag);
                     break;
                 }
             }

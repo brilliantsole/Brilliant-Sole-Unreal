@@ -11,10 +11,10 @@ DEFINE_LOG_CATEGORY(LogBS_Device);
 
 UBS_Device::UBS_Device()
 {
-    UE_LOGFMT(LogBS_Device, Log, "Constructor: {0}", GetName());
+    UE_LOGFMT(LogBS_Device, Verbose, "Constructor: {0}", GetName());
     if (HasAnyFlags(RF_ClassDefaultObject))
     {
-        UE_LOGFMT(LogBS_Device, Log, "CDO - Skipping Constructor");
+        UE_LOGFMT(LogBS_Device, Verbose, "CDO - Skipping Constructor");
         return;
     }
 
@@ -88,10 +88,10 @@ UBS_Device::UBS_Device()
 void UBS_Device::PostInitProperties()
 {
     Super::PostInitProperties();
-    UE_LOGFMT(LogBS_Device, Log, "PostInitProperties {0}", GetName());
+    UE_LOGFMT(LogBS_Device, Verbose, "PostInitProperties {0}", GetName());
     if (HasAnyFlags(RF_ClassDefaultObject))
     {
-        UE_LOGFMT(LogBS_Device, Log, "CDO - Skipping");
+        UE_LOGFMT(LogBS_Device, Verbose, "CDO - Skipping");
         return;
     }
 
@@ -106,15 +106,15 @@ void UBS_Device::GetBS_Subsystem()
         UWorld *World = GetWorld();
         if (World)
         {
-            UE_LOGFMT(LogBS_Device, Log, "World found");
+            UE_LOGFMT(LogBS_Device, Verbose, "World found");
             UGameInstance *GameInstance = World->GetGameInstance();
             if (GameInstance)
             {
-                UE_LOGFMT(LogBS_Device, Log, "GameInstance found");
+                UE_LOGFMT(LogBS_Device, Verbose, "GameInstance found");
                 UBS_Subsystem *__BS_Subsystem = GameInstance->GetSubsystem<UBS_Subsystem>();
                 if (__BS_Subsystem)
                 {
-                    UE_LOGFMT(LogBS_Device, Log, "BS_Subsystem found");
+                    UE_LOGFMT(LogBS_Device, Verbose, "BS_Subsystem found");
                     _BS_Subsystem = __BS_Subsystem;
                 }
                 else
@@ -134,7 +134,7 @@ void UBS_Device::GetBS_Subsystem()
     }
     else
     {
-        UE_LOGFMT(LogBS_Device, Log, "CDO constructor - skipping");
+        UE_LOGFMT(LogBS_Device, Verbose, "CDO constructor - skipping");
     }
 }
 
@@ -163,7 +163,7 @@ void UBS_Device::OnBatteryLevelUpdate(uint8 NewBatteryLevel)
 {
     BatteryLevel = NewBatteryLevel;
     bDidGetBatteryLevel = true;
-    UE_LOGFMT(LogBS_Device, Log, "BatteryLevel: {0}%", BatteryLevel);
+    UE_LOGFMT(LogBS_Device, Verbose, "BatteryLevel: {0}%", BatteryLevel);
     OnBatteryLevel.Broadcast(this, BatteryLevel);
 }
 // BATTERY LEVEL END
@@ -171,7 +171,7 @@ void UBS_Device::OnBatteryLevelUpdate(uint8 NewBatteryLevel)
 // CONNECTION START
 void UBS_Device::OnConnectionManagerConnectionStatusUpdate(EBS_ConnectionStatus NewConnectionManagerConnectionStatus)
 {
-    UE_LOGFMT(LogBS_Device, Log, "ConnectionManager ConnectionStatus: {0}", UEnum::GetValueAsString(NewConnectionManagerConnectionStatus));
+    UE_LOGFMT(LogBS_Device, Verbose, "ConnectionManager ConnectionStatus: {0}", UEnum::GetValueAsString(NewConnectionManagerConnectionStatus));
     switch (NewConnectionManagerConnectionStatus)
     {
     case EBS_ConnectionStatus::CONNECTED:
@@ -192,11 +192,11 @@ void UBS_Device::SetConnectionStatus(EBS_ConnectionStatus NewConnectionStatus)
 {
     if (ConnectionStatus == NewConnectionStatus)
     {
-        UE_LOGFMT(LogBS_Device, Log, "Redundant ConnectionStatus {0} - not updating", UEnum::GetValueAsString(ConnectionStatus));
+        UE_LOGFMT(LogBS_Device, Verbose, "Redundant ConnectionStatus {0} - not updating", UEnum::GetValueAsString(ConnectionStatus));
         return;
     }
     ConnectionStatus = NewConnectionStatus;
-    UE_LOGFMT(LogBS_Device, Log, "ConnectionStatus Updated to {0}", UEnum::GetValueAsString(ConnectionStatus));
+    UE_LOGFMT(LogBS_Device, Verbose, "ConnectionStatus Updated to {0}", UEnum::GetValueAsString(ConnectionStatus));
     OnConnectionStatusUpdate.Broadcast(this, ConnectionStatus);
 
     switch (ConnectionStatus)
@@ -212,25 +212,25 @@ void UBS_Device::SetConnectionStatus(EBS_ConnectionStatus NewConnectionStatus)
 
 void UBS_Device::CheckIfFullyConnected()
 {
-    UE_LOGFMT(LogBS_Device, Log, "Checking if Fully Connected...");
+    UE_LOGFMT(LogBS_Device, Verbose, "Checking if Fully Connected...");
     if (!bDidGetBatteryLevel)
     {
-        UE_LOGFMT(LogBS_Device, Log, "Didn't get BatteryLevel, stopping now");
+        UE_LOGFMT(LogBS_Device, Verbose, "Didn't get BatteryLevel, stopping now");
         return;
     }
     if (!DeviceInformation.GetDidGetAllInformation())
     {
-        UE_LOGFMT(LogBS_Device, Log, "Didn't get Device Information, stopping now");
+        UE_LOGFMT(LogBS_Device, Verbose, "Didn't get Device Information, stopping now");
         return;
     }
     if (ConnectionStatus != EBS_ConnectionStatus::CONNECTING)
     {
-        UE_LOGFMT(LogBS_Device, Log, "Not Connecting, stopping now");
+        UE_LOGFMT(LogBS_Device, Verbose, "Not Connecting, stopping now");
         return;
     }
     if (InformationManager->GetCurrentTime() == 0)
     {
-        UE_LOGFMT(LogBS_Device, Log, "CurrentTime is 0, stopping now");
+        UE_LOGFMT(LogBS_Device, Verbose, "CurrentTime is 0, stopping now");
         return;
     }
 
@@ -239,12 +239,12 @@ void UBS_Device::CheckIfFullyConnected()
     {
         if (!ReceivedTxMessages.Contains(TxMessageType))
         {
-            UE_LOGFMT(LogBS_Device, Log, "Doesn't contain TxMessageType #{0}", TxMessageType);
+            UE_LOGFMT(LogBS_Device, Verbose, "Doesn't contain TxMessageType #{0}", TxMessageType);
             HasReceivedAllRequiredTxMessages = false;
             break;
         }
     }
-    UE_LOGFMT(LogBS_Device, Log, "HasReceivedAllRequiredTxMessages? {0}", HasReceivedAllRequiredTxMessages);
+    UE_LOGFMT(LogBS_Device, Verbose, "HasReceivedAllRequiredTxMessages? {0}", HasReceivedAllRequiredTxMessages);
     if (!HasReceivedAllRequiredTxMessages)
     {
         return;
@@ -269,31 +269,31 @@ const TArray<uint8> UBS_Device::InitializePingTxData()
 
 void UBS_Device::OnRxMessage(uint8 MessageType, const TArray<uint8> &Message)
 {
-    UE_LOGFMT(LogBS_Device, Log, "message #{0} ({1} bytes)", MessageType, Message.Num());
+    UE_LOGFMT(LogBS_Device, Verbose, "message #{0} ({1} bytes)", MessageType, Message.Num());
 
     if (BatteryManager->OnRxMessage(MessageType, Message))
     {
-        UE_LOGFMT(LogBS_Device, Log, "Parsed BatteryManager Message");
+        UE_LOGFMT(LogBS_Device, Verbose, "Parsed BatteryManager Message");
     }
     else if (InformationManager->OnRxMessage(MessageType, Message))
     {
-        UE_LOGFMT(LogBS_Device, Log, "Parsed InformationManager Message");
+        UE_LOGFMT(LogBS_Device, Verbose, "Parsed InformationManager Message");
     }
     else if (SensorConfigurationManager->OnRxMessage(MessageType, Message))
     {
-        UE_LOGFMT(LogBS_Device, Log, "Parsed SensorConfigurationManager Message");
+        UE_LOGFMT(LogBS_Device, Verbose, "Parsed SensorConfigurationManager Message");
     }
     else if (SensorDataManager->OnRxMessage(MessageType, Message))
     {
-        UE_LOGFMT(LogBS_Device, Log, "Parsed SensorDataManager Message");
+        UE_LOGFMT(LogBS_Device, Verbose, "Parsed SensorDataManager Message");
     }
     else if (FileTransferManager->OnRxMessage(MessageType, Message))
     {
-        UE_LOGFMT(LogBS_Device, Log, "Parsed FileTransferManager Message");
+        UE_LOGFMT(LogBS_Device, Verbose, "Parsed FileTransferManager Message");
     }
     else if (TfliteManager->OnRxMessage(MessageType, Message))
     {
-        UE_LOGFMT(LogBS_Device, Log, "Parsed TfliteManager Message");
+        UE_LOGFMT(LogBS_Device, Verbose, "Parsed TfliteManager Message");
     }
 
     if (ConnectionStatus == EBS_ConnectionStatus::CONNECTING)
@@ -305,16 +305,16 @@ void UBS_Device::OnRxMessage(uint8 MessageType, const TArray<uint8> &Message)
 
 void UBS_Device::SendTxMessages(const TArray<FBS_TxMessage> &TxMessages, bool bSendImmediately)
 {
-    UE_LOGFMT(LogBS_Device, Log, "Requesting to send {0} Messages...", TxMessages.Num());
+    UE_LOGFMT(LogBS_Device, Verbose, "Requesting to send {0} Messages...", TxMessages.Num());
     PendingTxMessages.Append(TxMessages);
     if (!bSendImmediately)
     {
-        UE_LOGFMT(LogBS_Device, Log, "Not sending data immediately");
+        UE_LOGFMT(LogBS_Device, Verbose, "Not sending data immediately");
         return;
     }
     if (bIsSendingTxData)
     {
-        UE_LOGFMT(LogBS_Device, Log, "Already sending data - will wait until new data is sent");
+        UE_LOGFMT(LogBS_Device, Verbose, "Already sending data - will wait until new data is sent");
         return;
     }
     SendPendingTxMessages();
@@ -341,32 +341,32 @@ void UBS_Device::SendPendingTxMessages()
         bool ShouldAppendTxMessage = MaxMessageLength == 0 || TxData.Num() + PendingTxMessageLength <= MaxMessageLength;
         if (ShouldAppendTxMessage)
         {
-            UE_LOGFMT(LogBS_Device, Log, "Appending message #{0} ({1} bytes)", PendingTxMessage.Type, PendingTxMessageLength);
+            UE_LOGFMT(LogBS_Device, Verbose, "Appending message #{0} ({1} bytes)", PendingTxMessage.Type, PendingTxMessageLength);
             PendingTxMessage.AppendTo(TxData);
             PendingTxMessages.RemoveAt(PendingTxMessageIndex);
         }
         else
         {
-            UE_LOGFMT(LogBS_Device, Log, "Skipping message #{0} ({1} bytes)", PendingTxMessage.Type, PendingTxMessageLength);
+            UE_LOGFMT(LogBS_Device, Verbose, "Skipping message #{0} ({1} bytes)", PendingTxMessage.Type, PendingTxMessageLength);
             PendingTxMessageIndex++;
         }
     }
 
     if (TxData.IsEmpty())
     {
-        UE_LOGFMT(LogBS_Device, Log, "TxData is Empty - won't send any data");
+        UE_LOGFMT(LogBS_Device, Verbose, "TxData is Empty - won't send any data");
         bIsSendingTxData = false;
         return;
     }
 
-    UE_LOGFMT(LogBS_Device, Log, "Sending {0} bytes", TxData.Num());
+    UE_LOGFMT(LogBS_Device, Verbose, "Sending {0} bytes", TxData.Num());
 
     SendTxData(TxData);
 }
 
 void UBS_Device::OnSendTxData()
 {
-    UE_LOGFMT(LogBS_Device, Log, "sent tx data");
+    UE_LOGFMT(LogBS_Device, Verbose, "sent tx data");
     bIsSendingTxData = false;
 
     BatteryManager->OnSendTxData();

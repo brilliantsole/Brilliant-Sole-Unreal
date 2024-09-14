@@ -16,7 +16,7 @@ void FBS_DeviceInformation::UpdateDidGetAllInformation()
     bNewDidGetAllInformation = bNewDidGetAllInformation && FirmwareRevision != "";
     bNewDidGetAllInformation = bNewDidGetAllInformation && SoftwareRevision != "";
 
-    UE_LOGFMT(LogBS_DeviceInformation, Log, "bNewDidGetAllInformation: {0}", bNewDidGetAllInformation);
+    UE_LOGFMT(LogBS_DeviceInformation, Verbose, "bNewDidGetAllInformation: {0}", bNewDidGetAllInformation);
 
     if (bDidGetAllInformation == bNewDidGetAllInformation)
     {
@@ -24,11 +24,11 @@ void FBS_DeviceInformation::UpdateDidGetAllInformation()
     }
 
     bDidGetAllInformation = bNewDidGetAllInformation;
-    UE_LOGFMT(LogBS_DeviceInformation, Log, "Updated bDidGetAllInformation to {0}", bDidGetAllInformation);
+    UE_LOGFMT(LogBS_DeviceInformation, Verbose, "Updated bDidGetAllInformation to {0}", bDidGetAllInformation);
 
     if (bDidGetAllInformation)
     {
-        UE_LOGFMT(LogBS_DeviceInformation, Log, "Got all Information");
+        UE_LOGFMT(LogBS_DeviceInformation, Verbose, "Got all Information");
     }
 }
 
@@ -50,7 +50,7 @@ void FBS_DeviceInformation::SetValue(const EBS_DeviceInformationType DeviceInfor
 {
     const FString String = BS_ByteParser::GetString(Value);
 
-    UE_LOGFMT(LogBS_DeviceInformation, Log, "Setting {0} to \"{1}\"", UEnum::GetValueAsString(DeviceInformationType), String);
+    UE_LOGFMT(LogBS_DeviceInformation, Verbose, "Setting {0} to \"{1}\"", UEnum::GetValueAsString(DeviceInformationType), String);
 
     switch (DeviceInformationType)
     {

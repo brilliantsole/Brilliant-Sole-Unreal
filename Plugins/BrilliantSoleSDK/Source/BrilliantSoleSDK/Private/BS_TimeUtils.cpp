@@ -21,26 +21,26 @@ uint64 TimeUtils::GetMilliseconds()
 uint64 TimeUtils::ParseTimestamp(const TArray<uint8> &Message)
 {
     const uint64 CurrentTimestamp = GetMilliseconds();
-    UE_LOGFMT(LogBS_TimeUtils, Log, "CurrentTimestamp: {0}ms", CurrentTimestamp);
+    UE_LOGFMT(LogBS_TimeUtils, Verbose, "CurrentTimestamp: {0}ms", CurrentTimestamp);
 
     uint16 RawTimestamp = BS_ByteParser::ParseAs<uint16>(Message, 0, true);
-    UE_LOGFMT(LogBS_TimeUtils, Log, "RawTimestamp: {0}ms", RawTimestamp);
+    UE_LOGFMT(LogBS_TimeUtils, Verbose, "RawTimestamp: {0}ms", RawTimestamp);
 
     uint64 Timestamp = CurrentTimestamp - (CurrentTimestamp % UINT16_MAX);
     Timestamp += RawTimestamp;
 
-    UE_LOGFMT(LogBS_TimeUtils, Log, "Temp Timestamp: {0}ms", Timestamp);
+    UE_LOGFMT(LogBS_TimeUtils, Verbose, "Temp Timestamp: {0}ms", Timestamp);
 
     const uint64 TimestampDifference = FMath::Abs(CurrentTimestamp > Timestamp ? CurrentTimestamp - Timestamp : Timestamp - CurrentTimestamp);
-    UE_LOGFMT(LogBS_TimeUtils, Log, "TimestampDifference: {0}ms", TimestampDifference);
+    UE_LOGFMT(LogBS_TimeUtils, Verbose, "TimestampDifference: {0}ms", TimestampDifference);
 
     if (TimestampDifference > TimestampThreshold)
     {
-        UE_LOGFMT(LogBS_TimeUtils, Log, "Correcting Timestamp Overflow");
+        UE_LOGFMT(LogBS_TimeUtils, Verbose, "Correcting Timestamp Overflow");
         Timestamp += UINT16_MAX * FMath::Sign(CurrentTimestamp - Timestamp);
     }
 
-    UE_LOGFMT(LogBS_TimeUtils, Log, "Timestamp: {0}ms", Timestamp);
+    UE_LOGFMT(LogBS_TimeUtils, Verbose, "Timestamp: {0}ms", Timestamp);
     return Timestamp;
 }
 

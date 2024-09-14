@@ -11,22 +11,22 @@ void UBS_ParseUtils::ParseRxData(const TArray<uint8> &Data, FBS_MessageCallback 
     const auto DataLength = Data.Num();
     uint16 Offset = 0;
 
-    UE_LOGFMT(LogBS_ParseUtils, Log, "Parsing {0} bytes...", DataLength);
+    UE_LOGFMT(LogBS_ParseUtils, Verbose, "Parsing {0} bytes...", DataLength);
 
     while (Offset < DataLength)
     {
-        UE_LOGFMT(LogBS_ParseUtils, Log, "Parsing Message at {0}...", Offset);
+        UE_LOGFMT(LogBS_ParseUtils, Verbose, "Parsing Message at {0}...", Offset);
 
         const uint8 MessageType = Data[Offset++];
         const uint16 MessageDataLength = BS_ByteParser::ParseAs<uint16>(Data, Offset, true);
         Offset += 2;
 
-        UE_LOGFMT(LogBS_ParseUtils, Log, "Message #{0} ({1} bytes)", MessageType, MessageDataLength);
+        UE_LOGFMT(LogBS_ParseUtils, Verbose, "Message #{0} ({1} bytes)", MessageType, MessageDataLength);
 
         const TArrayView<uint8> MessageData((uint8 *)(Data.GetData() + Offset), MessageDataLength);
         MessageCallback.ExecuteIfBound(MessageType, static_cast<TArray<uint8>>(MessageData));
 
         Offset += MessageDataLength;
-        UE_LOGFMT(LogBS_ParseUtils, Log, "New Offset: {0}/{1}", Offset, DataLength);
+        UE_LOGFMT(LogBS_ParseUtils, Verbose, "New Offset: {0}/{1}", Offset, DataLength);
     }
 }

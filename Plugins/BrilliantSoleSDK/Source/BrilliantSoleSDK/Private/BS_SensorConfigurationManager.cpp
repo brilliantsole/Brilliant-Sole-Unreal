@@ -34,7 +34,7 @@ void UBS_SensorConfigurationManager::Reset()
 
 void UBS_SensorConfigurationManager::ParseSensorConfiguration(const TArray<uint8> &Message)
 {
-    UE_LOGFMT(LogBS_SensorConfigurationManager, Log, "Parsing SensorConfiguration...");
+    UE_LOGFMT(LogBS_SensorConfigurationManager, Verbose, "Parsing SensorConfiguration...");
     SensorConfiguration->Parse(Message);
     OnSensorConfigurationUpdate.ExecuteIfBound(SensorConfiguration);
 }
@@ -43,10 +43,10 @@ void UBS_SensorConfigurationManager::SetSensorConfiguration(const UBS_SensorConf
 {
     if (SensorConfiguration->IsEqualTo(NewSensorConfiguration))
     {
-        UE_LOGFMT(LogBS_SensorConfigurationManager, Log, "SensorConfigurations are equal - not updating");
+        UE_LOGFMT(LogBS_SensorConfigurationManager, Verbose, "SensorConfigurations are equal - not updating");
         return;
     }
-    UE_LOGFMT(LogBS_SensorConfigurationManager, Log, "Setting SensorConfiguration...");
+    UE_LOGFMT(LogBS_SensorConfigurationManager, Verbose, "Setting SensorConfiguration...");
     const TArray<uint8> TxMessage = NewSensorConfiguration->ToArray();
     SendTxMessages.ExecuteIfBound({{BS_MessageSetSensorConfiguration, TxMessage}}, true);
 }
@@ -79,10 +79,10 @@ void UBS_SensorConfigurationManager::ClearSensorRate(EBS_SensorType SensorType)
 }
 void UBS_SensorConfigurationManager::ToggleSensorRate(EBS_SensorType SensorType, EBS_SensorRate SensorRate, EBS_SensorRate &UpdatedSensorRate)
 {
-    UE_LOGFMT(LogBS_SensorConfigurationManager, Log, "Toggling Sensor Rate {0} to {1}", UEnum::GetValueAsString(SensorType), UEnum::GetValueAsString(SensorRate));
+    UE_LOGFMT(LogBS_SensorConfigurationManager, Verbose, "Toggling Sensor Rate {0} to {1}", UEnum::GetValueAsString(SensorType), UEnum::GetValueAsString(SensorRate));
     TempSensorConfiguration->Reset();
     TempSensorConfiguration->SetSensorRate(SensorType, SensorConfiguration->GetSensorRate(SensorType));
     TempSensorConfiguration->ToggleSensorRate(SensorType, SensorRate, UpdatedSensorRate);
-    UE_LOGFMT(LogBS_SensorConfigurationManager, Log, "UpdatedSensorRate {0}", UEnum::GetValueAsString(UpdatedSensorRate));
+    UE_LOGFMT(LogBS_SensorConfigurationManager, Verbose, "UpdatedSensorRate {0}", UEnum::GetValueAsString(UpdatedSensorRate));
     SetSensorConfiguration(TempSensorConfiguration);
 }

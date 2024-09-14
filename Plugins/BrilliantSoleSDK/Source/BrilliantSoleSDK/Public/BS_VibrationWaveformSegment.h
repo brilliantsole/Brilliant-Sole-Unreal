@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "BS_VibrationWaveformSegment.generated.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(BS_VibrationWaveformSegment, Log, All);
+DECLARE_LOG_CATEGORY_EXTERN(BS_VibrationWaveformSegment, Verbose, All);
 
 USTRUCT(BlueprintType, meta = (ShowOnlyInnerProperties, FullyExpand = "true"))
 struct FBS_VibrationWaveformSegment

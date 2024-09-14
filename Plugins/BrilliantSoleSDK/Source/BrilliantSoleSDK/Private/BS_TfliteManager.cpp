@@ -68,7 +68,7 @@ void UBS_TfliteManager::Reset()
 
 void UBS_TfliteManager::SetConfiguration(const FBS_TfliteConfiguration &TfliteConfiguration, bool bSendImmediately)
 {
-    UE_LOGFMT(LogBS_TfliteManager, Log, "Setting Configuration...");
+    UE_LOGFMT(LogBS_TfliteManager, Verbose, "Setting Configuration...");
     SetName(TfliteConfiguration.Name, false);
     SetTask(TfliteConfiguration.Task, false);
     SetSensorTypes(TfliteConfiguration.GetSensorTypes(), false);
@@ -80,9 +80,9 @@ void UBS_TfliteManager::SetConfiguration(const FBS_TfliteConfiguration &TfliteCo
 // NAME START
 void UBS_TfliteManager::ParseName(const TArray<uint8> &Message)
 {
-    UE_LOGFMT(LogBS_TfliteManager, Log, "Parsing Name...");
+    UE_LOGFMT(LogBS_TfliteManager, Verbose, "Parsing Name...");
     Name = BS_ByteParser::GetString(Message);
-    UE_LOGFMT(LogBS_TfliteManager, Log, "Parsed Name: {0}", Name);
+    UE_LOGFMT(LogBS_TfliteManager, Verbose, "Parsed Name: {0}", Name);
     OnNameUpdate.ExecuteIfBound(Name);
 }
 
@@ -92,7 +92,7 @@ void UBS_TfliteManager::SetName(const FString &NewName, bool bSendImmediately)
 {
     if (NewName == Name)
     {
-        UE_LOGFMT(LogBS_TfliteManager, Log, "Redundant Name - not setting");
+        UE_LOGFMT(LogBS_TfliteManager, Verbose, "Redundant Name - not setting");
         return;
     }
     const auto NewNameLength = NewName.Len();
@@ -101,7 +101,7 @@ void UBS_TfliteManager::SetName(const FString &NewName, bool bSendImmediately)
         UE_LOGFMT(LogBS_TfliteManager, Warning, "Name must be between {0}-{1} characters long (got {2})", MinNameLength, MaxNameLength, NewNameLength);
         return;
     }
-    UE_LOGFMT(LogBS_TfliteManager, Log, "Setting Name to {0}...", NewName);
+    UE_LOGFMT(LogBS_TfliteManager, Verbose, "Setting Name to {0}...", NewName);
 
     const TArray<uint8> TxMessage = BS_ByteParser::StringToArray(NewName);
     SendTxMessages.ExecuteIfBound({{BS_MessageTfliteSetName, TxMessage}}, bSendImmediately);
@@ -112,7 +112,7 @@ void UBS_TfliteManager::SetName(const FString &NewName, bool bSendImmediately)
 void UBS_TfliteManager::ParseTask(const TArray<uint8> &Message)
 {
     Task = static_cast<EBS_TfliteTask>(Message[0]);
-    UE_LOGFMT(LogBS_TfliteManager, Log, "Parsed Task: {0}", UEnum::GetValueAsString(Task));
+    UE_LOGFMT(LogBS_TfliteManager, Verbose, "Parsed Task: {0}", UEnum::GetValueAsString(Task));
     OnTaskUpdate.ExecuteIfBound(Task);
 }
 
@@ -120,10 +120,10 @@ void UBS_TfliteManager::SetTask(const EBS_TfliteTask NewTask, bool bSendImmediat
 {
     if (NewTask == Task)
     {
-        UE_LOGFMT(LogBS_TfliteManager, Log, "Redundant Task - not setting");
+        UE_LOGFMT(LogBS_TfliteManager, Verbose, "Redundant Task - not setting");
         return;
     }
-    UE_LOGFMT(LogBS_TfliteManager, Log, "Setting Task to {0}...", UEnum::GetValueAsString(NewTask));
+    UE_LOGFMT(LogBS_TfliteManager, Verbose, "Setting Task to {0}...", UEnum::GetValueAsString(NewTask));
 
     const TArray<uint8> TxMessage = {static_cast<uint8>(NewTask)};
     SendTxMessages.ExecuteIfBound({{BS_MessageTfliteSetTask, TxMessage}}, bSendImmediately);
@@ -133,14 +133,14 @@ void UBS_TfliteManager::SetTask(const EBS_TfliteTask NewTask, bool bSendImmediat
 // SAMPLE RATE START
 void UBS_TfliteManager::ParseSampleRate(const TArray<uint8> &Message)
 {
-    UE_LOGFMT(LogBS_TfliteManager, Log, "Parsing SampleRate...");
+    UE_LOGFMT(LogBS_TfliteManager, Verbose, "Parsing SampleRate...");
 
     uint16 RawSampleRate = BS_ByteParser::ParseAs<uint16>(Message, 0, true);
-    UE_LOGFMT(LogBS_TfliteManager, Log, "RawSampleRate: {0}ms", RawSampleRate);
+    UE_LOGFMT(LogBS_TfliteManager, Verbose, "RawSampleRate: {0}ms", RawSampleRate);
 
     SampleRate = UBS_SensorConfiguration::GetClosestSensorRate(RawSampleRate);
     RawSampleRate = UBS_SensorConfiguration::GetRawSensorRate(SampleRate);
-    UE_LOGFMT(LogBS_TfliteManager, Log, "SampleRate: {0}, RawSampleRate: {1}ms", UEnum::GetValueAsString(SampleRate), RawSampleRate);
+    UE_LOGFMT(LogBS_TfliteManager, Verbose, "SampleRate: {0}, RawSampleRate: {1}ms", UEnum::GetValueAsString(SampleRate), RawSampleRate);
 
     OnSampleRateUpdate.ExecuteIfBound(SampleRate);
 }
@@ -149,11 +149,11 @@ void UBS_TfliteManager::SetSampleRate(const EBS_SensorRate NewSampleRate, bool b
 {
     if (NewSampleRate == SampleRate)
     {
-        UE_LOGFMT(LogBS_TfliteManager, Log, "Redundant SampleRate - not setting");
+        UE_LOGFMT(LogBS_TfliteManager, Verbose, "Redundant SampleRate - not setting");
         return;
     }
     const uint16 NewRawSampleRate = UBS_SensorConfiguration::GetRawSensorRate(NewSampleRate);
-    UE_LOGFMT(LogBS_TfliteManager, Log, "Updating SampleRate to {0}, NewRawSampleRate: {1}ms", UEnum::GetValueAsString(NewSampleRate), NewRawSampleRate);
+    UE_LOGFMT(LogBS_TfliteManager, Verbose, "Updating SampleRate to {0}, NewRawSampleRate: {1}ms", UEnum::GetValueAsString(NewSampleRate), NewRawSampleRate);
     const TArray<uint8> TxMessage = BS_ByteParser::ToByteArray(NewRawSampleRate);
     SendTxMessages.ExecuteIfBound({{BS_MessageTfliteSetSampleRate, TxMessage}}, bSendImmediately);
 }
@@ -175,7 +175,7 @@ bool UBS_TfliteManager::IsSensorTypeValid(const EBS_SensorType SensorType)
 }
 void UBS_TfliteManager::ParseSensorTypes(const TArray<uint8> &Message)
 {
-    UE_LOGFMT(LogBS_TfliteManager, Log, "Parsing SensorTypes...");
+    UE_LOGFMT(LogBS_TfliteManager, Verbose, "Parsing SensorTypes...");
 
     TArray<EBS_SensorType> NewSensorTypes;
     for (const uint8 SensorTypeEnum : Message)
@@ -187,19 +187,19 @@ void UBS_TfliteManager::ParseSensorTypes(const TArray<uint8> &Message)
         }
         const EBS_SensorType SensorType = static_cast<EBS_SensorType>(SensorTypeEnum);
 
-        UE_LOGFMT(LogBS_TfliteManager, Log, "Adding SensorType {0}", UEnum::GetValueAsString(SensorType));
+        UE_LOGFMT(LogBS_TfliteManager, Verbose, "Adding SensorType {0}", UEnum::GetValueAsString(SensorType));
         NewSensorTypes.Add(SensorType);
     }
 
     SensorTypes = NewSensorTypes;
-    UE_LOGFMT(LogBS_TfliteManager, Log, "Parsed {0} SensorTypes", SensorTypes.Num());
+    UE_LOGFMT(LogBS_TfliteManager, Verbose, "Parsed {0} SensorTypes", SensorTypes.Num());
 
     OnSensorTypesUpdate.ExecuteIfBound(SensorTypes);
 }
 
 void UBS_TfliteManager::SetSensorTypes(const TArray<EBS_SensorType> &NewSensorTypes, bool bSendImmediately)
 {
-    UE_LOGFMT(LogBS_TfliteManager, Log, "Updating SensorTypes...");
+    UE_LOGFMT(LogBS_TfliteManager, Verbose, "Updating SensorTypes...");
 
     TArray<uint8> TxMessage;
     for (const EBS_SensorType SensorType : NewSensorTypes)
@@ -210,7 +210,7 @@ void UBS_TfliteManager::SetSensorTypes(const TArray<EBS_SensorType> &NewSensorTy
             continue;
         }
 
-        UE_LOGFMT(LogBS_TfliteManager, Log, "Adding SensorType {0}", UEnum::GetValueAsString(SensorType));
+        UE_LOGFMT(LogBS_TfliteManager, Verbose, "Adding SensorType {0}", UEnum::GetValueAsString(SensorType));
         TxMessage.Add(static_cast<uint8>(SensorType));
     }
 
@@ -221,9 +221,9 @@ void UBS_TfliteManager::SetSensorTypes(const TArray<EBS_SensorType> &NewSensorTy
 // IS READY START
 void UBS_TfliteManager::ParseIsReady(const TArray<uint8> &Message)
 {
-    UE_LOGFMT(LogBS_TfliteManager, Log, "Parsing IsReady...");
+    UE_LOGFMT(LogBS_TfliteManager, Verbose, "Parsing IsReady...");
     IsReady = static_cast<bool>(Message[0]);
-    UE_LOGFMT(LogBS_TfliteManager, Log, "Parsed IsReady: {0}", IsReady);
+    UE_LOGFMT(LogBS_TfliteManager, Verbose, "Parsed IsReady: {0}", IsReady);
     OnIsReadyUpdate.ExecuteIfBound(IsReady);
 }
 // IS READY END
@@ -231,9 +231,9 @@ void UBS_TfliteManager::ParseIsReady(const TArray<uint8> &Message)
 // CAPTURE DELAY START
 void UBS_TfliteManager::ParseCaptureDelay(const TArray<uint8> &Message)
 {
-    UE_LOGFMT(LogBS_TfliteManager, Log, "Parsing CaptureDelay...");
+    UE_LOGFMT(LogBS_TfliteManager, Verbose, "Parsing CaptureDelay...");
     CaptureDelay = BS_ByteParser::ParseAs<uint16>(Message, 0, true);
-    UE_LOGFMT(LogBS_TfliteManager, Log, "Parsed CaptureDelay: {0}", CaptureDelay);
+    UE_LOGFMT(LogBS_TfliteManager, Verbose, "Parsed CaptureDelay: {0}", CaptureDelay);
     OnCaptureDelayUpdate.ExecuteIfBound(CaptureDelay);
 }
 
@@ -241,10 +241,10 @@ void UBS_TfliteManager::SetCaptureDelay(const uint16 NewCaptureDelay, bool bSend
 {
     if (NewCaptureDelay == CaptureDelay)
     {
-        UE_LOGFMT(LogBS_TfliteManager, Log, "Redundant CaptureDelay - not setting");
+        UE_LOGFMT(LogBS_TfliteManager, Verbose, "Redundant CaptureDelay - not setting");
         return;
     }
-    UE_LOGFMT(LogBS_TfliteManager, Log, "Updating CaptureDelay to {0}", NewCaptureDelay);
+    UE_LOGFMT(LogBS_TfliteManager, Verbose, "Updating CaptureDelay to {0}", NewCaptureDelay);
     const TArray<uint8> TxMessage = BS_ByteParser::ToByteArray(NewCaptureDelay);
     SendTxMessages.ExecuteIfBound({{BS_MessageTfliteSetCaptureDelay, TxMessage}}, bSendImmediately);
 }
@@ -253,9 +253,9 @@ void UBS_TfliteManager::SetCaptureDelay(const uint16 NewCaptureDelay, bool bSend
 // THRESHOLD START
 void UBS_TfliteManager::ParseThreshold(const TArray<uint8> &Message)
 {
-    UE_LOGFMT(LogBS_TfliteManager, Log, "Parsing Threshold...");
+    UE_LOGFMT(LogBS_TfliteManager, Verbose, "Parsing Threshold...");
     Threshold = BS_ByteParser::ParseAs<float>(Message, 0, true);
-    UE_LOGFMT(LogBS_TfliteManager, Log, "Parsed Threshold: {0}", Threshold);
+    UE_LOGFMT(LogBS_TfliteManager, Verbose, "Parsed Threshold: {0}", Threshold);
     OnThresholdUpdate.ExecuteIfBound(Threshold);
 }
 
@@ -263,10 +263,10 @@ void UBS_TfliteManager::SetThreshold(const float NewThreshold, bool bSendImmedia
 {
     if (NewThreshold == Threshold)
     {
-        UE_LOGFMT(LogBS_TfliteManager, Log, "Redundant Threshold - not setting");
+        UE_LOGFMT(LogBS_TfliteManager, Verbose, "Redundant Threshold - not setting");
         return;
     }
-    UE_LOGFMT(LogBS_TfliteManager, Log, "Updating Threshold to {0}", NewThreshold);
+    UE_LOGFMT(LogBS_TfliteManager, Verbose, "Updating Threshold to {0}", NewThreshold);
     const TArray<uint8> TxMessage = BS_ByteParser::ToByteArray(NewThreshold);
     SendTxMessages.ExecuteIfBound({{BS_MessageTfliteSetThreshold, TxMessage}}, bSendImmediately);
 }
@@ -275,9 +275,9 @@ void UBS_TfliteManager::SetThreshold(const float NewThreshold, bool bSendImmedia
 // INFERENCING ENABLED START
 void UBS_TfliteManager::ParseInferencingEnabled(const TArray<uint8> &Message)
 {
-    UE_LOGFMT(LogBS_TfliteManager, Log, "Parsing InferencingEnabled...");
+    UE_LOGFMT(LogBS_TfliteManager, Verbose, "Parsing InferencingEnabled...");
     InferencingEnabled = static_cast<bool>(Message[0]);
-    UE_LOGFMT(LogBS_TfliteManager, Log, "Parsed InferencingEnabled: {0}", InferencingEnabled);
+    UE_LOGFMT(LogBS_TfliteManager, Verbose, "Parsed InferencingEnabled: {0}", InferencingEnabled);
     OnInferencingEnabledUpdate.ExecuteIfBound(InferencingEnabled);
 }
 
@@ -285,7 +285,7 @@ void UBS_TfliteManager::SetInferencingEnabled(const bool NewInferencingEnabled)
 {
     if (NewInferencingEnabled == InferencingEnabled)
     {
-        UE_LOGFMT(LogBS_TfliteManager, Log, "Redundant NewInferencingEnabled assignment {0} - Skipping", NewInferencingEnabled);
+        UE_LOGFMT(LogBS_TfliteManager, Verbose, "Redundant NewInferencingEnabled assignment {0} - Skipping", NewInferencingEnabled);
         return;
     }
     if (NewInferencingEnabled && !IsReady)
@@ -293,7 +293,7 @@ void UBS_TfliteManager::SetInferencingEnabled(const bool NewInferencingEnabled)
         UE_LOGFMT(LogBS_TfliteManager, Warning, "Tflite is not ready - Skipping");
         return;
     }
-    UE_LOGFMT(LogBS_TfliteManager, Log, "Updating InferencingEnabled to {0}", NewInferencingEnabled);
+    UE_LOGFMT(LogBS_TfliteManager, Verbose, "Updating InferencingEnabled to {0}", NewInferencingEnabled);
     const TArray<uint8> TxMessage = {static_cast<uint8>(NewInferencingEnabled)};
     SendTxMessages.ExecuteIfBound({{BS_MessageTfliteSetInferencingEnabled, TxMessage}}, true);
 }
@@ -304,11 +304,11 @@ void UBS_TfliteManager::ParseInference(const TArray<uint8> &Message)
 {
     uint8 Offset = 0;
     const uint16 MessageLength = Message.Num();
-    UE_LOGFMT(LogBS_TfliteManager, Log, "MessageLength: {0}", MessageLength);
+    UE_LOGFMT(LogBS_TfliteManager, Verbose, "MessageLength: {0}", MessageLength);
 
     uint64 Timestamp = TimeUtils::ParseTimestamp(Message);
     Offset += 2;
-    UE_LOGFMT(LogBS_TfliteManager, Log, "Timestamp: {0}ms", Timestamp);
+    UE_LOGFMT(LogBS_TfliteManager, Verbose, "Timestamp: {0}ms", Timestamp);
 
     const uint8 InferenceMessageLegth = MessageLength - Offset;
     const uint8 InferenceSize = sizeof(float);
@@ -322,11 +322,11 @@ void UBS_TfliteManager::ParseInference(const TArray<uint8> &Message)
     for (uint8 ClassIndex = 0; Offset < MessageLength; Offset += InferenceSize, ClassIndex++)
     {
         const float ClassValue = BS_ByteParser::ParseAs<float>(Message, Offset, true);
-        UE_LOGFMT(LogBS_TfliteManager, Log, "Class #{0} Value: {1}", ClassIndex, ClassValue);
+        UE_LOGFMT(LogBS_TfliteManager, Verbose, "Class #{0} Value: {1}", ClassIndex, ClassValue);
         Inference.Add(ClassValue);
     }
 
-    UE_LOGFMT(LogBS_TfliteManager, Log, "Parsed Inference with {0} classes", Inference.Num());
+    UE_LOGFMT(LogBS_TfliteManager, Verbose, "Parsed Inference with {0} classes", Inference.Num());
     OnInferenceUpdate.ExecuteIfBound(Inference, Timestamp);
 }
 // INFERENCE END

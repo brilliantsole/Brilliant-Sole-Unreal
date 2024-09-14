@@ -9,7 +9,7 @@
 #include "TimerManager.h"
 #include "BS_Subsystem.generated.h"
 
-DEFINE_LOG_CATEGORY_STATIC(LogBS_Subsystem, Log, All);
+DEFINE_LOG_CATEGORY_STATIC(LogBS_Subsystem, Verbose, All);
 
 UCLASS()
 class BRILLIANTSOLESDK_API UBS_Subsystem : public UGameInstanceSubsystem

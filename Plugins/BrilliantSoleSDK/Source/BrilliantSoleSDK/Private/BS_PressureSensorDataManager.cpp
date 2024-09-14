@@ -50,10 +50,10 @@ void UBS_PressureSensorDataManager::ParsePressure(EBS_SensorType SensorType, con
         const FVector2D &Position = PressurePositions[Index];
 
         const uint16 RawValue = BS_ByteParser::ParseAs<uint16>(Message, Index * 2);
-        UE_LOGFMT(LogBS_PressureSensorDataManager, Log, "RawPressureValue #{0}: {1}", Index, RawValue);
+        UE_LOGFMT(LogBS_PressureSensorDataManager, Verbose, "RawPressureValue #{0}: {1}", Index, RawValue);
 
         const float ScaledValue = static_cast<float>(RawValue) * Scalar;
-        UE_LOGFMT(LogBS_PressureSensorDataManager, Log, "ScaledValue #{0}: {1}", Index, ScaledValue);
+        UE_LOGFMT(LogBS_PressureSensorDataManager, Verbose, "ScaledValue #{0}: {1}", Index, ScaledValue);
 
         FBS_Range &Range = PressureSensorRanges[Index];
         const float NormalizedValue = Range.UpdateAndGetNormalization(ScaledValue, true);
@@ -61,16 +61,16 @@ void UBS_PressureSensorDataManager::ParsePressure(EBS_SensorType SensorType, con
         const float WeightedValue = 0.0f;
 
         const FBS_PressureSensorData PressureSensorData = {Position, RawValue, ScaledValue, NormalizedValue, WeightedValue};
-        UE_LOGFMT(LogBS_PressureSensorDataManager, Log, "PressureSensorData #{0}: {1}", Index, PressureSensorData.ToString());
+        UE_LOGFMT(LogBS_PressureSensorDataManager, Verbose, "PressureSensorData #{0}: {1}", Index, PressureSensorData.ToString());
         PressureData.Sensors.Add(PressureSensorData);
 
         PressureData.ScaledSum += ScaledValue;
         PressureData.NormalizedSum += NormalizedValue / static_cast<float>(NumberOfPressureSensors);
 
-        UE_LOGFMT(LogBS_PressureSensorDataManager, Log, "ScaledSum after adding ScaledValue #{0}: {1}", Index, PressureData.ScaledSum);
+        UE_LOGFMT(LogBS_PressureSensorDataManager, Verbose, "ScaledSum after adding ScaledValue #{0}: {1}", Index, PressureData.ScaledSum);
     }
 
-    UE_LOGFMT(LogBS_PressureSensorDataManager, Log, "ScaledSum: {0}, NormalizedSum: {1}", PressureData.ScaledSum, PressureData.NormalizedSum);
+    UE_LOGFMT(LogBS_PressureSensorDataManager, Verbose, "ScaledSum: {0}, NormalizedSum: {1}", PressureData.ScaledSum, PressureData.NormalizedSum);
 
     if (PressureData.ScaledSum > 0)
     {
@@ -79,14 +79,14 @@ void UBS_PressureSensorDataManager::ParsePressure(EBS_SensorType SensorType, con
             PressureSensorData.WeightedValue = PressureSensorData.ScaledValue / PressureData.ScaledSum;
             PressureData.CenterOfPressure += PressureSensorData.Position * PressureSensorData.WeightedValue;
         }
-        UE_LOGFMT(LogBS_PressureSensorDataManager, Log, "CenterOfPressure: {0}", PressureData.CenterOfPressure.ToString());
+        UE_LOGFMT(LogBS_PressureSensorDataManager, Verbose, "CenterOfPressure: {0}", PressureData.CenterOfPressure.ToString());
 
         PressureData.NormalizedCenterOfPressure = CenterOfPressureRange.UpdateAndGetNormalization(PressureData.CenterOfPressure);
-        UE_LOGFMT(LogBS_PressureSensorDataManager, Log, "NormalizedCenterOfPressure: {0}", PressureData.NormalizedCenterOfPressure.ToString());
+        UE_LOGFMT(LogBS_PressureSensorDataManager, Verbose, "NormalizedCenterOfPressure: {0}", PressureData.NormalizedCenterOfPressure.ToString());
     }
     else
     {
-        UE_LOGFMT(LogBS_PressureSensorDataManager, Log, "ScaledSum is 0 - skipping CenterOfPressure calculation");
+        UE_LOGFMT(LogBS_PressureSensorDataManager, Verbose, "ScaledSum is 0 - skipping CenterOfPressure calculation");
     }
 
     OnPressureUpdate.ExecuteIfBound(PressureData, Timestamp);
@@ -101,14 +101,14 @@ void UBS_PressureSensorDataManager::ParsePressurePositions(const TArray<uint8> &
     {
         float X = static_cast<float>(Message[Offset]) / PressurePositionScalar;
         float Y = static_cast<float>(Message[Offset + 1]) / PressurePositionScalar;
-        UE_LOGFMT(LogBS_PressureSensorDataManager, Log, "PressurePosition #{0}: {1}, {2}", PressurePositions.Num(), X, Y);
+        UE_LOGFMT(LogBS_PressureSensorDataManager, Verbose, "PressurePosition #{0}: {1}, {2}", PressurePositions.Num(), X, Y);
 
         PressurePositions.Emplace(X, Y);
     }
 
-    UE_LOGFMT(LogBS_PressureSensorDataManager, Log, "PressurePositions updated");
+    UE_LOGFMT(LogBS_PressureSensorDataManager, Verbose, "PressurePositions updated");
 
     NumberOfPressureSensors = PressurePositions.Num();
-    UE_LOGFMT(LogBS_PressureSensorDataManager, Log, "NumberOfPressureSensors: {0}", NumberOfPressureSensors);
+    UE_LOGFMT(LogBS_PressureSensorDataManager, Verbose, "NumberOfPressureSensors: {0}", NumberOfPressureSensors);
     PressureSensorRanges.SetNum(NumberOfPressureSensors);
 }

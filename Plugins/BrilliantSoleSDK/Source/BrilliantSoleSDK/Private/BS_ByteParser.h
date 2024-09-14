@@ -6,7 +6,7 @@
 #include "Logging/StructuredLog.h"
 #include "Algo/Reverse.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogBS_ByteParser, Log, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_ByteParser, Verbose, All);
 
 class BS_ByteParser
 {
@@ -43,11 +43,11 @@ public:
 
         T ParsedValue;
         FMemory::Memcpy(&ParsedValue, ByteArray.GetData() + Offset, sizeof(T));
-        UE_LOGFMT(LogBS_ByteParser, Log, "ParsedValue: {0}", ParsedValue);
+        UE_LOGFMT(LogBS_ByteParser, Verbose, "ParsedValue: {0}", ParsedValue);
         if (!bIsLittleEndian)
         {
             ParsedValue = ByteSwap(ParsedValue);
-            UE_LOGFMT(LogBS_ByteParser, Log, "Swapped ParsedValue: {0}", ParsedValue);
+            UE_LOGFMT(LogBS_ByteParser, Verbose, "Swapped ParsedValue: {0}", ParsedValue);
         }
 
         return ParsedValue;

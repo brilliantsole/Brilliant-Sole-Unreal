@@ -19,7 +19,7 @@
 #include "BS_MathUtils.h"
 #include "BS_Device.generated.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogBS_Device, Log, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_Device, Verbose, All);
 
 UCLASS(Abstract, BlueprintType, Blueprintable)
 class UBS_Device : public UObject

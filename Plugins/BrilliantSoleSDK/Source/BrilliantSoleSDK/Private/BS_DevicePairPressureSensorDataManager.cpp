@@ -22,12 +22,12 @@ bool UBS_DevicePairPressureSensorDataManager::HasAllData() const
 
 void UBS_DevicePairPressureSensorDataManager::OnDevicePressureData(EBS_InsoleSide InsoleSide, const FBS_PressureData &DevicePressureData, const int64 &Timestamp)
 {
-    UE_LOGFMT(LogBS_DevicePairPressureSensorDataManager, Log, "Received Pressure Data from {0}", UEnum::GetValueAsString(InsoleSide));
+    UE_LOGFMT(LogBS_DevicePairPressureSensorDataManager, Verbose, "Received Pressure Data from {0}", UEnum::GetValueAsString(InsoleSide));
     DevicesPressureData.Emplace(InsoleSide, DevicePressureData);
 
     if (!HasAllData())
     {
-        UE_LOGFMT(LogBS_DevicePairPressureSensorDataManager, Log, "Doesn't have data from all devices - skipping");
+        UE_LOGFMT(LogBS_DevicePairPressureSensorDataManager, Verbose, "Doesn't have data from all devices - skipping");
         return;
     }
 
@@ -39,7 +39,7 @@ void UBS_DevicePairPressureSensorDataManager::OnDevicePressureData(EBS_InsoleSid
         PressureData.NormalizedSum += _DevicePressureData.NormalizedSum;
     }
 
-    UE_LOGFMT(LogBS_DevicePairPressureSensorDataManager, Log, "RawSum: {0}, NormalizedSum: {1}", PressureData.RawSum, PressureData.NormalizedSum);
+    UE_LOGFMT(LogBS_DevicePairPressureSensorDataManager, Verbose, "RawSum: {0}, NormalizedSum: {1}", PressureData.RawSum, PressureData.NormalizedSum);
 
     if (PressureData.NormalizedSum > 0)
     {
@@ -59,7 +59,7 @@ void UBS_DevicePairPressureSensorDataManager::OnDevicePressureData(EBS_InsoleSid
         }
         PressureData.NormalizedCenterOfPressure = CenterOfPressureRange.UpdateAndGetNormalization(PressureData.CenterOfPressure);
 
-        UE_LOGFMT(LogBS_DevicePairPressureSensorDataManager, Log, "CenterOfPressure: {0}, NormalizedCenterOfPressure: {1}", PressureData.CenterOfPressure.ToString(), PressureData.NormalizedCenterOfPressure.ToString());
+        UE_LOGFMT(LogBS_DevicePairPressureSensorDataManager, Verbose, "CenterOfPressure: {0}, NormalizedCenterOfPressure: {1}", PressureData.CenterOfPressure.ToString(), PressureData.NormalizedCenterOfPressure.ToString());
     }
 
     OnPressureUpdate.ExecuteIfBound(PressureData, Timestamp);

@@ -10,7 +10,7 @@
 #include "BS_TfliteConfiguration.h"
 #include "BS_TfliteManager.generated.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogBS_TfliteManager, Log, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_TfliteManager, Verbose, All);
 
 #define EBS_TfliteMessage BS_MessageTfliteGetName,               \
 						  BS_MessageTfliteSetName,               \

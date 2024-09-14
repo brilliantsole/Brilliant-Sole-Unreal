@@ -8,7 +8,7 @@ DEFINE_LOG_CATEGORY(LogBS_SensorConfiguration);
 
 void UBS_SensorConfiguration::Copy(const UBS_SensorConfiguration *Other)
 {
-    UE_LOGFMT(LogBS_SensorConfiguration, Log, "Copying SensorConfiguration...");
+    UE_LOGFMT(LogBS_SensorConfiguration, Verbose, "Copying SensorConfiguration...");
     SensorRates = Other->GetSensorRates();
 }
 
@@ -120,7 +120,7 @@ void UBS_SensorConfiguration::ClearSensorRate(EBS_SensorType SensorType)
 void UBS_SensorConfiguration::ToggleSensorRate(EBS_SensorType SensorType, EBS_SensorRate SensorRate, EBS_SensorRate &UpdatedSensorRate)
 {
 
-    UE_LOGFMT(LogBS_SensorConfiguration, Log, "Toggling Sensor Rate {0} to {1}", UEnum::GetValueAsString(SensorType), UEnum::GetValueAsString(SensorRate));
+    UE_LOGFMT(LogBS_SensorConfiguration, Verbose, "Toggling Sensor Rate {0} to {1}", UEnum::GetValueAsString(SensorType), UEnum::GetValueAsString(SensorRate));
     if (SensorRates.Contains(SensorType))
     {
         if (SensorRates[SensorType] == EBS_SensorRate::Value0)
@@ -204,18 +204,18 @@ void UBS_SensorConfiguration::Parse(const TArray<uint8> &Message)
         }
         const EBS_SensorType SensorType = static_cast<EBS_SensorType>(SensorTypeEnum);
         uint16 RawSensorRate = BS_ByteParser::ParseAs<uint16>(Message, Offset + 1, true);
-        UE_LOGFMT(LogBS_SensorConfiguration, Log, "RawSensorRate: {0}ms", RawSensorRate);
+        UE_LOGFMT(LogBS_SensorConfiguration, Verbose, "RawSensorRate: {0}ms", RawSensorRate);
 
         EBS_SensorRate SensorRate = GetClosestSensorRate(RawSensorRate);
         RawSensorRate = GetRawSensorRate(SensorRate);
 
-        UE_LOGFMT(LogBS_SensorConfiguration, Log, "{0}: {1} ({2}ms)", UEnum::GetValueAsString(SensorType), UEnum::GetValueAsString(SensorRate), RawSensorRate);
+        UE_LOGFMT(LogBS_SensorConfiguration, Verbose, "{0}: {1} ({2}ms)", UEnum::GetValueAsString(SensorType), UEnum::GetValueAsString(SensorRate), RawSensorRate);
         SensorRates.Emplace(SensorType, SensorRate);
     }
 
     bSensorTypesNeedsUpdate = true;
 
-    UE_LOGFMT(LogBS_SensorConfiguration, Log, "Updated SensorConfiguration:\n{0}", ToString());
+    UE_LOGFMT(LogBS_SensorConfiguration, Verbose, "Updated SensorConfiguration:\n{0}", ToString());
 }
 
 const TArray<uint8> UBS_SensorConfiguration::ToArray() const

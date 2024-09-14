@@ -6,7 +6,7 @@
 #include "BS_Range.h"
 #include "BS_CenterOfPressureRange.generated.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogBS_CenterOfPressureRange, Log, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_CenterOfPressureRange, Verbose, All);
 
 USTRUCT()
 struct FBS_CenterOfPressureRange
@@ -28,7 +28,7 @@ public:
     {
         X.Update(Value.X);
         Y.Update(Value.Y);
-        UE_LOGFMT(LogTemp, Log, "Updated CenterOfPressureRange to {0}", *ToString());
+        UE_LOGFMT(LogTemp, Verbose, "Updated CenterOfPressureRange to {0}", *ToString());
     }
 
     FVector2D GetNormalization(FVector2D Value)

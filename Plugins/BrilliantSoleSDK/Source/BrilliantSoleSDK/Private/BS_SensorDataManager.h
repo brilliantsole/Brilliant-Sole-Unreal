@@ -10,7 +10,7 @@
 #include "BS_BaseManager.h"
 #include "BS_SensorDataManager.generated.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogBS_SensorDataManager, Log, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_SensorDataManager, Verbose, All);
 
 #define EBS_SensorScalarsMessage BS_MessageGetSensorScalars
 #define EBS_SensorDataMessge BS_MessageSensorData

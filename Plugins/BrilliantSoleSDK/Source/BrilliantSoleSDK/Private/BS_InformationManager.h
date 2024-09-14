@@ -7,7 +7,7 @@
 #include "BS_DeviceType.h"
 #include "BS_InformationManager.generated.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogBS_InformationManager, Log, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_InformationManager, Verbose, All);
 
 #define EBS_MTU_Message BS_MessageGetMTU
 #define EBS_DeviceIdMessage BS_MessageGetId

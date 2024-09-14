@@ -7,10 +7,10 @@ DEFINE_LOG_CATEGORY(LogBS_DevicePair);
 
 UBS_DevicePair::UBS_DevicePair()
 {
-    UE_LOGFMT(LogBS_DevicePair, Log, "Constructor: {0}", GetName());
+    UE_LOGFMT(LogBS_DevicePair, Verbose, "Constructor: {0}", GetName());
     if (HasAnyFlags(RF_ClassDefaultObject))
     {
-        UE_LOGFMT(LogBS_DevicePair, Log, "CDO - Skipping Constructor");
+        UE_LOGFMT(LogBS_DevicePair, Verbose, "CDO - Skipping Constructor");
         return;
     }
 
@@ -21,10 +21,10 @@ UBS_DevicePair::UBS_DevicePair()
 void UBS_DevicePair::PostInitProperties()
 {
     Super::PostInitProperties();
-    UE_LOGFMT(LogBS_DevicePair, Log, "PostInitProperties {0}", GetName());
+    UE_LOGFMT(LogBS_DevicePair, Verbose, "PostInitProperties {0}", GetName());
     if (HasAnyFlags(RF_ClassDefaultObject))
     {
-        UE_LOGFMT(LogBS_DevicePair, Log, "CDO - Skipping");
+        UE_LOGFMT(LogBS_DevicePair, Verbose, "CDO - Skipping");
         return;
     }
 
@@ -39,15 +39,15 @@ void UBS_DevicePair::GetBS_Subsystem()
         UWorld *World = GetWorld();
         if (World)
         {
-            UE_LOGFMT(LogBS_DevicePair, Log, "World found");
+            UE_LOGFMT(LogBS_DevicePair, Verbose, "World found");
             UGameInstance *GameInstance = World->GetGameInstance();
             if (GameInstance)
             {
-                UE_LOGFMT(LogBS_DevicePair, Log, "GameInstance found");
+                UE_LOGFMT(LogBS_DevicePair, Verbose, "GameInstance found");
                 UBS_Subsystem *__BS_Subsystem = GameInstance->GetSubsystem<UBS_Subsystem>();
                 if (__BS_Subsystem)
                 {
-                    UE_LOGFMT(LogBS_DevicePair, Log, "BS_Subsystem found");
+                    UE_LOGFMT(LogBS_DevicePair, Verbose, "BS_Subsystem found");
                     _BS_Subsystem = __BS_Subsystem;
                 }
                 else
@@ -67,7 +67,7 @@ void UBS_DevicePair::GetBS_Subsystem()
     }
     else
     {
-        UE_LOGFMT(LogBS_DevicePair, Log, "CDO constructor - skipping");
+        UE_LOGFMT(LogBS_DevicePair, Verbose, "CDO constructor - skipping");
     }
 }
 
@@ -81,12 +81,12 @@ void UBS_DevicePair::SetIsSingleton(bool bNewIsSingleton)
 {
     if (bIsSingleton == bNewIsSingleton)
     {
-        UE_LOGFMT(LogBS_DevicePair, Log, "redundant bIsSingleton assignment - skipping");
+        UE_LOGFMT(LogBS_DevicePair, Verbose, "redundant bIsSingleton assignment - skipping");
         return;
     }
 
     bIsSingleton = bNewIsSingleton;
-    UE_LOGFMT(LogBS_DevicePair, Log, "Updated bIsSingleton to {0}", bIsSingleton);
+    UE_LOGFMT(LogBS_DevicePair, Verbose, "Updated bIsSingleton to {0}", bIsSingleton);
     OnIsSingletonUpdate(bIsSingleton);
 }
 // IS SINGLETON END
@@ -101,7 +101,7 @@ bool UBS_DevicePair::VerifyDevice(const UBS_Device *Device)
     }
     if (!Device->IsInsole())
     {
-        UE_LOGFMT(LogBS_DevicePair, Log, "Device is not an Insole");
+        UE_LOGFMT(LogBS_DevicePair, Verbose, "Device is not an Insole");
         return false;
     }
 
@@ -117,16 +117,16 @@ void UBS_DevicePair::AddDevice(UBS_Device *Device)
     const EBS_InsoleSide InsoleSide = Device->InsoleSide();
     if (Devices.Contains(InsoleSide) && Devices[InsoleSide] == Device)
     {
-        UE_LOGFMT(LogBS_DevicePair, Log, "Redundant Device Assignment");
+        UE_LOGFMT(LogBS_DevicePair, Verbose, "Redundant Device Assignment");
         return;
     }
     if (Devices.Contains(InsoleSide))
     {
-        UE_LOGFMT(LogBS_DevicePair, Log, "Removing existing {0} Device...", UEnum::GetValueAsString(InsoleSide));
+        UE_LOGFMT(LogBS_DevicePair, Verbose, "Removing existing {0} Device...", UEnum::GetValueAsString(InsoleSide));
         RemoveDeviceBySide(InsoleSide);
     }
 
-    UE_LOGFMT(LogBS_DevicePair, Log, "Adding {0} Device \"{1}\"", UEnum::GetValueAsString(InsoleSide), Device->GetName());
+    UE_LOGFMT(LogBS_DevicePair, Verbose, "Adding {0} Device \"{1}\"", UEnum::GetValueAsString(InsoleSide), Device->GetName());
     Devices.Emplace(InsoleSide, Device);
     AddDeviceListeners(Device);
     UpdateHasAllDevices();
@@ -136,7 +136,7 @@ void UBS_DevicePair::RemoveDeviceBySide(const EBS_InsoleSide InsoleSide)
 {
     if (!Devices.Contains(InsoleSide))
     {
-        UE_LOGFMT(LogBS_DevicePair, Log, "{0} Device not assigned", UEnum::GetValueAsString(InsoleSide));
+        UE_LOGFMT(LogBS_DevicePair, Verbose, "{0} Device not assigned", UEnum::GetValueAsString(InsoleSide));
         return;
     }
     RemoveDevice(Devices[InsoleSide]);
@@ -151,11 +151,11 @@ void UBS_DevicePair::RemoveDevice(UBS_Device *Device)
     const EBS_InsoleSide InsoleSide = Device->InsoleSide();
     if (!Devices.Contains(InsoleSide) || Devices[InsoleSide] != Device)
     {
-        UE_LOGFMT(LogBS_DevicePair, Log, "Device is not assigned");
+        UE_LOGFMT(LogBS_DevicePair, Verbose, "Device is not assigned");
         return;
     }
 
-    UE_LOGFMT(LogBS_DevicePair, Log, "Removing {0} Device \"{1}\"", UEnum::GetValueAsString(InsoleSide), Device->GetName());
+    UE_LOGFMT(LogBS_DevicePair, Verbose, "Removing {0} Device \"{1}\"", UEnum::GetValueAsString(InsoleSide), Device->GetName());
     RemoveDeviceListeners(Device);
     Devices.Remove(InsoleSide);
     UpdateHasAllDevices();
@@ -214,7 +214,7 @@ void UBS_DevicePair::UpdateIsFullyConnected()
     }
 
     bIsFullyConnected = bNewIsFullyConnected;
-    UE_LOGFMT(LogBS_DevicePair, Log, "Updating bIsFullyConnected to {0}", bIsFullyConnected);
+    UE_LOGFMT(LogBS_DevicePair, Verbose, "Updating bIsFullyConnected to {0}", bIsFullyConnected);
 
     OnIsFullyConnectedUpdated.Broadcast(this, bIsFullyConnected);
 }
@@ -227,7 +227,7 @@ void UBS_DevicePair::AddDeviceListeners(UBS_Device *Device)
     {
         return;
     }
-    UE_LOGFMT(LogBS_DevicePair, Log, "AddDeviceListeners to \"{0}\"", Device->Name());
+    UE_LOGFMT(LogBS_DevicePair, Verbose, "AddDeviceListeners to \"{0}\"", Device->Name());
 
     Device->OnConnectionStatusUpdate.AddDynamic(this, &UBS_DevicePair::_OnDeviceConnectionStatusUpdate);
     Device->OnIsConnectedUpdate.AddDynamic(this, &UBS_DevicePair::_OnDeviceIsConnectedUpdate);
@@ -258,7 +258,7 @@ void UBS_DevicePair::RemoveDeviceListeners(UBS_Device *Device)
     {
         return;
     }
-    UE_LOGFMT(LogBS_DevicePair, Log, "RemoveDeviceListeners from \"{0}\"", Device->Name());
+    UE_LOGFMT(LogBS_DevicePair, Verbose, "RemoveDeviceListeners from \"{0}\"", Device->Name());
 
     Device->OnConnectionStatusUpdate.RemoveDynamic(this, &UBS_DevicePair::_OnDeviceConnectionStatusUpdate);
     Device->OnIsConnectedUpdate.RemoveDynamic(this, &UBS_DevicePair::_OnDeviceIsConnectedUpdate);

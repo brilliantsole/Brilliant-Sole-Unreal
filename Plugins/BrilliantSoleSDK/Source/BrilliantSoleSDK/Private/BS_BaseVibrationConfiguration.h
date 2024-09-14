@@ -9,7 +9,7 @@
 #include "BS_VibrationWaveformEffect.h"
 #include "BS_BaseVibrationConfiguration.generated.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogBS_BaseVibrationConfiguration, Log, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_BaseVibrationConfiguration, Verbose, All);
 
 UCLASS(Abstract)
 class BRILLIANTSOLESDK_API UBS_BaseVibrationConfiguration : public UObject

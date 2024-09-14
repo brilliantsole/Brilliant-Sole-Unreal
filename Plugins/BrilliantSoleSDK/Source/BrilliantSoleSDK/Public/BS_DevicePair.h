@@ -8,7 +8,7 @@
 #include "BS_DevicePairSensorDataManager.h"
 #include "BS_DevicePair.generated.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogBS_DevicePair, Log, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_DevicePair, Verbose, All);
 
 UCLASS(Abstract, BlueprintType, Blueprintable)
 class UBS_DevicePair : public UObject

@@ -27,7 +27,7 @@ UClass *UBS_Subsystem::GetClass(const FString &ClassPath)
     ConstructorHelpers::FClassFinder<UObject> ClassFinder(*ClassPath);
     if (ClassFinder.Succeeded())
     {
-        UE_LOGFMT(LogBS_Subsystem, Log, "Found Class at path: {0}", ClassPath);
+        UE_LOGFMT(LogBS_Subsystem, Verbose, "Found Class at path: {0}", ClassPath);
         return ClassFinder.Class;
     }
     else
@@ -42,7 +42,7 @@ UObject *UBS_Subsystem::CreateSingleton(UClass *SingletonClass, bool bInitialize
     UObject *Singleton;
 
     Singleton = NewObject<UObject>(this, SingletonClass);
-    UE_LOGFMT(LogBS_Subsystem, Log, "Created new Singleton instance: {0}", Singleton->GetName());
+    UE_LOGFMT(LogBS_Subsystem, Verbose, "Created new Singleton instance: {0}", Singleton->GetName());
 
     if (bInitialize)
     {

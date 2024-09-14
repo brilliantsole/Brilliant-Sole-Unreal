@@ -11,10 +11,10 @@ DEFINE_LOG_CATEGORY(LogBS_SensorDataManager);
 
 UBS_SensorDataManager::UBS_SensorDataManager()
 {
-    UE_LOGFMT(LogBS_SensorDataManager, Log, "Constructor: {0}", GetName());
+    UE_LOGFMT(LogBS_SensorDataManager, Verbose, "Constructor: {0}", GetName());
     if (HasAnyFlags(RF_ClassDefaultObject))
     {
-        UE_LOGFMT(LogBS_SensorDataManager, Log, "CDO - Skipping Constructor");
+        UE_LOGFMT(LogBS_SensorDataManager, Verbose, "CDO - Skipping Constructor");
         return;
     }
 
@@ -65,23 +65,23 @@ void UBS_SensorDataManager::ParseSensorScalars(const TArray<uint8> &Message)
         }
         const EBS_SensorType SensorType = static_cast<EBS_SensorType>(SensorTypeEnum);
         float SensorScalar = BS_ByteParser::ParseAs<float>(Message, Offset + 1, true);
-        UE_LOGFMT(LogBS_SensorDataManager, Log, "SensorType: {0}, SensorScalar: {1}", UEnum::GetValueAsString(SensorType), SensorScalar);
+        UE_LOGFMT(LogBS_SensorDataManager, Verbose, "SensorType: {0}, SensorScalar: {1}", UEnum::GetValueAsString(SensorType), SensorScalar);
 
         SensorScalars.Emplace(SensorType, SensorScalar);
     }
 
-    UE_LOGFMT(LogBS_SensorDataManager, Log, "SensorScalars updated");
+    UE_LOGFMT(LogBS_SensorDataManager, Verbose, "SensorScalars updated");
 }
 
 void UBS_SensorDataManager::ParseSensorData(const TArray<uint8> &Message)
 {
     uint16 Offset = 0;
     const uint16 MessageLength = Message.Num();
-    UE_LOGFMT(LogBS_SensorDataManager, Log, "MessageLength: {0}", MessageLength);
+    UE_LOGFMT(LogBS_SensorDataManager, Verbose, "MessageLength: {0}", MessageLength);
 
     uint64 Timestamp = TimeUtils::ParseTimestamp(Message);
     Offset += 2;
-    UE_LOGFMT(LogBS_SensorDataManager, Log, "Timestamp: {0}ms", Timestamp);
+    UE_LOGFMT(LogBS_SensorDataManager, Verbose, "Timestamp: {0}ms", Timestamp);
 
     while (Offset < MessageLength)
     {
@@ -92,29 +92,29 @@ void UBS_SensorDataManager::ParseSensorData(const TArray<uint8> &Message)
             return;
         }
         const EBS_SensorType SensorType = static_cast<EBS_SensorType>(SensorTypeEnum);
-        UE_LOGFMT(LogBS_SensorDataManager, Log, "SensorType: {0}", UEnum::GetValueAsString(SensorType));
+        UE_LOGFMT(LogBS_SensorDataManager, Verbose, "SensorType: {0}", UEnum::GetValueAsString(SensorType));
 
         float Scalar = SensorScalars.Contains(SensorType) ? SensorScalars[SensorType] : 1.0f;
-        UE_LOGFMT(LogBS_SensorDataManager, Log, "Scalar: {0}", Scalar);
+        UE_LOGFMT(LogBS_SensorDataManager, Verbose, "Scalar: {0}", Scalar);
 
         const uint8 SensorDataMessageLength = Message[Offset++];
 
-        UE_LOGFMT(LogBS_SensorDataManager, Log, "SensorDataMessageLength: {0}", SensorDataMessageLength);
+        UE_LOGFMT(LogBS_SensorDataManager, Verbose, "SensorDataMessageLength: {0}", SensorDataMessageLength);
 
         // I have no idea why I have to add 1 here...
         const TArrayView<uint8> SensorDataMessage((uint8 *)(Message.GetData() + Offset + 1), SensorDataMessageLength);
 
         if (PressureSensorDataManager->OnSensorDataMessage(SensorType, static_cast<TArray<uint8>>(SensorDataMessage), Timestamp, Scalar))
         {
-            UE_LOGFMT(LogBS_SensorDataManager, Log, "Parsed PressureSensorDataManager Message");
+            UE_LOGFMT(LogBS_SensorDataManager, Verbose, "Parsed PressureSensorDataManager Message");
         }
         else if (MotionSensorDataManager->OnSensorDataMessage(SensorType, static_cast<TArray<uint8>>(SensorDataMessage), Timestamp, Scalar))
         {
-            UE_LOGFMT(LogBS_SensorDataManager, Log, "Parsed MotionSensorDataManager Message");
+            UE_LOGFMT(LogBS_SensorDataManager, Verbose, "Parsed MotionSensorDataManager Message");
         }
         else if (BarometerSensorDataManager->OnSensorDataMessage(SensorType, static_cast<TArray<uint8>>(SensorDataMessage), Timestamp, Scalar))
         {
-            UE_LOGFMT(LogBS_SensorDataManager, Log, "Parsed BarometerSensorDataManager Message");
+            UE_LOGFMT(LogBS_SensorDataManager, Verbose, "Parsed BarometerSensorDataManager Message");
         }
         else
         {

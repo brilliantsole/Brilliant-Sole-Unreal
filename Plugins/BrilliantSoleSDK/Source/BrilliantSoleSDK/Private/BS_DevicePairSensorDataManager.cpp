@@ -8,10 +8,10 @@ DEFINE_LOG_CATEGORY(LogBS_DevicePairSensorDataManager);
 
 UBS_DevicePairSensorDataManager::UBS_DevicePairSensorDataManager()
 {
-    UE_LOGFMT(LogBS_DevicePairSensorDataManager, Log, "Constructor: {0}", GetName());
+    UE_LOGFMT(LogBS_DevicePairSensorDataManager, Verbose, "Constructor: {0}", GetName());
     if (HasAnyFlags(RF_ClassDefaultObject))
     {
-        UE_LOGFMT(LogBS_DevicePairSensorDataManager, Log, "CDO - Skipping Constructor");
+        UE_LOGFMT(LogBS_DevicePairSensorDataManager, Verbose, "CDO - Skipping Constructor");
         return;
     }
 

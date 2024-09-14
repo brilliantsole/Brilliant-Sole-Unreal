@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "BS_TfliteModel.generated.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogBS_TfliteModel, Log, Warning);
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_TfliteModel, Verbose, Warning);
 
 UCLASS(Blueprintable)
 class BRILLIANTSOLESDK_API UBS_TfliteModel : public UObject

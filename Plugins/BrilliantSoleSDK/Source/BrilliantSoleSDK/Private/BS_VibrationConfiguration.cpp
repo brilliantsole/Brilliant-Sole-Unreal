@@ -70,11 +70,11 @@ const TArray<uint8> FBS_VibrationConfiguration::WaveformEffectSequenceToArray() 
         switch (Segment.Type)
         {
         case EBS_VibrationWaveformEffectSegmentType::Effect:
-            UE_LOGFMT(LogBS_VibrationConfiguration, Log, "Effect #{0}: {1}", Index, UEnum::GetValueAsString(Segment.Effect));
+            UE_LOGFMT(LogBS_VibrationConfiguration, Verbose, "Effect #{0}: {1}", Index, UEnum::GetValueAsString(Segment.Effect));
             Array.Add(static_cast<uint8>(Segment.Effect));
             break;
         case EBS_VibrationWaveformEffectSegmentType::Delay:
-            UE_LOGFMT(LogBS_VibrationConfiguration, Log, "Delay #{0}: {1}ms", Index, Segment.Delay);
+            UE_LOGFMT(LogBS_VibrationConfiguration, Verbose, "Delay #{0}: {1}ms", Index, Segment.Delay);
             Array.Add(static_cast<uint8>((1 << 7) | (Segment.Delay / 10)));
             break;
         default:

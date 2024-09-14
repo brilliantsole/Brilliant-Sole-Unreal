@@ -8,7 +8,7 @@ DEFINE_LOG_CATEGORY(LogBS_VibrationManager);
 
 void UBS_VibrationManager::TriggerVibration(const TArray<FBS_VibrationConfiguration> &VibrationConfigurations)
 {
-    UE_LOGFMT(LogBS_VibrationManager, Log, "Triggering Vibration...");
+    UE_LOGFMT(LogBS_VibrationManager, Verbose, "Triggering Vibration...");
     TArray<uint8> TxMessage;
     for (const FBS_VibrationConfiguration &VibrationConfiguration : VibrationConfigurations)
     {

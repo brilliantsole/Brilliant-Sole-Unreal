@@ -6,7 +6,7 @@
 #include "BS_BaseManager.h"
 #include "BS_BatteryManager.generated.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogBS_BatteryManager, Log, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_BatteryManager, Verbose, All);
 
 DECLARE_DELEGATE_OneParam(FBS_IsBatteryChargingCallbackLocal, bool);
 DECLARE_DELEGATE_OneParam(FBS_BatteryCurrentCallbackLocal, float);

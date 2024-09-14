@@ -8,7 +8,7 @@
 #include "BS_DeviceInformationType.h"
 #include "BS_BleUtils.generated.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogBS_BleUtils, Log, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_BleUtils, Verbose, All);
 
 UCLASS()
 class BRILLIANTSOLESDK_API UBS_BleUtils : public UBlueprintFunctionLibrary

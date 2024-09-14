@@ -21,6 +21,6 @@ const uint8 UBS_BaseVibrationConfiguration::GetVibrationLocationsBitmask() const
     {
         VibrationLocationsBitmask |= 1 << static_cast<uint8>(VibrationLocation);
     }
-    UE_LOGFMT(LogBS_BaseVibrationConfiguration, Log, "VibrationLocationsBitmask: {0}", VibrationLocationsBitmask);
+    UE_LOGFMT(LogBS_BaseVibrationConfiguration, Verbose, "VibrationLocationsBitmask: {0}", VibrationLocationsBitmask);
     return VibrationLocationsBitmask;
 }
