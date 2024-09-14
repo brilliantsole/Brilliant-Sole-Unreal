@@ -126,7 +126,7 @@ void UBS_DevicePair::AddDevice(UBS_Device *Device)
         RemoveDeviceBySide(InsoleSide);
     }
 
-    UE_LOGFMT(LogBS_DevicePair, Verbose, "Adding {0} Device \"{1}\"", UEnum::GetValueAsString(InsoleSide), Device->GetName());
+    UE_LOGFMT(LogBS_DevicePair, Verbose, "Adding {0} Device \"{1}\"", UEnum::GetValueAsString(InsoleSide), Device->Name());
     Devices.Emplace(InsoleSide, Device);
     AddDeviceListeners(Device);
     UpdateHasAllDevices();
@@ -155,7 +155,7 @@ void UBS_DevicePair::RemoveDevice(UBS_Device *Device)
         return;
     }
 
-    UE_LOGFMT(LogBS_DevicePair, Verbose, "Removing {0} Device \"{1}\"", UEnum::GetValueAsString(InsoleSide), Device->GetName());
+    UE_LOGFMT(LogBS_DevicePair, Verbose, "Removing {0} Device \"{1}\"", UEnum::GetValueAsString(InsoleSide), Device->Name());
     RemoveDeviceListeners(Device);
     Devices.Remove(InsoleSide);
     UpdateHasAllDevices();
