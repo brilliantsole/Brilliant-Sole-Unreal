@@ -30,7 +30,8 @@
 			"future": "cpp",
 			"string": "cpp",
 			"string_view": "cpp",
-			"ios": "cpp"
+			"ios": "cpp",
+			"fft": "cpp"
 		}
 	},
 	"extensions": {

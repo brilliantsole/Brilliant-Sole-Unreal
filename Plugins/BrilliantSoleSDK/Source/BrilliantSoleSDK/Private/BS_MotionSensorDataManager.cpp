@@ -115,6 +115,8 @@ void UBS_MotionSensorDataManager::ParseQuaternion(EBS_SensorType SensorType, con
     FQuat Quaternion(-Z, X, Y, -W);
     Quaternion *= Scalar;
 
+    UE_LOGFMT(LogBS_MotionSensorDataManager, Verbose, "Quaternion: {0}", Quaternion.ToString());
+
     switch (SensorType)
     {
     case EBS_SensorType::GAME_ROTATION:
