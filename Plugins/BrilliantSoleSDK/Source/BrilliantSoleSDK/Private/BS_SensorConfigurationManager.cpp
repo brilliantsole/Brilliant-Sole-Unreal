@@ -74,7 +74,7 @@ void UBS_SensorConfigurationManager::SetSensorRates(const TMap<EBS_SensorType, E
 void UBS_SensorConfigurationManager::ClearSensorRate(EBS_SensorType SensorType)
 {
     TempSensorConfiguration->Reset();
-    TempSensorConfiguration->ClearSensorRate(SensorType);
+    TempSensorConfiguration->SetSensorRate(SensorType, EBS_SensorRate::Value0);
     SetSensorConfiguration(TempSensorConfiguration);
 }
 void UBS_SensorConfigurationManager::ToggleSensorRate(EBS_SensorType SensorType, EBS_SensorRate SensorRate, EBS_SensorRate &UpdatedSensorRate)

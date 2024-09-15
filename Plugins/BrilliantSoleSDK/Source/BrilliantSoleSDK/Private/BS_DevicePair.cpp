@@ -173,16 +173,18 @@ void UBS_DevicePair::UpdateHasAllDevices()
     bool bNewHasAllDevices = true;
     for (const EBS_InsoleSide InsoleSide : TEnumRange<EBS_InsoleSide>())
     {
-        bNewHasAllDevices = bNewHasAllDevices || Devices.Contains(InsoleSide);
+        bNewHasAllDevices = bNewHasAllDevices && Devices.Contains(InsoleSide);
         if (!bNewHasAllDevices)
         {
             break;
         }
     }
+    UE_LOGFMT(LogBS_DevicePair, Verbose, "bNewHasAllDevices: {0}", bNewHasAllDevices);
     if (bHasAllDevices == bNewHasAllDevices)
     {
         return;
     }
+    UE_LOGFMT(LogBS_DevicePair, Verbose, "Updating bHasAllDevices to {0}", bHasAllDevices);
     bHasAllDevices = bNewHasAllDevices;
 }
 // DEVICES START
@@ -196,7 +198,7 @@ void UBS_DevicePair::UpdateIsFullyConnected()
     {
         for (const EBS_InsoleSide InsoleSide : TEnumRange<EBS_InsoleSide>())
         {
-            bNewIsFullyConnected = bNewIsFullyConnected || Devices[InsoleSide]->IsConnected();
+            bNewIsFullyConnected = bNewIsFullyConnected && Devices[InsoleSide]->IsConnected();
             if (!bNewIsFullyConnected)
             {
                 break;
@@ -207,6 +209,8 @@ void UBS_DevicePair::UpdateIsFullyConnected()
     {
         bNewIsFullyConnected = false;
     }
+
+    UE_LOGFMT(LogBS_DevicePair, Verbose, "bNewIsFullyConnected: {0}", bNewIsFullyConnected);
 
     if (bIsFullyConnected == bNewIsFullyConnected)
     {
@@ -302,6 +306,7 @@ void UBS_DevicePair::ClearSensorConfiguration()
 }
 void UBS_DevicePair::SetSensorRate(EBS_SensorType SensorType, EBS_SensorRate SensorRate, bool &bDidUpdateSensorRate)
 {
+    UE_LOGFMT(LogBS_DevicePair, Verbose, "SetSensorRate: {0} {1}", UEnum::GetValueAsString(SensorType), UEnum::GetValueAsString(SensorRate));
     for (const TPair<EBS_InsoleSide, UBS_Device *> &Pair : Devices)
     {
         Pair.Value->SetSensorRate(SensorType, SensorRate, bDidUpdateSensorRate);
@@ -316,16 +321,10 @@ void UBS_DevicePair::SetSensorRates(const TMap<EBS_SensorType, EBS_SensorRate> &
 }
 void UBS_DevicePair::ClearSensorRate(EBS_SensorType SensorType)
 {
+    UE_LOGFMT(LogBS_DevicePair, Verbose, "ClearSensorRate: {0}", UEnum::GetValueAsString(SensorType));
     for (const TPair<EBS_InsoleSide, UBS_Device *> &Pair : Devices)
     {
         Pair.Value->ClearSensorRate(SensorType);
-    }
-}
-void UBS_DevicePair::ToggleSensorRate(EBS_SensorType SensorType, EBS_SensorRate SensorRate, EBS_SensorRate &UpdatedSensorRate)
-{
-    for (const TPair<EBS_InsoleSide, UBS_Device *> &Pair : Devices)
-    {
-        Pair.Value->ToggleSensorRate(SensorType, SensorRate, UpdatedSensorRate);
     }
 }
 

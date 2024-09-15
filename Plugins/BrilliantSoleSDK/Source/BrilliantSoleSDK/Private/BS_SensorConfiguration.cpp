@@ -40,7 +40,6 @@ bool UBS_SensorConfiguration::IsEqualTo(const UBS_SensorConfiguration *Other)
 
 void UBS_SensorConfiguration::Clear()
 {
-
     for (const TPair<EBS_SensorType, EBS_SensorRate> &Pair : SensorRates)
     {
         ClearSensorRate(Pair.Key);
@@ -109,7 +108,6 @@ void UBS_SensorConfiguration::SetSensorRates(const TMap<EBS_SensorType, EBS_Sens
 
 void UBS_SensorConfiguration::ClearSensorRate(EBS_SensorType SensorType)
 {
-
     if (!SensorRates.Contains(SensorType))
     {
         return;

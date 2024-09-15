@@ -136,9 +136,6 @@ public:
     UFUNCTION(BlueprintCallable, Category = "BS Device Pair Sensor Configuration")
     void ClearSensorRate(EBS_SensorType SensorType);
 
-    UFUNCTION(BlueprintCallable, Category = "BS Device Pair Sensor Configuration")
-    void ToggleSensorRate(EBS_SensorType SensorType, EBS_SensorRate SensorRate, EBS_SensorRate &UpdatedSensorRate);
-
     // SENSOR CONFIGURATION END
 
     // DEVICE MOTION DATA LISTENERS START
