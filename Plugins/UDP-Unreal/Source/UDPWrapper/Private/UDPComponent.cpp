@@ -4,11 +4,8 @@
 #include "SocketSubsystem.h"
 #include "Kismet/KismetSystemLibrary.h"
 
-UUDPComponent::UUDPComponent(const FObjectInitializer &init) : UActorComponent(init)
+UUDPComponent::UUDPComponent()
 {
-	bWantsInitializeComponent = true;
-	bAutoActivate = true;
-
 	Native = MakeShareable(new FUDPNative);
 
 	LinkupCallbacks();
@@ -19,7 +16,7 @@ void UUDPComponent::LinkupCallbacks()
 	Native->OnSendOpened = [this](int32 SpecifiedPort, int32 BoundPort, FString BoundIP)
 	{
 		Settings.bIsSendOpen = true;
-		Settings.SendBoundPort = BoundPort;	//ensure sync on opened bound port
+		Settings.SendBoundPort = BoundPort; // ensure sync on opened bound port
 		Settings.SendBoundIP = BoundIP;
 
 		Settings.SendIP = Native->Settings.SendIP;
@@ -45,7 +42,7 @@ void UUDPComponent::LinkupCallbacks()
 		Settings.bIsReceiveOpen = false;
 		OnReceiveSocketClosed.Broadcast(Port);
 	};
-	Native->OnReceivedBytes = [this](const TArray<uint8>& Data, const FString& Endpoint, const int32& Port)
+	Native->OnReceivedBytes = [this](const TArray<uint8> &Data, const FString &Endpoint, const int32 &Port)
 	{
 		OnReceivedBytes.Broadcast(Data, Endpoint, Port);
 	};
@@ -56,9 +53,9 @@ bool UUDPComponent::CloseReceiveSocket()
 	return Native->CloseReceiveSocket();
 }
 
-int32 UUDPComponent::OpenSendSocket(const FString& InIP /*= TEXT("127.0.0.1")*/, const int32 InPort /*= 3000*/)
+int32 UUDPComponent::OpenSendSocket(const FString &InIP /*= TEXT("127.0.0.1")*/, const int32 InPort /*= 3000*/)
 {
-	//Sync side effect sampled settings
+	// Sync side effect sampled settings
 	Native->Settings.SendSocketName = Settings.SendSocketName;
 	Native->Settings.BufferSize = Settings.BufferSize;
 
@@ -72,9 +69,9 @@ bool UUDPComponent::CloseSendSocket()
 	return Native->CloseSendSocket();
 }
 
-bool UUDPComponent::OpenReceiveSocket(const FString& InListenIp /*= TEXT("0.0.0.0")*/, const int32 InListenPort /*= 3002*/)
+bool UUDPComponent::OpenReceiveSocket(const FString &InListenIp /*= TEXT("0.0.0.0")*/, const int32 InListenPort /*= 3002*/)
 {
-	//Sync side effect sampled settings
+	// Sync side effect sampled settings
 	Native->Settings.bShouldAutoOpenReceive = Settings.bShouldAutoOpenReceive;
 	Native->Settings.ReceiveSocketName = Settings.ReceiveSocketName;
 	Native->Settings.BufferSize = Settings.BufferSize;
@@ -82,26 +79,14 @@ bool UUDPComponent::OpenReceiveSocket(const FString& InListenIp /*= TEXT("0.0.0.
 	return Native->OpenReceiveSocket(InListenIp, InListenPort);
 }
 
-bool UUDPComponent::EmitBytes(const TArray<uint8>& Bytes)
+bool UUDPComponent::EmitBytes(const TArray<uint8> &Bytes)
 {
 	return Native->EmitBytes(Bytes);
 }
 
-void UUDPComponent::InitializeComponent()
+void UUDPComponent::Start()
 {
-	Super::InitializeComponent();
-}
-
-void UUDPComponent::UninitializeComponent()
-{
-	Super::UninitializeComponent();
-}
-
-void UUDPComponent::BeginPlay()
-{
-	Super::BeginPlay();
-	
-	//Sync all settings to native. These are duplicated for dev convenience in bp
+	// Sync all settings to native. These are duplicated for dev convenience in bp
 	Native->Settings = Settings;
 
 	if (Settings.bShouldAutoOpenSend)
@@ -115,15 +100,13 @@ void UUDPComponent::BeginPlay()
 	}
 }
 
-void UUDPComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
+void UUDPComponent::Stop()
 {
 	CloseSendSocket();
 	CloseReceiveSocket();
 
 	Native->ClearSendCallbacks();
 	Native->ClearReceiveCallbacks();
-
-	Super::EndPlay(EndPlayReason);
 }
 
 FUDPNative::FUDPNative()
@@ -149,7 +132,7 @@ FUDPNative::~FUDPNative()
 	}
 }
 
-int32 FUDPNative::OpenSendSocket(const FString& InIP /*= TEXT("127.0.0.1")*/, const int32 InPort /*= 3000*/)
+int32 FUDPNative::OpenSendSocket(const FString &InIP /*= TEXT("127.0.0.1")*/, const int32 InPort /*= 3000*/)
 {
 	Settings.SendIP = InIP;
 	Settings.SendPort = InPort;
@@ -168,7 +151,7 @@ int32 FUDPNative::OpenSendSocket(const FString& InIP /*= TEXT("127.0.0.1")*/, co
 
 	SenderSocket = FUdpSocketBuilder(*Settings.SendSocketName).AsReusable().WithBroadcast();
 
-	//Set Send Buffer Size
+	// Set Send Buffer Size
 	SenderSocket->SetSendBufferSize(Settings.BufferSize, Settings.BufferSize);
 	SenderSocket->SetReceiveBufferSize(Settings.BufferSize, Settings.BufferSize);
 
@@ -180,7 +163,7 @@ int32 FUDPNative::OpenSendSocket(const FString& InIP /*= TEXT("127.0.0.1")*/, co
 	Settings.SendBoundIP = SendBoundAddress->ToString(false);
 
 	if (OnSendOpened)
-	{	
+	{
 		OnSendOpened(Settings.SendPort, Settings.SendBoundPort, Settings.SendBoundIP);
 	}
 
@@ -207,7 +190,7 @@ bool FUDPNative::CloseSendSocket()
 	return bDidCloseCorrectly;
 }
 
-bool FUDPNative::EmitBytes(const TArray<uint8>& Bytes)
+bool FUDPNative::EmitBytes(const TArray<uint8> &Bytes)
 {
 	bool bDidSendCorrectly = true;
 
@@ -216,7 +199,7 @@ bool FUDPNative::EmitBytes(const TArray<uint8>& Bytes)
 		int32 BytesSent = 0;
 		bDidSendCorrectly = SenderSocket->Send(Bytes.GetData(), Bytes.Num(), BytesSent);
 	}
-	else if(Settings.bShouldAutoOpenSend)
+	else if (Settings.bShouldAutoOpenSend)
 	{
 		bool bDidOpen = OpenSendSocket(Settings.SendIP, Settings.SendPort) != 0;
 		return bDidOpen && EmitBytes(Bytes);
@@ -225,9 +208,9 @@ bool FUDPNative::EmitBytes(const TArray<uint8>& Bytes)
 	return bDidSendCorrectly;
 }
 
-bool FUDPNative::OpenReceiveSocket(const FString& InListenIP /*= TEXT("0.0.0.0")*/, const int32 InListenPort /*= 3002*/)
+bool FUDPNative::OpenReceiveSocket(const FString &InListenIP /*= TEXT("0.0.0.0")*/, const int32 InListenPort /*= 3002*/)
 {
-	//Sync and overwrite settings
+	// Sync and overwrite settings
 	if (Settings.bShouldOpenReceiveToBoundSendPort)
 	{
 		if (Settings.SendBoundPort == 0)
@@ -254,21 +237,21 @@ bool FUDPNative::OpenReceiveSocket(const FString& InListenIP /*= TEXT("0.0.0.0")
 	FIPv4Address Addr;
 	FIPv4Address::Parse(Settings.ReceiveIP, Addr);
 
-	//Create Socket
+	// Create Socket
 	FIPv4Endpoint Endpoint(Addr, Settings.ReceivePort);
 
 	ReceiverSocket = FUdpSocketBuilder(*Settings.ReceiveSocketName)
-		.AsNonBlocking()
-		.AsReusable()
-		.BoundToEndpoint(Endpoint)
-		.WithReceiveBufferSize(Settings.BufferSize);
+						 .AsNonBlocking()
+						 .AsReusable()
+						 .BoundToEndpoint(Endpoint)
+						 .WithReceiveBufferSize(Settings.BufferSize);
 
 	FTimespan ThreadWaitTime = FTimespan::FromMilliseconds(100);
 	FString ThreadName = FString::Printf(TEXT("UDP RECEIVER-FUDPNative"));
 	UDPReceiver = new FUdpSocketReceiver(ReceiverSocket, ThreadWaitTime, *ThreadName);
 
-	UDPReceiver->OnDataReceived().BindLambda([this](const FArrayReaderPtr& DataPtr, const FIPv4Endpoint& Endpoint)
-	{
+	UDPReceiver->OnDataReceived().BindLambda([this](const FArrayReaderPtr &DataPtr, const FIPv4Endpoint &Endpoint)
+											 {
 		if (!OnReceivedBytes)
 		{
 			return;
@@ -296,8 +279,7 @@ bool FUDPNative::OpenReceiveSocket(const FString& InListenIP /*= TEXT("0.0.0.0")
 		else
 		{
 			OnReceivedBytes(Data, SenderIp, SenderPort);
-		}
-	});
+		} });
 
 	Settings.bIsReceiveOpen = true;
 
@@ -356,7 +338,7 @@ FUDPSettings::FUDPSettings()
 	bReceiveDataOnGameThread = true;
 	SendIP = FString(TEXT("127.0.0.1"));
 	SendPort = 3001;
-	SendBoundPort = 0;	//invalid if 0
+	SendBoundPort = 0; // invalid if 0
 	SendBoundIP = FString(TEXT("0.0.0.0"));
 	ReceiveIP = FString(TEXT("0.0.0.0"));
 	ReceivePort = 3002;
@@ -366,5 +348,5 @@ FUDPSettings::FUDPSettings()
 	bIsReceiveOpen = false;
 	bIsSendOpen = false;
 
-	BufferSize = 2 * 1024 * 1024;	//default roughly 2mb
+	BufferSize = 2 * 1024 * 1024; // default roughly 2mb
 }

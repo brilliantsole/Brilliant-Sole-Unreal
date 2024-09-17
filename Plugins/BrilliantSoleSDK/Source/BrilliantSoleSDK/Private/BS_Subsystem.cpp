@@ -9,6 +9,7 @@ UBS_Subsystem::UBS_Subsystem()
 {
     GetBleManagerClass();
     GetDeviceManagerClass();
+    GetUDPManagerClass();
 }
 
 void UBS_Subsystem::Initialize(FSubsystemCollectionBase &Collection)
@@ -112,3 +113,33 @@ UObject *UBS_Subsystem::GetDeviceManager()
     return DeviceManagerSingleton;
 }
 // DEVICE MANAGER END
+
+// UDP MANAGER START
+void UBS_Subsystem::GetUDPManagerClass()
+{
+    UDPManagerClass = GetClass(TEXT("/Script/Engine.Blueprint'/BrilliantSoleSDK/Blueprints/UDP/BS_UDP_ManagerBP.BS_UDP_ManagerBP_C'"));
+}
+
+UObject *UBS_Subsystem::GetUDPManager()
+{
+    if (!UDPManagerSingleton && UDPManagerClass)
+    {
+        UDPManagerSingleton = CreateSingleton(UDPManagerClass, true);
+        GetDeviceManager();
+
+        FName MethodName("AssignBS_DeviceManager");
+        UFunction *InitalizeFunction = UDPManagerSingleton->FindFunction(MethodName);
+        if (InitalizeFunction)
+        {
+            UE_LOGFMT(LogBS_Subsystem, Log, "Assigning DeviceManagerSingleton to UDPManagerSingleton...");
+            UDPManagerSingleton->ProcessEvent(InitalizeFunction, &DeviceManagerSingleton);
+        }
+        else
+        {
+            UE_LOGFMT(LogBS_Subsystem, Error, "Couldn't find AssignBS_DeviceManager function");
+        }
+    }
+    return UDPManagerSingleton;
+}
+
+// UDP MANAGER END

@@ -7,7 +7,7 @@
 #include "Common/UdpSocketSender.h"
 #include "UDPComponent.generated.h"
 
-//UDP Connection Settings
+// UDP Connection Settings
 USTRUCT(BlueprintType)
 struct UDPWRAPPER_API FUDPSettings
 {
@@ -75,70 +75,72 @@ struct UDPWRAPPER_API FUDPSettings
 class UDPWRAPPER_API FUDPNative
 {
 public:
-
-	TFunction<void(const TArray<uint8>&, const FString&, const int32&)> OnReceivedBytes;
+	TFunction<void(const TArray<uint8> &, const FString &, const int32 &)> OnReceivedBytes;
 	TFunction<void(int32 Port)> OnReceiveOpened;
 	TFunction<void(int32 Port)> OnReceiveClosed;
 	TFunction<void(int32 SpecifiedPort, int32 BoundPort, FString BoundIP)> OnSendOpened;
 	TFunction<void(int32 Port)> OnSendClosed;
 
-	//Default settings, on open send/receive they will sync with what was last passed into them
+	// Default settings, on open send/receive they will sync with what was last passed into them
 	FUDPSettings Settings;
 
 	FUDPNative();
 	~FUDPNative();
 
-	//Send
+	// Send
 	/**
-	* Open socket for sending and return bound port
-	*/
-	int32 OpenSendSocket(const FString& InIP = TEXT("127.0.0.1"), const int32 InPort = 3000);
+	 * Open socket for sending and return bound port
+	 */
+	int32 OpenSendSocket(const FString &InIP = TEXT("127.0.0.1"), const int32 InPort = 3000);
 
 	/**
-	* Close current sending socket, returns true if successful
-	*/
+	 * Close current sending socket, returns true if successful
+	 */
 	bool CloseSendSocket();
 
-	/** 
-	* Emit given bytes to send socket. If Settings.bShouldAutoOpenSend is true it will auto-open socket.
-	* Returns true if bytes emitted successfully
-	*/
-	bool EmitBytes(const TArray<uint8>& Bytes);
+	/**
+	 * Emit given bytes to send socket. If Settings.bShouldAutoOpenSend is true it will auto-open socket.
+	 * Returns true if bytes emitted successfully
+	 */
+	bool EmitBytes(const TArray<uint8> &Bytes);
 
-	//Receive
+	// Receive
 	/**
-	* Open current receiving socket, returns true if successful
-	*/
-	bool OpenReceiveSocket(const FString& InIP = TEXT("0.0.0.0"), const int32 InListenPort = 3002);
+	 * Open current receiving socket, returns true if successful
+	 */
+	bool OpenReceiveSocket(const FString &InIP = TEXT("0.0.0.0"), const int32 InListenPort = 3002);
 	/**
-	* Close current receiving socket, returns true if successful
-	*/
+	 * Close current receiving socket, returns true if successful
+	 */
 	bool CloseReceiveSocket();
 
-	//Callback convenience
+	// Callback convenience
 	void ClearSendCallbacks();
 	void ClearReceiveCallbacks();
 
 protected:
-	FSocket* SenderSocket;
-	FSocket* ReceiverSocket;
-	FUdpSocketReceiver* UDPReceiver;
+	FSocket *SenderSocket;
+	FSocket *ReceiverSocket;
+	FUdpSocketReceiver *UDPReceiver;
 	FString SocketDescription;
 	TSharedPtr<FInternetAddr> RemoteAdress;
-	ISocketSubsystem* SocketSubsystem;
+	ISocketSubsystem *SocketSubsystem;
 };
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FUDPSocketStateSignature, int32, Port);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FUDPSocketSendStateSignature, int32, SpecifiedPort, int32, BoundPort, const FString&, BoundIP);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FUDPMessageSignature, const TArray<uint8>&, Bytes, const FString&, IPAddress, const int32&, Port);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FUDPSocketSendStateSignature, int32, SpecifiedPort, int32, BoundPort, const FString &, BoundIP);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FUDPMessageSignature, const TArray<uint8> &, Bytes, const FString &, IPAddress, const int32 &, Port);
 
-UCLASS(ClassGroup = "Networking", meta = (BlueprintSpawnableComponent))
-class UDPWRAPPER_API UUDPComponent : public UActorComponent
+UCLASS(BlueprintType, Blueprintable)
+class UDPWRAPPER_API UUDPComponent : public UObject
 {
-	GENERATED_UCLASS_BODY()
-public:
+	GENERATED_BODY()
 
-	//Async events
+public:
+	UUDPComponent();
+
+public:
+	// Async events
 
 	/** On message received on receive socket from Ip address */
 	UPROPERTY(BlueprintAssignable, Category = "UDP Events")
@@ -165,47 +167,45 @@ public:
 	FUDPSettings Settings;
 
 	/**
-	* Connect to a udp endpoint, optional method if auto-connect is set to true.
-	* Emit function will then work as long the network is reachable. By default
-	* it will attempt this setup for this socket on BeginPlay.
-	*
-	* @param InIP the ip4 you wish to connect to
-	* @param InPort the udp port you wish to connect to
-	*/
+	 * Connect to a udp endpoint, optional method if auto-connect is set to true.
+	 * Emit function will then work as long the network is reachable. By default
+	 * it will attempt this setup for this socket on BeginPlay.
+	 *
+	 * @param InIP the ip4 you wish to connect to
+	 * @param InPort the udp port you wish to connect to
+	 */
 	UFUNCTION(BlueprintCallable, Category = "UDP Functions")
-	int32 OpenSendSocket(const FString& InIP = TEXT("127.0.0.1"), const int32 InPort = 3000);
+	int32 OpenSendSocket(const FString &InIP = TEXT("127.0.0.1"), const int32 InPort = 3000);
 
 	/**
-	* Close the sending socket. This is usually automatically done on EndPlay.
-	*/
+	 * Close the sending socket. This is usually automatically done on EndPlay.
+	 */
 	UFUNCTION(BlueprintCallable, Category = "UDP Functions")
 	bool CloseSendSocket();
 
-	/** 
-	* Start listening at given port for udp messages. Will auto-listen on BeginPlay by default. Listen IP of 0.0.0.0 means all connections.
-	*/
+	/**
+	 * Start listening at given port for udp messages. Will auto-listen on BeginPlay by default. Listen IP of 0.0.0.0 means all connections.
+	 */
 	UFUNCTION(BlueprintCallable, Category = "UDP Functions")
-	bool OpenReceiveSocket(const FString& InListenIP = TEXT("0.0.0.0"), const int32 InListenPort = 3002);
+	bool OpenReceiveSocket(const FString &InListenIP = TEXT("0.0.0.0"), const int32 InListenPort = 3002);
 
 	/**
-	* Close the receiving socket. This is usually automatically done on EndPlay.
-	*/
+	 * Close the receiving socket. This is usually automatically done on EndPlay.
+	 */
 	UFUNCTION(BlueprintCallable, Category = "UDP Functions")
 	bool CloseReceiveSocket();
 
 	/**
-	* Emit specified bytes to the udp channel.
-	*
-	* @param Message	Bytes
-	*/
+	 * Emit specified bytes to the udp channel.
+	 *
+	 * @param Message	Bytes
+	 */
 	UFUNCTION(BlueprintCallable, Category = "UDP Functions")
-	bool EmitBytes(const TArray<uint8>& Bytes);
+	bool EmitBytes(const TArray<uint8> &Bytes);
 
-	virtual void InitializeComponent() override;
-	virtual void UninitializeComponent() override;
-	virtual void BeginPlay() override;
-	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
-	
+	void Start();
+	void Stop();
+
 protected:
 	TSharedPtr<FUDPNative> Native;
 	void LinkupCallbacks();
