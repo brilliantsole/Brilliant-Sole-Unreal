@@ -78,6 +78,19 @@ UObject *UBS_Subsystem::GetBleManager()
     if (!BleManagerSingleton && BleManagerClass)
     {
         BleManagerSingleton = CreateSingleton(BleManagerClass, true);
+        GetDeviceManager();
+
+        FName MethodName("AssignBS_DeviceManager");
+        UFunction *InitalizeFunction = BleManagerSingleton->FindFunction(MethodName);
+        if (InitalizeFunction)
+        {
+            UE_LOGFMT(LogBS_Subsystem, Log, "Assigning DeviceManagerSingleton to BleManagerSingleton...");
+            BleManagerSingleton->ProcessEvent(InitalizeFunction, &DeviceManagerSingleton);
+        }
+        else
+        {
+            UE_LOGFMT(LogBS_Subsystem, Error, "Couldn't find AssignBS_DeviceManager function");
+        }
     }
     return BleManagerSingleton;
 }
