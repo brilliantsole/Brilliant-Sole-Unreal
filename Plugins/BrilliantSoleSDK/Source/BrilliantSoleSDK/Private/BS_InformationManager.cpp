@@ -140,6 +140,6 @@ void UBS_InformationManager::UpdateCurrentTime()
     uint64 Milliseconds = TimeUtils::GetMilliseconds();
     UE_LOGFMT(LogBS_InformationManager, Verbose, "Updating CurrentTime to {0}", Milliseconds);
     const TArray<uint8> TxMessage = BS_ByteParser::ToByteArray(Milliseconds);
-    SendTxMessages.ExecuteIfBound({{BS_MessageSetCurrentTime, TxMessage}}, true);
+    SendTxMessages.ExecuteIfBound({{BS_MessageSetCurrentTime, TxMessage}}, false);
 }
 // CURRENT TIME END

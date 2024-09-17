@@ -111,6 +111,9 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "BS ConnectionManager")
 	void OnRxMessage(const uint8 MessageType, const TArray<uint8> &Message);
 
+	UFUNCTION(BlueprintCallable, Category = "BS ConnectionManager")
+	void OnRxMessages();
+
 	UFUNCTION(BlueprintImplementableEvent, Category = "BS ConnectionManager")
 	void SendTxData(const TArray<uint8> &Data);
 

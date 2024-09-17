@@ -299,6 +299,16 @@ void UBS_Device::OnRxMessage(uint8 MessageType, const TArray<uint8> &Message)
     if (ConnectionStatus == EBS_ConnectionStatus::CONNECTING)
     {
         ReceivedTxMessages.Emplace(MessageType);
+    }
+}
+
+void UBS_Device::OnRxMessages()
+{
+    UE_LOGFMT(LogBS_Device, Verbose, "Rx Messages received");
+    SendPendingTxMessages();
+
+    if (ConnectionStatus == EBS_ConnectionStatus::CONNECTING)
+    {
         CheckIfFullyConnected();
     }
 }
