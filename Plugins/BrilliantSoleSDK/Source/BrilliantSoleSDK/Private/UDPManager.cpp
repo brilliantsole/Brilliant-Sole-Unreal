@@ -1,17 +1,17 @@
 
-#include "UDPComponent.h"
+#include "UDPManager.h"
 #include "Async/Async.h"
 #include "SocketSubsystem.h"
 #include "Kismet/KismetSystemLibrary.h"
 
-UUDPComponent::UUDPComponent()
+UUDPManager::UUDPManager()
 {
 	Native = MakeShareable(new FUDPNative);
 
 	LinkupCallbacks();
 }
 
-void UUDPComponent::LinkupCallbacks()
+void UUDPManager::LinkupCallbacks()
 {
 	Native->OnSendOpened = [this](int32 SpecifiedPort, int32 BoundPort, FString BoundIP)
 	{
@@ -48,12 +48,12 @@ void UUDPComponent::LinkupCallbacks()
 	};
 }
 
-bool UUDPComponent::CloseReceiveSocket()
+bool UUDPManager::CloseReceiveSocket()
 {
 	return Native->CloseReceiveSocket();
 }
 
-int32 UUDPComponent::OpenSendSocket(const FString &InIP /*= TEXT("127.0.0.1")*/, const int32 InPort /*= 3000*/)
+int32 UUDPManager::OpenSendSocket(const FString &InIP /*= TEXT("127.0.0.1")*/, const int32 InPort /*= 3000*/)
 {
 	// Sync side effect sampled settings
 	Native->Settings.SendSocketName = Settings.SendSocketName;
@@ -62,14 +62,14 @@ int32 UUDPComponent::OpenSendSocket(const FString &InIP /*= TEXT("127.0.0.1")*/,
 	return Native->OpenSendSocket(InIP, InPort);
 }
 
-bool UUDPComponent::CloseSendSocket()
+bool UUDPManager::CloseSendSocket()
 {
 	Settings.SendBoundPort = 0;
 	Settings.SendBoundIP = FString(TEXT("0.0.0.0"));
 	return Native->CloseSendSocket();
 }
 
-bool UUDPComponent::OpenReceiveSocket(const FString &InListenIp /*= TEXT("0.0.0.0")*/, const int32 InListenPort /*= 3002*/)
+bool UUDPManager::OpenReceiveSocket(const FString &InListenIp /*= TEXT("0.0.0.0")*/, const int32 InListenPort /*= 3002*/)
 {
 	// Sync side effect sampled settings
 	Native->Settings.bShouldAutoOpenReceive = Settings.bShouldAutoOpenReceive;
@@ -79,12 +79,12 @@ bool UUDPComponent::OpenReceiveSocket(const FString &InListenIp /*= TEXT("0.0.0.
 	return Native->OpenReceiveSocket(InListenIp, InListenPort);
 }
 
-bool UUDPComponent::EmitBytes(const TArray<uint8> &Bytes)
+bool UUDPManager::EmitBytes(const TArray<uint8> &Bytes)
 {
 	return Native->EmitBytes(Bytes);
 }
 
-void UUDPComponent::Start()
+void UUDPManager::Start()
 {
 	// Sync all settings to native. These are duplicated for dev convenience in bp
 	Native->Settings = Settings;
@@ -100,7 +100,7 @@ void UUDPComponent::Start()
 	}
 }
 
-void UUDPComponent::Stop()
+void UUDPManager::Stop()
 {
 	CloseSendSocket();
 	CloseReceiveSocket();

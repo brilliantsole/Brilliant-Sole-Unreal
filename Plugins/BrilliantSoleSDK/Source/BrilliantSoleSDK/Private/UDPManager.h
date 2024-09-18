@@ -1,15 +1,15 @@
 #pragma once
 
-#include "Components/ActorComponent.h"
+#include "CoreMinimal.h"
 #include "IPAddress.h"
 #include "Common/UdpSocketBuilder.h"
 #include "Common/UdpSocketReceiver.h"
 #include "Common/UdpSocketSender.h"
-#include "UDPComponent.generated.h"
+#include "UDPManager.generated.h"
 
 // UDP Connection Settings
 USTRUCT(BlueprintType)
-struct UDPWRAPPER_API FUDPSettings
+struct FUDPSettings
 {
 	GENERATED_USTRUCT_BODY()
 
@@ -72,7 +72,7 @@ struct UDPWRAPPER_API FUDPSettings
 	FUDPSettings();
 };
 
-class UDPWRAPPER_API FUDPNative
+class FUDPNative
 {
 public:
 	TFunction<void(const TArray<uint8> &, const FString &, const int32 &)> OnReceivedBytes;
@@ -132,12 +132,12 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FUDPSocketSendStateSignature, int
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FUDPMessageSignature, const TArray<uint8> &, Bytes, const FString &, IPAddress, const int32 &, Port);
 
 UCLASS(BlueprintType, Blueprintable)
-class UDPWRAPPER_API UUDPComponent : public UObject
+class UUDPManager : public UObject
 {
 	GENERATED_BODY()
 
 public:
-	UUDPComponent();
+	UUDPManager();
 
 public:
 	// Async events
