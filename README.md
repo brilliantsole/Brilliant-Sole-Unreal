@@ -34,31 +34,6 @@ if ([[Characteristic.UUID.UUIDString lowercaseString] isEqualToString:[Character
 }
 ```
 
-and modify UBleDevice::WriteCharacteristic:
-
-```
-void UBleDevice::WriteCharacteristic(const FString &ServiceUUID, const FString &CharacteristicUUID, const TArray<uint8> &Data)
-{
-	CBCharacteristic *Characteristic = GetCharacteristic(ServiceUUID, CharacteristicUUID);
-	if (Characteristic)
-	{
-		[Device writeValue:[NSData dataWithBytes:(void *)Data.GetData() length:Data.Num()]
-			forCharacteristic:Characteristic
-						 type:CBCharacteristicWriteWithoutResponse];
-	}
-}
-```
-
-to this:
-
-```
-if ([[Characteristic.UUID.UUIDString lowercaseString] isEqualToString:[CharacteristicCBUUID.UUIDString lowercaseString]])
-{
-	TargetCharacteristic = Characteristic;
-	break;
-}
-```
-
 and add to BleDeviceDelegate.cpp (be sure to replace the existing `didUpdateValueForCharacteristic` method):
 
 ```

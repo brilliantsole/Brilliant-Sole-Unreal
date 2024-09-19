@@ -124,20 +124,7 @@ UObject *UBS_Subsystem::GetUDPManager()
 {
     if (!UDPManagerSingleton && UDPManagerClass)
     {
-        UDPManagerSingleton = CreateSingleton(UDPManagerClass, true);
-        GetDeviceManager();
-
-        FName MethodName("AssignBS_DeviceManager");
-        UFunction *InitalizeFunction = UDPManagerSingleton->FindFunction(MethodName);
-        if (InitalizeFunction)
-        {
-            UE_LOGFMT(LogBS_Subsystem, Log, "Assigning DeviceManagerSingleton to UDPManagerSingleton...");
-            UDPManagerSingleton->ProcessEvent(InitalizeFunction, &DeviceManagerSingleton);
-        }
-        else
-        {
-            UE_LOGFMT(LogBS_Subsystem, Error, "Couldn't find AssignBS_DeviceManager function");
-        }
+        UDPManagerSingleton = CreateSingleton(UDPManagerClass, false);
     }
     return UDPManagerSingleton;
 }
