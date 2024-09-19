@@ -112,7 +112,7 @@ void UBS_FileTransferManager::SetFileLength(const uint32 NewFileLength, bool bSe
         return;
     }
     UE_LOGFMT(LogBS_FileTransferManager, Verbose, "Updating FileLength to {0}", NewFileLength);
-    const TArray<uint8> TxMessage = BS_ByteParser::ToByteArray(NewFileLength);
+    const TArray<uint8> TxMessage = BS_ByteParser::ToByteArray(NewFileLength, true);
     SendTxMessages.ExecuteIfBound({{BS_MessageSetFileLength, TxMessage}}, bSendImmediately);
 }
 // FILE LENGTH END
@@ -134,7 +134,7 @@ void UBS_FileTransferManager::SetFileChecksum(const uint32 NewFileChecksum, bool
         return;
     }
     UE_LOGFMT(LogBS_FileTransferManager, Verbose, "Updating FileChecksum to {0}", NewFileChecksum);
-    const TArray<uint8> TxMessage = BS_ByteParser::ToByteArray(NewFileChecksum);
+    const TArray<uint8> TxMessage = BS_ByteParser::ToByteArray(NewFileChecksum, true);
     SendTxMessages.ExecuteIfBound({{BS_MessageSetFileChecksum, TxMessage}}, bSendImmediately);
 }
 // FILE CHECKSUM END
@@ -297,7 +297,7 @@ void UBS_FileTransferManager::ParseFileTransferBlock(const TArray<uint8> &Messag
     }
     else
     {
-        const TArray<uint8> TxMessage = BS_ByteParser::ToByteArray(CurrentFileLength);
+        const TArray<uint8> TxMessage = BS_ByteParser::ToByteArray(CurrentFileLength, true);
         SendTxMessages.ExecuteIfBound({{BS_MessageFileBytesTransferred, TxMessage}}, true);
     }
 }

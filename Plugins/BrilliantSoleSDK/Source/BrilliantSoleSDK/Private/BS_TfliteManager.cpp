@@ -154,7 +154,7 @@ void UBS_TfliteManager::SetSampleRate(const EBS_SensorRate NewSampleRate, bool b
     }
     const uint16 NewRawSampleRate = UBS_SensorConfiguration::GetRawSensorRate(NewSampleRate);
     UE_LOGFMT(LogBS_TfliteManager, Verbose, "Updating SampleRate to {0}, NewRawSampleRate: {1}ms", UEnum::GetValueAsString(NewSampleRate), NewRawSampleRate);
-    const TArray<uint8> TxMessage = BS_ByteParser::ToByteArray(NewRawSampleRate);
+    const TArray<uint8> TxMessage = BS_ByteParser::ToByteArray(NewRawSampleRate, true);
     SendTxMessages.ExecuteIfBound({{BS_MessageTfliteSetSampleRate, TxMessage}}, bSendImmediately);
 }
 // SAMPLE RATE END
@@ -245,7 +245,7 @@ void UBS_TfliteManager::SetCaptureDelay(const uint16 NewCaptureDelay, bool bSend
         return;
     }
     UE_LOGFMT(LogBS_TfliteManager, Verbose, "Updating CaptureDelay to {0}", NewCaptureDelay);
-    const TArray<uint8> TxMessage = BS_ByteParser::ToByteArray(NewCaptureDelay);
+    const TArray<uint8> TxMessage = BS_ByteParser::ToByteArray(NewCaptureDelay, true);
     SendTxMessages.ExecuteIfBound({{BS_MessageTfliteSetCaptureDelay, TxMessage}}, bSendImmediately);
 }
 // CAPTURE DELAY END
@@ -267,7 +267,7 @@ void UBS_TfliteManager::SetThreshold(const float NewThreshold, bool bSendImmedia
         return;
     }
     UE_LOGFMT(LogBS_TfliteManager, Verbose, "Updating Threshold to {0}", NewThreshold);
-    const TArray<uint8> TxMessage = BS_ByteParser::ToByteArray(NewThreshold);
+    const TArray<uint8> TxMessage = BS_ByteParser::ToByteArray(NewThreshold, true);
     SendTxMessages.ExecuteIfBound({{BS_MessageTfliteSetThreshold, TxMessage}}, bSendImmediately);
 }
 // THRESHOLD END

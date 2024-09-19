@@ -38,7 +38,7 @@ struct FBS_UDP_Message
         Array.Add(static_cast<uint8>(Type));
 
         uint16 DataLength = DataNum();
-        Array.Append(BS_ByteParser::ToByteArray<uint16>(DataLength));
+        Array.Append(BS_ByteParser::ToByteArray(DataLength));
         // Array.Add(DataLength & 0xFF);        // Low byte
         // Array.Add((DataLength >> 8) & 0xFF); // High byte
 

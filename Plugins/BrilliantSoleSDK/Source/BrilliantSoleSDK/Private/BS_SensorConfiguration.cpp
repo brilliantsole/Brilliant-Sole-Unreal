@@ -225,7 +225,7 @@ const TArray<uint8> UBS_SensorConfiguration::ToArray() const
         const uint8 SensorTypeEnum = static_cast<uint8>(Pair.Key);
         ByteArray.Add(SensorTypeEnum);
         const uint16 RawSensorRate = GetRawSensorRate(Pair.Value);
-        ByteArray.Append(BS_ByteParser::ToByteArray(RawSensorRate));
+        ByteArray.Append(BS_ByteParser::ToByteArray(RawSensorRate, true));
     }
     return ByteArray;
 }

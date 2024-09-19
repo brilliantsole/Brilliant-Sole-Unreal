@@ -18,7 +18,7 @@ void UBS_ParseUtils::ParseRxData(const TArray<uint8> &Data, FBS_MessageCallback 
         UE_LOGFMT(LogBS_ParseUtils, Verbose, "Parsing Message at {0}...", Offset);
 
         const uint8 MessageType = Data[Offset++];
-        const uint16 MessageDataLength = BS_ByteParser::ParseAs<uint16>(Data, Offset);
+        const uint16 MessageDataLength = BS_ByteParser::ParseAs<uint16>(Data, Offset, true);
         Offset += 2;
 
         UE_LOGFMT(LogBS_ParseUtils, Verbose, "Message #{0} ({1} bytes)", MessageType, MessageDataLength);

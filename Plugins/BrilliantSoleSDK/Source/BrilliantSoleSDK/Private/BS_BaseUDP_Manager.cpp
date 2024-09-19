@@ -83,7 +83,7 @@ int32 UBS_BaseUDP_Manager::SetInListenPort(int32 NewInListenPort)
     if (InListenPort != NewInListenPort)
     {
         InListenPort = NewInListenPort;
-        SetInListenPortUDP_Message.Data = BS_ByteParser::ToByteArray<uint16>(InListenPort);
+        SetInListenPortUDP_Message.Data = BS_ByteParser::ToByteArray(InListenPort);
         UE_LOGFMT(LogBS_BaseUDP_Manager, Verbose, "Updated InListenPort to {0}", InListenPort);
     }
     else
