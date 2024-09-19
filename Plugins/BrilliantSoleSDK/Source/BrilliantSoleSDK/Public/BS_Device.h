@@ -120,7 +120,7 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "BS ConnectionManager")
 	void OnSendTxData();
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BS ConnectionManager")
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BS ConnectionManager")
 	bool bIsSendingTxData = false;
 
 private:

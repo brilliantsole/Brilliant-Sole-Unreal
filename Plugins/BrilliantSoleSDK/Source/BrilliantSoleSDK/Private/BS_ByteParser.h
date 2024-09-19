@@ -24,8 +24,10 @@ public:
         // }
 
         FMemory::Memcpy(ByteArray.GetData(), &Value, Size);
-        if (bIsLittleEndian && !PLATFORM_LITTLE_ENDIAN)
+        // UE_LOGFMT(LogBS_ByteParser, Verbose, "bIsLittleEndian {0} PLATFORM_LITTLE_ENDIAN {1}", bIsLittleEndian, PLATFORM_LITTLE_ENDIAN);
+        if (bIsLittleEndian != PLATFORM_LITTLE_ENDIAN)
         {
+            UE_LOGFMT(LogBS_ByteParser, Verbose, "Reversing bytes...");
             Algo::Reverse(ByteArray);
         }
 
@@ -44,7 +46,8 @@ public:
         T ParsedValue;
         FMemory::Memcpy(&ParsedValue, ByteArray.GetData() + Offset, sizeof(T));
         UE_LOGFMT(LogBS_ByteParser, Verbose, "ParsedValue: {0}", ParsedValue);
-        if (!bIsLittleEndian)
+        UE_LOGFMT(LogBS_ByteParser, Verbose, "bIsLittleEndian: {0} PLATFORM_LITTLE_ENDIAN: {1}", bIsLittleEndian, PLATFORM_LITTLE_ENDIAN);
+        if (bIsLittleEndian != PLATFORM_LITTLE_ENDIAN)
         {
             ParsedValue = ByteSwap(ParsedValue);
             UE_LOGFMT(LogBS_ByteParser, Verbose, "Swapped ParsedValue: {0}", ParsedValue);
