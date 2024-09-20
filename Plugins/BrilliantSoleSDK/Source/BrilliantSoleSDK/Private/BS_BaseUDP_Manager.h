@@ -6,6 +6,8 @@
 #include "UDPManager.h"
 #include "Logging/StructuredLog.h"
 #include "BS_UDP_Message.h"
+#include "BS_ConnectionStatus.h"
+#include "BS_BaseClientManager.h"
 #include "BS_BaseUDP_Manager.generated.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_BaseUDP_Manager, Verbose, All);
@@ -13,27 +15,12 @@ DECLARE_LOG_CATEGORY_EXTERN(LogBS_BaseUDP_Manager, Verbose, All);
 #define MAX_UDP_MESSAGE_SIZE 65507
 
 UCLASS(Abstract, BlueprintType, Blueprintable)
-class UBS_BaseUDP_Manager : public UObject
+class UBS_BaseUDP_Manager : public UBS_BaseClientManager
 {
     GENERATED_BODY()
 
 public:
     UBS_BaseUDP_Manager();
-    void PostInitProperties();
-
-public:
-    UFUNCTION(BlueprintImplementableEvent, Category = "BS Subsystem")
-    void InitializeBP();
-
-    // BS SUBSYSTEM START
-protected:
-    UFUNCTION(BlueprintPure, Category = "BS Subsystem")
-    const UBS_Subsystem *BS_Subsystem() const { return _BS_Subsystem; }
-
-private:
-    void GetBS_Subsystem();
-    UBS_Subsystem *_BS_Subsystem;
-    // BS SUBSYSTEM END
 
     // UDP MANAGER START
 public:
@@ -66,6 +53,11 @@ private:
     const FBS_UDP_Message &GetPingMessage();
     // PING END
 
+    // PONG START
+    void OnPongMessage(const TArray<uint8> &Message);
+
+    // PONG END
+
     // MESSAGING START
 public:
 protected:
@@ -96,16 +88,12 @@ private:
 
     // CONNECTION START
 public:
-    UFUNCTION(BlueprintPure, Category = "BS UDP Manager")
-    bool IsConnected() const { return bIsConnected; }
-
-    UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "BS UDP Manager")
+    UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "BS UDP Manager")
     void Connect(const FString &IP_Address = "127.0.0.1", const int32 Port = 3000);
+    virtual void Connect_Implementation(const FString &IP_Address = "127.0.0.1", const int32 Port = 3000);
 
-    UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "BS UDP Manager")
+    UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "BS UDP Manager")
     void Disconnect();
-
-private:
-    bool bIsConnected = false;
+    virtual void Disconnect_Implementation();
     // CONNECTION END
 };

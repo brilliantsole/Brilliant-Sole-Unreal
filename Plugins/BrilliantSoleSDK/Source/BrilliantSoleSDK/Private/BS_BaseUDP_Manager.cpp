@@ -12,6 +12,7 @@
 DEFINE_LOG_CATEGORY(LogBS_BaseUDP_Manager);
 
 UBS_BaseUDP_Manager::UBS_BaseUDP_Manager()
+    : UBS_BaseClientManager()
 {
     UE_LOGFMT(LogBS_BaseUDP_Manager, Verbose, "Constructor: {0}", GetName());
     if (HasAnyFlags(RF_ClassDefaultObject))
@@ -21,59 +22,6 @@ UBS_BaseUDP_Manager::UBS_BaseUDP_Manager()
     }
 
     UDP_Manager = CreateDefaultSubobject<UUDPManager>(TEXT("UDPManager"));
-}
-
-void UBS_BaseUDP_Manager::PostInitProperties()
-{
-    Super::PostInitProperties();
-    UE_LOGFMT(LogBS_BaseUDP_Manager, Verbose, "PostInitProperties {0}", GetName());
-    if (HasAnyFlags(RF_ClassDefaultObject))
-    {
-        UE_LOGFMT(LogBS_BaseUDP_Manager, Verbose, "CDO - Skipping");
-        return;
-    }
-
-    GetBS_Subsystem();
-    InitializeBP();
-}
-
-void UBS_BaseUDP_Manager::GetBS_Subsystem()
-{
-    if (!HasAnyFlags(RF_ClassDefaultObject))
-    {
-        UWorld *World = GetWorld();
-        if (World)
-        {
-            UE_LOGFMT(LogBS_BaseUDP_Manager, Verbose, "World found");
-            UGameInstance *GameInstance = World->GetGameInstance();
-            if (GameInstance)
-            {
-                UE_LOGFMT(LogBS_BaseUDP_Manager, Verbose, "GameInstance found");
-                UBS_Subsystem *__BS_Subsystem = GameInstance->GetSubsystem<UBS_Subsystem>();
-                if (__BS_Subsystem)
-                {
-                    UE_LOGFMT(LogBS_BaseUDP_Manager, Verbose, "BS_Subsystem found");
-                    _BS_Subsystem = __BS_Subsystem;
-                }
-                else
-                {
-                    UE_LOGFMT(LogBS_BaseUDP_Manager, Error, "BS_Subsystem not found");
-                }
-            }
-            else
-            {
-                UE_LOGFMT(LogBS_BaseUDP_Manager, Error, "GameInstance not found");
-            }
-        }
-        else
-        {
-            UE_LOGFMT(LogBS_BaseUDP_Manager, Error, "World not found");
-        }
-    }
-    else
-    {
-        UE_LOGFMT(LogBS_BaseUDP_Manager, Verbose, "CDO constructor - skipping");
-    }
 }
 
 // IN LISTEN PORT START
@@ -97,6 +45,7 @@ int32 UBS_BaseUDP_Manager::SetInListenPort(int32 NewInListenPort)
 // PING START
 void UBS_BaseUDP_Manager::Ping()
 {
+    // FILL - don't ping if a message was sent
     UE_LOGFMT(LogBS_BaseUDP_Manager, Verbose, "Pinging Server...");
     SendUDP_Messages({GetPingMessage()}, true);
 }
@@ -108,6 +57,14 @@ const FBS_UDP_Message &UBS_BaseUDP_Manager::GetPingMessage()
 
 const FBS_UDP_Message UBS_BaseUDP_Manager::PingUDP_Message = {EBS_UDP_MessageType::PING};
 // PING END
+
+// PONG START
+void UBS_BaseUDP_Manager::OnPongMessage(const TArray<uint8> &Message)
+{
+    UE_LOGFMT(LogBS_BaseUDP_Manager, Verbose, "Received Pong Message");
+    // FILL -
+}
+// PONG END
 
 // MESSAGE START
 void UBS_BaseUDP_Manager::SendUDP_Messages(const TArray<FBS_UDP_Message> &UDP_Messages, bool bSendImmediately)
@@ -182,6 +139,7 @@ void UBS_BaseUDP_Manager::OnUDP_Message(EBS_UDP_MessageType MessageType, const T
     case EBS_UDP_MessageType::PING:
         break;
     case EBS_UDP_MessageType::PONG:
+        OnPongMessage(Message);
         break;
     case EBS_UDP_MessageType::SET_REMOTE_RECEIVE_PORT:
         OnSetRemoteReceivePortMessage(Message);
@@ -210,3 +168,14 @@ void UBS_BaseUDP_Manager::OnSetRemoteReceivePortMessage(const TArray<uint8> &Mes
     bDidSendSetInListenPortMessage = true;
 }
 // PARSING END
+
+// CONNECTION START
+void UBS_BaseUDP_Manager::Connect_Implementation(const FString &IP_Address, const int32 Port)
+{
+    SetConnectionStatus(EBS_ConnectionStatus::CONNECTING);
+}
+void UBS_BaseUDP_Manager::Disconnect_Implementation()
+{
+    SetConnectionStatus(EBS_ConnectionStatus::DISCONNECTING);
+}
+// CONNECTION END

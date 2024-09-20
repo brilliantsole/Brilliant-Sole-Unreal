@@ -1,0 +1,62 @@
+// Copyright 2024 Zack Qattan @ Brilliant Sole. All Rights Reserved
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "Logging/StructuredLog.h"
+#include "BS_ServerMessageType.h"
+#include "BS_ConnectionStatus.h"
+#include "BS_BaseClientManager.generated.h"
+
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_BaseClientManager, Verbose, All);
+
+UCLASS(Abstract, BlueprintType, Blueprintable)
+class UBS_BaseClientManager : public UObject
+{
+    GENERATED_BODY()
+
+public:
+    UBS_BaseClientManager();
+    void PostInitProperties();
+
+public:
+    UFUNCTION(BlueprintImplementableEvent, Category = "BS Subsystem")
+    void InitializeBP();
+
+    // BS SUBSYSTEM START
+protected:
+    UFUNCTION(BlueprintPure, Category = "BS Subsystem")
+    const UBS_Subsystem *BS_Subsystem() const { return _BS_Subsystem; }
+
+private:
+    void GetBS_Subsystem();
+    UBS_Subsystem *_BS_Subsystem;
+    // BS SUBSYSTEM END
+
+    // CONNECTION START
+public:
+    UFUNCTION(BlueprintPure, Category = "BS Client Manager")
+    EBS_ConnectionStatus GetConnectionStatus() const { return ConnectionStatus; }
+
+    UFUNCTION(BlueprintPure, Category = "BS Client Manager")
+    bool GetIsConnected() const { return ConnectionStatus == EBS_ConnectionStatus::CONNECTED; }
+
+    DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBS_ClientManagerConnectionStatusUpdateCallback, UBS_BaseClientManager *, ClientManager, EBS_ConnectionStatus, ConnectionStatus);
+    UPROPERTY(BlueprintAssignable, Category = "BS Client Manager")
+    FBS_ClientManagerConnectionStatusUpdateCallback OnConnectionStatusUpdate;
+
+    DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBS_ClientManagerIsConnectedUpdateCallback, UBS_BaseClientManager *, ClientManager, bool, IsConnected);
+    UPROPERTY(BlueprintAssignable, Category = "BS Client Manager")
+    FBS_ClientManagerIsConnectedUpdateCallback OnIsConnectedUpdate;
+
+    UFUNCTION(BlueprintPure, Category = "BS Client Manager")
+    bool IsConnected() const { return ConnectionStatus == EBS_ConnectionStatus::CONNECTED; }
+
+protected:
+    void SetConnectionStatus(EBS_ConnectionStatus NewConnectionStatus);
+
+private:
+    EBS_ConnectionStatus ConnectionStatus = EBS_ConnectionStatus::NOT_CONNECTED;
+
+    // CONNECTION END
+};
