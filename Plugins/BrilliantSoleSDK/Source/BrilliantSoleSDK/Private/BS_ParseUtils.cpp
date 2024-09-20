@@ -50,7 +50,7 @@ void UBS_ParseUtils::ParseUDP_Data(const TArray<uint8> &Data, FBS_UDP_MessageCal
         }
         const EBS_UDP_MessageType MessageType = static_cast<EBS_UDP_MessageType>(MessageTypeEnum);
 
-        const uint16 MessageDataLength = BS_ByteParser::ParseAs<uint16>(Data, Offset);
+        const uint16 MessageDataLength = BS_ByteParser::ParseAs<uint16>(Data, Offset, true);
         Offset += 2;
 
         UE_LOGFMT(LogBS_ParseUtils, Verbose, "Message #{0} ({1} bytes)", UEnum::GetValueAsString(MessageType), MessageDataLength);

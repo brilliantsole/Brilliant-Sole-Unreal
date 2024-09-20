@@ -83,7 +83,7 @@ int32 UBS_BaseUDP_Manager::SetInListenPort(int32 NewInListenPort)
     if (InListenPort != NewInListenPort)
     {
         InListenPort = NewInListenPort;
-        SetInListenPortUDP_Message.Data = BS_ByteParser::ToByteArray(InListenPort);
+        SetInListenPortUDP_Message.Data = BS_ByteParser::ToByteArray<uint16>(InListenPort);
         UE_LOGFMT(LogBS_BaseUDP_Manager, Verbose, "Updated InListenPort to {0}", InListenPort);
     }
     else
@@ -148,13 +148,13 @@ void UBS_BaseUDP_Manager::SendPendingUDP_Messages()
         bool ShouldAppendUDP_Message = MaxMessageLength == 0 || UDP_Data.Num() + PendingUDP_MessageLength <= MaxMessageLength;
         if (ShouldAppendUDP_Message)
         {
-            UE_LOGFMT(LogBS_BaseUDP_Manager, Verbose, "Appending message #{0} ({1} bytes)", UEnum::GetValueAsString(PendingUDP_Message.Type), PendingUDP_MessageLength);
+            UE_LOGFMT(LogBS_BaseUDP_Manager, Verbose, "Appending message {0} ({1} bytes)", UEnum::GetValueAsString(PendingUDP_Message.Type), PendingUDP_MessageLength);
             PendingUDP_Message.AppendTo(UDP_Data);
             PendingUDP_Messages.RemoveAt(PendingUDP_MessageIndex);
         }
         else
         {
-            UE_LOGFMT(LogBS_BaseUDP_Manager, Verbose, "Skipping message #{0} ({1} bytes)", UEnum::GetValueAsString(PendingUDP_Message.Type), PendingUDP_MessageLength);
+            UE_LOGFMT(LogBS_BaseUDP_Manager, Verbose, "Skipping message {0} ({1} bytes)", UEnum::GetValueAsString(PendingUDP_Message.Type), PendingUDP_MessageLength);
             PendingUDP_MessageIndex++;
         }
     }
@@ -180,6 +180,8 @@ void UBS_BaseUDP_Manager::OnUDP_Message(EBS_UDP_MessageType MessageType, const T
     switch (MessageType)
     {
     case EBS_UDP_MessageType::PING:
+        break;
+    case EBS_UDP_MessageType::PONG:
         break;
     case EBS_UDP_MessageType::SET_REMOTE_RECEIVE_PORT:
         OnSetRemoteReceivePortMessage(Message);

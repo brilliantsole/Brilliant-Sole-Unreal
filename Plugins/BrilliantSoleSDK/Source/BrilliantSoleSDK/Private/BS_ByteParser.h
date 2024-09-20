@@ -18,11 +18,6 @@ public:
         const uint8 Size = sizeof(T);
         ByteArray.SetNumZeroed(Size);
 
-        // for (uint8 i = 0; i < Size; i++)
-        // {
-        //     ByteArray[i] = (Value >> (i * 8)) & 0xFF;
-        // }
-
         FMemory::Memcpy(ByteArray.GetData(), &Value, Size);
         // UE_LOGFMT(LogBS_ByteParser, Verbose, "bIsLittleEndian {0} PLATFORM_LITTLE_ENDIAN {1}", bIsLittleEndian, PLATFORM_LITTLE_ENDIAN);
         if (bIsLittleEndian != PLATFORM_LITTLE_ENDIAN)
@@ -46,7 +41,7 @@ public:
         T ParsedValue;
         FMemory::Memcpy(&ParsedValue, ByteArray.GetData() + Offset, sizeof(T));
         UE_LOGFMT(LogBS_ByteParser, Verbose, "ParsedValue: {0}", ParsedValue);
-        UE_LOGFMT(LogBS_ByteParser, Verbose, "bIsLittleEndian: {0} PLATFORM_LITTLE_ENDIAN: {1}", bIsLittleEndian, PLATFORM_LITTLE_ENDIAN);
+        // UE_LOGFMT(LogBS_ByteParser, Verbose, "bIsLittleEndian: {0} PLATFORM_LITTLE_ENDIAN: {1}", bIsLittleEndian, PLATFORM_LITTLE_ENDIAN);
         if (bIsLittleEndian != PLATFORM_LITTLE_ENDIAN)
         {
             ParsedValue = ByteSwap(ParsedValue);

@@ -93,4 +93,19 @@ protected:
 private:
     void OnSetRemoteReceivePortMessage(const TArray<uint8> &Message);
     // PARSING END
+
+    // CONNECTION START
+public:
+    UFUNCTION(BlueprintPure, Category = "BS UDP Manager")
+    bool IsConnected() const { return bIsConnected; }
+
+    UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "BS UDP Manager")
+    void Connect(const FString &IP_Address = "127.0.0.1", const int32 Port = 3000);
+
+    UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "BS UDP Manager")
+    void Disconnect();
+
+private:
+    bool bIsConnected = false;
+    // CONNECTION END
 };

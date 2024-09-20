@@ -8,6 +8,7 @@ UENUM(BlueprintType)
 enum class EBS_UDP_MessageType : uint8
 {
     PING UMETA(DisplayName = "Ping"),
+    PONG UMETA(DisplayName = "Pong"),
     SET_REMOTE_RECEIVE_PORT UMETA(DisplayName = "Set Remote Receive Port"),
     SERVER_MESSAGE UMETA(DisplayName = "Server Message"),
     COUNT UMETA(Hidden)
