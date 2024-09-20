@@ -97,3 +97,42 @@ void UBS_BaseClientManager::SetConnectionStatus(EBS_ConnectionStatus NewConnecti
     }
 }
 // CONNECTION END
+
+// MESSAGE START
+void UBS_BaseClientManager::OnMessage(EBS_ServerMessageType MessageType, const TArray<uint8> &Message)
+{
+    UE_LOGFMT(LogBS_BaseClientManager, Verbose, "message {0} ({1} bytes)", UEnum::GetValueAsString(MessageType), Message.Num());
+
+    switch (MessageType)
+    {
+    default:
+        UE_LOGFMT(LogBS_BaseClientManager, Error, "Uncaught MessageType {0}", UEnum::GetValueAsString(MessageType));
+        break;
+    }
+}
+
+void UBS_BaseClientManager::OnData(const TArray<uint8> &Data)
+{
+    // FILL
+}
+
+void UBS_BaseClientManager::SendMessages(const TArray<FBS_ServerMessage> &ServerMessages, bool bSendImmediately)
+{
+    TArray<uint8> MessageData;
+
+    for (const FBS_ServerMessage &ServerMessage : ServerMessages)
+    {
+        ServerMessage.AppendTo(MessageData);
+    }
+
+    if (MessageData.IsEmpty())
+    {
+        UE_LOGFMT(LogBS_BaseClientManager, Verbose, "MessageData is Empty - won't send any data");
+        return;
+    }
+
+    UE_LOGFMT(LogBS_BaseClientManager, Verbose, "Sending {0} bytes", MessageData.Num());
+
+    SendMessageData(MessageData, bSendImmediately);
+}
+// MESSAGE END

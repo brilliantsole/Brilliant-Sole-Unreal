@@ -7,8 +7,6 @@
 UENUM(BlueprintType)
 enum class EBS_ServerMessageType : uint8
 {
-    PING UMETA(DisplayName = "Ping"),
-    PONG UMETA(DisplayName = "Pong"),
     IS_SCANNING_AVAILABLE UMETA(DisplayName = "Is Scanning Available"),
     IS_SCANNING UMETA(DisplayName = "Is Scanning"),
     START_SCAN UMETA(DisplayName = "Start Scan"),

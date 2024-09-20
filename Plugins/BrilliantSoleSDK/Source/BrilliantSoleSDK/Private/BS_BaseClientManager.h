@@ -6,6 +6,7 @@
 #include "Logging/StructuredLog.h"
 #include "BS_ServerMessageType.h"
 #include "BS_ConnectionStatus.h"
+#include "BS_ServerMessage.h"
 #include "BS_BaseClientManager.generated.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_BaseClientManager, Verbose, All);
@@ -28,7 +29,7 @@ protected:
     UFUNCTION(BlueprintPure, Category = "BS Subsystem")
     const UBS_Subsystem *BS_Subsystem() const { return _BS_Subsystem; }
 
-private:
+protected:
     void GetBS_Subsystem();
     UBS_Subsystem *_BS_Subsystem;
     // BS SUBSYSTEM END
@@ -59,4 +60,17 @@ private:
     EBS_ConnectionStatus ConnectionStatus = EBS_ConnectionStatus::NOT_CONNECTED;
 
     // CONNECTION END
+
+    // MESSAGE START
+protected:
+    void OnData(const TArray<uint8> &Data);
+    void OnMessage(EBS_ServerMessageType MessageType, const TArray<uint8> &Message);
+
+    virtual void SendMessageData(const TArray<uint8> &Data, bool bSendImmediately = true) {}
+
+private:
+    void SendMessages(const TArray<FBS_ServerMessage> &ServerMessages, bool bSendImmediately = true);
+
+private:
+    // MESSAGE END
 };

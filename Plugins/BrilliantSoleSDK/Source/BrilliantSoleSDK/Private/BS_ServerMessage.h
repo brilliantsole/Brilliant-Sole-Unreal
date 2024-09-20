@@ -4,21 +4,21 @@
 
 #include "CoreMinimal.h"
 #include "Containers/Array.h"
-#include "BS_UDP_MessageType.h"
+#include "BS_ServerMessageType.h"
 #include "BS_ByteParser.h"
 #include "Misc/Optional.h"
 
-struct FBS_UDP_Message
+struct FBS_ServerMessage
 {
-    EBS_UDP_MessageType Type;
+    EBS_ServerMessageType Type;
     TOptional<TArray<uint8>> Data;
 
-    FBS_UDP_Message(EBS_UDP_MessageType InType, const TArray<uint8> &InData)
+    FBS_ServerMessage(EBS_ServerMessageType InType, const TArray<uint8> &InData)
         : Type(InType), Data(InData)
     {
     }
 
-    FBS_UDP_Message(EBS_UDP_MessageType InType)
+    FBS_ServerMessage(EBS_ServerMessageType InType)
         : Type(InType)
     {
     }

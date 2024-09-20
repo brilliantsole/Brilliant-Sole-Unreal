@@ -43,30 +43,48 @@ int32 UBS_BaseUDP_Manager::SetInListenPort(int32 NewInListenPort)
 // IN LISTEN PORT END
 
 // PING START
-void UBS_BaseUDP_Manager::Ping()
+void UBS_BaseUDP_Manager::StartPinging()
 {
-    // FILL - don't ping if a message was sent
-    UE_LOGFMT(LogBS_BaseUDP_Manager, Verbose, "Pinging Server...");
-    SendUDP_Messages({GetPingMessage()}, true);
+    UWorld *World = GetWorld();
+    if (World)
+    {
+        World->GetTimerManager().SetTimer(PingTimerHandler, this, &UBS_BaseUDP_Manager::Ping, 2.0f, true);
+    }
+}
+void UBS_BaseUDP_Manager::StopPinging()
+{
+    UWorld *World = GetWorld();
+    if (World)
+    {
+        World->GetTimerManager().ClearTimer(PingTimerHandler);
+    }
 }
 
-const FBS_UDP_Message &UBS_BaseUDP_Manager::GetPingMessage()
+void UBS_BaseUDP_Manager::Ping()
 {
-    return bDidSendSetInListenPortMessage ? PingUDP_Message : SetInListenPortUDP_Message;
+    UE_LOGFMT(LogBS_BaseUDP_Manager, Verbose, "Pinging...");
+    const FBS_UDP_Message &_PingMessage = bDidSendSetInListenPortMessage ? PingMessage : SetInListenPortUDP_Message;
+    SendUDP_Messages({_PingMessage}, true);
 };
 
-const FBS_UDP_Message UBS_BaseUDP_Manager::PingUDP_Message = {EBS_UDP_MessageType::PING};
+const FBS_UDP_Message UBS_BaseUDP_Manager::PingMessage = {EBS_UDP_MessageType::PING};
 // PING END
 
 // PONG START
-void UBS_BaseUDP_Manager::OnPongMessage(const TArray<uint8> &Message)
+void UBS_BaseUDP_Manager::Pong()
 {
-    UE_LOGFMT(LogBS_BaseUDP_Manager, Verbose, "Received Pong Message");
-    // FILL -
+    UE_LOGFMT(LogBS_BaseUDP_Manager, Verbose, "Ponging Server...");
+    SendUDP_Messages({PongMessage}, true);
 }
+const FBS_UDP_Message UBS_BaseUDP_Manager::PongMessage = {EBS_UDP_MessageType::PONG};
+
 // PONG END
 
 // MESSAGE START
+void UBS_BaseUDP_Manager::SendMessageData(const TArray<uint8> &Data, bool bSendImmediately)
+{
+    SendUDP_Messages({{EBS_UDP_MessageType::SERVER_MESSAGE, Data}}, bSendImmediately);
+}
 void UBS_BaseUDP_Manager::SendUDP_Messages(const TArray<FBS_UDP_Message> &UDP_Messages, bool bSendImmediately)
 {
     UE_LOGFMT(LogBS_BaseUDP_Manager, Verbose, "Requesting to send {0} Messages...", UDP_Messages.Num());
@@ -137,14 +155,15 @@ void UBS_BaseUDP_Manager::OnUDP_Message(EBS_UDP_MessageType MessageType, const T
     switch (MessageType)
     {
     case EBS_UDP_MessageType::PING:
+        Pong();
         break;
     case EBS_UDP_MessageType::PONG:
-        OnPongMessage(Message);
         break;
     case EBS_UDP_MessageType::SET_REMOTE_RECEIVE_PORT:
         OnSetRemoteReceivePortMessage(Message);
         break;
     case EBS_UDP_MessageType::SERVER_MESSAGE:
+        OnData(Message);
         break;
     default:
         UE_LOGFMT(LogBS_BaseUDP_Manager, Error, "Uncaught MessageType {0}", UEnum::GetValueAsString(MessageType));
@@ -166,6 +185,8 @@ void UBS_BaseUDP_Manager::OnSetRemoteReceivePortMessage(const TArray<uint8> &Mes
     UE_LOGFMT(LogBS_BaseUDP_Manager, Verbose, "Successfully set RemoteReceivePort");
 
     bDidSendSetInListenPortMessage = true;
+
+    SetConnectionStatus(EBS_ConnectionStatus::CONNECTED);
 }
 // PARSING END
 

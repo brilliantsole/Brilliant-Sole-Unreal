@@ -8,6 +8,8 @@
 #include "BS_UDP_Message.h"
 #include "BS_ConnectionStatus.h"
 #include "BS_BaseClientManager.h"
+#include "TimerManager.h"
+#include "Engine/World.h"
 #include "BS_BaseUDP_Manager.generated.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_BaseUDP_Manager, Verbose, All);
@@ -44,23 +46,31 @@ private:
     // IN LISTEN PORT END
 
     // PING START
-protected:
+public:
     UFUNCTION(BlueprintCallable, Category = "BS UDP Manager")
+    void StartPinging();
+    UFUNCTION(BlueprintCallable, Category = "BS UDP Manager")
+    void StopPinging();
+
+protected:
+private:
+    FTimerHandle PingTimerHandler;
     void Ping();
 
-private:
-    static const FBS_UDP_Message PingUDP_Message;
-    const FBS_UDP_Message &GetPingMessage();
+    static const FBS_UDP_Message PingMessage;
     // PING END
 
     // PONG START
-    void OnPongMessage(const TArray<uint8> &Message);
-
+private:
+    void Pong();
+    static const FBS_UDP_Message PongMessage;
     // PONG END
 
-    // MESSAGING START
+    // MESSAGE START
 public:
 protected:
+    void SendMessageData(const TArray<uint8> &Data, bool bSendImmediately) override;
+
 private:
     void SendUDP_Data(const TArray<uint8> &Data)
     {
@@ -75,7 +85,7 @@ private:
     TArray<uint8> UDP_Data;
 
     bool bIsSendingUDP_Data = false;
-    // MESSAGING END
+    // MESSAGE END
 
     // PARSING START
 protected:
