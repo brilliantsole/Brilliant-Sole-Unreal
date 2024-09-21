@@ -5,8 +5,10 @@
 #include "CoreMinimal.h"
 #include "Logging/StructuredLog.h"
 #include "BS_ServerMessageType.h"
+#include "BS_ServerMessage.h"
 #include "BS_ConnectionStatus.h"
 #include "BS_ServerMessage.h"
+#include "BS_ParseUtils.h"
 #include "BS_BaseClient.generated.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_BaseClient, Verbose, All);
@@ -19,6 +21,9 @@ class UBS_BaseClient : public UObject
 public:
     UBS_BaseClient();
     void PostInitProperties();
+
+private:
+    void Reset();
 
 public:
     UFUNCTION(BlueprintImplementableEvent, Category = "BS Subsystem")
@@ -40,7 +45,7 @@ public:
     EBS_ConnectionStatus GetConnectionStatus() const { return ConnectionStatus; }
 
     UFUNCTION(BlueprintPure, Category = "BS Client")
-    bool GetIsConnected() const { return ConnectionStatus == EBS_ConnectionStatus::CONNECTED; }
+    const bool GetIsConnected() const { return ConnectionStatus == EBS_ConnectionStatus::CONNECTED; }
 
     DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBS_ClientConnectionStatusUpdateCallback, UBS_BaseClient *, Client, EBS_ConnectionStatus, ConnectionStatus);
     UPROPERTY(BlueprintAssignable, Category = "BS Client")
@@ -51,7 +56,7 @@ public:
     FBS_ClientIsConnectedUpdateCallback OnIsConnectedUpdate;
 
     UFUNCTION(BlueprintPure, Category = "BS Client")
-    bool IsConnected() const { return ConnectionStatus == EBS_ConnectionStatus::CONNECTED; }
+    const bool IsConnected() const { return ConnectionStatus == EBS_ConnectionStatus::CONNECTED; }
 
 protected:
     UFUNCTION(BlueprintCallable, Category = "BS Client")
@@ -62,16 +67,57 @@ private:
 
     // CONNECTION END
 
-    // MESSAGE START
+    // MESSAGING START
 protected:
     void OnData(const TArray<uint8> &Data);
-    void OnMessage(EBS_ServerMessageType MessageType, const TArray<uint8> &Message);
 
     virtual void SendMessageData(const TArray<uint8> &Data, bool bSendImmediately = true) {}
 
 private:
+    void OnMessage(EBS_ServerMessageType MessageType, const TArray<uint8> &Message);
+    FBS_ServerMessageCallback BoundOnMessage;
+
     void SendMessages(const TArray<FBS_ServerMessage> &ServerMessages, bool bSendImmediately = true);
 
+    void SendRequiredMessages() { SendMessages(UBS_BaseClient::RequiredMessages); }
+
+    static const TArray<EBS_ServerMessageType> RequiredMessageTypes;
+    static const TArray<FBS_ServerMessage> RequiredMessages;
+    static const TArray<FBS_ServerMessage> InitializeRequiredMessages();
+
 private:
-    // MESSAGE END
+    // MESSAGING END
+
+    // SCANNING START
+public:
+    UFUNCTION(BlueprintPure, Category = "BS Client")
+    const bool GetIsScanningAvailable() const { return bIsScanningAvailable; }
+
+    DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBS_ClientIsScanningAvailableUpdateCallback, UBS_BaseClient *, Client, bool, IsScanningAvailable);
+    UPROPERTY(BlueprintAssignable, Category = "BS Client")
+    FBS_ClientIsScanningAvailableUpdateCallback OnIsScanningAvailableUpdate;
+
+    UFUNCTION(BlueprintPure, Category = "BS Client")
+    const bool GetIsScanning() const { return bIsScanning; }
+
+    DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBS_ClientIsScanningUpdateCallback, UBS_BaseClient *, Client, bool, IsScanning);
+    UPROPERTY(BlueprintAssignable, Category = "BS Client")
+    FBS_ClientIsScanningUpdateCallback OnIsScanningUpdate;
+
+    UFUNCTION(BlueprintCallable, Category = "BS Client")
+    void StartScan();
+
+    UFUNCTION(BlueprintCallable, Category = "BS Client")
+    void StopScan();
+
+    UFUNCTION(BlueprintCallable, Category = "BS Client")
+    void ToggleScan();
+
+private:
+    bool bIsScanningAvailable = false;
+    bool bIsScanning = false;
+
+    void ParseIsScanningAvailable(const TArray<uint8> &Message);
+    void ParseIsScanning(const TArray<uint8> &Message);
+    // SCANNING END
 };

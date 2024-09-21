@@ -19,6 +19,15 @@ UBS_BaseClient::UBS_BaseClient()
         UE_LOGFMT(LogBS_BaseClient, Verbose, "CDO - Skipping Constructor");
         return;
     }
+
+    BoundOnMessage.BindUObject(this, &UBS_BaseClient::OnMessage);
+}
+
+void UBS_BaseClient::Reset()
+{
+    // FILL
+    bIsScanningAvailable = false;
+    bIsScanning = false;
 }
 
 void UBS_BaseClient::PostInitProperties()
@@ -91,6 +100,14 @@ void UBS_BaseClient::SetConnectionStatus(EBS_ConnectionStatus NewConnectionStatu
     case EBS_ConnectionStatus::CONNECTED:
     case EBS_ConnectionStatus::NOT_CONNECTED:
         OnIsConnectedUpdate.Broadcast(this, GetIsConnected());
+        if (ConnectionStatus == EBS_ConnectionStatus::CONNECTED)
+        {
+            SendRequiredMessages();
+        }
+        else
+        {
+            Reset();
+        }
         break;
     default:
         break;
@@ -98,13 +115,34 @@ void UBS_BaseClient::SetConnectionStatus(EBS_ConnectionStatus NewConnectionStatu
 }
 // CONNECTION END
 
-// MESSAGE START
+// MESSAGING START
 void UBS_BaseClient::OnMessage(EBS_ServerMessageType MessageType, const TArray<uint8> &Message)
 {
     UE_LOGFMT(LogBS_BaseClient, Verbose, "message {0} ({1} bytes)", UEnum::GetValueAsString(MessageType), Message.Num());
 
     switch (MessageType)
     {
+    case EBS_ServerMessageType::IS_SCANNING_AVAILABLE:
+        ParseIsScanningAvailable(Message);
+        break;
+    case EBS_ServerMessageType::IS_SCANNING:
+        ParseIsScanning(Message);
+        break;
+    case EBS_ServerMessageType::DISCOVERED_DEVICE:
+        // FILL
+        break;
+    case EBS_ServerMessageType::DISCOVERED_DEVICES:
+        // FILL
+        break;
+    case EBS_ServerMessageType::EXPIRED_DISCOVERED_DEVICE:
+        // FILL
+        break;
+    case EBS_ServerMessageType::CONNECTED_DEVICES:
+        // FILL
+        break;
+    case EBS_ServerMessageType::DEVICE_MESSAGE:
+        // FILL
+        break;
     default:
         UE_LOGFMT(LogBS_BaseClient, Error, "Uncaught MessageType {0}", UEnum::GetValueAsString(MessageType));
         break;
@@ -113,7 +151,8 @@ void UBS_BaseClient::OnMessage(EBS_ServerMessageType MessageType, const TArray<u
 
 void UBS_BaseClient::OnData(const TArray<uint8> &Data)
 {
-    // FILL
+    UE_LOGFMT(LogBS_BaseClient, Log, "Parsing {0} Bytes...", Data.Num());
+    UBS_ParseUtils::ParseServerData(Data, BoundOnMessage);
 }
 
 void UBS_BaseClient::SendMessages(const TArray<FBS_ServerMessage> &ServerMessages, bool bSendImmediately)
@@ -135,4 +174,92 @@ void UBS_BaseClient::SendMessages(const TArray<FBS_ServerMessage> &ServerMessage
 
     SendMessageData(MessageData, bSendImmediately);
 }
-// MESSAGE END
+
+const TArray<EBS_ServerMessageType> UBS_BaseClient::RequiredMessageTypes = {EBS_ServerMessageType::IS_SCANNING_AVAILABLE, EBS_ServerMessageType::DISCOVERED_DEVICES, EBS_ServerMessageType::CONNECTED_DEVICES};
+
+const TArray<FBS_ServerMessage> UBS_BaseClient::InitializeRequiredMessages()
+{
+    TArray<FBS_ServerMessage> _RequiredMessages;
+    for (const EBS_ServerMessageType MessageType : UBS_BaseClient::RequiredMessageTypes)
+    {
+        _RequiredMessages.Add({MessageType});
+    }
+    return _RequiredMessages;
+}
+const TArray<FBS_ServerMessage> UBS_BaseClient::RequiredMessages = UBS_BaseClient::InitializeRequiredMessages();
+// MESSAGING END
+
+// SCANNING START
+void UBS_BaseClient::ParseIsScanningAvailable(const TArray<uint8> &Message)
+{
+    bool bNewIsScanningAvailable = static_cast<bool>(Message[0]);
+    UE_LOGFMT(LogBS_BaseClient, Verbose, "bNewIsScanningAvailable: {0}", bNewIsScanningAvailable);
+
+    if (bNewIsScanningAvailable == bIsScanningAvailable)
+    {
+        UE_LOGFMT(LogBS_BaseClient, Verbose, "Redundant bIsScanningAvailable Assignment");
+        return;
+    }
+
+    bIsScanningAvailable = bNewIsScanningAvailable;
+    UE_LOGFMT(LogBS_BaseClient, Verbose, "Updated bIsScanningAvailable to {0}", bIsScanningAvailable);
+    OnIsScanningAvailableUpdate.Broadcast(this, bIsScanningAvailable);
+
+    if (bIsScanningAvailable)
+    {
+        UE_LOGFMT(LogBS_BaseClient, Verbose, "Checking if IsScanning...");
+        SendMessages({{EBS_ServerMessageType::IS_SCANNING}});
+    }
+}
+void UBS_BaseClient::ParseIsScanning(const TArray<uint8> &Message)
+{
+    bool bNewIsScanning = static_cast<bool>(Message[0]);
+    UE_LOGFMT(LogBS_BaseClient, Verbose, "bNewIsScanning: {0}", bNewIsScanning);
+
+    if (bNewIsScanning == bIsScanning)
+    {
+        UE_LOGFMT(LogBS_BaseClient, Verbose, "Redundant bIsScanning Assignment");
+        return;
+    }
+
+    bIsScanning = bNewIsScanning;
+    UE_LOGFMT(LogBS_BaseClient, Verbose, "Updated bIsScanning to {0}", bIsScanning);
+    OnIsScanningUpdate.Broadcast(this, bIsScanning);
+}
+
+void UBS_BaseClient::StartScan()
+{
+    if (!bIsScanningAvailable)
+    {
+        UE_LOGFMT(LogBS_BaseClient, Verbose, "Scanning is not available");
+        return;
+    }
+    if (bIsScanning)
+    {
+        UE_LOGFMT(LogBS_BaseClient, Verbose, "Already scanning");
+        return;
+    }
+    SendMessages({{EBS_ServerMessageType::START_SCAN}});
+}
+void UBS_BaseClient::StopScan()
+{
+    if (!bIsScanning)
+    {
+        UE_LOGFMT(LogBS_BaseClient, Verbose, "Already not scanning");
+        return;
+    }
+    SendMessages({{EBS_ServerMessageType::STOP_SCAN}});
+}
+
+void UBS_BaseClient::ToggleScan()
+{
+    if (bIsScanning)
+    {
+        StopScan();
+    }
+    else
+    {
+        StartScan();
+    }
+}
+// SCANNING END

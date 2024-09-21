@@ -20,10 +20,12 @@ UCLASS(Abstract, BlueprintType, Blueprintable)
 class UBS_BaseUDP_Client : public UBS_BaseClient
 {
     GENERATED_BODY()
-    void Reset();
 
 public:
     UBS_BaseUDP_Client();
+
+private:
+    void Reset();
 
     // UDP CLIENT START
 public:
@@ -77,7 +79,7 @@ private:
     static const FBS_UDP_Message PongMessage;
     // PONG END
 
-    // MESSAGE START
+    // MESSAGING START
 public:
 protected:
     void SendMessageData(const TArray<uint8> &Data, bool bSendImmediately) override;
@@ -96,7 +98,7 @@ private:
     TArray<uint8> UDP_Data;
 
     bool bIsSendingUDP_Data = false;
-    // MESSAGE END
+    // MESSAGING END
 
     // PARSING START
 protected:
@@ -118,16 +120,6 @@ public:
     virtual void Disconnect_Implementation();
 
     UFUNCTION(BlueprintCallable, Category = "BS UDP Client")
-    void ToggleConnection(const FString &IP_Address = "127.0.0.1", const int32 Port = 3000)
-    {
-        if (GetIsConnected())
-        {
-            Disconnect();
-        }
-        else
-        {
-            Connect(IP_Address, Port);
-        }
-    }
+    void ToggleConnection(const FString &IP_Address = "127.0.0.1", const int32 Port = 3000);
     // CONNECTION END
 };

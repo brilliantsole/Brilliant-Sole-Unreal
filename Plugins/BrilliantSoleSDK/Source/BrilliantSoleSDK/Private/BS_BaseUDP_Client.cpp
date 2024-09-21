@@ -108,7 +108,7 @@ const FBS_UDP_Message UBS_BaseUDP_Client::PongMessage = {EBS_UDP_MessageType::PO
 
 // PONG END
 
-// MESSAGE START
+// MESSAGING START
 void UBS_BaseUDP_Client::SendMessageData(const TArray<uint8> &Data, bool bSendImmediately)
 {
     SendUDP_Messages({{EBS_UDP_MessageType::SERVER_MESSAGE, Data}}, bSendImmediately);
@@ -173,7 +173,7 @@ void UBS_BaseUDP_Client::SendPendingUDP_Messages()
 
     SendUDP_Data(UDP_Data);
 }
-// MESSAGE END
+// MESSAGING END
 
 // PARSING START
 void UBS_BaseUDP_Client::OnUDP_Message(EBS_UDP_MessageType MessageType, const TArray<uint8> &Message)
@@ -227,13 +227,32 @@ void UBS_BaseUDP_Client::OnSetRemoteReceivePortMessage(const TArray<uint8> &Mess
 // CONNECTION START
 void UBS_BaseUDP_Client::Connect_Implementation(const FString &IP_Address, const int32 Port)
 {
+    UE_LOGFMT(LogBS_BaseUDP_Client, Verbose, "Connecting to {0}:{1}", IP_Address, Port);
     SetConnectionStatus(EBS_ConnectionStatus::CONNECTING);
 }
 void UBS_BaseUDP_Client::Disconnect_Implementation()
 {
+    UE_LOGFMT(LogBS_BaseUDP_Client, Verbose, "Disconnect");
+
     SetConnectionStatus(EBS_ConnectionStatus::DISCONNECTING);
     Reset();
     StopPinging();
     StopWaitingForPong();
+}
+
+void UBS_BaseUDP_Client::ToggleConnection(const FString &IP_Address, const int32 Port)
+{
+    const EBS_ConnectionStatus ConnectionStatus = GetConnectionStatus();
+    UE_LOGFMT(LogBS_BaseUDP_Client, Verbose, "Toggling Connection based on {0}...", UEnum::GetValueAsString(ConnectionStatus));
+    switch (ConnectionStatus)
+    {
+    case EBS_ConnectionStatus::CONNECTED:
+    case EBS_ConnectionStatus::CONNECTING:
+        Disconnect();
+        break;
+    default:
+        Connect(IP_Address, Port);
+        break;
+    }
 }
 // CONNECTION END

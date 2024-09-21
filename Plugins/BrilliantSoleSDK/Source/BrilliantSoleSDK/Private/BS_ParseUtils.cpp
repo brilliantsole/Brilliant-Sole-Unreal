@@ -53,7 +53,39 @@ void UBS_ParseUtils::ParseUDP_Data(const TArray<uint8> &Data, FBS_UDP_MessageCal
         const uint16 MessageDataLength = BS_ByteParser::ParseAs<uint16>(Data, Offset, true);
         Offset += 2;
 
-        UE_LOGFMT(LogBS_ParseUtils, Verbose, "Message #{0} ({1} bytes)", UEnum::GetValueAsString(MessageType), MessageDataLength);
+        UE_LOGFMT(LogBS_ParseUtils, Verbose, "Message {0} ({1} bytes)", UEnum::GetValueAsString(MessageType), MessageDataLength);
+
+        const TArrayView<uint8> MessageData((uint8 *)(Data.GetData() + Offset), MessageDataLength);
+        MessageCallback.ExecuteIfBound(MessageType, static_cast<TArray<uint8>>(MessageData));
+
+        Offset += MessageDataLength;
+        UE_LOGFMT(LogBS_ParseUtils, Verbose, "New Offset: {0}/{1}", Offset, DataLength);
+    }
+}
+
+void UBS_ParseUtils::ParseServerData(const TArray<uint8> &Data, FBS_ServerMessageCallback MessageCallback)
+{
+    const auto DataLength = Data.Num();
+    uint16 Offset = 0;
+
+    UE_LOGFMT(LogBS_ParseUtils, Verbose, "Parsing {0} bytes...", DataLength);
+
+    while (Offset < DataLength)
+    {
+        UE_LOGFMT(LogBS_ParseUtils, Verbose, "Parsing Message at {0}...", Offset);
+
+        const uint8 MessageTypeEnum = Data[Offset++];
+        if (MessageTypeEnum >= static_cast<uint8>(EBS_ServerMessageType::COUNT))
+        {
+            UE_LOGFMT(LogBS_ParseUtils, Error, "invalid MessageTypeEnum {0}", MessageTypeEnum);
+            continue;
+        }
+        const EBS_ServerMessageType MessageType = static_cast<EBS_ServerMessageType>(MessageTypeEnum);
+
+        const uint16 MessageDataLength = BS_ByteParser::ParseAs<uint16>(Data, Offset, true);
+        Offset += 2;
+
+        UE_LOGFMT(LogBS_ParseUtils, Verbose, "Message {0} ({1} bytes)", UEnum::GetValueAsString(MessageType), MessageDataLength);
 
         const TArrayView<uint8> MessageData((uint8 *)(Data.GetData() + Offset), MessageDataLength);
         MessageCallback.ExecuteIfBound(MessageType, static_cast<TArray<uint8>>(MessageData));
