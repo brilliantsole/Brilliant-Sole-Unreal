@@ -36,24 +36,25 @@ protected:
 
     // CONNECTION START
 public:
-    UFUNCTION(BlueprintPure, Category = "BS Client Manager")
+    UFUNCTION(BlueprintPure, Category = "BS Client")
     EBS_ConnectionStatus GetConnectionStatus() const { return ConnectionStatus; }
 
-    UFUNCTION(BlueprintPure, Category = "BS Client Manager")
+    UFUNCTION(BlueprintPure, Category = "BS Client")
     bool GetIsConnected() const { return ConnectionStatus == EBS_ConnectionStatus::CONNECTED; }
 
-    DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBS_ClientManagerConnectionStatusUpdateCallback, UBS_BaseClient *, ClientManager, EBS_ConnectionStatus, ConnectionStatus);
-    UPROPERTY(BlueprintAssignable, Category = "BS Client Manager")
-    FBS_ClientManagerConnectionStatusUpdateCallback OnConnectionStatusUpdate;
+    DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBS_ClientConnectionStatusUpdateCallback, UBS_BaseClient *, Client, EBS_ConnectionStatus, ConnectionStatus);
+    UPROPERTY(BlueprintAssignable, Category = "BS Client")
+    FBS_ClientConnectionStatusUpdateCallback OnConnectionStatusUpdate;
 
-    DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBS_ClientManagerIsConnectedUpdateCallback, UBS_BaseClient *, ClientManager, bool, IsConnected);
-    UPROPERTY(BlueprintAssignable, Category = "BS Client Manager")
-    FBS_ClientManagerIsConnectedUpdateCallback OnIsConnectedUpdate;
+    DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBS_ClientIsConnectedUpdateCallback, UBS_BaseClient *, Client, bool, IsConnected);
+    UPROPERTY(BlueprintAssignable, Category = "BS Client")
+    FBS_ClientIsConnectedUpdateCallback OnIsConnectedUpdate;
 
-    UFUNCTION(BlueprintPure, Category = "BS Client Manager")
+    UFUNCTION(BlueprintPure, Category = "BS Client")
     bool IsConnected() const { return ConnectionStatus == EBS_ConnectionStatus::CONNECTED; }
 
 protected:
+    UFUNCTION(BlueprintCallable, Category = "BS Client")
     void SetConnectionStatus(EBS_ConnectionStatus NewConnectionStatus);
 
 private:

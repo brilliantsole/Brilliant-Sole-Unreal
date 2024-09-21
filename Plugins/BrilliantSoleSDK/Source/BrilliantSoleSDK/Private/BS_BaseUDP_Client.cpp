@@ -24,6 +24,11 @@ UBS_BaseUDP_Client::UBS_BaseUDP_Client()
     UDP_Manager = CreateDefaultSubobject<UUDPManager>(TEXT("UDPManager"));
 }
 
+void UBS_BaseUDP_Client::Reset()
+{
+    bDidSendSetInListenPortMessage = false;
+}
+
 // IN LISTEN PORT START
 int32 UBS_BaseUDP_Client::SetInListenPort(int32 NewInListenPort)
 {
@@ -45,17 +50,17 @@ int32 UBS_BaseUDP_Client::SetInListenPort(int32 NewInListenPort)
 // PING START
 void UBS_BaseUDP_Client::StartPinging()
 {
-    UWorld *World = GetWorld();
-    if (World)
+    if (UWorld *World = GetWorld())
     {
+        UE_LOGFMT(LogBS_BaseUDP_Client, Verbose, "StartPinging");
         World->GetTimerManager().SetTimer(PingTimerHandler, this, &UBS_BaseUDP_Client::Ping, 2.0f, true);
     }
 }
 void UBS_BaseUDP_Client::StopPinging()
 {
-    UWorld *World = GetWorld();
-    if (World)
+    if (UWorld *World = GetWorld())
     {
+        UE_LOGFMT(LogBS_BaseUDP_Client, Verbose, "StopPinging");
         World->GetTimerManager().ClearTimer(PingTimerHandler);
     }
 }
@@ -71,6 +76,29 @@ const FBS_UDP_Message UBS_BaseUDP_Client::PingMessage = {EBS_UDP_MessageType::PI
 // PING END
 
 // PONG START
+void UBS_BaseUDP_Client::WaitForPong()
+{
+    if (UWorld *World = GetWorld())
+    {
+        UE_LOGFMT(LogBS_BaseUDP_Client, Verbose, "Waiting for Pong...");
+        World->GetTimerManager().SetTimer(WaitForPongTimerHandler, this, &UBS_BaseUDP_Client::PongTimeout, 3.0f, false);
+    }
+}
+void UBS_BaseUDP_Client::StopWaitingForPong()
+{
+    if (UWorld *World = GetWorld())
+    {
+        UE_LOGFMT(LogBS_BaseUDP_Client, Verbose, "StopWaitingForPong");
+        World->GetTimerManager().ClearTimer(WaitForPongTimerHandler);
+    }
+}
+
+void UBS_BaseUDP_Client::PongTimeout()
+{
+    UE_LOGFMT(LogBS_BaseUDP_Client, Verbose, "PongTimeout");
+    Disconnect();
+}
+
 void UBS_BaseUDP_Client::Pong()
 {
     UE_LOGFMT(LogBS_BaseUDP_Client, Verbose, "Ponging Server...");
@@ -158,6 +186,7 @@ void UBS_BaseUDP_Client::OnUDP_Message(EBS_UDP_MessageType MessageType, const TA
         Pong();
         break;
     case EBS_UDP_MessageType::PONG:
+        StopWaitingForPong();
         break;
     case EBS_UDP_MessageType::SET_REMOTE_RECEIVE_PORT:
         OnSetRemoteReceivePortMessage(Message);
@@ -168,6 +197,11 @@ void UBS_BaseUDP_Client::OnUDP_Message(EBS_UDP_MessageType MessageType, const TA
     default:
         UE_LOGFMT(LogBS_BaseUDP_Client, Error, "Uncaught MessageType {0}", UEnum::GetValueAsString(MessageType));
         break;
+    }
+
+    if (GetIsConnected())
+    {
+        WaitForPong();
     }
 }
 
@@ -198,5 +232,7 @@ void UBS_BaseUDP_Client::Connect_Implementation(const FString &IP_Address, const
 void UBS_BaseUDP_Client::Disconnect_Implementation()
 {
     SetConnectionStatus(EBS_ConnectionStatus::DISCONNECTING);
+    Reset();
+    StopPinging();
 }
 // CONNECTION END

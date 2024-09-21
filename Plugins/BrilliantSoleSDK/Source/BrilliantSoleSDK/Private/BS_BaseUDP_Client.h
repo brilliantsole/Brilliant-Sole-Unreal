@@ -20,22 +20,23 @@ UCLASS(Abstract, BlueprintType, Blueprintable)
 class UBS_BaseUDP_Client : public UBS_BaseClient
 {
     GENERATED_BODY()
+    void Reset();
 
 public:
     UBS_BaseUDP_Client();
 
-    // UDP MANAGER START
+    // UDP CLIENT START
 public:
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UDP Manager")
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UDP Client")
     UUDPManager *UDP_Manager;
-    // UDP MANAGER END
+    // UDP CLIENT END
 
     // IN LISTEN PORT START
 protected:
-    UFUNCTION(BlueprintPure, Category = "BS UDP Manager")
+    UFUNCTION(BlueprintPure, Category = "BS UDP Client")
     int32 GetInListenPort() { return InListenPort; };
 
-    UFUNCTION(BlueprintCallable, Category = "BS UDP Manager")
+    UFUNCTION(BlueprintCallable, Category = "BS UDP Client")
     int32 SetInListenPort(int32 NewInListenPort);
 
 private:
@@ -47,9 +48,9 @@ private:
 
     // PING START
 public:
-    UFUNCTION(BlueprintCallable, Category = "BS UDP Manager")
+    UFUNCTION(BlueprintCallable, Category = "BS UDP Client")
     void StartPinging();
-    UFUNCTION(BlueprintCallable, Category = "BS UDP Manager")
+    UFUNCTION(BlueprintCallable, Category = "BS UDP Client")
     void StopPinging();
 
 protected:
@@ -62,6 +63,16 @@ private:
 
     // PONG START
 private:
+    FTimerHandle WaitForPongTimerHandler;
+    void WaitForPong();
+    void StopWaitingForPong();
+    void ResetWaitForPong()
+    {
+        StopWaitingForPong();
+        WaitForPong();
+    }
+    void PongTimeout();
+
     void Pong();
     static const FBS_UDP_Message PongMessage;
     // PONG END
@@ -89,7 +100,7 @@ private:
 
     // PARSING START
 protected:
-    UFUNCTION(BlueprintCallable, Category = "BS UDP Manager")
+    UFUNCTION(BlueprintCallable, Category = "BS UDP Client")
     void OnUDP_Message(EBS_UDP_MessageType MessageType, const TArray<uint8> &Message);
 
 private:
@@ -98,11 +109,11 @@ private:
 
     // CONNECTION START
 public:
-    UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "BS UDP Manager")
+    UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "BS UDP Client")
     void Connect(const FString &IP_Address = "127.0.0.1", const int32 Port = 3000);
     virtual void Connect_Implementation(const FString &IP_Address = "127.0.0.1", const int32 Port = 3000);
 
-    UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "BS UDP Manager")
+    UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "BS UDP Client")
     void Disconnect();
     virtual void Disconnect_Implementation();
     // CONNECTION END
