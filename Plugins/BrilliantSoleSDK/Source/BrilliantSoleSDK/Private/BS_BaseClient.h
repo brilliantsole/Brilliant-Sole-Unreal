@@ -120,4 +120,21 @@ private:
     void ParseIsScanningAvailable(const TArray<uint8> &Message);
     void ParseIsScanning(const TArray<uint8> &Message);
     // SCANNING END
+
+    // DISCOVERED DEVICES START
+private:
+    void ParseDiscoveredDevice(const TArray<uint8> &Message);
+    void ParseExpiredDiscoveredDevice(const TArray<uint8> &Message);
+    // DISCOVERED DEVICES END
+
+    // CONNECTED DEVICES START
+private:
+    void ParseConnectedDevices(const TArray<uint8> &Message);
+    // CONNECTED DEVICES END
+
+    // DEVICE MESSAGE START
+private:
+    void ParseDeviceMessage(const TArray<uint8> &Message);
+
+    // DEVICE MESSAGE END
 };

@@ -7,6 +7,8 @@
 #include "Engine/World.h"
 #include "Engine/GameInstance.h"
 #include "BS_ByteParser.h"
+#include "Json.h"
+#include "JsonUtilities.h"
 #include "GenericPlatform/GenericPlatformTime.h"
 
 DEFINE_LOG_CATEGORY(LogBS_BaseClient);
@@ -25,9 +27,9 @@ UBS_BaseClient::UBS_BaseClient()
 
 void UBS_BaseClient::Reset()
 {
-    // FILL
     bIsScanningAvailable = false;
     bIsScanning = false;
+    // FILL
 }
 
 void UBS_BaseClient::PostInitProperties()
@@ -129,19 +131,16 @@ void UBS_BaseClient::OnMessage(EBS_ServerMessageType MessageType, const TArray<u
         ParseIsScanning(Message);
         break;
     case EBS_ServerMessageType::DISCOVERED_DEVICE:
-        // FILL
-        break;
-    case EBS_ServerMessageType::DISCOVERED_DEVICES:
-        // FILL
+        ParseDiscoveredDevice(Message);
         break;
     case EBS_ServerMessageType::EXPIRED_DISCOVERED_DEVICE:
-        // FILL
+        ParseExpiredDiscoveredDevice(Message);
         break;
     case EBS_ServerMessageType::CONNECTED_DEVICES:
-        // FILL
+        ParseConnectedDevices(Message);
         break;
     case EBS_ServerMessageType::DEVICE_MESSAGE:
-        // FILL
+        ParseDeviceMessage(Message);
         break;
     default:
         UE_LOGFMT(LogBS_BaseClient, Error, "Uncaught MessageType {0}", UEnum::GetValueAsString(MessageType));
@@ -263,3 +262,56 @@ void UBS_BaseClient::ToggleScan()
     }
 }
 // SCANNING END
+
+// DISCOVERED DEVICES START
+void UBS_BaseClient::ParseDiscoveredDevice(const TArray<uint8> &Message)
+{
+    UE_LOGFMT(LogBS_BaseClient, Log, "Parsing Discovered Device ({0} bytes)...", Message.Num());
+
+    uint8 Offset = 0;
+    const uint8 DiscoveredDeviceStringLength = Message[Offset++];
+    UE_LOGFMT(LogBS_BaseClient, Log, "DiscoveredDeviceStringLength: {0}", DiscoveredDeviceStringLength);
+
+    const TArrayView<uint8> DiscoveredDeviceStringData((uint8 *)(Message.GetData() + Offset), Message.Num() - Offset);
+    const FString DiscoveredDeviceString = BS_ByteParser::GetString(static_cast<TArray<uint8>>(DiscoveredDeviceStringData));
+    UE_LOGFMT(LogBS_BaseClient, Log, "DiscoveredDeviceString: {0}", DiscoveredDeviceString);
+
+    TSharedPtr<FJsonObject> DiscoveredDeviceJson;
+    TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(DiscoveredDeviceString);
+
+    if (FJsonSerializer::Deserialize(Reader, DiscoveredDeviceJson) && DiscoveredDeviceJson.IsValid())
+    {
+        FString Name = DiscoveredDeviceJson->GetStringField("name");
+        FString BluetoothId = DiscoveredDeviceJson->GetStringField("bluetoothId");
+        int32 RSSI = DiscoveredDeviceJson->GetIntegerField("rssi");
+
+        UE_LOGFMT(LogBS_BaseClient, Log, "Name: {0}, BluetoothId: {1}, RSSI: {2}", Name, BluetoothId, RSSI);
+    }
+    else
+    {
+        UE_LOGFMT(LogBS_BaseClient, Error, "Unable to convert DiscoveredDeviceString json");
+    }
+}
+void UBS_BaseClient::ParseExpiredDiscoveredDevice(const TArray<uint8> &Message)
+{
+    UE_LOGFMT(LogBS_BaseClient, Log, "Parsing Expired Discovered Device ({0} bytes)...", Message.Num());
+    // FILL
+}
+// DISCOVERED DEVICES END
+
+// CONNECTED DEVICES START
+void UBS_BaseClient::ParseConnectedDevices(const TArray<uint8> &Message)
+{
+    UE_LOGFMT(LogBS_BaseClient, Log, "Parsing Connected Devices ({0} bytes)...", Message.Num());
+    // FILL
+}
+// CONNECTED DEVICES END
+
+// DEVICE MESSAGE START
+void UBS_BaseClient::ParseDeviceMessage(const TArray<uint8> &Message)
+{
+    UE_LOGFMT(LogBS_BaseClient, Log, "Parsing Device Message ({0} bytes)...", Message.Num());
+    // FILL
+}
+
+// DEVICE MESSAGE END
