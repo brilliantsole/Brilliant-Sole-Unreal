@@ -1,6 +1,6 @@
 // Copyright 2024 Zack Qattan @ Brilliant Sole. All Rights Reserved
 
-#include "BS_BaseUDP_Manager.h"
+#include "BS_BaseUDP_Client.h"
 #include "Logging/StructuredLog.h"
 #include "BS_Message.h"
 #include "BS_Subsystem.h"
@@ -9,15 +9,15 @@
 #include "BS_ByteParser.h"
 #include "GenericPlatform/GenericPlatformTime.h"
 
-DEFINE_LOG_CATEGORY(LogBS_BaseUDP_Manager);
+DEFINE_LOG_CATEGORY(LogBS_BaseUDP_Client);
 
-UBS_BaseUDP_Manager::UBS_BaseUDP_Manager()
-    : UBS_BaseClientManager()
+UBS_BaseUDP_Client::UBS_BaseUDP_Client()
+    : UBS_BaseClient()
 {
-    UE_LOGFMT(LogBS_BaseUDP_Manager, Verbose, "Constructor: {0}", GetName());
+    UE_LOGFMT(LogBS_BaseUDP_Client, Verbose, "Constructor: {0}", GetName());
     if (HasAnyFlags(RF_ClassDefaultObject))
     {
-        UE_LOGFMT(LogBS_BaseUDP_Manager, Verbose, "CDO - Skipping Constructor");
+        UE_LOGFMT(LogBS_BaseUDP_Client, Verbose, "CDO - Skipping Constructor");
         return;
     }
 
@@ -25,33 +25,33 @@ UBS_BaseUDP_Manager::UBS_BaseUDP_Manager()
 }
 
 // IN LISTEN PORT START
-int32 UBS_BaseUDP_Manager::SetInListenPort(int32 NewInListenPort)
+int32 UBS_BaseUDP_Client::SetInListenPort(int32 NewInListenPort)
 {
-    // UE_LOGFMT(LogBS_BaseUDP_Manager, Verbose, "Setting InListenPort to {0}...", NewInListenPort);
+    // UE_LOGFMT(LogBS_BaseUDP_Client, Verbose, "Setting InListenPort to {0}...", NewInListenPort);
     if (InListenPort != NewInListenPort)
     {
         InListenPort = NewInListenPort;
         SetInListenPortUDP_Message.Data = BS_ByteParser::ToByteArray<uint16>(InListenPort);
-        UE_LOGFMT(LogBS_BaseUDP_Manager, Verbose, "Updated InListenPort to {0}", InListenPort);
+        UE_LOGFMT(LogBS_BaseUDP_Client, Verbose, "Updated InListenPort to {0}", InListenPort);
     }
     else
     {
-        UE_LOGFMT(LogBS_BaseUDP_Manager, Verbose, "Redundant InListenPort assignment {0}", InListenPort);
+        UE_LOGFMT(LogBS_BaseUDP_Client, Verbose, "Redundant InListenPort assignment {0}", InListenPort);
     }
     return InListenPort;
 }
 // IN LISTEN PORT END
 
 // PING START
-void UBS_BaseUDP_Manager::StartPinging()
+void UBS_BaseUDP_Client::StartPinging()
 {
     UWorld *World = GetWorld();
     if (World)
     {
-        World->GetTimerManager().SetTimer(PingTimerHandler, this, &UBS_BaseUDP_Manager::Ping, 2.0f, true);
+        World->GetTimerManager().SetTimer(PingTimerHandler, this, &UBS_BaseUDP_Client::Ping, 2.0f, true);
     }
 }
-void UBS_BaseUDP_Manager::StopPinging()
+void UBS_BaseUDP_Client::StopPinging()
 {
     UWorld *World = GetWorld();
     if (World)
@@ -60,48 +60,48 @@ void UBS_BaseUDP_Manager::StopPinging()
     }
 }
 
-void UBS_BaseUDP_Manager::Ping()
+void UBS_BaseUDP_Client::Ping()
 {
-    UE_LOGFMT(LogBS_BaseUDP_Manager, Verbose, "Pinging...");
+    UE_LOGFMT(LogBS_BaseUDP_Client, Verbose, "Pinging...");
     const FBS_UDP_Message &_PingMessage = bDidSendSetInListenPortMessage ? PingMessage : SetInListenPortUDP_Message;
     SendUDP_Messages({_PingMessage}, true);
 };
 
-const FBS_UDP_Message UBS_BaseUDP_Manager::PingMessage = {EBS_UDP_MessageType::PING};
+const FBS_UDP_Message UBS_BaseUDP_Client::PingMessage = {EBS_UDP_MessageType::PING};
 // PING END
 
 // PONG START
-void UBS_BaseUDP_Manager::Pong()
+void UBS_BaseUDP_Client::Pong()
 {
-    UE_LOGFMT(LogBS_BaseUDP_Manager, Verbose, "Ponging Server...");
+    UE_LOGFMT(LogBS_BaseUDP_Client, Verbose, "Ponging Server...");
     SendUDP_Messages({PongMessage}, true);
 }
-const FBS_UDP_Message UBS_BaseUDP_Manager::PongMessage = {EBS_UDP_MessageType::PONG};
+const FBS_UDP_Message UBS_BaseUDP_Client::PongMessage = {EBS_UDP_MessageType::PONG};
 
 // PONG END
 
 // MESSAGE START
-void UBS_BaseUDP_Manager::SendMessageData(const TArray<uint8> &Data, bool bSendImmediately)
+void UBS_BaseUDP_Client::SendMessageData(const TArray<uint8> &Data, bool bSendImmediately)
 {
     SendUDP_Messages({{EBS_UDP_MessageType::SERVER_MESSAGE, Data}}, bSendImmediately);
 }
-void UBS_BaseUDP_Manager::SendUDP_Messages(const TArray<FBS_UDP_Message> &UDP_Messages, bool bSendImmediately)
+void UBS_BaseUDP_Client::SendUDP_Messages(const TArray<FBS_UDP_Message> &UDP_Messages, bool bSendImmediately)
 {
-    UE_LOGFMT(LogBS_BaseUDP_Manager, Verbose, "Requesting to send {0} Messages...", UDP_Messages.Num());
+    UE_LOGFMT(LogBS_BaseUDP_Client, Verbose, "Requesting to send {0} Messages...", UDP_Messages.Num());
     PendingUDP_Messages.Append(UDP_Messages);
     if (!bSendImmediately)
     {
-        UE_LOGFMT(LogBS_BaseUDP_Manager, Verbose, "Not sending data immediately");
+        UE_LOGFMT(LogBS_BaseUDP_Client, Verbose, "Not sending data immediately");
         return;
     }
     if (bIsSendingUDP_Data)
     {
-        UE_LOGFMT(LogBS_BaseUDP_Manager, Verbose, "Already sending data - will wait until new data is sent");
+        UE_LOGFMT(LogBS_BaseUDP_Client, Verbose, "Already sending data - will wait until new data is sent");
         return;
     }
     SendPendingUDP_Messages();
 }
-void UBS_BaseUDP_Manager::SendPendingUDP_Messages()
+void UBS_BaseUDP_Client::SendPendingUDP_Messages()
 {
     if (PendingUDP_Messages.IsEmpty())
     {
@@ -123,34 +123,34 @@ void UBS_BaseUDP_Manager::SendPendingUDP_Messages()
         bool ShouldAppendUDP_Message = MaxMessageLength == 0 || UDP_Data.Num() + PendingUDP_MessageLength <= MaxMessageLength;
         if (ShouldAppendUDP_Message)
         {
-            UE_LOGFMT(LogBS_BaseUDP_Manager, Verbose, "Appending message {0} ({1} bytes)", UEnum::GetValueAsString(PendingUDP_Message.Type), PendingUDP_MessageLength);
+            UE_LOGFMT(LogBS_BaseUDP_Client, Verbose, "Appending message {0} ({1} bytes)", UEnum::GetValueAsString(PendingUDP_Message.Type), PendingUDP_MessageLength);
             PendingUDP_Message.AppendTo(UDP_Data);
             PendingUDP_Messages.RemoveAt(PendingUDP_MessageIndex);
         }
         else
         {
-            UE_LOGFMT(LogBS_BaseUDP_Manager, Verbose, "Skipping message {0} ({1} bytes)", UEnum::GetValueAsString(PendingUDP_Message.Type), PendingUDP_MessageLength);
+            UE_LOGFMT(LogBS_BaseUDP_Client, Verbose, "Skipping message {0} ({1} bytes)", UEnum::GetValueAsString(PendingUDP_Message.Type), PendingUDP_MessageLength);
             PendingUDP_MessageIndex++;
         }
     }
 
     if (UDP_Data.IsEmpty())
     {
-        UE_LOGFMT(LogBS_BaseUDP_Manager, Verbose, "UDP_Data is Empty - won't send any data");
+        UE_LOGFMT(LogBS_BaseUDP_Client, Verbose, "UDP_Data is Empty - won't send any data");
         bIsSendingUDP_Data = false;
         return;
     }
 
-    UE_LOGFMT(LogBS_BaseUDP_Manager, Verbose, "Sending {0} bytes", UDP_Data.Num());
+    UE_LOGFMT(LogBS_BaseUDP_Client, Verbose, "Sending {0} bytes", UDP_Data.Num());
 
     SendUDP_Data(UDP_Data);
 }
 // MESSAGE END
 
 // PARSING START
-void UBS_BaseUDP_Manager::OnUDP_Message(EBS_UDP_MessageType MessageType, const TArray<uint8> &Message)
+void UBS_BaseUDP_Client::OnUDP_Message(EBS_UDP_MessageType MessageType, const TArray<uint8> &Message)
 {
-    UE_LOGFMT(LogBS_BaseUDP_Manager, Verbose, "message {0} ({1} bytes)", UEnum::GetValueAsString(MessageType), Message.Num());
+    UE_LOGFMT(LogBS_BaseUDP_Client, Verbose, "message {0} ({1} bytes)", UEnum::GetValueAsString(MessageType), Message.Num());
 
     switch (MessageType)
     {
@@ -166,23 +166,23 @@ void UBS_BaseUDP_Manager::OnUDP_Message(EBS_UDP_MessageType MessageType, const T
         OnData(Message);
         break;
     default:
-        UE_LOGFMT(LogBS_BaseUDP_Manager, Error, "Uncaught MessageType {0}", UEnum::GetValueAsString(MessageType));
+        UE_LOGFMT(LogBS_BaseUDP_Client, Error, "Uncaught MessageType {0}", UEnum::GetValueAsString(MessageType));
         break;
     }
 }
 
-void UBS_BaseUDP_Manager::OnSetRemoteReceivePortMessage(const TArray<uint8> &Message)
+void UBS_BaseUDP_Client::OnSetRemoteReceivePortMessage(const TArray<uint8> &Message)
 {
     const uint16 ParsedRemoteReceivePort = BS_ByteParser::ParseAs<uint16>(Message);
-    UE_LOGFMT(LogBS_BaseUDP_Manager, Verbose, "Parsed RemoteReceivePort: {0}", ParsedRemoteReceivePort);
+    UE_LOGFMT(LogBS_BaseUDP_Client, Verbose, "Parsed RemoteReceivePort: {0}", ParsedRemoteReceivePort);
 
     if (ParsedRemoteReceivePort != InListenPort)
     {
-        UE_LOGFMT(LogBS_BaseUDP_Manager, Error, "Incorrect RemoteReceivePort (expected {0}, got {1})", InListenPort, ParsedRemoteReceivePort);
+        UE_LOGFMT(LogBS_BaseUDP_Client, Error, "Incorrect RemoteReceivePort (expected {0}, got {1})", InListenPort, ParsedRemoteReceivePort);
         return;
     }
 
-    UE_LOGFMT(LogBS_BaseUDP_Manager, Verbose, "Successfully set RemoteReceivePort");
+    UE_LOGFMT(LogBS_BaseUDP_Client, Verbose, "Successfully set RemoteReceivePort");
 
     bDidSendSetInListenPortMessage = true;
 
@@ -191,11 +191,11 @@ void UBS_BaseUDP_Manager::OnSetRemoteReceivePortMessage(const TArray<uint8> &Mes
 // PARSING END
 
 // CONNECTION START
-void UBS_BaseUDP_Manager::Connect_Implementation(const FString &IP_Address, const int32 Port)
+void UBS_BaseUDP_Client::Connect_Implementation(const FString &IP_Address, const int32 Port)
 {
     SetConnectionStatus(EBS_ConnectionStatus::CONNECTING);
 }
-void UBS_BaseUDP_Manager::Disconnect_Implementation()
+void UBS_BaseUDP_Client::Disconnect_Implementation()
 {
     SetConnectionStatus(EBS_ConnectionStatus::DISCONNECTING);
 }

@@ -9,7 +9,7 @@ UBS_Subsystem::UBS_Subsystem()
 {
     GetBleManagerClass();
     GetDeviceManagerClass();
-    GetUDPManagerClass();
+    GetUDP_ClientClass();
 }
 
 void UBS_Subsystem::Initialize(FSubsystemCollectionBase &Collection)
@@ -115,18 +115,18 @@ UObject *UBS_Subsystem::GetDeviceManager()
 // DEVICE MANAGER END
 
 // UDP MANAGER START
-void UBS_Subsystem::GetUDPManagerClass()
+void UBS_Subsystem::GetUDP_ClientClass()
 {
-    UDPManagerClass = GetClass(TEXT("/Script/Engine.Blueprint'/BrilliantSoleSDK/Blueprints/UDP/BS_UDP_ManagerBP.BS_UDP_ManagerBP_C'"));
+    UDP_ClientClass = GetClass(TEXT("/Script/Engine.Blueprint'/BrilliantSoleSDK/Blueprints/UDP/BS_UDP_ClientBP.BS_UDP_ClientBP_C'"));
 }
 
-UObject *UBS_Subsystem::GetUDPManager()
+UObject *UBS_Subsystem::GetUDP_Client()
 {
-    if (!UDPManagerSingleton && UDPManagerClass)
+    if (!UDP_ClientSingleton && UDP_ClientClass)
     {
-        UDPManagerSingleton = CreateSingleton(UDPManagerClass, false);
+        UDP_ClientSingleton = CreateSingleton(UDP_ClientClass, false);
     }
-    return UDPManagerSingleton;
+    return UDP_ClientSingleton;
 }
 
 // UDP MANAGER END

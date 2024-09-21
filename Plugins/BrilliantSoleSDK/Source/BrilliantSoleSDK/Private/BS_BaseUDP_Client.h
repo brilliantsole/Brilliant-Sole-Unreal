@@ -7,22 +7,22 @@
 #include "Logging/StructuredLog.h"
 #include "BS_UDP_Message.h"
 #include "BS_ConnectionStatus.h"
-#include "BS_BaseClientManager.h"
+#include "BS_BaseClient.h"
 #include "TimerManager.h"
 #include "Engine/World.h"
-#include "BS_BaseUDP_Manager.generated.h"
+#include "BS_BaseUDP_Client.generated.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogBS_BaseUDP_Manager, Verbose, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_BaseUDP_Client, Verbose, All);
 
 #define MAX_UDP_MESSAGE_SIZE 65507
 
 UCLASS(Abstract, BlueprintType, Blueprintable)
-class UBS_BaseUDP_Manager : public UBS_BaseClientManager
+class UBS_BaseUDP_Client : public UBS_BaseClient
 {
     GENERATED_BODY()
 
 public:
-    UBS_BaseUDP_Manager();
+    UBS_BaseUDP_Client();
 
     // UDP MANAGER START
 public:

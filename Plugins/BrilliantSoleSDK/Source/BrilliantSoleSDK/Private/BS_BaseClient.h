@@ -7,17 +7,17 @@
 #include "BS_ServerMessageType.h"
 #include "BS_ConnectionStatus.h"
 #include "BS_ServerMessage.h"
-#include "BS_BaseClientManager.generated.h"
+#include "BS_BaseClient.generated.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogBS_BaseClientManager, Verbose, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_BaseClient, Verbose, All);
 
 UCLASS(Abstract, BlueprintType, Blueprintable)
-class UBS_BaseClientManager : public UObject
+class UBS_BaseClient : public UObject
 {
     GENERATED_BODY()
 
 public:
-    UBS_BaseClientManager();
+    UBS_BaseClient();
     void PostInitProperties();
 
 public:
@@ -42,11 +42,11 @@ public:
     UFUNCTION(BlueprintPure, Category = "BS Client Manager")
     bool GetIsConnected() const { return ConnectionStatus == EBS_ConnectionStatus::CONNECTED; }
 
-    DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBS_ClientManagerConnectionStatusUpdateCallback, UBS_BaseClientManager *, ClientManager, EBS_ConnectionStatus, ConnectionStatus);
+    DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBS_ClientManagerConnectionStatusUpdateCallback, UBS_BaseClient *, ClientManager, EBS_ConnectionStatus, ConnectionStatus);
     UPROPERTY(BlueprintAssignable, Category = "BS Client Manager")
     FBS_ClientManagerConnectionStatusUpdateCallback OnConnectionStatusUpdate;
 
-    DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBS_ClientManagerIsConnectedUpdateCallback, UBS_BaseClientManager *, ClientManager, bool, IsConnected);
+    DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBS_ClientManagerIsConnectedUpdateCallback, UBS_BaseClient *, ClientManager, bool, IsConnected);
     UPROPERTY(BlueprintAssignable, Category = "BS Client Manager")
     FBS_ClientManagerIsConnectedUpdateCallback OnIsConnectedUpdate;
 

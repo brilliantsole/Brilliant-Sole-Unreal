@@ -59,18 +59,18 @@ private:
 	UObject *DeviceManagerSingleton;
 	// DEVICE MANAGER END
 
-	// UDP MANAGER START
+	// UDP CLIENT START
 public:
 	UFUNCTION(BlueprintCallable, Category = "BS Subsystem")
-	UObject *GetUDPManager();
+	UObject *GetUDP_Client();
 
 private:
-	void GetUDPManagerClass();
+	void GetUDP_ClientClass();
 
 	UPROPERTY()
-	TSubclassOf<UObject> UDPManagerClass;
+	TSubclassOf<UObject> UDP_ClientClass;
 
 	UPROPERTY()
-	UObject *UDPManagerSingleton;
-	// UDP MANAGER END
+	UObject *UDP_ClientSingleton;
+	// UDP CLIENT END
 };
