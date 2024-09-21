@@ -116,5 +116,18 @@ public:
     UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "BS UDP Client")
     void Disconnect();
     virtual void Disconnect_Implementation();
+
+    UFUNCTION(BlueprintCallable, Category = "BS UDP Client")
+    void ToggleConnection(const FString &IP_Address = "127.0.0.1", const int32 Port = 3000)
+    {
+        if (GetIsConnected())
+        {
+            Disconnect();
+        }
+        else
+        {
+            Connect(IP_Address, Port);
+        }
+    }
     // CONNECTION END
 };

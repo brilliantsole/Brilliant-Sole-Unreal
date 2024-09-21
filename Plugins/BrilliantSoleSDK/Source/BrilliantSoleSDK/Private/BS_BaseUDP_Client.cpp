@@ -234,5 +234,6 @@ void UBS_BaseUDP_Client::Disconnect_Implementation()
     SetConnectionStatus(EBS_ConnectionStatus::DISCONNECTING);
     Reset();
     StopPinging();
+    StopWaitingForPong();
 }
 // CONNECTION END
