@@ -9,6 +9,7 @@
 #include "BS_ByteParser.h"
 #include "Json.h"
 #include "JsonUtilities.h"
+#include "BS_DeviceType.h"
 #include "GenericPlatform/GenericPlatformTime.h"
 
 DEFINE_LOG_CATEGORY(LogBS_BaseClient);
@@ -29,6 +30,8 @@ void UBS_BaseClient::Reset()
 {
     bIsScanningAvailable = false;
     bIsScanning = false;
+
+    DiscoveredDevices.Reset();
     // FILL
 }
 
@@ -238,6 +241,7 @@ void UBS_BaseClient::StartScan()
         UE_LOGFMT(LogBS_BaseClient, Verbose, "Already scanning");
         return;
     }
+    DiscoveredDevices.Reset();
     SendMessages({{EBS_ServerMessageType::START_SCAN}});
 }
 void UBS_BaseClient::StopScan()
@@ -268,28 +272,15 @@ void UBS_BaseClient::ParseDiscoveredDevice(const TArray<uint8> &Message)
 {
     UE_LOGFMT(LogBS_BaseClient, Log, "Parsing Discovered Device ({0} bytes)...", Message.Num());
 
-    uint8 Offset = 0;
-    const uint8 DiscoveredDeviceStringLength = Message[Offset++];
-    UE_LOGFMT(LogBS_BaseClient, Log, "DiscoveredDeviceStringLength: {0}", DiscoveredDeviceStringLength);
-
-    const TArrayView<uint8> DiscoveredDeviceStringData((uint8 *)(Message.GetData() + Offset), Message.Num() - Offset);
-    const FString DiscoveredDeviceString = BS_ByteParser::GetString(static_cast<TArray<uint8>>(DiscoveredDeviceStringData));
-    UE_LOGFMT(LogBS_BaseClient, Log, "DiscoveredDeviceString: {0}", DiscoveredDeviceString);
-
-    TSharedPtr<FJsonObject> DiscoveredDeviceJson;
-    TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(DiscoveredDeviceString);
-
-    if (FJsonSerializer::Deserialize(Reader, DiscoveredDeviceJson) && DiscoveredDeviceJson.IsValid())
+    FBS_DiscoveredDevice DiscoveredDevice;
+    if (DiscoveredDevice.Parse(Message))
     {
-        FString Name = DiscoveredDeviceJson->GetStringField("name");
-        FString BluetoothId = DiscoveredDeviceJson->GetStringField("bluetoothId");
-        int32 RSSI = DiscoveredDeviceJson->GetIntegerField("rssi");
-
-        UE_LOGFMT(LogBS_BaseClient, Log, "Name: {0}, BluetoothId: {1}, RSSI: {2}", Name, BluetoothId, RSSI);
+        DiscoveredDevices.Emplace(DiscoveredDevice.BluetoothId, DiscoveredDevice);
+        OnDiscoveredDevice.Broadcast(this, DiscoveredDevice);
     }
     else
     {
-        UE_LOGFMT(LogBS_BaseClient, Error, "Unable to convert DiscoveredDeviceString json");
+        UE_LOGFMT(LogBS_BaseClient, Error, "Failed to parse Discovered Device");
     }
 }
 void UBS_BaseClient::ParseExpiredDiscoveredDevice(const TArray<uint8> &Message)

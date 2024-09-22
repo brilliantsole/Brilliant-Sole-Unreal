@@ -9,6 +9,7 @@
 #include "BS_ConnectionStatus.h"
 #include "BS_ServerMessage.h"
 #include "BS_ParseUtils.h"
+#include "BS_DiscoveredDevice.h"
 #include "BS_BaseClient.generated.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_BaseClient, Verbose, All);
@@ -122,9 +123,20 @@ private:
     // SCANNING END
 
     // DISCOVERED DEVICES START
+protected:
+    UFUNCTION(BlueprintPure, Category = "BS Client")
+    const TMap<FString, FBS_DiscoveredDevice> &GetDiscoveredDevices() const { return DiscoveredDevices; }
+
+    DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBS_ClientDiscoveredDeviceCallback, UBS_BaseClient *, Client, FBS_DiscoveredDevice, DiscoveredDevice);
+    UPROPERTY(BlueprintAssignable, Category = "BS Client")
+    FBS_ClientDiscoveredDeviceCallback OnDiscoveredDevice;
+
 private:
     void ParseDiscoveredDevice(const TArray<uint8> &Message);
     void ParseExpiredDiscoveredDevice(const TArray<uint8> &Message);
+
+    UPROPERTY()
+    TMap<FString, FBS_DiscoveredDevice> DiscoveredDevices;
     // DISCOVERED DEVICES END
 
     // CONNECTED DEVICES START
