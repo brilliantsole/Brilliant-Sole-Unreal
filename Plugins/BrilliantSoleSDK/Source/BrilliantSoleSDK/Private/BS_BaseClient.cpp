@@ -399,10 +399,10 @@ void UBS_BaseClient::OnDeviceEvent(UBS_Device *Device, EBS_DeviceEvent DeviceEve
     switch (DeviceEventType)
     {
     case EBS_DeviceEvent::IS_CONNECTED:
-        UE_LOGFMT(LogBS_BaseClient, Log, "Connected, fuck yea");
+        // FILL - set connectionStasus
         break;
     case EBS_DeviceEvent::RX:
-        UE_LOGFMT(LogBS_BaseClient, Log, "rx");
+        // FILL - parse RX message
         break;
     default:
         UE_LOGFMT(LogBS_BaseClient, Log, "Uncaught DeviceEventType {0}", static_cast<uint8>(DeviceEventType));
