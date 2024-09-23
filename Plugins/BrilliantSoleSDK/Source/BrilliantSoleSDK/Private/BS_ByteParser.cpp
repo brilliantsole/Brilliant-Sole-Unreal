@@ -10,14 +10,17 @@ FString BS_ByteParser::GetString(const TArray<uint8> &Data, bool bIncludesLength
     uint8 StringLength = Data.Num();
     if (bIncludesLength)
     {
+        // StringLength = FMath::Min(Data[Offset++], StringLength);
         StringLength = Data[Offset++];
     }
+    UE_LOGFMT(LogBS_ByteParser, Verbose, "Parsing String with length {0}", StringLength);
     FString String;
     String.Empty(StringLength);
     while (String.Len() < StringLength)
     {
         String.AppendChar(static_cast<TCHAR>(Data[Offset++]));
     }
+    UE_LOGFMT(LogBS_ByteParser, Verbose, "Parsed String: {0}", String);
     return String;
 }
 

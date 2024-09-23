@@ -10,7 +10,6 @@
 #include "Json.h"
 #include "JsonUtilities.h"
 #include "BS_DeviceType.h"
-#include "GenericPlatform/GenericPlatformTime.h"
 
 DEFINE_LOG_CATEGORY(LogBS_BaseClient);
 
@@ -24,6 +23,7 @@ UBS_BaseClient::UBS_BaseClient()
     }
 
     BoundOnMessage.BindUObject(this, &UBS_BaseClient::OnMessage);
+    BoundOnDeviceEvent.BindUObject(this, &UBS_BaseClient::OnDeviceEvent);
 }
 
 void UBS_BaseClient::Reset()
@@ -369,9 +369,45 @@ void UBS_BaseClient::SendDeviceMessage(const FBS_DiscoveredDevice &DiscoveredDev
 
 void UBS_BaseClient::ParseDeviceMessage(const TArray<uint8> &Message)
 {
-    UE_LOGFMT(LogBS_BaseClient, Log, "Parsing Device Message ({0} bytes)...", Message.Num());
-    // FILL - get bluetooth Id
-    // FILL - get Message
+    const uint16 MessageLength = Message.Num();
+
+    UE_LOGFMT(LogBS_BaseClient, Log, "Parsing Device Message ({0} bytes)...", MessageLength);
+    uint8 Offset = 0;
+    const FString BluetoothId = BS_ByteParser::GetString(Message, true);
+    Offset += 1 + BluetoothId.Len();
+
+    UE_LOGFMT(LogBS_BaseClient, Log, "Received Device Message for BluetoothId: {0}", BluetoothId);
+    if (!Devices.Contains(BluetoothId))
+    {
+        UE_LOGFMT(LogBS_BaseClient, Error, "No Device found with BluetoothId {0}", BluetoothId);
+        return;
+    }
+
+    UBS_Device *Device = Devices[BluetoothId];
+
+    const uint16 MessageDataLength = MessageLength - Offset;
+    const TArrayView<uint8> MessageData((uint8 *)(Message.GetData() + Offset), MessageDataLength);
+
+    UE_LOGFMT(LogBS_BaseClient, Log, "Parsing {0} Bytes for Device...", MessageDataLength);
+    UBS_ParseUtils::ParseDeviceEventData(Device, static_cast<TArray<uint8>>(MessageData), BoundOnDeviceEvent);
+}
+
+void UBS_BaseClient::OnDeviceEvent(UBS_Device *Device, EBS_DeviceEvent DeviceEventType, const TArray<uint8> &Message)
+{
+    UE_LOGFMT(LogBS_BaseClient, Log, "Message {0} ({1} Bytes) for {2}", static_cast<uint8>(DeviceEventType), Message.Num(), Device->Name());
+    // FILL
+    switch (DeviceEventType)
+    {
+    case EBS_DeviceEvent::IS_CONNECTED:
+        UE_LOGFMT(LogBS_BaseClient, Log, "Connected, fuck yea");
+        break;
+    case EBS_DeviceEvent::RX:
+        UE_LOGFMT(LogBS_BaseClient, Log, "rx");
+        break;
+    default:
+        UE_LOGFMT(LogBS_BaseClient, Log, "Uncaught DeviceEventType {0}", static_cast<uint8>(DeviceEventType));
+        break;
+    }
 }
 
 // DEVICE MESSAGE END

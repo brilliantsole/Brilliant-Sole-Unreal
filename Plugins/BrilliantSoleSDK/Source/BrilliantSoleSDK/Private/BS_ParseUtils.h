@@ -6,6 +6,8 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "BS_UDP_MessageType.h"
 #include "BS_ServerMessageType.h"
+#include "BS_DeviceEventType.h"
+#include "BS_Device.h"
 #include "BS_ParseUtils.generated.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_ParseUtils, Verbose, All);
@@ -13,6 +15,7 @@ DECLARE_LOG_CATEGORY_EXTERN(LogBS_ParseUtils, Verbose, All);
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FBS_MessageCallback, uint8, MessageType, const TArray<uint8> &, Message);
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FBS_UDP_MessageCallback, EBS_UDP_MessageType, MessageType, const TArray<uint8> &, Message);
 DECLARE_DELEGATE_TwoParams(FBS_ServerMessageCallback, EBS_ServerMessage, const TArray<uint8> &);
+DECLARE_DELEGATE_ThreeParams(FBS_DeviceEventCallback, UBS_Device *, EBS_DeviceEvent, const TArray<uint8> &);
 
 UCLASS()
 class UBS_ParseUtils : public UBlueprintFunctionLibrary
@@ -27,4 +30,6 @@ public:
 	static void ParseUDP_Data(const TArray<uint8> &Data, FBS_UDP_MessageCallback MessageCallback);
 
 	static void ParseServerData(const TArray<uint8> &Data, FBS_ServerMessageCallback MessageCallback);
+
+	static void ParseDeviceEventData(UBS_Device *Device, const TArray<uint8> &Data, FBS_DeviceEventCallback MessageCallback);
 };

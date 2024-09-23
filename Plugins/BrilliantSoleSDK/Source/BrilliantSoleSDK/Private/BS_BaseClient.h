@@ -79,6 +79,9 @@ private:
     void OnMessage(EBS_ServerMessage MessageType, const TArray<uint8> &Message);
     FBS_ServerMessageCallback BoundOnMessage;
 
+    void OnDeviceEvent(UBS_Device *Device, EBS_DeviceEvent DeviceEventType, const TArray<uint8> &Message);
+    FBS_DeviceEventCallback BoundOnDeviceEvent;
+
     void SendMessages(const TArray<FBS_ServerMessage> &ServerMessages, bool bSendImmediately = true);
 
     void SendRequiredMessages() { SendMessages(UBS_BaseClient::RequiredMessages); }
@@ -159,6 +162,13 @@ public:
 protected:
     UFUNCTION(BlueprintPure, Category = "BS Client")
     const TMap<FString, UBS_Device *> &GetDevices() const { return Devices; }
+
+    UFUNCTION(BlueprintCallable, Category = "BS Client")
+    void AddDevice(FString BluetoothId, UBS_Device *Device)
+    {
+        UE_LOGFMT(LogTemp, Log, "Adding Device for BluetoothId {0}", BluetoothId);
+        Devices.Add(BluetoothId, Device);
+    }
 
     UFUNCTION(BlueprintCallable, Category = "BS Client")
     UBS_Device *GetDeviceByDiscoveredDevice(const FBS_DiscoveredDevice &DiscoveredDevice);
