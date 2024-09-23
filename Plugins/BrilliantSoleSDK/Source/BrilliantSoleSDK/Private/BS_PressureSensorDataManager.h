@@ -13,8 +13,6 @@ DECLARE_LOG_CATEGORY_EXTERN(LogBS_PressureSensorDataManager, Verbose, All);
 
 DECLARE_DELEGATE_TwoParams(FBS_PressureDataCallbackLocal, const FBS_PressureData &, const uint64 &);
 
-#define EBS_PressurePositionsMessage BS_MessageGetPressurePositions
-
 UCLASS()
 class UBS_PressureSensorDataManager : public UBS_BaseSensorDataManager
 {

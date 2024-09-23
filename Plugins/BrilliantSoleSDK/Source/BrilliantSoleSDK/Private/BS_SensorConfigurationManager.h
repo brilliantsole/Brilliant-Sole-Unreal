@@ -5,14 +5,12 @@
 #include "CoreMinimal.h"
 #include "BS_BaseManager.h"
 #include "BS_SensorConfiguration.h"
+#include "BS_SensorConfigurationMessageType.h"
 #include "BS_SensorConfigurationManager.generated.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_SensorConfigurationManager, Verbose, All);
 
 DECLARE_DELEGATE_OneParam(FBS_SensorConfigurationCallbackLocal, const UBS_SensorConfiguration *);
-
-#define EBS_SensorConfigurationMessage BS_MessageGetSensorConfiguration, \
-									   BS_MessageSetSensorConfiguration
 
 UCLASS()
 class UBS_SensorConfigurationManager : public UBS_BaseManager
@@ -22,7 +20,7 @@ class UBS_SensorConfigurationManager : public UBS_BaseManager
 public:
 	UBS_SensorConfigurationManager();
 
-	bool OnRxMessage(uint8 MessageType, const TArray<uint8> &Message) override;
+	bool OnRxMessage(EBS_TxRxMessage MessageType, const TArray<uint8> &Message) override;
 	void Reset() override;
 
 public:

@@ -46,7 +46,7 @@ void FBS_DeviceInformation::Reset()
     }
 }
 
-void FBS_DeviceInformation::SetValue(const EBS_DeviceInformationType DeviceInformationType, const TArray<uint8> &Value)
+void FBS_DeviceInformation::SetValue(const EBS_DeviceInformation DeviceInformationType, const TArray<uint8> &Value)
 {
     const FString String = BS_ByteParser::GetString(Value);
 
@@ -54,22 +54,22 @@ void FBS_DeviceInformation::SetValue(const EBS_DeviceInformationType DeviceInfor
 
     switch (DeviceInformationType)
     {
-    case EBS_DeviceInformationType::MANUFACTURER_NAME:
+    case EBS_DeviceInformation::MANUFACTURER_NAME:
         ManufacturerName = String;
         break;
-    case EBS_DeviceInformationType::MODEL_NUMBER:
+    case EBS_DeviceInformation::MODEL_NUMBER:
         ModelNumber = String;
         break;
-    case EBS_DeviceInformationType::SERIAL_NUMBER:
+    case EBS_DeviceInformation::SERIAL_NUMBER:
         SerialNumber = String;
         break;
-    case EBS_DeviceInformationType::HARDWARE_REVISION:
+    case EBS_DeviceInformation::HARDWARE_REVISION:
         HardwareRevision = String;
         break;
-    case EBS_DeviceInformationType::FIRMWARE_REVISION:
+    case EBS_DeviceInformation::FIRMWARE_REVISION:
         FirmwareRevision = String;
         break;
-    case EBS_DeviceInformationType::SOFTWARE_REVISION:
+    case EBS_DeviceInformation::SOFTWARE_REVISION:
         SoftwareRevision = String;
         break;
     default:

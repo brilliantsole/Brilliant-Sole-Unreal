@@ -2,7 +2,6 @@
 
 #include "BS_BaseUDP_Client.h"
 #include "Logging/StructuredLog.h"
-#include "BS_Message.h"
 #include "BS_Subsystem.h"
 #include "Engine/World.h"
 #include "Engine/GameInstance.h"

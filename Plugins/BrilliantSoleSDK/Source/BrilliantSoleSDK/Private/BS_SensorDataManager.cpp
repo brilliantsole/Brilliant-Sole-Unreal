@@ -1,7 +1,7 @@
 // Copyright 2024 Zack Qattan @ Brilliant Sole. All Rights Reserved
 
 #include "BS_SensorDataManager.h"
-#include "BS_Message.h"
+#include "BS_TxRxMessageType.h"
 #include "BS_ByteParser.h"
 #include "BS_TimeUtils.h"
 #include "BS_SensorType.h"
@@ -30,17 +30,17 @@ void UBS_SensorDataManager::Reset()
     PressureSensorDataManager->Reset();
 }
 
-bool UBS_SensorDataManager::OnRxMessage(uint8 MessageType, const TArray<uint8> &Message)
+bool UBS_SensorDataManager::OnRxMessage(EBS_TxRxMessage MessageType, const TArray<uint8> &Message)
 {
     switch (MessageType)
     {
-    case BS_MessageGetPressurePositions:
+    case EBS_TxRxMessage::GET_PRESSURE_POSITIONS:
         PressureSensorDataManager->ParsePressurePositions(Message);
         break;
-    case BS_MessageGetSensorScalars:
+    case EBS_TxRxMessage::GET_SENSOR_SCALARS:
         ParseSensorScalars(Message);
         break;
-    case BS_MessageSensorData:
+    case EBS_TxRxMessage::SENSOR_DATA:
         ParseSensorData(Message);
         break;
     default:

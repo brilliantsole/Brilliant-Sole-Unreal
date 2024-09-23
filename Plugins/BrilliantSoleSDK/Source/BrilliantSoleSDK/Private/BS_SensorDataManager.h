@@ -8,12 +8,10 @@
 #include "BS_MotionSensorDataManager.h"
 #include "BS_SensorType.h"
 #include "BS_BaseManager.h"
+#include "BS_SensorDataMessageType.h"
 #include "BS_SensorDataManager.generated.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_SensorDataManager, Verbose, All);
-
-#define EBS_SensorScalarsMessage BS_MessageGetSensorScalars
-#define EBS_SensorDataMessge BS_MessageSensorData
 
 UCLASS()
 class UBS_SensorDataManager : public UBS_BaseManager
@@ -25,7 +23,7 @@ public:
 	void Reset() override;
 
 public:
-	bool OnRxMessage(uint8 MessageType, const TArray<uint8> &Message) override;
+	bool OnRxMessage(EBS_TxRxMessage MessageType, const TArray<uint8> &Message) override;
 
 public:
 	UPROPERTY()

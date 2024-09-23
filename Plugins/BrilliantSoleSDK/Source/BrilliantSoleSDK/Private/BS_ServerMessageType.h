@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 
 UENUM(BlueprintType)
-enum class EBS_ServerMessageType : uint8
+enum class EBS_ServerMessage : uint8
 {
     IS_SCANNING_AVAILABLE UMETA(DisplayName = "Is Scanning Available"),
     IS_SCANNING UMETA(DisplayName = "Is Scanning"),
@@ -21,4 +21,4 @@ enum class EBS_ServerMessageType : uint8
     COUNT UMETA(Hidden)
 };
 
-ENUM_RANGE_BY_COUNT(EBS_ServerMessageType, static_cast<int32>(EBS_ServerMessageType::COUNT))
+ENUM_RANGE_BY_COUNT(EBS_ServerMessage, static_cast<int32>(EBS_ServerMessage::COUNT))

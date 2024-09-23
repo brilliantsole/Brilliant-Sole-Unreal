@@ -2,7 +2,7 @@
 
 #include "BS_VibrationManager.h"
 #include "Logging/StructuredLog.h"
-#include "BS_Message.h"
+#include "BS_TxRxMessageType.h"
 
 DEFINE_LOG_CATEGORY(LogBS_VibrationManager);
 
@@ -29,5 +29,5 @@ void UBS_VibrationManager::TriggerVibration(const TArray<FBS_VibrationConfigurat
         return;
     }
 
-    SendTxMessages.ExecuteIfBound({{BS_MessageTriggerVibration, TxMessage}}, true);
+    SendTxMessages.ExecuteIfBound({{EBS_TxRxMessage::TRIGGER_VIBRATION, TxMessage}}, true);
 }

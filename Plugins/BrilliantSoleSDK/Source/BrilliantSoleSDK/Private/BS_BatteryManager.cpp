@@ -2,19 +2,19 @@
 
 #include "BS_BatteryManager.h"
 #include "Logging/StructuredLog.h"
-#include "BS_Message.h"
+#include "BS_TxRxMessageType.h"
 #include "BS_ByteParser.h"
 
 DEFINE_LOG_CATEGORY(LogBS_BatteryManager);
 
-bool UBS_BatteryManager::OnRxMessage(uint8 MessageType, const TArray<uint8> &Message)
+bool UBS_BatteryManager::OnRxMessage(EBS_TxRxMessage MessageType, const TArray<uint8> &Message)
 {
     switch (MessageType)
     {
-    case BS_MessageIsBatteryCharging:
+    case EBS_TxRxMessage::IS_BATTERY_CHARGING:
         ParseIsBatteryCharging(Message);
         break;
-    case BS_MessageGetBatteryCurrent:
+    case EBS_TxRxMessage::GET_BATTERY_CURRENT:
         ParseBatteryCurrent(Message);
         break;
     default:

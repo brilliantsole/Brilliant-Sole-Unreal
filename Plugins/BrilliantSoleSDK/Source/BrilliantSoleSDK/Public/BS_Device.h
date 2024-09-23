@@ -8,6 +8,7 @@
 #include "BS_DeviceInformation.h"
 #include "BS_Subsystem.h"
 #include "BS_TxMessage.h"
+#include "BS_TxRxMessageType.h"
 #include "BS_BatteryManager.h"
 #include "BS_InformationManager.h"
 #include "BS_SensorDataManager.h"
@@ -71,7 +72,7 @@ public:
 
 protected:
 	UFUNCTION(BlueprintCallable, Category = "BS Device Information")
-	void OnDeviceInformationValue(const EBS_DeviceInformationType DeviceInformationType, const TArray<uint8> &Value) { DeviceInformation.SetValue(DeviceInformationType, Value); };
+	void OnDeviceInformationValue(const EBS_DeviceInformation DeviceInformationType, const TArray<uint8> &Value) { DeviceInformation.SetValue(DeviceInformationType, Value); };
 
 private:
 	FBS_DeviceInformation DeviceInformation;
@@ -79,6 +80,15 @@ private:
 
 	// CONNECTION START
 public:
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "BS Device")
+	void Connect();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "BS Device")
+	void Disconnect();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "BS Device")
+	void ToggleConnection();
+
 	UFUNCTION(BlueprintPure, Category = "BS Device")
 	EBS_ConnectionStatus GetConnectionStatus() const { return ConnectionStatus; }
 
@@ -102,14 +112,14 @@ private:
 	void SetConnectionStatus(EBS_ConnectionStatus NewConnectionStatus);
 
 	void CheckIfFullyConnected();
-	TSet<uint8> ReceivedTxMessages;
+	TSet<EBS_TxRxMessage> ReceivedTxMessages;
 	// CONNECTION END
 
 	// MESSAGING START
 public:
 protected:
 	UFUNCTION(BlueprintCallable, Category = "BS ConnectionManager")
-	void OnRxMessage(const uint8 MessageType, const TArray<uint8> &Message);
+	void OnRxMessage(uint8 MessageTypeEnum, const TArray<uint8> &Message);
 
 	UFUNCTION(BlueprintCallable, Category = "BS ConnectionManager")
 	void OnRxMessages();
@@ -120,7 +130,7 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "BS ConnectionManager")
 	void OnSendTxData();
 
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BS ConnectionManager")
+	// UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BS ConnectionManager")
 	bool bIsSendingTxData = false;
 
 private:
@@ -132,7 +142,7 @@ private:
 	TArray<FBS_TxMessage> PendingTxMessages;
 	TArray<uint8> TxData;
 
-	static const TArray<uint8> RequiredTxMessageTypes;
+	static const TArray<EBS_TxRxMessage> RequiredTxMessageTypes;
 	static const TArray<FBS_TxMessage> RequiredTxMessages;
 	static const TArray<FBS_TxMessage> InitializeRequiredTxMessages();
 

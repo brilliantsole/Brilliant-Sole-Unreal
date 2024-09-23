@@ -75,12 +75,12 @@ void UBS_ParseUtils::ParseServerData(const TArray<uint8> &Data, FBS_ServerMessag
         UE_LOGFMT(LogBS_ParseUtils, Verbose, "Parsing Message at {0}...", Offset);
 
         const uint8 MessageTypeEnum = Data[Offset++];
-        if (MessageTypeEnum >= static_cast<uint8>(EBS_ServerMessageType::COUNT))
+        if (MessageTypeEnum >= static_cast<uint8>(EBS_ServerMessage::COUNT))
         {
             UE_LOGFMT(LogBS_ParseUtils, Error, "invalid MessageTypeEnum {0}", MessageTypeEnum);
             continue;
         }
-        const EBS_ServerMessageType MessageType = static_cast<EBS_ServerMessageType>(MessageTypeEnum);
+        const EBS_ServerMessage MessageType = static_cast<EBS_ServerMessage>(MessageTypeEnum);
 
         const uint16 MessageDataLength = BS_ByteParser::ParseAs<uint16>(Data, Offset, true);
         Offset += 2;

@@ -4,6 +4,11 @@
 
 #include "CoreMinimal.h"
 
+#define EBS_ConnectionStatuses NOT_CONNECTED, \
+                               CONNECTING,    \
+                               CONNECTED,     \
+                               DISCONNECTING
+
 UENUM(BlueprintType)
 enum class EBS_ConnectionStatus : uint8
 {

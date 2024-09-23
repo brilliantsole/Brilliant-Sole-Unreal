@@ -51,6 +51,6 @@ public:
         return ParsedValue;
     }
 
-    static FString GetString(const TArray<uint8> &ByteArray);
-    static TArray<uint8> StringToArray(const FString &String);
+    static FString GetString(const TArray<uint8> &ByteArray, bool bIncludesLength = false);
+    static TArray<uint8> StringToArray(const FString &String, bool bIncludeLength = false);
 };

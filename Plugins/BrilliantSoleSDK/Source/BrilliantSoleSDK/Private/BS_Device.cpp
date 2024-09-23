@@ -2,7 +2,6 @@
 
 #include "BS_Device.h"
 #include "Logging/StructuredLog.h"
-#include "BS_Message.h"
 #include "BS_Subsystem.h"
 #include "Engine/World.h"
 #include "Engine/GameInstance.h"
@@ -235,11 +234,11 @@ void UBS_Device::CheckIfFullyConnected()
     }
 
     bool HasReceivedAllRequiredTxMessages = true;
-    for (uint8 TxMessageType : RequiredTxMessageTypes)
+    for (EBS_TxRxMessage TxMessageType : RequiredTxMessageTypes)
     {
         if (!ReceivedTxMessages.Contains(TxMessageType))
         {
-            UE_LOGFMT(LogBS_Device, Verbose, "Doesn't contain TxMessageType #{0}", TxMessageType);
+            UE_LOGFMT(LogBS_Device, Verbose, "Doesn't contain TxMessageType {0}", static_cast<uint8>(TxMessageType));
             HasReceivedAllRequiredTxMessages = false;
             break;
         }
@@ -255,7 +254,7 @@ void UBS_Device::CheckIfFullyConnected()
 // CONNECTION END
 
 // PING START
-const FBS_TxMessage UBS_Device::PingTxMessage = {BS_MessageGetMTU};
+const FBS_TxMessage UBS_Device::PingTxMessage = {EBS_TxRxMessage::GET_MTU};
 const TArray<uint8> UBS_Device::PingTxData = UBS_Device::InitializePingTxData();
 const TArray<uint8> UBS_Device::InitializePingTxData()
 {
@@ -267,9 +266,16 @@ const TArray<uint8> UBS_Device::InitializePingTxData()
 
 // MESSAGING START
 
-void UBS_Device::OnRxMessage(uint8 MessageType, const TArray<uint8> &Message)
+void UBS_Device::OnRxMessage(uint8 MessageTypeEnum, const TArray<uint8> &Message)
 {
-    UE_LOGFMT(LogBS_Device, Verbose, "message #{0} ({1} bytes)", MessageType, Message.Num());
+    if (MessageTypeEnum >= static_cast<uint8>(EBS_TxRxMessage::COUNT))
+    {
+        UE_LOGFMT(LogBS_Device, Error, "invalid TxRxMessage {0}", MessageTypeEnum);
+        return;
+    }
+    EBS_TxRxMessage MessageType = static_cast<EBS_TxRxMessage>(MessageTypeEnum);
+
+    UE_LOGFMT(LogBS_Device, Verbose, "message {0} ({1} bytes)", static_cast<uint8>(MessageType), Message.Num());
 
     if (BatteryManager->OnRxMessage(MessageType, Message))
     {
@@ -351,13 +357,13 @@ void UBS_Device::SendPendingTxMessages()
         bool ShouldAppendTxMessage = MaxMessageLength == 0 || TxData.Num() + PendingTxMessageLength <= MaxMessageLength;
         if (ShouldAppendTxMessage)
         {
-            UE_LOGFMT(LogBS_Device, Verbose, "Appending message #{0} ({1} bytes)", PendingTxMessage.Type, PendingTxMessageLength);
+            UE_LOGFMT(LogBS_Device, Verbose, "Appending message {0} ({1} bytes)", static_cast<uint8>(PendingTxMessage.Type), PendingTxMessageLength);
             PendingTxMessage.AppendTo(TxData);
             PendingTxMessages.RemoveAt(PendingTxMessageIndex);
         }
         else
         {
-            UE_LOGFMT(LogBS_Device, Verbose, "Skipping message #{0} ({1} bytes)", PendingTxMessage.Type, PendingTxMessageLength);
+            UE_LOGFMT(LogBS_Device, Verbose, "Skipping message {0} ({1} bytes)", static_cast<uint8>(PendingTxMessage.Type), PendingTxMessageLength);
             PendingTxMessageIndex++;
         }
     }
@@ -390,40 +396,40 @@ void UBS_Device::OnSendTxData()
     SendPendingTxMessages();
 }
 
-const TArray<uint8> UBS_Device::RequiredTxMessageTypes = {
-    BS_MessageIsBatteryCharging,
-    BS_MessageGetBatteryCurrent,
+const TArray<EBS_TxRxMessage> UBS_Device::RequiredTxMessageTypes = {
+    EBS_TxRxMessage::IS_BATTERY_CHARGING,
+    EBS_TxRxMessage::GET_BATTERY_CURRENT,
 
-    BS_MessageGetMTU,
+    EBS_TxRxMessage::GET_MTU,
 
-    BS_MessageGetId,
-    BS_MessageGetName,
-    BS_MessageGetType,
-    BS_MessageGetCurrentTime,
+    EBS_TxRxMessage::GET_ID,
+    EBS_TxRxMessage::GET_NAME,
+    EBS_TxRxMessage::GET_TYPE,
+    EBS_TxRxMessage::GET_CURRENT_TIME,
 
-    BS_MessageGetSensorConfiguration,
-    BS_MessageGetSensorScalars,
-    BS_MessageGetPressurePositions,
+    EBS_TxRxMessage::GET_PRESSURE_POSITIONS,
+    EBS_TxRxMessage::GET_SENSOR_SCALARS,
+    EBS_TxRxMessage::GET_SENSOR_CONFIGURATION,
 
-    BS_MessageGetMaxFileLength,
-    BS_MessageGetFileTransferType,
-    BS_MessageGetFileLength,
-    BS_MessageGetFileChecksum,
-    BS_MessageGetFileTransferStatus,
+    EBS_TxRxMessage::GET_MAX_FILE_LENGTH,
+    EBS_TxRxMessage::GET_FILE_TRANSFER_TYPE,
+    EBS_TxRxMessage::GET_FILE_LENGTH,
+    EBS_TxRxMessage::GET_FILE_CHECKSUM,
+    EBS_TxRxMessage::GET_FILE_TRANSFER_STATUS,
 
-    BS_MessageTfliteGetName,
-    BS_MessageTfliteGetTask,
-    BS_MessageTfliteGetSampleRate,
-    BS_MessageTfliteGetSensorTypes,
-    BS_MessageTfliteGetIsReady,
-    BS_MessageTfliteGetCaptureDelay,
-    BS_MessageTfliteGetThreshold,
-    BS_MessageTfliteGetInferencingEnabled};
+    EBS_TxRxMessage::GET_TFLITE_NAME,
+    EBS_TxRxMessage::GET_TFLITE_TASK,
+    EBS_TxRxMessage::GET_TFLITE_SAMPLE_RATE,
+    EBS_TxRxMessage::GET_TFLITE_SENSOR_TYPES,
+    EBS_TxRxMessage::IS_TFLITE_READY,
+    EBS_TxRxMessage::GET_TFLITE_CAPTURE_DELAY,
+    EBS_TxRxMessage::GET_TFLITE_THRESHOLD,
+    EBS_TxRxMessage::GET_TFLITE_INFERENCING_ENABLED};
 
 const TArray<FBS_TxMessage> UBS_Device::InitializeRequiredTxMessages()
 {
     TArray<FBS_TxMessage> _RequiredTxMessages;
-    for (uint8 TxMessageType : UBS_Device::RequiredTxMessageTypes)
+    for (EBS_TxRxMessage TxMessageType : UBS_Device::RequiredTxMessageTypes)
     {
         _RequiredTxMessages.Add({TxMessageType});
     }

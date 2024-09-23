@@ -10,15 +10,15 @@
 
 struct FBS_ServerMessage
 {
-    EBS_ServerMessageType Type;
+    EBS_ServerMessage Type;
     TOptional<TArray<uint8>> Data;
 
-    FBS_ServerMessage(EBS_ServerMessageType InType, const TArray<uint8> &InData)
+    FBS_ServerMessage(EBS_ServerMessage InType, const TArray<uint8> &InData)
         : Type(InType), Data(InData)
     {
     }
 
-    FBS_ServerMessage(EBS_ServerMessageType InType)
+    FBS_ServerMessage(EBS_ServerMessage InType)
         : Type(InType)
     {
     }

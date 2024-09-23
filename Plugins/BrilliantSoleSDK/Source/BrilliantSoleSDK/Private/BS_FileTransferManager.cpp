@@ -2,39 +2,40 @@
 
 #include "BS_FileTransferManager.h"
 #include "BS_ByteParser.h"
-#include "BS_Message.h"
+#include "BS_TxRxMessageType.h"
+#include "BS_TxMessage.h"
 #include "Logging/StructuredLog.h"
 
 DEFINE_LOG_CATEGORY(LogBS_FileTransferManager);
 
-bool UBS_FileTransferManager::OnRxMessage(uint8 MessageType, const TArray<uint8> &Message)
+bool UBS_FileTransferManager::OnRxMessage(EBS_TxRxMessage MessageType, const TArray<uint8> &Message)
 {
     switch (MessageType)
     {
-    case BS_MessageGetMaxFileLength:
+    case EBS_TxRxMessage::GET_MAX_FILE_LENGTH:
         ParseMaxFileLength(Message);
         break;
-    case BS_MessageGetFileTransferType:
-    case BS_MessageSetFileTransferType:
+    case EBS_TxRxMessage::GET_FILE_TRANSFER_TYPE:
+    case EBS_TxRxMessage::SET_FILE_TRANSFER_TYPE:
         ParseFileType(Message);
         break;
-    case BS_MessageGetFileLength:
-    case BS_MessageSetFileLength:
+    case EBS_TxRxMessage::GET_FILE_LENGTH:
+    case EBS_TxRxMessage::SET_FILE_LENGTH:
         ParseFileLength(Message);
         break;
-    case BS_MessageGetFileChecksum:
-    case BS_MessageSetFileChecksum:
+    case EBS_TxRxMessage::GET_FILE_CHECKSUM:
+    case EBS_TxRxMessage::SET_FILE_CHECKSUM:
         ParseFileChecksum(Message);
         break;
-    case BS_MessageGetFileTransferStatus:
+    case EBS_TxRxMessage::GET_FILE_TRANSFER_STATUS:
         ParseFileTransferStatus(Message);
         break;
-    case BS_MessageGetFileTransferBlock:
+    case EBS_TxRxMessage::GET_FILE_TRANSFER_BLOCK:
         ParseFileTransferBlock(Message);
         break;
-    case BS_MessageSetFileTransferBlock:
+    case EBS_TxRxMessage::SET_FILE_TRANSFER_BLOCK:
         break;
-    case BS_MessageFileBytesTransferred:
+    case EBS_TxRxMessage::FILE_BYTES_TRANSFERRED:
         ParseFileBytesTransferred(Message);
         break;
     default:
@@ -86,7 +87,7 @@ void UBS_FileTransferManager::SetFileType(const EBS_FileType NewFileType, bool b
     UE_LOGFMT(LogBS_FileTransferManager, Verbose, "Setting FileType to {0}...", UEnum::GetValueAsString(NewFileType));
 
     const TArray<uint8> TxMessage = {static_cast<uint8>(NewFileType)};
-    SendTxMessages.ExecuteIfBound({{BS_MessageSetFileTransferType, TxMessage}}, bSendImmediately);
+    SendTxMessages.ExecuteIfBound({{EBS_TxRxMessage::SET_FILE_TRANSFER_TYPE, TxMessage}}, bSendImmediately);
 }
 // FILE TRANSFER TYPE END
 
@@ -113,7 +114,7 @@ void UBS_FileTransferManager::SetFileLength(const uint32 NewFileLength, bool bSe
     }
     UE_LOGFMT(LogBS_FileTransferManager, Verbose, "Updating FileLength to {0}", NewFileLength);
     const TArray<uint8> TxMessage = BS_ByteParser::ToByteArray(NewFileLength, true);
-    SendTxMessages.ExecuteIfBound({{BS_MessageSetFileLength, TxMessage}}, bSendImmediately);
+    SendTxMessages.ExecuteIfBound({{EBS_TxRxMessage::SET_FILE_LENGTH, TxMessage}}, bSendImmediately);
 }
 // FILE LENGTH END
 
@@ -135,7 +136,7 @@ void UBS_FileTransferManager::SetFileChecksum(const uint32 NewFileChecksum, bool
     }
     UE_LOGFMT(LogBS_FileTransferManager, Verbose, "Updating FileChecksum to {0}", NewFileChecksum);
     const TArray<uint8> TxMessage = BS_ByteParser::ToByteArray(NewFileChecksum, true);
-    SendTxMessages.ExecuteIfBound({{BS_MessageSetFileChecksum, TxMessage}}, bSendImmediately);
+    SendTxMessages.ExecuteIfBound({{EBS_TxRxMessage::SET_FILE_CHECKSUM, TxMessage}}, bSendImmediately);
 }
 // FILE CHECKSUM END
 
@@ -145,7 +146,7 @@ void UBS_FileTransferManager::SetFileTransferCommand(const EBS_FileTransferComma
     UE_LOGFMT(LogBS_FileTransferManager, Verbose, "Setting FileTransferCommand to {0}...", UEnum::GetValueAsString(NewFileTransferCommand));
 
     const TArray<uint8> TxMessage = {static_cast<uint8>(NewFileTransferCommand)};
-    SendTxMessages.ExecuteIfBound({{BS_MessageSetFileTransferCommand, TxMessage}}, bSendImmediately);
+    SendTxMessages.ExecuteIfBound({{EBS_TxRxMessage::SET_FILE_TRANSFER_COMMAND, TxMessage}}, bSendImmediately);
 }
 // FILE TRANSFER COMMAND END
 
@@ -256,7 +257,7 @@ void UBS_FileTransferManager::SendFileBlock(bool bSendImmediately)
     BytesTransferred += FileBlockLength;
     UE_LOGFMT(LogBS_FileTransferManager, Verbose, "BytesTransferred: {0}", BytesTransferred);
 
-    SendTxMessages.ExecuteIfBound({{BS_MessageSetFileTransferBlock, FileBlockToSend}}, bSendImmediately);
+    SendTxMessages.ExecuteIfBound({{EBS_TxRxMessage::SET_FILE_TRANSFER_BLOCK, FileBlockToSend}}, bSendImmediately);
 }
 void UBS_FileTransferManager::ParseFileTransferBlock(const TArray<uint8> &Message)
 {
@@ -298,7 +299,7 @@ void UBS_FileTransferManager::ParseFileTransferBlock(const TArray<uint8> &Messag
     else
     {
         const TArray<uint8> TxMessage = BS_ByteParser::ToByteArray(CurrentFileLength, true);
-        SendTxMessages.ExecuteIfBound({{BS_MessageFileBytesTransferred, TxMessage}}, true);
+        SendTxMessages.ExecuteIfBound({{EBS_TxRxMessage::FILE_BYTES_TRANSFERRED, TxMessage}}, true); // TODO: try setting to "false", since it'll be picked up UBS_Device::OnRxMessages
     }
 }
 void UBS_FileTransferManager::ParseFileBytesTransferred(const TArray<uint8> &Message)

@@ -5,18 +5,10 @@
 #include "CoreMinimal.h"
 #include "BS_BaseManager.h"
 #include "BS_DeviceType.h"
+#include "BS_InformationMessageType.h"
 #include "BS_InformationManager.generated.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_InformationManager, Verbose, All);
-
-#define EBS_MTU_Message BS_MessageGetMTU
-#define EBS_DeviceIdMessage BS_MessageGetId
-#define EBS_DeviceNameMessage BS_MessageGetName, \
-							  BS_MessageSetName
-#define EBS_DeviceTypeMessage BS_MessageGetType, \
-							  BS_MessageSetType
-#define EBS_CurrentTimeMessage BS_MessageGetCurrentTime, \
-							   BS_MessageSetCurrentTime
 
 UCLASS()
 class UBS_InformationManager : public UBS_BaseManager
@@ -25,7 +17,7 @@ class UBS_InformationManager : public UBS_BaseManager
 
 public:
 	void Reset() override;
-	bool OnRxMessage(uint8 MessageType, const TArray<uint8> &Message) override;
+	bool OnRxMessage(EBS_TxRxMessage MessageType, const TArray<uint8> &Message) override;
 
 	// MTU START
 public:

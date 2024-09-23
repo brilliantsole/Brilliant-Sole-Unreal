@@ -30,12 +30,13 @@ public:
 
     bool Parse(const TArray<uint8> &Message)
     {
-        uint8 Offset = 0;
-        const uint8 DiscoveredDeviceStringLength = Message[Offset++];
-        UE_LOGFMT(LogTemp, Log, "DiscoveredDeviceStringLength: {0}", DiscoveredDeviceStringLength);
+        // uint8 Offset = 0;
+        // const uint8 DiscoveredDeviceStringLength = Message[Offset++];
+        // UE_LOGFMT(LogTemp, Log, "DiscoveredDeviceStringLength: {0}", DiscoveredDeviceStringLength);
 
-        const TArrayView<uint8> DiscoveredDeviceStringData((uint8 *)(Message.GetData() + Offset), Message.Num() - Offset);
-        const FString DiscoveredDeviceString = BS_ByteParser::GetString(static_cast<TArray<uint8>>(DiscoveredDeviceStringData));
+        // const TArrayView<uint8> DiscoveredDeviceStringData((uint8 *)(Message.GetData() + Offset), Message.Num() - Offset);
+        // const FString DiscoveredDeviceString = BS_ByteParser::GetString(static_cast<TArray<uint8>>(DiscoveredDeviceStringData));
+        const FString DiscoveredDeviceString = BS_ByteParser::GetString(Message, true);
         UE_LOGFMT(LogTemp, Log, "DiscoveredDeviceString: {0}", DiscoveredDeviceString);
 
         TSharedPtr<FJsonObject> DiscoveredDeviceJson;

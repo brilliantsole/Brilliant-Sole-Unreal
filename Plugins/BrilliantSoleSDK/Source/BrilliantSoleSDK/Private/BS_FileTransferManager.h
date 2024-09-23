@@ -9,24 +9,12 @@
 #include "BS_FileTransferDirection.h"
 #include "BS_FileType.h"
 #include "Misc/Crc.h"
+#include "BS_FileTransferMessageType.h"
 #include "BS_FileTransferManager.generated.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_FileTransferManager, Verbose, All);
 
 DECLARE_DELEGATE_OneParam(FBS_FileTransferFileLengthCallbackLocal, uint32);
-
-#define EBS_FileTransferMessage BS_MessageGetMaxFileLength,       \
-								BS_MessageGetFileTransferType,    \
-								BS_MessageSetFileTransferType,    \
-								BS_MessageGetFileLength,          \
-								BS_MessageSetFileLength,          \
-								BS_MessageGetFileChecksum,        \
-								BS_MessageSetFileChecksum,        \
-								BS_MessageSetFileTransferCommand, \
-								BS_MessageGetFileTransferStatus,  \
-								BS_MessageGetFileTransferBlock,   \
-								BS_MessageSetFileTransferBlock,   \
-								BS_MessageFileBytesTransferred
 
 UCLASS()
 class UBS_FileTransferManager : public UBS_BaseManager
@@ -34,7 +22,7 @@ class UBS_FileTransferManager : public UBS_BaseManager
 	GENERATED_BODY()
 
 public:
-	bool OnRxMessage(uint8 MessageType, const TArray<uint8> &Message) override;
+	bool OnRxMessage(EBS_TxRxMessage MessageType, const TArray<uint8> &Message) override;
 	void Reset() override;
 
 	// MAX FILE LENGTH START

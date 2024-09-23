@@ -4,15 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "BS_BaseManager.h"
+#include "BS_BatteryMessageType.h"
 #include "BS_BatteryManager.generated.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_BatteryManager, Verbose, All);
 
 DECLARE_DELEGATE_OneParam(FBS_IsBatteryChargingCallbackLocal, bool);
 DECLARE_DELEGATE_OneParam(FBS_BatteryCurrentCallbackLocal, float);
-
-#define EBS_BatteryMessage BS_MessageIsBatteryCharging, \
-						   BS_MessageGetBatteryCurrent
 
 UCLASS()
 class UBS_BatteryManager : public UBS_BaseManager
@@ -21,7 +19,7 @@ class UBS_BatteryManager : public UBS_BaseManager
 
 public:
 	void Reset() override;
-	bool OnRxMessage(uint8 MessageType, const TArray<uint8> &Message) override;
+	bool OnRxMessage(EBS_TxRxMessage MessageType, const TArray<uint8> &Message) override;
 
 	bool GetIsBatteryCharging() const { return bIsBatteryCharging; }
 	FBS_IsBatteryChargingCallbackLocal OnIsBatteryChargingUpdate;

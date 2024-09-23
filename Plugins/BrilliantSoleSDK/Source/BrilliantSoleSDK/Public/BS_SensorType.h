@@ -4,6 +4,21 @@
 
 #include "CoreMinimal.h"
 
+#define EBS_SensorTypes PRESSURE,            \
+                        ACCELERATION,        \
+                        GRAVITY,             \
+                        LINEAR_ACCELERATION, \
+                        GYROSCOPE,           \
+                        MAGNETOMETER,        \
+                        GAME_ROTATION,       \
+                        ROTATION,            \
+                        ORIENTATION,         \
+                        ACTIVITY,            \
+                        STEP_COUNT,          \
+                        STEP_DETECTION,      \
+                        DEVICE_ORIENTATION,  \
+                        BAROMETER
+
 UENUM(BlueprintType)
 enum class EBS_SensorType : uint8
 {

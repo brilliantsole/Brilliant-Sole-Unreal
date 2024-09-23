@@ -82,43 +82,43 @@ const EBS_BleCharacteristic UBS_BleUtils::GetBleCharacteristic(const FString &Ch
     }
 }
 
-const EBS_DeviceInformationType UBS_BleUtils::GetDeviceInformationType(const EBS_BleCharacteristic DeviceInformationCharacteristic)
+const EBS_DeviceInformation UBS_BleUtils::GetDeviceInformationType(const EBS_BleCharacteristic DeviceInformationCharacteristic)
 {
     switch (DeviceInformationCharacteristic)
     {
     case EBS_BleCharacteristic::MANUFACTURER_NAME:
-        return EBS_DeviceInformationType::MANUFACTURER_NAME;
+        return EBS_DeviceInformation::MANUFACTURER_NAME;
     case EBS_BleCharacteristic::MODEL_NUMBER:
-        return EBS_DeviceInformationType::MODEL_NUMBER;
+        return EBS_DeviceInformation::MODEL_NUMBER;
     case EBS_BleCharacteristic::SERIAL_NUMBER:
-        return EBS_DeviceInformationType::SERIAL_NUMBER;
+        return EBS_DeviceInformation::SERIAL_NUMBER;
     case EBS_BleCharacteristic::HARDWARE_REVISION:
-        return EBS_DeviceInformationType::HARDWARE_REVISION;
+        return EBS_DeviceInformation::HARDWARE_REVISION;
     case EBS_BleCharacteristic::FIRMWARE_REVISION:
-        return EBS_DeviceInformationType::FIRMWARE_REVISION;
+        return EBS_DeviceInformation::FIRMWARE_REVISION;
     case EBS_BleCharacteristic::SOFTWARE_REVISION:
-        return EBS_DeviceInformationType::SOFTWARE_REVISION;
+        return EBS_DeviceInformation::SOFTWARE_REVISION;
     default:
         UE_LOGFMT(LogBS_BleUtils, Error, "Uncaught DeviceInformationCharacteristic {0}", UEnum::GetValueAsString(DeviceInformationCharacteristic));
-        return EBS_DeviceInformationType::NONE;
+        return EBS_DeviceInformation::MANUFACTURER_NAME;
     }
 }
 
-const EBS_BleCharacteristic UBS_BleUtils::GetDeviceInformationCharacteristic(const EBS_DeviceInformationType DeviceInformationType)
+const EBS_BleCharacteristic UBS_BleUtils::GetDeviceInformationCharacteristic(const EBS_DeviceInformation DeviceInformationType)
 {
     switch (DeviceInformationType)
     {
-    case EBS_DeviceInformationType::MANUFACTURER_NAME:
+    case EBS_DeviceInformation::MANUFACTURER_NAME:
         return EBS_BleCharacteristic::MANUFACTURER_NAME;
-    case EBS_DeviceInformationType::MODEL_NUMBER:
+    case EBS_DeviceInformation::MODEL_NUMBER:
         return EBS_BleCharacteristic::MODEL_NUMBER;
-    case EBS_DeviceInformationType::SERIAL_NUMBER:
+    case EBS_DeviceInformation::SERIAL_NUMBER:
         return EBS_BleCharacteristic::SERIAL_NUMBER;
-    case EBS_DeviceInformationType::HARDWARE_REVISION:
+    case EBS_DeviceInformation::HARDWARE_REVISION:
         return EBS_BleCharacteristic::HARDWARE_REVISION;
-    case EBS_DeviceInformationType::FIRMWARE_REVISION:
+    case EBS_DeviceInformation::FIRMWARE_REVISION:
         return EBS_BleCharacteristic::FIRMWARE_REVISION;
-    case EBS_DeviceInformationType::SOFTWARE_REVISION:
+    case EBS_DeviceInformation::SOFTWARE_REVISION:
         return EBS_BleCharacteristic::SOFTWARE_REVISION;
     default:
         UE_LOGFMT(LogBS_BleUtils, Error, "Uncaught DeviceInformationType {0}", UEnum::GetValueAsString(DeviceInformationType));
@@ -126,21 +126,21 @@ const EBS_BleCharacteristic UBS_BleUtils::GetDeviceInformationCharacteristic(con
     }
 }
 
-const FString &UBS_BleUtils::GetDeviceInformationCharacteristicUUID(const EBS_DeviceInformationType DeviceInformationType)
+const FString &UBS_BleUtils::GetDeviceInformationCharacteristicUUID(const EBS_DeviceInformation DeviceInformationType)
 {
     switch (DeviceInformationType)
     {
-    case EBS_DeviceInformationType::MANUFACTURER_NAME:
+    case EBS_DeviceInformation::MANUFACTURER_NAME:
         return ManufacturerNameStringCharacteristicUUID;
-    case EBS_DeviceInformationType::MODEL_NUMBER:
+    case EBS_DeviceInformation::MODEL_NUMBER:
         return ModelNumberStringCharacteristicUUID;
-    case EBS_DeviceInformationType::SERIAL_NUMBER:
+    case EBS_DeviceInformation::SERIAL_NUMBER:
         return SerialNumberStringCharacteristicUUID;
-    case EBS_DeviceInformationType::HARDWARE_REVISION:
+    case EBS_DeviceInformation::HARDWARE_REVISION:
         return HardwareRevisionStringCharacteristicUUID;
-    case EBS_DeviceInformationType::FIRMWARE_REVISION:
+    case EBS_DeviceInformation::FIRMWARE_REVISION:
         return FirmwareRevisionCharacteristicUUID;
-    case EBS_DeviceInformationType::SOFTWARE_REVISION:
+    case EBS_DeviceInformation::SOFTWARE_REVISION:
         return SoftwareRevisionCharacteristicUUID;
     default:
         UE_LOGFMT(LogBS_BleUtils, Error, "Uncaught DeviceInformationType {0}", UEnum::GetValueAsString(DeviceInformationType));

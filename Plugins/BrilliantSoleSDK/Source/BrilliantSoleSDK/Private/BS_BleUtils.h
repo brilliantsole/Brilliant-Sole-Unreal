@@ -108,11 +108,11 @@ public:
 	static const EBS_BleCharacteristic GetBleCharacteristic(const FString &CharacteristicUUID);
 
 	UFUNCTION(BlueprintPure, Category = "BS Ble Utils")
-	static const EBS_DeviceInformationType GetDeviceInformationType(const EBS_BleCharacteristic DeviceInformationCharacteristic);
+	static const EBS_DeviceInformation GetDeviceInformationType(const EBS_BleCharacteristic DeviceInformationCharacteristic);
 
 	UFUNCTION(BlueprintPure, Category = "BS Ble Utils")
-	static const EBS_BleCharacteristic GetDeviceInformationCharacteristic(const EBS_DeviceInformationType DeviceInformationType);
+	static const EBS_BleCharacteristic GetDeviceInformationCharacteristic(const EBS_DeviceInformation DeviceInformationType);
 
 	UFUNCTION(BlueprintPure, Category = "BS Ble Utils")
-	static const FString &GetDeviceInformationCharacteristicUUID(const EBS_DeviceInformationType DeviceInformationType);
+	static const FString &GetDeviceInformationCharacteristicUUID(const EBS_DeviceInformation DeviceInformationType);
 };

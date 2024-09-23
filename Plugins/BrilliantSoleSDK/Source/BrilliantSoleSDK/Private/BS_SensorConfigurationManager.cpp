@@ -2,7 +2,7 @@
 
 #include "BS_SensorConfigurationManager.h"
 #include "Logging/StructuredLog.h"
-#include "BS_Message.h"
+#include "BS_TxRxMessageType.h"
 
 DEFINE_LOG_CATEGORY(LogBS_SensorConfigurationManager);
 
@@ -12,12 +12,12 @@ UBS_SensorConfigurationManager::UBS_SensorConfigurationManager()
     TempSensorConfiguration = CreateDefaultSubobject<UBS_SensorConfiguration>(TEXT("TempSensorConfiguration"));
 }
 
-bool UBS_SensorConfigurationManager::OnRxMessage(uint8 MessageType, const TArray<uint8> &Message)
+bool UBS_SensorConfigurationManager::OnRxMessage(EBS_TxRxMessage MessageType, const TArray<uint8> &Message)
 {
     switch (MessageType)
     {
-    case BS_MessageGetSensorConfiguration:
-    case BS_MessageSetSensorConfiguration:
+    case EBS_TxRxMessage::GET_SENSOR_CONFIGURATION:
+    case EBS_TxRxMessage::SET_SENSOR_CONFIGURATION:
         ParseSensorConfiguration(Message);
         break;
     default:
@@ -48,7 +48,7 @@ void UBS_SensorConfigurationManager::SetSensorConfiguration(const UBS_SensorConf
     }
     UE_LOGFMT(LogBS_SensorConfigurationManager, Verbose, "Setting SensorConfiguration...");
     const TArray<uint8> TxMessage = NewSensorConfiguration->ToArray();
-    SendTxMessages.ExecuteIfBound({{BS_MessageSetSensorConfiguration, TxMessage}}, true);
+    SendTxMessages.ExecuteIfBound({{EBS_TxRxMessage::SET_SENSOR_CONFIGURATION, TxMessage}}, true);
 }
 
 void UBS_SensorConfigurationManager::ClearSensorConfiguration()

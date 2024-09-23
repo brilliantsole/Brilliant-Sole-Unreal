@@ -2,7 +2,7 @@
 
 #include "BS_BaseClient.h"
 #include "Logging/StructuredLog.h"
-#include "BS_Message.h"
+#include "BS_TxRxMessageType.h"
 #include "BS_Subsystem.h"
 #include "Engine/World.h"
 #include "Engine/GameInstance.h"
@@ -32,7 +32,7 @@ void UBS_BaseClient::Reset()
     bIsScanning = false;
 
     DiscoveredDevices.Reset();
-    // FILL
+    Devices.Reset();
 }
 
 void UBS_BaseClient::PostInitProperties()
@@ -121,28 +121,28 @@ void UBS_BaseClient::SetConnectionStatus(EBS_ConnectionStatus NewConnectionStatu
 // CONNECTION END
 
 // MESSAGING START
-void UBS_BaseClient::OnMessage(EBS_ServerMessageType MessageType, const TArray<uint8> &Message)
+void UBS_BaseClient::OnMessage(EBS_ServerMessage MessageType, const TArray<uint8> &Message)
 {
     UE_LOGFMT(LogBS_BaseClient, Verbose, "message {0} ({1} bytes)", UEnum::GetValueAsString(MessageType), Message.Num());
 
     switch (MessageType)
     {
-    case EBS_ServerMessageType::IS_SCANNING_AVAILABLE:
+    case EBS_ServerMessage::IS_SCANNING_AVAILABLE:
         ParseIsScanningAvailable(Message);
         break;
-    case EBS_ServerMessageType::IS_SCANNING:
+    case EBS_ServerMessage::IS_SCANNING:
         ParseIsScanning(Message);
         break;
-    case EBS_ServerMessageType::DISCOVERED_DEVICE:
+    case EBS_ServerMessage::DISCOVERED_DEVICE:
         ParseDiscoveredDevice(Message);
         break;
-    case EBS_ServerMessageType::EXPIRED_DISCOVERED_DEVICE:
+    case EBS_ServerMessage::EXPIRED_DISCOVERED_DEVICE:
         ParseExpiredDiscoveredDevice(Message);
         break;
-    case EBS_ServerMessageType::CONNECTED_DEVICES:
-        ParseConnectedDevices(Message);
+    case EBS_ServerMessage::CONNECTED_DEVICES:
+        ParseDevices(Message);
         break;
-    case EBS_ServerMessageType::DEVICE_MESSAGE:
+    case EBS_ServerMessage::DEVICE_MESSAGE:
         ParseDeviceMessage(Message);
         break;
     default:
@@ -177,12 +177,12 @@ void UBS_BaseClient::SendMessages(const TArray<FBS_ServerMessage> &ServerMessage
     SendMessageData(MessageData, bSendImmediately);
 }
 
-const TArray<EBS_ServerMessageType> UBS_BaseClient::RequiredMessageTypes = {EBS_ServerMessageType::IS_SCANNING_AVAILABLE, EBS_ServerMessageType::DISCOVERED_DEVICES, EBS_ServerMessageType::CONNECTED_DEVICES};
+const TArray<EBS_ServerMessage> UBS_BaseClient::RequiredMessageTypes = {EBS_ServerMessage::IS_SCANNING_AVAILABLE, EBS_ServerMessage::DISCOVERED_DEVICES, EBS_ServerMessage::CONNECTED_DEVICES};
 
 const TArray<FBS_ServerMessage> UBS_BaseClient::InitializeRequiredMessages()
 {
     TArray<FBS_ServerMessage> _RequiredMessages;
-    for (const EBS_ServerMessageType MessageType : UBS_BaseClient::RequiredMessageTypes)
+    for (const EBS_ServerMessage MessageType : UBS_BaseClient::RequiredMessageTypes)
     {
         _RequiredMessages.Add({MessageType});
     }
@@ -210,7 +210,7 @@ void UBS_BaseClient::ParseIsScanningAvailable(const TArray<uint8> &Message)
     if (bIsScanningAvailable)
     {
         UE_LOGFMT(LogBS_BaseClient, Verbose, "Checking if IsScanning...");
-        SendMessages({{EBS_ServerMessageType::IS_SCANNING}});
+        SendMessages({{EBS_ServerMessage::IS_SCANNING}});
     }
 }
 void UBS_BaseClient::ParseIsScanning(const TArray<uint8> &Message)
@@ -242,7 +242,7 @@ void UBS_BaseClient::StartScan()
         return;
     }
     DiscoveredDevices.Reset();
-    SendMessages({{EBS_ServerMessageType::START_SCAN}});
+    SendMessages({{EBS_ServerMessage::START_SCAN}});
 }
 void UBS_BaseClient::StopScan()
 {
@@ -251,7 +251,7 @@ void UBS_BaseClient::StopScan()
         UE_LOGFMT(LogBS_BaseClient, Verbose, "Already not scanning");
         return;
     }
-    SendMessages({{EBS_ServerMessageType::STOP_SCAN}});
+    SendMessages({{EBS_ServerMessage::STOP_SCAN}});
 }
 
 void UBS_BaseClient::ToggleScan()
@@ -290,19 +290,88 @@ void UBS_BaseClient::ParseExpiredDiscoveredDevice(const TArray<uint8> &Message)
 }
 // DISCOVERED DEVICES END
 
-// CONNECTED DEVICES START
-void UBS_BaseClient::ParseConnectedDevices(const TArray<uint8> &Message)
+// DEVICE CONNECTION START
+UBS_Device *UBS_BaseClient::ConnectToDevice_Implementation(const FBS_DiscoveredDevice &DiscoveredDevice)
+{
+    UBS_Device *Device = GetDeviceByDiscoveredDevice(DiscoveredDevice);
+    if (Device)
+    {
+        Device->Connect();
+        return Device;
+    }
+    return nullptr;
+}
+
+UBS_Device *UBS_BaseClient::DisconnectFromDevice_Implementation(const FBS_DiscoveredDevice &DiscoveredDevice)
+{
+    UBS_Device *Device = GetDeviceByDiscoveredDevice(DiscoveredDevice);
+    if (Device)
+    {
+        Device->Disconnect();
+        return Device;
+    }
+    return nullptr;
+}
+
+UBS_Device *UBS_BaseClient::ToggleDeviceConnection(const FBS_DiscoveredDevice &DiscoveredDevice)
+{
+    UBS_Device *Device = GetDeviceByDiscoveredDevice(DiscoveredDevice);
+    if (Device)
+    {
+        Device->ToggleConnection();
+        return Device;
+    }
+    return nullptr;
+}
+// DEVICE CONNECTION END
+
+// DEVICES START
+
+UBS_Device *UBS_BaseClient::GetDeviceByDiscoveredDevice(const FBS_DiscoveredDevice &DiscoveredDevice)
+{
+    UBS_Device *FoundDevice = nullptr;
+    for (const TPair<FString, UBS_Device *> &Pair : Devices)
+    {
+        if (Pair.Key == DiscoveredDevice.BluetoothId)
+        {
+            FoundDevice = Pair.Value;
+            break;
+        }
+    }
+    return FoundDevice;
+}
+void UBS_BaseClient::ParseDevices(const TArray<uint8> &Message)
 {
     UE_LOGFMT(LogBS_BaseClient, Log, "Parsing Connected Devices ({0} bytes)...", Message.Num());
     // FILL
 }
-// CONNECTED DEVICES END
+// DEVICES END
 
 // DEVICE MESSAGE START
+void UBS_BaseClient::SendConnectToDeviceMessage(const FBS_DiscoveredDevice &DiscoveredDevice, bool bSendImmediately)
+{
+    UE_LOGFMT(LogBS_BaseClient, Log, "Requesting connection to {0}...", DiscoveredDevice.BluetoothId);
+    const TArray<uint8> TxMessage = BS_ByteParser::StringToArray(DiscoveredDevice.BluetoothId, true);
+    SendMessages({{EBS_ServerMessage::CONNECT_TO_DEVICE, TxMessage}});
+}
+void UBS_BaseClient::SendDisconnectFromDeviceMessage(const FBS_DiscoveredDevice &DiscoveredDevice, bool bSendImmediately)
+{
+    UE_LOGFMT(LogBS_BaseClient, Log, "Requesting disconnection from {0}...", DiscoveredDevice.BluetoothId);
+    const TArray<uint8> TxMessage = BS_ByteParser::StringToArray(DiscoveredDevice.BluetoothId, true);
+    SendMessages({{EBS_ServerMessage::DISCONNECT_FROM_DEVICE, TxMessage}});
+}
+void UBS_BaseClient::SendDeviceMessage(const FBS_DiscoveredDevice &DiscoveredDevice, const TArray<uint8> &Message, bool bSendImmediately)
+{
+    UE_LOGFMT(LogBS_BaseClient, Log, "Sending {0} bytes to {1}...", Message.Num(), DiscoveredDevice.BluetoothId);
+    // FILL
+    // SendMessages({{EBS_ServerMessage::DEVICE_MESSAGE, Message}});
+}
+
 void UBS_BaseClient::ParseDeviceMessage(const TArray<uint8> &Message)
 {
     UE_LOGFMT(LogBS_BaseClient, Log, "Parsing Device Message ({0} bytes)...", Message.Num());
-    // FILL
+    // FILL - get bluetooth Id
+    // FILL - get Message
 }
 
 // DEVICE MESSAGE END

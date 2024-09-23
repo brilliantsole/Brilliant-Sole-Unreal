@@ -20,6 +20,6 @@ public:
 	FSendTxMessagesDelegate SendTxMessages;
 	virtual void OnSendTxData() {}
 
-	virtual bool OnRxMessage(uint8 MessageType, const TArray<uint8> &Message) { return false; }
+	virtual bool OnRxMessage(EBS_TxRxMessage MessageType, const TArray<uint8> &Message) { return false; }
 	virtual void Reset() {}
 };

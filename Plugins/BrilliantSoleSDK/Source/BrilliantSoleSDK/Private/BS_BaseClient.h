@@ -10,6 +10,7 @@
 #include "BS_ServerMessage.h"
 #include "BS_ParseUtils.h"
 #include "BS_DiscoveredDevice.h"
+#include "BS_Device.h"
 #include "BS_BaseClient.generated.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_BaseClient, Verbose, All);
@@ -75,14 +76,14 @@ protected:
     virtual void SendMessageData(const TArray<uint8> &Data, bool bSendImmediately = true) {}
 
 private:
-    void OnMessage(EBS_ServerMessageType MessageType, const TArray<uint8> &Message);
+    void OnMessage(EBS_ServerMessage MessageType, const TArray<uint8> &Message);
     FBS_ServerMessageCallback BoundOnMessage;
 
     void SendMessages(const TArray<FBS_ServerMessage> &ServerMessages, bool bSendImmediately = true);
 
     void SendRequiredMessages() { SendMessages(UBS_BaseClient::RequiredMessages); }
 
-    static const TArray<EBS_ServerMessageType> RequiredMessageTypes;
+    static const TArray<EBS_ServerMessage> RequiredMessageTypes;
     static const TArray<FBS_ServerMessage> RequiredMessages;
     static const TArray<FBS_ServerMessage> InitializeRequiredMessages();
 
@@ -139,12 +140,48 @@ private:
     TMap<FString, FBS_DiscoveredDevice> DiscoveredDevices;
     // DISCOVERED DEVICES END
 
-    // CONNECTED DEVICES START
+    // DEVICE CONNECTION START
+public:
+    UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "BS Client")
+    UBS_Device *ConnectToDevice(const FBS_DiscoveredDevice &DiscoveredDevice);
+    virtual UBS_Device *ConnectToDevice_Implementation(const FBS_DiscoveredDevice &DiscoveredDevice);
+
+    UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "BS Client")
+    UBS_Device *DisconnectFromDevice(const FBS_DiscoveredDevice &DiscoveredDevice);
+    virtual UBS_Device *DisconnectFromDevice_Implementation(const FBS_DiscoveredDevice &DiscoveredDevice);
+
+    UFUNCTION(BlueprintCallable, Category = "BS Client")
+    UBS_Device *ToggleDeviceConnection(const FBS_DiscoveredDevice &DiscoveredDevice);
+
+    // DEVICE CONNECTION END
+
+    // DEVICES START
+protected:
+    UFUNCTION(BlueprintPure, Category = "BS Client")
+    const TMap<FString, UBS_Device *> &GetDevices() const { return Devices; }
+
+    UFUNCTION(BlueprintCallable, Category = "BS Client")
+    UBS_Device *GetDeviceByDiscoveredDevice(const FBS_DiscoveredDevice &DiscoveredDevice);
+
+    UPROPERTY()
+    TMap<FString, UBS_Device *> Devices;
+
 private:
-    void ParseConnectedDevices(const TArray<uint8> &Message);
-    // CONNECTED DEVICES END
+    void ParseDevices(const TArray<uint8> &Message);
+
+    // DEVICES DEVICES END
 
     // DEVICE MESSAGE START
+public:
+    UFUNCTION(BlueprintCallable, Category = "BS Client")
+    void SendConnectToDeviceMessage(const FBS_DiscoveredDevice &DiscoveredDevice, bool bSendImmediately = true);
+
+    UFUNCTION(BlueprintCallable, Category = "BS Client")
+    void SendDisconnectFromDeviceMessage(const FBS_DiscoveredDevice &DiscoveredDevice, bool bSendImmediately = true);
+
+    UFUNCTION(BlueprintCallable, Category = "BS Client")
+    void SendDeviceMessage(const FBS_DiscoveredDevice &DiscoveredDevice, const TArray<uint8> &Message, bool bSendImmediately = true);
+
 private:
     void ParseDeviceMessage(const TArray<uint8> &Message);
 

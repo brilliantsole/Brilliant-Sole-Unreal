@@ -4,19 +4,20 @@
 
 #include "CoreMinimal.h"
 #include "Containers/Array.h"
+#include "BS_TxRxMessageType.h"
 #include "Misc/Optional.h"
 
 struct FBS_TxMessage
 {
-    uint8 Type;
+    EBS_TxRxMessage Type;
     TOptional<TArray<uint8>> Data;
 
-    FBS_TxMessage(uint8 InType, const TArray<uint8> &InData)
+    FBS_TxMessage(EBS_TxRxMessage InType, const TArray<uint8> &InData)
         : Type(InType), Data(InData)
     {
     }
 
-    FBS_TxMessage(uint8 InType)
+    FBS_TxMessage(EBS_TxRxMessage InType)
         : Type(InType)
     {
     }
@@ -33,7 +34,7 @@ struct FBS_TxMessage
 
     void AppendTo(TArray<uint8> &Array) const
     {
-        Array.Add(Type);
+        Array.Add(static_cast<uint8>(Type));
 
         uint16 DataLength = DataNum();
         Array.Add(DataLength & 0xFF);        // Low byte

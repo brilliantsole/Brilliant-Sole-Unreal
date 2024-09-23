@@ -41,6 +41,6 @@ public:
 
 public:
     void Reset();
-    void SetValue(const EBS_DeviceInformationType DeviceInformationType, const TArray<uint8> &Value);
+    void SetValue(const EBS_DeviceInformation DeviceInformationType, const TArray<uint8> &Value);
     void UpdateDidGetAllInformation();
 };

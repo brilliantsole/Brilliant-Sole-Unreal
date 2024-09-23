@@ -3,31 +3,31 @@
 #include "BS_InformationManager.h"
 #include "Logging/StructuredLog.h"
 #include "BS_ByteParser.h"
-#include "BS_Message.h"
+#include "BS_TxRxMessageType.h"
 #include "BS_TimeUtils.h"
 
 DEFINE_LOG_CATEGORY(LogBS_InformationManager);
 
-bool UBS_InformationManager::OnRxMessage(uint8 MessageType, const TArray<uint8> &Message)
+bool UBS_InformationManager::OnRxMessage(EBS_TxRxMessage MessageType, const TArray<uint8> &Message)
 {
     switch (MessageType)
     {
-    case BS_MessageGetMTU:
+    case EBS_TxRxMessage::GET_MTU:
         ParseMTU(Message);
         break;
-    case BS_MessageGetId:
+    case EBS_TxRxMessage::GET_ID:
         ParseId(Message);
         break;
-    case BS_MessageGetName:
-    case BS_MessageSetName:
+    case EBS_TxRxMessage::GET_NAME:
+    case EBS_TxRxMessage::SET_NAME:
         ParseName(Message);
         break;
-    case BS_MessageGetType:
-    case BS_MessageSetType:
+    case EBS_TxRxMessage::GET_TYPE:
+    case EBS_TxRxMessage::SET_TYPE:
         ParseType(Message);
         break;
-    case BS_MessageGetCurrentTime:
-    case BS_MessageSetCurrentTime:
+    case EBS_TxRxMessage::GET_CURRENT_TIME:
+    case EBS_TxRxMessage::SET_CURRENT_TIME:
         ParseCurrentTime(Message);
         break;
     default:
@@ -94,7 +94,7 @@ void UBS_InformationManager::SetName(const FString &NewName)
     UE_LOGFMT(LogBS_InformationManager, Verbose, "Setting Name to \"{0}\"...", NewName);
 
     const TArray<uint8> TxMessage = BS_ByteParser::StringToArray(NewName);
-    SendTxMessages.ExecuteIfBound({{BS_MessageSetName, TxMessage}}, true);
+    SendTxMessages.ExecuteIfBound({{EBS_TxRxMessage::SET_NAME, TxMessage}}, true);
 }
 // NAME END
 
@@ -116,7 +116,7 @@ void UBS_InformationManager::SetType(const EBS_DeviceType NewType)
     UE_LOGFMT(LogBS_InformationManager, Verbose, "Setting Type to {0}...", UEnum::GetValueAsString(NewType));
 
     const TArray<uint8> TxMessage = {static_cast<uint8>(NewType)};
-    SendTxMessages.ExecuteIfBound({{BS_MessageSetType, TxMessage}}, true);
+    SendTxMessages.ExecuteIfBound({{EBS_TxRxMessage::SET_TYPE, TxMessage}}, true);
 }
 // TYPE END
 
@@ -140,6 +140,6 @@ void UBS_InformationManager::UpdateCurrentTime()
     uint64 Milliseconds = TimeUtils::GetMilliseconds();
     UE_LOGFMT(LogBS_InformationManager, Verbose, "Updating CurrentTime to {0}", Milliseconds);
     const TArray<uint8> TxMessage = BS_ByteParser::ToByteArray(Milliseconds);
-    SendTxMessages.ExecuteIfBound({{BS_MessageSetCurrentTime, TxMessage}}, false);
+    SendTxMessages.ExecuteIfBound({{EBS_TxRxMessage::SET_CURRENT_TIME, TxMessage}}, false);
 }
 // CURRENT TIME END

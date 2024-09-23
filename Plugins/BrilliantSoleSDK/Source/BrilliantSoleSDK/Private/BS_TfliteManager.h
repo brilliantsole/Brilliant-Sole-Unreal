@@ -8,26 +8,10 @@
 #include "BS_SensorType.h"
 #include "BS_SensorRate.h"
 #include "BS_TfliteConfiguration.h"
+#include "BS_TfliteMessageType.h"
 #include "BS_TfliteManager.generated.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_TfliteManager, Verbose, All);
-
-#define EBS_TfliteMessage BS_MessageTfliteGetName,               \
-						  BS_MessageTfliteSetName,               \
-						  BS_MessageTfliteGetTask,               \
-						  BS_MessageTfliteSetTask,               \
-						  BS_MessageTfliteGetSampleRate,         \
-						  BS_MessageTfliteSetSampleRate,         \
-						  BS_MessageTfliteGetSensorTypes,        \
-						  BS_MessageTfliteSetSensorTypes,        \
-						  BS_MessageTfliteGetIsReady,            \
-						  BS_MessageTfliteGetCaptureDelay,       \
-						  BS_MessageTfliteSetCaptureDelay,       \
-						  BS_MessageTfliteGetThreshold,          \
-						  BS_MessageTfliteSetThreshold,          \
-						  BS_MessageTfliteGetInferencingEnabled, \
-						  BS_MessageTfliteSetInferencingEnabled, \
-						  BS_MessageTfliteInference
 
 UCLASS()
 class UBS_TfliteManager : public UBS_BaseManager
@@ -35,7 +19,7 @@ class UBS_TfliteManager : public UBS_BaseManager
 	GENERATED_BODY()
 
 public:
-	bool OnRxMessage(uint8 MessageType, const TArray<uint8> &Message) override;
+	bool OnRxMessage(EBS_TxRxMessage MessageType, const TArray<uint8> &Message) override;
 	void Reset() override;
 
 public:

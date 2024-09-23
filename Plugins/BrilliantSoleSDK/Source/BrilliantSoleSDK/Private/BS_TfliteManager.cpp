@@ -3,49 +3,49 @@
 #include "BS_TfliteManager.h"
 #include "Logging/StructuredLog.h"
 #include "BS_ByteParser.h"
-#include "BS_Message.h"
+#include "BS_TxRxMessageType.h"
 #include "BS_TimeUtils.h"
 #include "BS_MathUtils.h"
 #include "BS_SensorConfiguration.h"
 
 DEFINE_LOG_CATEGORY(LogBS_TfliteManager);
 
-bool UBS_TfliteManager::OnRxMessage(uint8 MessageType, const TArray<uint8> &Message)
+bool UBS_TfliteManager::OnRxMessage(EBS_TxRxMessage MessageType, const TArray<uint8> &Message)
 {
     switch (MessageType)
     {
-    case BS_MessageTfliteGetName:
-    case BS_MessageTfliteSetName:
+    case EBS_TxRxMessage::GET_TFLITE_NAME:
+    case EBS_TxRxMessage::SET_TFLITE_NAME:
         ParseName(Message);
         break;
-    case BS_MessageTfliteGetTask:
-    case BS_MessageTfliteSetTask:
+    case EBS_TxRxMessage::GET_TFLITE_TASK:
+    case EBS_TxRxMessage::SET_TFLITE_TASK:
         ParseTask(Message);
         break;
-    case BS_MessageTfliteGetSampleRate:
-    case BS_MessageTfliteSetSampleRate:
+    case EBS_TxRxMessage::GET_TFLITE_SAMPLE_RATE:
+    case EBS_TxRxMessage::SET_TFLITE_SAMPLE_RATE:
         ParseSampleRate(Message);
         break;
-    case BS_MessageTfliteGetSensorTypes:
-    case BS_MessageTfliteSetSensorTypes:
+    case EBS_TxRxMessage::GET_TFLITE_SENSOR_TYPES:
+    case EBS_TxRxMessage::SET_TFLITE_SENSOR_TYPES:
         ParseSensorTypes(Message);
         break;
-    case BS_MessageTfliteGetIsReady:
+    case EBS_TxRxMessage::IS_TFLITE_READY:
         ParseIsReady(Message);
         break;
-    case BS_MessageTfliteGetCaptureDelay:
-    case BS_MessageTfliteSetCaptureDelay:
+    case EBS_TxRxMessage::GET_TFLITE_CAPTURE_DELAY:
+    case EBS_TxRxMessage::SET_TFLITE_CAPTURE_DELAY:
         ParseCaptureDelay(Message);
         break;
-    case BS_MessageTfliteGetThreshold:
-    case BS_MessageTfliteSetThreshold:
+    case EBS_TxRxMessage::GET_TFLITE_THRESHOLD:
+    case EBS_TxRxMessage::SET_TFLITE_THRESHOLD:
         ParseThreshold(Message);
         break;
-    case BS_MessageTfliteGetInferencingEnabled:
-    case BS_MessageTfliteSetInferencingEnabled:
+    case EBS_TxRxMessage::GET_TFLITE_INFERENCING_ENABLED:
+    case EBS_TxRxMessage::SET_TFLITE_INFERENCING_ENABLED:
         ParseInferencingEnabled(Message);
         break;
-    case BS_MessageTfliteInference:
+    case EBS_TxRxMessage::TFLITE_INFERENCE:
         ParseInference(Message);
         break;
     default:
@@ -104,7 +104,7 @@ void UBS_TfliteManager::SetName(const FString &NewName, bool bSendImmediately)
     UE_LOGFMT(LogBS_TfliteManager, Verbose, "Setting Name to {0}...", NewName);
 
     const TArray<uint8> TxMessage = BS_ByteParser::StringToArray(NewName);
-    SendTxMessages.ExecuteIfBound({{BS_MessageTfliteSetName, TxMessage}}, bSendImmediately);
+    SendTxMessages.ExecuteIfBound({{EBS_TxRxMessage::SET_TFLITE_NAME, TxMessage}}, bSendImmediately);
 }
 // NAME END
 
@@ -126,7 +126,7 @@ void UBS_TfliteManager::SetTask(const EBS_TfliteTask NewTask, bool bSendImmediat
     UE_LOGFMT(LogBS_TfliteManager, Verbose, "Setting Task to {0}...", UEnum::GetValueAsString(NewTask));
 
     const TArray<uint8> TxMessage = {static_cast<uint8>(NewTask)};
-    SendTxMessages.ExecuteIfBound({{BS_MessageTfliteSetTask, TxMessage}}, bSendImmediately);
+    SendTxMessages.ExecuteIfBound({{EBS_TxRxMessage::SET_TFLITE_TASK, TxMessage}}, bSendImmediately);
 }
 // TASK END
 
@@ -155,7 +155,7 @@ void UBS_TfliteManager::SetSampleRate(const EBS_SensorRate NewSampleRate, bool b
     const uint16 NewRawSampleRate = UBS_SensorConfiguration::GetRawSensorRate(NewSampleRate);
     UE_LOGFMT(LogBS_TfliteManager, Verbose, "Updating SampleRate to {0}, NewRawSampleRate: {1}ms", UEnum::GetValueAsString(NewSampleRate), NewRawSampleRate);
     const TArray<uint8> TxMessage = BS_ByteParser::ToByteArray(NewRawSampleRate, true);
-    SendTxMessages.ExecuteIfBound({{BS_MessageTfliteSetSampleRate, TxMessage}}, bSendImmediately);
+    SendTxMessages.ExecuteIfBound({{EBS_TxRxMessage::SET_TFLITE_SAMPLE_RATE, TxMessage}}, bSendImmediately);
 }
 // SAMPLE RATE END
 
@@ -214,7 +214,7 @@ void UBS_TfliteManager::SetSensorTypes(const TArray<EBS_SensorType> &NewSensorTy
         TxMessage.Add(static_cast<uint8>(SensorType));
     }
 
-    SendTxMessages.ExecuteIfBound({{BS_MessageTfliteSetSensorTypes, TxMessage}}, bSendImmediately);
+    SendTxMessages.ExecuteIfBound({{EBS_TxRxMessage::SET_TFLITE_SENSOR_TYPES, TxMessage}}, bSendImmediately);
 }
 // SENSOR TYPES END
 
@@ -246,7 +246,7 @@ void UBS_TfliteManager::SetCaptureDelay(const uint16 NewCaptureDelay, bool bSend
     }
     UE_LOGFMT(LogBS_TfliteManager, Verbose, "Updating CaptureDelay to {0}", NewCaptureDelay);
     const TArray<uint8> TxMessage = BS_ByteParser::ToByteArray(NewCaptureDelay, true);
-    SendTxMessages.ExecuteIfBound({{BS_MessageTfliteSetCaptureDelay, TxMessage}}, bSendImmediately);
+    SendTxMessages.ExecuteIfBound({{EBS_TxRxMessage::SET_TFLITE_CAPTURE_DELAY, TxMessage}}, bSendImmediately);
 }
 // CAPTURE DELAY END
 
@@ -268,7 +268,7 @@ void UBS_TfliteManager::SetThreshold(const float NewThreshold, bool bSendImmedia
     }
     UE_LOGFMT(LogBS_TfliteManager, Verbose, "Updating Threshold to {0}", NewThreshold);
     const TArray<uint8> TxMessage = BS_ByteParser::ToByteArray(NewThreshold, true);
-    SendTxMessages.ExecuteIfBound({{BS_MessageTfliteSetThreshold, TxMessage}}, bSendImmediately);
+    SendTxMessages.ExecuteIfBound({{EBS_TxRxMessage::SET_TFLITE_THRESHOLD, TxMessage}}, bSendImmediately);
 }
 // THRESHOLD END
 
@@ -295,7 +295,7 @@ void UBS_TfliteManager::SetInferencingEnabled(const bool NewInferencingEnabled)
     }
     UE_LOGFMT(LogBS_TfliteManager, Verbose, "Updating InferencingEnabled to {0}", NewInferencingEnabled);
     const TArray<uint8> TxMessage = {static_cast<uint8>(NewInferencingEnabled)};
-    SendTxMessages.ExecuteIfBound({{BS_MessageTfliteSetInferencingEnabled, TxMessage}}, true);
+    SendTxMessages.ExecuteIfBound({{EBS_TxRxMessage::SET_TFLITE_INFERENCING_ENABLED, TxMessage}}, true);
 }
 // INFERENCING ENABLED END
 
