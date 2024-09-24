@@ -109,7 +109,7 @@ void UBS_ParseUtils::ParseDeviceEventData(UBS_Device *Device, const TArray<uint8
         const uint8 MessageTypeEnum = Data[Offset++];
         if (MessageTypeEnum >= static_cast<uint8>(EBS_DeviceEvent::COUNT))
         {
-            UE_LOGFMT(LogBS_ParseUtils, Error, "invalid DeviceEventEnum {0}", MessageTypeEnum);
+            UE_LOGFMT(LogBS_ParseUtils, Error, "invalid DeviceEventEnum {0} (max {1})", MessageTypeEnum, static_cast<uint8>(EBS_DeviceEvent::COUNT));
             continue;
         }
         const EBS_DeviceEvent MessageType = static_cast<EBS_DeviceEvent>(MessageTypeEnum);

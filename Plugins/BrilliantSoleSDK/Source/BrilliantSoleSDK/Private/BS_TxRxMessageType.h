@@ -2,7 +2,6 @@
 
 #pragma once
 
-#include "BS_BatteryMessageType.h"
 #include "BS_InformationMessageType.h"
 #include "BS_SensorConfigurationMessageType.h"
 #include "BS_SensorDataMessageType.h"
@@ -10,8 +9,7 @@
 #include "BS_TfliteMessageType.h"
 #include "BS_FileTransferMessageType.h"
 
-#define EBS_TxRxMessages EBS_BatteryMessages,             \
-                         EBS_InformationMessages,         \
+#define EBS_TxRxMessages EBS_InformationMessages,         \
                          EBS_SensorConfigurationMessages, \
                          EBS_SensorDataMessages,          \
                          EBS_VibrationMessages,           \

@@ -25,13 +25,13 @@ enum class EBS_FileTransferMessage : uint8
 
 ENUM_RANGE_BY_COUNT(EBS_FileTransferMessage, static_cast<int32>(EBS_FileTransferMessage::COUNT))
 
-#define EBS_FileTransferEvents FILE_TRANSFER_PROGRESS, \
-							   FILE_TRANSFER_COMPLETE, \
+#define EBS_FileTransferEvents EBS_FileTransferMessages, \
+							   FILE_TRANSFER_PROGRESS,   \
+							   FILE_TRANSFER_COMPLETE,   \
 							   FILE_RECEIVED
 
 enum class EBS_FileTransferEvent : uint8
 {
-	EBS_FileTransferMessages,
 	EBS_FileTransferEvents,
 	COUNT
 };

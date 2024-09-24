@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 
 #include "BS_ConnectionEventType.h"
-#include "BS_BatteryLevelMessageType.h"
 #include "BS_DeviceInformationType.h"
 #include "BS_MetaConnectionMessageType.h"
 #include "BS_TxRxMessageType.h"
@@ -21,7 +20,7 @@
                          EBS_SensorDataEvents,            \
                          EBS_FileTransferEvents,          \
                          EBS_TfliteMessages,              \
-                         EBS_SMP_Messages
+                         EBS_SMP_Events
 
 enum class EBS_DeviceEvent : uint8
 {

@@ -4,8 +4,8 @@
 
 #include "CoreMinimal.h"
 
-#define EBS_MetaConnectionMessages TX, \
-                                   RX
+#define EBS_MetaConnectionMessages RX, \
+                                   TX
 
 enum class EBS_MetaConnectionMessage : uint8
 {
