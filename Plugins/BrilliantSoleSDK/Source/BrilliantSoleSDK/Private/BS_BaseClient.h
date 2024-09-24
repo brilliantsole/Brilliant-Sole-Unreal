@@ -79,9 +79,6 @@ private:
     void OnMessage(EBS_ServerMessage MessageType, const TArray<uint8> &Message);
     FBS_ServerMessageCallback BoundOnMessage;
 
-    void OnDeviceEvent(UBS_Device *Device, EBS_DeviceEvent DeviceEventType, const TArray<uint8> &Message);
-    FBS_DeviceEventCallback BoundOnDeviceEvent;
-
     void SendMessages(const TArray<FBS_ServerMessage> &ServerMessages, bool bSendImmediately = true);
 
     void SendRequiredMessages() { SendMessages(UBS_BaseClient::RequiredMessages); }

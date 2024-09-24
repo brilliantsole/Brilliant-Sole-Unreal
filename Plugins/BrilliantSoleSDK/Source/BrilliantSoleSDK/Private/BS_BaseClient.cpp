@@ -10,6 +10,7 @@
 #include "Json.h"
 #include "JsonUtilities.h"
 #include "BS_DeviceType.h"
+#include "BS_ClientConnectionManager.h"
 
 DEFINE_LOG_CATEGORY(LogBS_BaseClient);
 
@@ -23,7 +24,6 @@ UBS_BaseClient::UBS_BaseClient()
     }
 
     BoundOnMessage.BindUObject(this, &UBS_BaseClient::OnMessage);
-    BoundOnDeviceEvent.BindUObject(this, &UBS_BaseClient::OnDeviceEvent);
 }
 
 void UBS_BaseClient::Reset()
@@ -389,27 +389,14 @@ void UBS_BaseClient::ParseDeviceMessage(const TArray<uint8> &Message)
     const TArrayView<uint8> MessageData((uint8 *)(Message.GetData() + Offset), MessageDataLength);
 
     UE_LOGFMT(LogBS_BaseClient, Log, "Parsing {0} Bytes for Device...", MessageDataLength);
-    UBS_ParseUtils::ParseDeviceEventData(Device, static_cast<TArray<uint8>>(MessageData), BoundOnDeviceEvent);
-}
-
-void UBS_BaseClient::OnDeviceEvent(UBS_Device *Device, EBS_DeviceEvent DeviceEventType, const TArray<uint8> &Message)
-{
-    UE_LOGFMT(LogBS_BaseClient, Log, "Message {0} ({1} Bytes) for \"{2}\"", static_cast<uint8>(DeviceEventType), Message.Num(), Device->Name());
-    switch (DeviceEventType)
+    UBS_ClientConnectionManager *ConnectionManager = Cast<UBS_ClientConnectionManager>(Device->GetConnectionManager());
+    if (!ConnectionManager)
     {
-    case EBS_DeviceEvent::IS_CONNECTED:
-        UE_LOGFMT(LogBS_BaseClient, Log, "Received IsConnected Message");
-        // FILL - set connectionStasus
-        break;
-    case EBS_DeviceEvent::RX:
-        UE_LOGFMT(LogBS_BaseClient, Log, "Received Rx Message");
-        // FILL - parse RX message
-        break;
-    default:
-        UE_LOGFMT(LogBS_BaseClient, Log, "Miscellaneous message {0}", static_cast<uint8>(DeviceEventType));
-        // FILL - onMessageReceived
-        break;
+        UE_LOGFMT(LogBS_BaseClient, Error, "Failed to cast ConnectionManager to ClientConnectionManager");
+        return;
     }
+
+    UBS_ParseUtils::ParseDeviceEventData(Device, static_cast<TArray<uint8>>(MessageData), ConnectionManager->BoundOnDeviceEvent);
 }
 
 // DEVICE MESSAGE END

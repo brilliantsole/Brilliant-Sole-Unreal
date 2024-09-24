@@ -5,6 +5,18 @@
 
 DEFINE_LOG_CATEGORY(LogBS_ClientConnectionManager);
 
+UBS_ClientConnectionManager::UBS_ClientConnectionManager()
+{
+    UE_LOGFMT(LogBS_ClientConnectionManager, Verbose, "Constructor: {0}", GetName());
+    if (HasAnyFlags(RF_ClassDefaultObject))
+    {
+        UE_LOGFMT(LogBS_ClientConnectionManager, Verbose, "CDO - Skipping Constructor");
+        return;
+    }
+
+    BoundOnDeviceEvent.BindUObject(this, &UBS_ClientConnectionManager::OnDeviceEvent);
+}
+
 // CLIENT START
 void UBS_ClientConnectionManager::AssignClient(UBS_BaseClient *_Client)
 {
@@ -20,6 +32,26 @@ void UBS_ClientConnectionManager::AssignDiscoveredDevice(const FBS_DiscoveredDev
     DiscoveredDevice = NewDiscoveredDevice;
 }
 // DISCOVERED DEVICE END
+
+// CONNECTION START
+void UBS_ClientConnectionManager::SetIsConnected(bool bNewIsConnected)
+{
+    if (bNewIsConnected == bIsConnected)
+    {
+        UE_LOGFMT(LogBS_ClientConnectionManager, Verbose, "Redundant bIsConnected Assignment");
+        return;
+    }
+    bIsConnected = bNewIsConnected;
+    UE_LOGFMT(LogBS_ClientConnectionManager, Verbose, "Updated bIsConnected to {0}", bIsConnected);
+
+    SetConnectionStatus(bIsConnected ? EBS_ConnectionStatus::CONNECTED : EBS_ConnectionStatus::NOT_CONNECTED);
+
+    if (bIsConnected)
+    {
+        // FILL - request device information
+    }
+}
+// CONNECTION END
 
 // MESSAGING START
 void UBS_ClientConnectionManager::Connect_Implementation(bool &bContinue)
@@ -69,6 +101,30 @@ void UBS_ClientConnectionManager::SendTxData_Implementation(const TArray<uint8> 
         UE_LOGFMT(LogBS_ClientConnectionManager, Error, "Client not defined");
         return;
     }
-    // FILL
+
+    Client->SendDeviceMessage(DiscoveredDevice, Data);
+}
+
+void UBS_ClientConnectionManager::OnDeviceEvent(UBS_Device *Device, EBS_DeviceEvent DeviceEventType, const TArray<uint8> &Message)
+{
+    UE_LOGFMT(LogBS_ClientConnectionManager, Log, "Message {0} ({1} Bytes) for \"{2}\"", static_cast<uint8>(DeviceEventType), Message.Num(), Device->Name());
+    switch (DeviceEventType)
+    {
+    case EBS_DeviceEvent::IS_CONNECTED:
+    {
+        UE_LOGFMT(LogBS_ClientConnectionManager, Log, "Received IsConnected Message");
+        bool bNewIsConnected = static_cast<bool>(Message[0]);
+        SetIsConnected(bNewIsConnected);
+    }
+    break;
+    case EBS_DeviceEvent::RX:
+        UE_LOGFMT(LogBS_ClientConnectionManager, Log, "Received Rx Message");
+        // FILL - parse RX message
+        break;
+    default:
+        UE_LOGFMT(LogBS_ClientConnectionManager, Log, "Miscellaneous message {0}", static_cast<uint8>(DeviceEventType));
+        // FILL - onMessageReceived
+        break;
+    }
 }
 // MESSAGING END

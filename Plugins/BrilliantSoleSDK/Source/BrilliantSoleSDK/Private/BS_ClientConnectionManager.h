@@ -17,6 +17,9 @@ class UBS_ClientConnectionManager : public UBS_BaseConnectionManager
 {
 	GENERATED_BODY()
 
+public:
+	UBS_ClientConnectionManager();
+
 	// CLIENT START
 public:
 	UFUNCTION(BlueprintPure, Category = "BS Client Connection Manager")
@@ -41,10 +44,23 @@ private:
 	FBS_DiscoveredDevice DiscoveredDevice;
 	// DISCOVERED DEVICE END
 
+	// CONNECTION START
+public:
+	virtual const bool GetIsConnected_Implementation() const override { return bIsConnected; }
+
+private:
+	void SetIsConnected(bool bNewIsConnected);
+	bool bIsConnected = false;
+	// CONNECTION END
+
 	// MESSAGING START
 public:
 	virtual void Connect_Implementation(bool &bContinue) override;
 	virtual void Disconnect_Implementation(bool &bContinue) override;
 	virtual void SendTxData_Implementation(const TArray<uint8> &Data) override;
+
+public:
+	void OnDeviceEvent(UBS_Device *Device, EBS_DeviceEvent DeviceEventType, const TArray<uint8> &Message);
+	FBS_DeviceEventCallback BoundOnDeviceEvent;
 	// MESSAGING END
 };
