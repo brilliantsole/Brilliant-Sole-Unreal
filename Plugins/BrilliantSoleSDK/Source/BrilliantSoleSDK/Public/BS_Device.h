@@ -82,13 +82,13 @@ private:
 	// CONNECTION START
 public:
 	UFUNCTION(BlueprintCallable, Category = "BS Device")
-	void Connect() { ConnectionManager->Connect(); }
+	void Connect();
 
 	UFUNCTION(BlueprintCallable, Category = "BS Device")
-	void Disconnect() { ConnectionManager->Disconnect(); }
+	void Disconnect();
 
 	UFUNCTION(BlueprintCallable, Category = "BS Device")
-	void ToggleConnection() { ConnectionManager->ToggleConnection(); }
+	void ToggleConnection();
 
 	UFUNCTION(BlueprintPure, Category = "BS Device")
 	EBS_ConnectionStatus GetConnectionStatus() const { return ConnectionStatus; }
@@ -140,7 +140,7 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "BS Connection Manager")
 	void OnRxMessages(UBS_BaseConnectionManager *_ConnectionManager);
 
-	void SendTxData(const TArray<uint8> &Data) { ConnectionManager->SendTxData(Data); }
+	void SendTxData(const TArray<uint8> &Data);
 
 	UFUNCTION(BlueprintCallable, Category = "BS Connection Manager")
 	void OnSendTxData(UBS_BaseConnectionManager *_ConnectionManager);

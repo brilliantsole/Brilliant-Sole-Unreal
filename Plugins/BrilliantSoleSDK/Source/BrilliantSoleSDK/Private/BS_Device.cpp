@@ -168,6 +168,36 @@ void UBS_Device::OnBatteryLevelUpdate(UBS_BaseConnectionManager *_ConnectionMana
 // BATTERY LEVEL END
 
 // CONNECTION START
+void UBS_Device::Connect()
+{
+    if (!ConnectionManager)
+    {
+        UE_LOGFMT(LogBS_Device, Error, "ConnectionManager not defined");
+        return;
+    }
+    ConnectionManager->Connect();
+}
+
+void UBS_Device::Disconnect()
+{
+    if (!ConnectionManager)
+    {
+        UE_LOGFMT(LogBS_Device, Error, "ConnectionManager not defined");
+        return;
+    }
+    ConnectionManager->Disconnect();
+}
+
+void UBS_Device::ToggleConnection()
+{
+    if (!ConnectionManager)
+    {
+        UE_LOGFMT(LogBS_Device, Error, "ConnectionManager not defined");
+        return;
+    }
+    ConnectionManager->ToggleConnection();
+}
+
 void UBS_Device::OnConnectionManagerStatusUpdate(UBS_BaseConnectionManager *_ConnectionManager, EBS_ConnectionStatus NewConnectionManagerConnectionStatus)
 {
     UE_LOGFMT(LogBS_Device, Verbose, "ConnectionManager ConnectionStatus: {0}", UEnum::GetValueAsString(NewConnectionManagerConnectionStatus));
@@ -477,5 +507,15 @@ const TArray<FBS_TxMessage> UBS_Device::InitializeRequiredTxMessages()
     return _RequiredTxMessages;
 }
 const TArray<FBS_TxMessage> UBS_Device::RequiredTxMessages = UBS_Device::InitializeRequiredTxMessages();
+
+void UBS_Device::SendTxData(const TArray<uint8> &Data)
+{
+    if (!ConnectionManager)
+    {
+        UE_LOGFMT(LogBS_Device, Error, "ConnectionManager not defined");
+        return;
+    }
+    ConnectionManager->SendTxData(Data);
+}
 
 // MESSAGING END

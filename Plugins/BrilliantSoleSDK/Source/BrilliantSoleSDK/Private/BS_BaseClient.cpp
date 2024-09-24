@@ -394,18 +394,20 @@ void UBS_BaseClient::ParseDeviceMessage(const TArray<uint8> &Message)
 
 void UBS_BaseClient::OnDeviceEvent(UBS_Device *Device, EBS_DeviceEvent DeviceEventType, const TArray<uint8> &Message)
 {
-    UE_LOGFMT(LogBS_BaseClient, Log, "Message {0} ({1} Bytes) for {2}", static_cast<uint8>(DeviceEventType), Message.Num(), Device->Name());
-    // FILL
+    UE_LOGFMT(LogBS_BaseClient, Log, "Message {0} ({1} Bytes) for \"{2}\"", static_cast<uint8>(DeviceEventType), Message.Num(), Device->Name());
     switch (DeviceEventType)
     {
     case EBS_DeviceEvent::IS_CONNECTED:
+        UE_LOGFMT(LogBS_BaseClient, Log, "Received IsConnected Message");
         // FILL - set connectionStasus
         break;
     case EBS_DeviceEvent::RX:
+        UE_LOGFMT(LogBS_BaseClient, Log, "Received Rx Message");
         // FILL - parse RX message
         break;
     default:
-        UE_LOGFMT(LogBS_BaseClient, Log, "Uncaught DeviceEventType {0}", static_cast<uint8>(DeviceEventType));
+        UE_LOGFMT(LogBS_BaseClient, Log, "Miscellaneous message {0}", static_cast<uint8>(DeviceEventType));
+        // FILL - onMessageReceived
         break;
     }
 }
