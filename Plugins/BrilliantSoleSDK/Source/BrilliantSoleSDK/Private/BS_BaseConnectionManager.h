@@ -8,6 +8,7 @@
 #include "BS_ConnectionStatus.h"
 #include "BS_DeviceInformationType.h"
 #include "BS_TxMessage.h"
+#include "BS_TxRxMessageType.h"
 #include "BS_BaseConnectionManager.generated.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_BaseConnectionManager, Verbose, All);
@@ -16,6 +17,9 @@ UCLASS(Abstract, BlueprintType, Blueprintable)
 class UBS_BaseConnectionManager : public UObject
 {
 	GENERATED_BODY()
+
+public:
+	UBS_BaseConnectionManager();
 
 	// CONNECTION START
 public:
@@ -62,6 +66,12 @@ private:
 	EBS_ConnectionStatus ConnectionStatus = EBS_ConnectionStatus::NOT_CONNECTED;
 	// CONNECTION STATUS END
 
+	// RX DATA START
+protected:
+	UFUNCTION(BlueprintCallable, Category = "BS Connection Manager")
+	void ParseRxData(const TArray<uint8> &Data);
+	// RX DATA END
+
 	// MESSAGING START
 public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "BS Connection Manager")
@@ -107,11 +117,10 @@ public:
 
 	// MESSAGING EVENT DISPTACHERS START
 public:
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FBS_ConnectionManagerRxDataCallback, UBS_BaseConnectionManager *, ConnectionManager, uint8, MessageType, const TArray<uint8> &, Message);
+	DECLARE_MULTICAST_DELEGATE_ThreeParams(FBS_ConnectionManagerRxDataCallback, UBS_BaseConnectionManager *, EBS_TxRxMessage, const TArray<uint8> &);
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBS_ConnectionManagerBatteryLevelCallback, UBS_BaseConnectionManager *, ConnectionManager, uint8, BatteryLevel);
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FBS_ConnectionManagerDeviceInformationValueCallback, UBS_BaseConnectionManager *, ConnectionManager, EBS_DeviceInformation, Type, const TArray<uint8> &, Value);
 
-	UPROPERTY(BlueprintCallable, Category = "BS Connection Manager")
 	FBS_ConnectionManagerRxDataCallback OnRxMessage;
 
 	UPROPERTY(BlueprintCallable, Category = "BS Connection Manager")

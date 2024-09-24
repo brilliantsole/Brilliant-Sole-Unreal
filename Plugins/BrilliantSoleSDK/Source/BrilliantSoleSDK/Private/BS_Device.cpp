@@ -298,7 +298,7 @@ void UBS_Device::AssignConnectionManager(UBS_BaseConnectionManager *NewConnectio
 
     ConnectionManager->OnConnectionUpdate.AddDynamic(this, &UBS_Device::OnConnectionManagerStatusUpdate);
     ConnectionManager->OnBatteryLevel.AddDynamic(this, &UBS_Device::OnBatteryLevelUpdate);
-    ConnectionManager->OnRxMessage.AddDynamic(this, &UBS_Device::OnRxMessage);
+    ConnectionManager->OnRxMessage.AddUObject(this, &UBS_Device::OnRxMessage);
     ConnectionManager->OnRxMessages.AddDynamic(this, &UBS_Device::OnRxMessages);
     ConnectionManager->OnDeviceInformationValue.AddDynamic(this, &UBS_Device::OnDeviceInformationValue);
     ConnectionManager->OnSendTxMessage.AddDynamic(this, &UBS_Device::OnSendTxData);
@@ -314,7 +314,7 @@ void UBS_Device::RemoveConnectionManager()
 
     ConnectionManager->OnConnectionUpdate.RemoveDynamic(this, &UBS_Device::OnConnectionManagerStatusUpdate);
     ConnectionManager->OnBatteryLevel.RemoveDynamic(this, &UBS_Device::OnBatteryLevelUpdate);
-    ConnectionManager->OnRxMessage.RemoveDynamic(this, &UBS_Device::OnRxMessage);
+    ConnectionManager->OnRxMessage.RemoveAll(this);
     ConnectionManager->OnRxMessages.RemoveDynamic(this, &UBS_Device::OnRxMessages);
     ConnectionManager->OnDeviceInformationValue.RemoveDynamic(this, &UBS_Device::OnDeviceInformationValue);
     ConnectionManager->OnSendTxMessage.RemoveDynamic(this, &UBS_Device::OnSendTxData);
@@ -337,15 +337,8 @@ const TArray<uint8> UBS_Device::InitializePingTxData()
 
 // MESSAGING START
 
-void UBS_Device::OnRxMessage(UBS_BaseConnectionManager *_ConnectionManager, uint8 MessageTypeEnum, const TArray<uint8> &Message)
+void UBS_Device::OnRxMessage(UBS_BaseConnectionManager *_ConnectionManager, EBS_TxRxMessage MessageType, const TArray<uint8> &Message)
 {
-    if (MessageTypeEnum >= static_cast<uint8>(EBS_TxRxMessage::COUNT))
-    {
-        UE_LOGFMT(LogBS_Device, Error, "invalid TxRxMessage {0}", MessageTypeEnum);
-        return;
-    }
-    EBS_TxRxMessage MessageType = static_cast<EBS_TxRxMessage>(MessageTypeEnum);
-
     UE_LOGFMT(LogBS_Device, Verbose, "message {0} ({1} bytes)", static_cast<uint8>(MessageType), Message.Num());
 
     if (BatteryManager->OnRxMessage(MessageType, Message))

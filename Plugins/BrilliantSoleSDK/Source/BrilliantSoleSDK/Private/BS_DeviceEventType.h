@@ -8,6 +8,7 @@
 #include "BS_DeviceInformationType.h"
 #include "BS_MetaConnectionMessageType.h"
 #include "BS_TxRxMessageType.h"
+#include "BS_BatteryLevelMessageType.h"
 #include "BS_SMP_MessageType.h"
 
 #define EBS_DeviceEvents CONNECTION_MESSAGE,              \

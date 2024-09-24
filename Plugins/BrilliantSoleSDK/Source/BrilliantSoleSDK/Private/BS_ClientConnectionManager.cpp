@@ -2,6 +2,7 @@
 
 #include "BS_ClientConnectionManager.h"
 #include "Logging/StructuredLog.h"
+#include "BS_DeviceInformationType.h"
 
 DEFINE_LOG_CATEGORY(LogBS_ClientConnectionManager);
 
@@ -119,11 +120,39 @@ void UBS_ClientConnectionManager::OnDeviceEvent(UBS_Device *Device, EBS_DeviceEv
     break;
     case EBS_DeviceEvent::RX:
         UE_LOGFMT(LogBS_ClientConnectionManager, Log, "Received Rx Message");
-        // FILL - parse RX message
+        ParseRxData(Message);
         break;
+
+    case EBS_DeviceEvent::BATTERY_LEVEL:
+    {
+        uint8 BatteryLevel = Message[0];
+        OnBatteryLevel.Broadcast(this, BatteryLevel);
+    }
+    break;
+
+    case EBS_DeviceEvent::MANUFACTURER_NAME:
+        OnDeviceInformationValue.Broadcast(this, EBS_DeviceInformation::MANUFACTURER_NAME, Message);
+        break;
+    case EBS_DeviceEvent::MODEL_NUMBER:
+        OnDeviceInformationValue.Broadcast(this, EBS_DeviceInformation::MODEL_NUMBER, Message);
+        break;
+    case EBS_DeviceEvent::SOFTWARE_REVISION:
+        OnDeviceInformationValue.Broadcast(this, EBS_DeviceInformation::SOFTWARE_REVISION, Message);
+        break;
+    case EBS_DeviceEvent::HARDWARE_REVISION:
+        OnDeviceInformationValue.Broadcast(this, EBS_DeviceInformation::HARDWARE_REVISION, Message);
+        break;
+    case EBS_DeviceEvent::FIRMWARE_REVISION:
+        OnDeviceInformationValue.Broadcast(this, EBS_DeviceInformation::FIRMWARE_REVISION, Message);
+        break;
+    case EBS_DeviceEvent::SERIAL_NUMBER:
+        OnDeviceInformationValue.Broadcast(this, EBS_DeviceInformation::SERIAL_NUMBER, Message);
+        break;
+
     default:
         UE_LOGFMT(LogBS_ClientConnectionManager, Log, "Miscellaneous message {0}", static_cast<uint8>(DeviceEventType));
-        // FILL - onMessageReceived
+        // FILL - convert EBS_DeviceEvent to EBS_TxRxMessage
+        // OnRxMessage.Broadcast(this, MessageType, static_cast<TArray<uint8>>(MessageData));
         break;
     }
 }

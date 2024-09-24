@@ -134,12 +134,10 @@ private:
 	// MESSAGING START
 public:
 protected:
-	UFUNCTION(BlueprintCallable, Category = "BS Connection Manager")
-	void OnRxMessage(UBS_BaseConnectionManager *_ConnectionManager, uint8 MessageTypeEnum, const TArray<uint8> &Message);
-
-	UFUNCTION(BlueprintCallable, Category = "BS Connection Manager")
+	void OnRxMessage(UBS_BaseConnectionManager *_ConnectionManager, EBS_TxRxMessage MessageType, const TArray<uint8> &Message);
+	UFUNCTION()
 	void OnRxMessages(UBS_BaseConnectionManager *_ConnectionManager);
-
+	UFUNCTION()
 	void SendTxData(const TArray<uint8> &Data);
 
 	UFUNCTION(BlueprintCallable, Category = "BS Connection Manager")

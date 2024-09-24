@@ -5,6 +5,16 @@
 
 DEFINE_LOG_CATEGORY(LogBS_BaseConnectionManager);
 
+UBS_BaseConnectionManager::UBS_BaseConnectionManager()
+{
+    UE_LOGFMT(LogBS_BaseConnectionManager, Verbose, "Constructor: {0}", GetName());
+    if (HasAnyFlags(RF_ClassDefaultObject))
+    {
+        UE_LOGFMT(LogBS_BaseConnectionManager, Verbose, "CDO - Skipping Constructor");
+        return;
+    }
+}
+
 // CONNECTION START
 void UBS_BaseConnectionManager::Connect_Implementation(bool &bContinue)
 {
@@ -94,6 +104,44 @@ void UBS_BaseConnectionManager::SetConnectionStatus(EBS_ConnectionStatus NewConn
     }
 }
 // CONNECTION STATUS START
+
+// RX DATA END
+void UBS_BaseConnectionManager::ParseRxData(const TArray<uint8> &Data)
+{
+    UE_LOGFMT(LogBS_BaseConnectionManager, Verbose, "Parsing Rx Data ({0} Bytes)", Data.Num());
+
+    const auto DataLength = Data.Num();
+    uint16 Offset = 0;
+
+    UE_LOGFMT(LogBS_BaseConnectionManager, Verbose, "Parsing {0} bytes...", DataLength);
+
+    while (Offset < DataLength)
+    {
+        UE_LOGFMT(LogBS_BaseConnectionManager, Verbose, "Parsing Message at {0}...", Offset);
+
+        const uint8 MessageTypeEnum = Data[Offset++];
+        if (MessageTypeEnum >= static_cast<uint8>(EBS_TxRxMessage::COUNT))
+        {
+            UE_LOGFMT(LogBS_BaseConnectionManager, Error, "invalid EBS_TxRxMessageType {0}", MessageTypeEnum);
+            break;
+        }
+        const EBS_TxRxMessage MessageType = static_cast<EBS_TxRxMessage>(MessageTypeEnum);
+
+        const uint16 MessageDataLength = BS_ByteParser::ParseAs<uint16>(Data, Offset, true);
+        Offset += 2;
+
+        UE_LOGFMT(LogBS_BaseConnectionManager, Verbose, "Message {0} ({1} bytes)", static_cast<uint8>(MessageType), MessageDataLength);
+
+        const TArrayView<uint8> MessageData((uint8 *)(Data.GetData() + Offset), MessageDataLength);
+        OnRxMessage.Broadcast(this, MessageType, static_cast<TArray<uint8>>(MessageData));
+
+        Offset += MessageDataLength;
+        UE_LOGFMT(LogBS_BaseConnectionManager, Verbose, "New Offset: {0}/{1}", Offset, DataLength);
+    }
+
+    OnRxMessages.Broadcast(this);
+}
+// RX DATA START
 
 // MESSAGING START
 void UBS_BaseConnectionManager::SendTxData_Implementation(const TArray<uint8> &Data)
