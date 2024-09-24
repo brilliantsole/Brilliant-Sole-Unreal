@@ -18,6 +18,7 @@
 #include "BS_TfliteManager.h"
 #include "BS_InsoleSide.h"
 #include "BS_MathUtils.h"
+#include "BS_BaseConnectionManager.h"
 #include "BS_Device.generated.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_Device, Verbose, All);
@@ -58,7 +59,7 @@ public:
 
 protected:
 	UFUNCTION(BlueprintCallable, Category = "BS Battery Level")
-	void OnBatteryLevelUpdate(uint8 NewBatteryLevel);
+	void OnBatteryLevelUpdate(UBS_BaseConnectionManager *_ConnectionManager, uint8 NewBatteryLevel);
 
 private:
 	bool bDidGetBatteryLevel = false;
@@ -72,7 +73,7 @@ public:
 
 protected:
 	UFUNCTION(BlueprintCallable, Category = "BS Device Information")
-	void OnDeviceInformationValue(const EBS_DeviceInformation DeviceInformationType, const TArray<uint8> &Value) { DeviceInformation.SetValue(DeviceInformationType, Value); };
+	void OnDeviceInformationValue(UBS_BaseConnectionManager *_ConnectionManager, const EBS_DeviceInformation DeviceInformationType, const TArray<uint8> &Value) { DeviceInformation.SetValue(DeviceInformationType, Value); };
 
 private:
 	FBS_DeviceInformation DeviceInformation;
@@ -80,14 +81,14 @@ private:
 
 	// CONNECTION START
 public:
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "BS Device")
-	void Connect();
+	UFUNCTION(BlueprintCallable, Category = "BS Device")
+	void Connect() { ConnectionManager->Connect(); }
 
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "BS Device")
-	void Disconnect();
+	UFUNCTION(BlueprintCallable, Category = "BS Device")
+	void Disconnect() { ConnectionManager->Disconnect(); }
 
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "BS Device")
-	void ToggleConnection();
+	UFUNCTION(BlueprintCallable, Category = "BS Device")
+	void ToggleConnection() { ConnectionManager->ToggleConnection(); }
 
 	UFUNCTION(BlueprintPure, Category = "BS Device")
 	EBS_ConnectionStatus GetConnectionStatus() const { return ConnectionStatus; }
@@ -104,8 +105,8 @@ public:
 	FBS_IsConnectedUpdateCallback OnIsConnectedUpdate;
 
 protected:
-	UFUNCTION(BlueprintCallable, Category = "BS ConnectionManager")
-	void OnConnectionManagerConnectionStatusUpdate(EBS_ConnectionStatus NewConnectionManagerConnectionStatus);
+	UFUNCTION(BlueprintCallable, Category = "BS Connection Manager")
+	void OnConnectionManagerStatusUpdate(UBS_BaseConnectionManager *_ConnectionManager, EBS_ConnectionStatus NewConnectionManagerConnectionStatus);
 
 private:
 	EBS_ConnectionStatus ConnectionStatus = EBS_ConnectionStatus::NOT_CONNECTED;
@@ -115,22 +116,36 @@ private:
 	TSet<EBS_TxRxMessage> ReceivedTxMessages;
 	// CONNECTION END
 
+	// CONNECTION MANAGER START
+public:
+	UFUNCTION(BlueprintPure, Category = "BS Connection Manager")
+	UBS_BaseConnectionManager *GetConnectionManager() const { return ConnectionManager; }
+
+	UFUNCTION(BlueprintCallable, Category = "BS Connection Manager")
+	void AssignConnectionManager(UBS_BaseConnectionManager *NewConnectionManager);
+
+	UFUNCTION(BlueprintCallable, Category = "BS Connection Manager")
+	void RemoveConnectionManager();
+
+private:
+	UBS_BaseConnectionManager *ConnectionManager = nullptr;
+	// CONNECTION MANAGER END
+
 	// MESSAGING START
 public:
 protected:
-	UFUNCTION(BlueprintCallable, Category = "BS ConnectionManager")
-	void OnRxMessage(uint8 MessageTypeEnum, const TArray<uint8> &Message);
+	UFUNCTION(BlueprintCallable, Category = "BS Connection Manager")
+	void OnRxMessage(UBS_BaseConnectionManager *_ConnectionManager, uint8 MessageTypeEnum, const TArray<uint8> &Message);
 
-	UFUNCTION(BlueprintCallable, Category = "BS ConnectionManager")
-	void OnRxMessages();
+	UFUNCTION(BlueprintCallable, Category = "BS Connection Manager")
+	void OnRxMessages(UBS_BaseConnectionManager *_ConnectionManager);
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "BS ConnectionManager")
-	void SendTxData(const TArray<uint8> &Data);
+	void SendTxData(const TArray<uint8> &Data) { ConnectionManager->SendTxData(Data); }
 
-	UFUNCTION(BlueprintCallable, Category = "BS ConnectionManager")
-	void OnSendTxData();
+	UFUNCTION(BlueprintCallable, Category = "BS Connection Manager")
+	void OnSendTxData(UBS_BaseConnectionManager *_ConnectionManager);
 
-	// UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BS ConnectionManager")
+	// UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BS Connection Manager")
 	bool bIsSendingTxData = false;
 
 private:
@@ -150,7 +165,7 @@ private:
 
 	// PING START
 public:
-	UFUNCTION(BlueprintPure, Category = "BS ConnectionManager")
+	UFUNCTION(BlueprintPure, Category = "BS Connection Manager")
 	static const TArray<uint8> &GetPingTxData() { return PingTxData; }
 
 private:

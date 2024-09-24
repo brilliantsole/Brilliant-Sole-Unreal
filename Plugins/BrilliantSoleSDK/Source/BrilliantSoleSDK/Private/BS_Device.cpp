@@ -158,7 +158,7 @@ void UBS_Device::Reset()
 }
 
 // BATTERY LEVEL START
-void UBS_Device::OnBatteryLevelUpdate(uint8 NewBatteryLevel)
+void UBS_Device::OnBatteryLevelUpdate(UBS_BaseConnectionManager *_ConnectionManager, uint8 NewBatteryLevel)
 {
     BatteryLevel = NewBatteryLevel;
     bDidGetBatteryLevel = true;
@@ -168,7 +168,7 @@ void UBS_Device::OnBatteryLevelUpdate(uint8 NewBatteryLevel)
 // BATTERY LEVEL END
 
 // CONNECTION START
-void UBS_Device::OnConnectionManagerConnectionStatusUpdate(EBS_ConnectionStatus NewConnectionManagerConnectionStatus)
+void UBS_Device::OnConnectionManagerStatusUpdate(UBS_BaseConnectionManager *_ConnectionManager, EBS_ConnectionStatus NewConnectionManagerConnectionStatus)
 {
     UE_LOGFMT(LogBS_Device, Verbose, "ConnectionManager ConnectionStatus: {0}", UEnum::GetValueAsString(NewConnectionManagerConnectionStatus));
     switch (NewConnectionManagerConnectionStatus)
@@ -253,6 +253,47 @@ void UBS_Device::CheckIfFullyConnected()
 
 // CONNECTION END
 
+// CONNECTION MANAGER START
+void UBS_Device::AssignConnectionManager(UBS_BaseConnectionManager *NewConnectionManager)
+{
+    RemoveConnectionManager();
+    UE_LOGFMT(LogBS_Device, Verbose, "Assigning ConnectionManager...");
+
+    if (NewConnectionManager == nullptr)
+    {
+        UE_LOGFMT(LogBS_Device, Error, "null ConnectionManager found");
+        return;
+    }
+    ConnectionManager = NewConnectionManager;
+
+    ConnectionManager->OnConnectionUpdate.AddDynamic(this, &UBS_Device::OnConnectionManagerStatusUpdate);
+    ConnectionManager->OnBatteryLevel.AddDynamic(this, &UBS_Device::OnBatteryLevelUpdate);
+    ConnectionManager->OnRxMessage.AddDynamic(this, &UBS_Device::OnRxMessage);
+    ConnectionManager->OnRxMessages.AddDynamic(this, &UBS_Device::OnRxMessages);
+    ConnectionManager->OnDeviceInformationValue.AddDynamic(this, &UBS_Device::OnDeviceInformationValue);
+    ConnectionManager->OnSendTxMessage.AddDynamic(this, &UBS_Device::OnSendTxData);
+}
+void UBS_Device::RemoveConnectionManager()
+{
+    if (ConnectionManager == nullptr)
+    {
+        UE_LOGFMT(LogBS_Device, Verbose, "No ConnectionManager to remove");
+        return;
+    }
+    UE_LOGFMT(LogBS_Device, Verbose, "Removing ConnectionManager...");
+
+    ConnectionManager->OnConnectionUpdate.RemoveDynamic(this, &UBS_Device::OnConnectionManagerStatusUpdate);
+    ConnectionManager->OnBatteryLevel.RemoveDynamic(this, &UBS_Device::OnBatteryLevelUpdate);
+    ConnectionManager->OnRxMessage.RemoveDynamic(this, &UBS_Device::OnRxMessage);
+    ConnectionManager->OnRxMessages.RemoveDynamic(this, &UBS_Device::OnRxMessages);
+    ConnectionManager->OnDeviceInformationValue.RemoveDynamic(this, &UBS_Device::OnDeviceInformationValue);
+    ConnectionManager->OnSendTxMessage.RemoveDynamic(this, &UBS_Device::OnSendTxData);
+
+    ConnectionManager = nullptr;
+}
+
+// CONNECTION MANAGER END
+
 // PING START
 const FBS_TxMessage UBS_Device::PingTxMessage = {EBS_TxRxMessage::GET_MTU};
 const TArray<uint8> UBS_Device::PingTxData = UBS_Device::InitializePingTxData();
@@ -266,7 +307,7 @@ const TArray<uint8> UBS_Device::InitializePingTxData()
 
 // MESSAGING START
 
-void UBS_Device::OnRxMessage(uint8 MessageTypeEnum, const TArray<uint8> &Message)
+void UBS_Device::OnRxMessage(UBS_BaseConnectionManager *_ConnectionManager, uint8 MessageTypeEnum, const TArray<uint8> &Message)
 {
     if (MessageTypeEnum >= static_cast<uint8>(EBS_TxRxMessage::COUNT))
     {
@@ -308,7 +349,7 @@ void UBS_Device::OnRxMessage(uint8 MessageTypeEnum, const TArray<uint8> &Message
     }
 }
 
-void UBS_Device::OnRxMessages()
+void UBS_Device::OnRxMessages(UBS_BaseConnectionManager *_ConnectionManager)
 {
     UE_LOGFMT(LogBS_Device, Verbose, "Rx Messages received");
     SendPendingTxMessages();
@@ -380,7 +421,7 @@ void UBS_Device::SendPendingTxMessages()
     SendTxData(TxData);
 }
 
-void UBS_Device::OnSendTxData()
+void UBS_Device::OnSendTxData(UBS_BaseConnectionManager *_ConnectionManager)
 {
     UE_LOGFMT(LogBS_Device, Verbose, "sent tx data");
     bIsSendingTxData = false;
