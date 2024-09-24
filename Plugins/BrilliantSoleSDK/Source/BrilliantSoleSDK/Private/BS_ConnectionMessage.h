@@ -4,21 +4,21 @@
 
 #include "CoreMinimal.h"
 #include "Containers/Array.h"
-#include "BS_TxRxMessageType.h"
+#include "BS_ConnectionMessageType.h"
 #include "BS_ByteParser.h"
 #include "Misc/Optional.h"
 
-struct FBS_TxMessage
+struct FBS_ConnectionMessage
 {
-    EBS_TxRxMessage Type;
+    EBS_ConnectionMessage Type;
     TOptional<TArray<uint8>> Data;
 
-    FBS_TxMessage(EBS_TxRxMessage InType, const TArray<uint8> &InData)
+    FBS_ConnectionMessage(EBS_ConnectionMessage InType, const TArray<uint8> &InData)
         : Type(InType), Data(InData)
     {
     }
 
-    FBS_TxMessage(EBS_TxRxMessage InType)
+    FBS_ConnectionMessage(EBS_ConnectionMessage InType)
         : Type(InType)
     {
     }

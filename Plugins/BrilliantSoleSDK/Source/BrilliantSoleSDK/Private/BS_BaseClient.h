@@ -11,6 +11,7 @@
 #include "BS_ParseUtils.h"
 #include "BS_DiscoveredDevice.h"
 #include "BS_Device.h"
+#include "BS_ConnectionMessage.h"
 #include "BS_BaseClient.generated.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_BaseClient, Verbose, All);
@@ -180,14 +181,9 @@ private:
 
     // DEVICE MESSAGE START
 public:
-    UFUNCTION(BlueprintCallable, Category = "BS Client")
     void SendConnectToDeviceMessage(const FBS_DiscoveredDevice &DiscoveredDevice, bool bSendImmediately = true);
-
-    UFUNCTION(BlueprintCallable, Category = "BS Client")
     void SendDisconnectFromDeviceMessage(const FBS_DiscoveredDevice &DiscoveredDevice, bool bSendImmediately = true);
-
-    UFUNCTION(BlueprintCallable, Category = "BS Client")
-    void SendDeviceMessage(const FBS_DiscoveredDevice &DiscoveredDevice, const TArray<uint8> &Message, bool bSendImmediately = true);
+    void SendDeviceMessages(const FBS_DiscoveredDevice &DiscoveredDevice, const TArray<FBS_ConnectionMessage> &Messages, bool bSendImmediately = true);
 
 private:
     void ParseDeviceMessage(const TArray<uint8> &Message);

@@ -48,7 +48,7 @@ void UBS_ClientConnectionManager::SetIsConnected(bool bNewIsConnected)
 
     if (bIsConnected)
     {
-        // FILL - request device information
+        RequestDeviceInformation();
     }
 }
 // CONNECTION END
@@ -102,7 +102,7 @@ void UBS_ClientConnectionManager::SendTxData_Implementation(const TArray<uint8> 
         return;
     }
 
-    Client->SendDeviceMessage(DiscoveredDevice, Data);
+    Client->SendDeviceMessages(DiscoveredDevice, {{EBS_ConnectionMessage::TX, Data}});
 }
 
 void UBS_ClientConnectionManager::OnDeviceEvent(UBS_Device *Device, EBS_DeviceEvent DeviceEventType, const TArray<uint8> &Message)
@@ -128,3 +128,37 @@ void UBS_ClientConnectionManager::OnDeviceEvent(UBS_Device *Device, EBS_DeviceEv
     }
 }
 // MESSAGING END
+
+// DEVICE INFORMATION START
+const TArray<EBS_ConnectionMessage> UBS_ClientConnectionManager::RequiredDeviceInformationMessageTypes = {
+    EBS_ConnectionMessage::BATTERY_LEVEL,
+
+    EBS_ConnectionMessage::MANUFACTURER_NAME,
+    EBS_ConnectionMessage::MODEL_NUMBER,
+    EBS_ConnectionMessage::SERIAL_NUMBER,
+    EBS_ConnectionMessage::SOFTWARE_REVISION,
+    EBS_ConnectionMessage::HARDWARE_REVISION,
+    EBS_ConnectionMessage::FIRMWARE_REVISION};
+
+const TArray<FBS_ConnectionMessage> UBS_ClientConnectionManager::InitializeRequiredDeviceInformationMessages()
+{
+    TArray<FBS_ConnectionMessage> _RequiredDeviceInformationMessageTypes;
+    for (EBS_ConnectionMessage ConnectionMessageType : UBS_ClientConnectionManager::RequiredDeviceInformationMessageTypes)
+    {
+        _RequiredDeviceInformationMessageTypes.Add({ConnectionMessageType});
+    }
+    return _RequiredDeviceInformationMessageTypes;
+}
+const TArray<FBS_ConnectionMessage> UBS_ClientConnectionManager::RequiredDeviceInformationMessages = UBS_ClientConnectionManager::InitializeRequiredDeviceInformationMessages();
+
+void UBS_ClientConnectionManager::RequestDeviceInformation()
+{
+    if (!Client)
+    {
+        UE_LOGFMT(LogBS_ClientConnectionManager, Error, "Client not defined");
+        return;
+    }
+    UE_LOGFMT(LogBS_ClientConnectionManager, Verbose, "Requesting Device information...");
+    Client->SendDeviceMessages(DiscoveredDevice, RequiredDeviceInformationMessages);
+}
+// DEVICE INFORMATION END

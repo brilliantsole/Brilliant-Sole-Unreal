@@ -63,4 +63,13 @@ public:
 	void OnDeviceEvent(UBS_Device *Device, EBS_DeviceEvent DeviceEventType, const TArray<uint8> &Message);
 	FBS_DeviceEventCallback BoundOnDeviceEvent;
 	// MESSAGING END
+
+	// DEVICE INFORMATION START
+
+private:
+	static const TArray<EBS_ConnectionMessage> RequiredDeviceInformationMessageTypes;
+	static const TArray<FBS_ConnectionMessage> InitializeRequiredDeviceInformationMessages();
+	static const TArray<FBS_ConnectionMessage> RequiredDeviceInformationMessages;
+	void RequestDeviceInformation();
+	// DEVICE INFORMATION END
 };

@@ -360,11 +360,19 @@ void UBS_BaseClient::SendDisconnectFromDeviceMessage(const FBS_DiscoveredDevice 
     const TArray<uint8> TxMessage = BS_ByteParser::StringToArray(DiscoveredDevice.BluetoothId, true);
     SendMessages({{EBS_ServerMessage::DISCONNECT_FROM_DEVICE, TxMessage}});
 }
-void UBS_BaseClient::SendDeviceMessage(const FBS_DiscoveredDevice &DiscoveredDevice, const TArray<uint8> &Message, bool bSendImmediately)
+void UBS_BaseClient::SendDeviceMessages(const FBS_DiscoveredDevice &DiscoveredDevice, const TArray<FBS_ConnectionMessage> &Messages, bool bSendImmediately)
 {
-    UE_LOGFMT(LogBS_BaseClient, Log, "Sending {0} bytes to {1}...", Message.Num(), DiscoveredDevice.BluetoothId);
-    // FILL
-    // SendMessages({{EBS_ServerMessage::DEVICE_MESSAGE, Message}});
+    UE_LOGFMT(LogBS_BaseClient, Log, "Sending {0} messages to {1}...", Messages.Num(), DiscoveredDevice.BluetoothId);
+    TArray<uint8> MessageData;
+    MessageData.Append(BS_ByteParser::StringToArray(DiscoveredDevice.BluetoothId, true));
+
+    for (const FBS_ConnectionMessage &Message : Messages)
+    {
+        UE_LOGFMT(LogBS_BaseClient, Log, "Appending {0} ({1} bytes) to message", static_cast<uint8>(Message.Type), Message.DataNum());
+        Message.AppendTo(MessageData);
+    }
+
+    SendMessages({{EBS_ServerMessage::DEVICE_MESSAGE, MessageData}});
 }
 
 void UBS_BaseClient::ParseDeviceMessage(const TArray<uint8> &Message)
