@@ -140,7 +140,7 @@ void UBS_BaseClient::OnMessage(EBS_ServerMessage MessageType, const TArray<uint8
         ParseExpiredDiscoveredDevice(Message);
         break;
     case EBS_ServerMessage::CONNECTED_DEVICES:
-        ParseDevices(Message);
+        ParseConnectedDevices(Message);
         break;
     case EBS_ServerMessage::DEVICE_MESSAGE:
         ParseDeviceMessage(Message);
@@ -340,7 +340,7 @@ UBS_Device *UBS_BaseClient::GetDeviceByDiscoveredDevice(const FBS_DiscoveredDevi
     }
     return FoundDevice;
 }
-void UBS_BaseClient::ParseDevices(const TArray<uint8> &Message)
+void UBS_BaseClient::ParseConnectedDevices(const TArray<uint8> &Message)
 {
     UE_LOGFMT(LogBS_BaseClient, Log, "Parsing Connected Devices ({0} bytes)...", Message.Num());
     // FILL

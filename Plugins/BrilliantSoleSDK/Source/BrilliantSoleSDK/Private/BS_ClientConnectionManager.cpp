@@ -3,6 +3,7 @@
 #include "BS_ClientConnectionManager.h"
 #include "Logging/StructuredLog.h"
 #include "BS_DeviceInformationType.h"
+#include "BS_TypeUtils.h"
 
 DEFINE_LOG_CATEGORY(LogBS_ClientConnectionManager);
 
@@ -104,6 +105,7 @@ void UBS_ClientConnectionManager::SendTxData_Implementation(const TArray<uint8> 
     }
 
     Client->SendDeviceMessages(DiscoveredDevice, {{EBS_ConnectionMessage::TX, Data}});
+    OnSendTxMessage.Broadcast(this);
 }
 
 void UBS_ClientConnectionManager::OnDeviceEvent(UBS_Device *Device, EBS_DeviceEvent DeviceEventType, const TArray<uint8> &Message)
@@ -150,9 +152,15 @@ void UBS_ClientConnectionManager::OnDeviceEvent(UBS_Device *Device, EBS_DeviceEv
         break;
 
     default:
-        UE_LOGFMT(LogBS_ClientConnectionManager, Log, "Miscellaneous message {0}", static_cast<uint8>(DeviceEventType));
-        // FILL - convert EBS_DeviceEvent to EBS_TxRxMessage
-        // OnRxMessage.Broadcast(this, MessageType, static_cast<TArray<uint8>>(MessageData));
+        UE_LOGFMT(LogBS_ClientConnectionManager, Log, "miscellaneous message {0}", static_cast<uint8>(DeviceEventType));
+
+        EBS_TxRxMessage TxRxMessage = static_cast<EBS_TxRxMessage>(0);
+        if (BS_TypeUtils::ConvertDeviceEventTypeToTxRxMessageType(DeviceEventType, TxRxMessage))
+        {
+            UE_LOGFMT(LogBS_ClientConnectionManager, Log, "TxRxMessage message {0}", static_cast<uint8>(DeviceEventType));
+            OnRxMessage.Broadcast(this, TxRxMessage, static_cast<TArray<uint8>>(Message));
+            OnRxMessages.Broadcast(this);
+        }
         break;
     }
 }

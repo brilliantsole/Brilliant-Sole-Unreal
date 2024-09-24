@@ -175,7 +175,7 @@ protected:
     TMap<FString, UBS_Device *> Devices;
 
 private:
-    void ParseDevices(const TArray<uint8> &Message);
+    void ParseConnectedDevices(const TArray<uint8> &Message);
 
     // DEVICES DEVICES END
 
