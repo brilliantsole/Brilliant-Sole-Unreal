@@ -125,10 +125,7 @@ private:
     // SCANNING END
 
     // DISCOVERED DEVICES START
-protected:
-    UFUNCTION(BlueprintPure, Category = "BS Client")
-    const TMap<FString, FBS_DiscoveredDevice> &GetDiscoveredDevices() const { return DiscoveredDevices; }
-
+public:
     DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBS_ClientDiscoveredDeviceCallback, UBS_BaseClient *, Client, FBS_DiscoveredDevice, DiscoveredDevice);
     UPROPERTY(BlueprintAssignable, Category = "BS Client")
     FBS_ClientDiscoveredDeviceCallback OnDiscoveredDevice;
@@ -136,6 +133,10 @@ protected:
     DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBS_ClientExpiredDiscoveredDeviceCallback, UBS_BaseClient *, Client, FBS_DiscoveredDevice, ExpiredDiscoveredDevice);
     UPROPERTY(BlueprintAssignable, Category = "BS Client")
     FBS_ClientExpiredDiscoveredDeviceCallback OnExpiredDiscoveredDevice;
+
+protected:
+    UFUNCTION(BlueprintPure, Category = "BS Client")
+    const TMap<FString, FBS_DiscoveredDevice> &GetDiscoveredDevices() const { return DiscoveredDevices; }
 
 private:
     void ParseDiscoveredDevice(const TArray<uint8> &Message);
