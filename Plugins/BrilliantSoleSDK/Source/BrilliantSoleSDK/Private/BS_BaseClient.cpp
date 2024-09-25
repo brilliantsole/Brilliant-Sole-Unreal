@@ -354,7 +354,25 @@ UBS_Device *UBS_BaseClient::GetDeviceByDiscoveredDevice(const FBS_DiscoveredDevi
 void UBS_BaseClient::ParseConnectedDevices(const TArray<uint8> &Message)
 {
     UE_LOGFMT(LogBS_BaseClient, Log, "Parsing Connected Devices ({0} bytes)...", Message.Num());
-    // FILL
+    const FString ConnectedDeviceBluetoothIdsString = BS_ByteParser::GetString(Message, true);
+    UE_LOGFMT(LogBS_BaseClient, Log, "ConnectedDeviceBluetoothIdsString: {0}", ConnectedDeviceBluetoothIdsString);
+
+    TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(ConnectedDeviceBluetoothIdsString);
+    TArray<TSharedPtr<FJsonValue>> ConnectedDeviceBluetoothIds;
+
+    if (FJsonSerializer::Deserialize(Reader, ConnectedDeviceBluetoothIds))
+    {
+        for (const TSharedPtr<FJsonValue> &Value : ConnectedDeviceBluetoothIds)
+        {
+            FString ConnectedDeviceBluetoothId = Value->AsString();
+            UE_LOGFMT(LogBS_BaseClient, Verbose, "ConnectedDeviceBluetoothId: {0}", ConnectedDeviceBluetoothId);
+            // FILL - create device
+        }
+    }
+    else
+    {
+        UE_LOGFMT(LogBS_BaseClient, Error, "Unable to parse ConnectedDeviceBluetoothIdsString");
+    }
 }
 // DEVICES END
 

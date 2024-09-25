@@ -60,7 +60,7 @@ public:
         }
         else
         {
-            UE_LOGFMT(LogTemp, Error, "Unable to convert DiscoveredDeviceString json");
+            UE_LOGFMT(LogTemp, Error, "Unable to convert DiscoveredDeviceString to json");
             return false;
         }
         return true;
