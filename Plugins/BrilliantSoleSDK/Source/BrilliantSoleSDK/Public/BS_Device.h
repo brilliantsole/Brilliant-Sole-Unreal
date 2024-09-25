@@ -128,6 +128,7 @@ public:
 	void RemoveConnectionManager();
 
 private:
+	UPROPERTY()
 	UBS_BaseConnectionManager *ConnectionManager = nullptr;
 	// CONNECTION MANAGER END
 

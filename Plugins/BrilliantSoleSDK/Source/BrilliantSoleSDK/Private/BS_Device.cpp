@@ -407,6 +407,7 @@ void UBS_Device::SendPendingTxMessages()
     }
     bIsSendingTxData = true;
 
+    // TArray<uint8> _TxData;
     TxData.Reset();
 
     const auto MaxMessageLength = InformationManager->GetMaxTxMessageLength();
