@@ -178,6 +178,7 @@ void UBS_BaseUDP_Client::SendPendingUDP_Messages()
 void UBS_BaseUDP_Client::OnUDP_Message(EBS_UDP_MessageType MessageType, const TArray<uint8> &Message)
 {
     UE_LOGFMT(LogBS_BaseUDP_Client, Verbose, "message {0} ({1} bytes)", UEnum::GetValueAsString(MessageType), Message.Num());
+    StopWaitingForPong();
 
     switch (MessageType)
     {
@@ -185,7 +186,7 @@ void UBS_BaseUDP_Client::OnUDP_Message(EBS_UDP_MessageType MessageType, const TA
         Pong();
         break;
     case EBS_UDP_MessageType::PONG:
-        StopWaitingForPong();
+        // StopWaitingForPong();
         break;
     case EBS_UDP_MessageType::SET_REMOTE_RECEIVE_PORT:
         OnSetRemoteReceivePortMessage(Message);

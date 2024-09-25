@@ -286,7 +286,18 @@ void UBS_BaseClient::ParseDiscoveredDevice(const TArray<uint8> &Message)
 void UBS_BaseClient::ParseExpiredDiscoveredDevice(const TArray<uint8> &Message)
 {
     UE_LOGFMT(LogBS_BaseClient, Log, "Parsing Expired Discovered Device ({0} bytes)...", Message.Num());
-    // FILL
+    const FString BluetoothId = BS_ByteParser::GetString(Message, true);
+    UE_LOGFMT(LogBS_BaseClient, Log, "Expired Discovered Device for BluetoothId: {0}", BluetoothId);
+    if (!DiscoveredDevices.Contains(BluetoothId))
+    {
+        UE_LOGFMT(LogBS_BaseClient, Error, "No DiscoveredDevice found with BluetoothId {0}", BluetoothId);
+        return;
+    }
+
+    const FBS_DiscoveredDevice ExpiredDiscoveredDevice = DiscoveredDevices[BluetoothId];
+    UE_LOGFMT(LogBS_BaseClient, Verbose, "Expiring Discovered Device with name \"{0}\" and BluetoothId \"{1}\"", ExpiredDiscoveredDevice.Name, ExpiredDiscoveredDevice.BluetoothId);
+    DiscoveredDevices.Remove(BluetoothId);
+    OnExpiredDiscoveredDevice.Broadcast(this, ExpiredDiscoveredDevice);
 }
 // DISCOVERED DEVICES END
 

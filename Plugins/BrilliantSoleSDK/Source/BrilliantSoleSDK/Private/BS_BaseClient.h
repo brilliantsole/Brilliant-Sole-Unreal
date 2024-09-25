@@ -133,6 +133,10 @@ protected:
     UPROPERTY(BlueprintAssignable, Category = "BS Client")
     FBS_ClientDiscoveredDeviceCallback OnDiscoveredDevice;
 
+    DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBS_ClientExpiredDiscoveredDeviceCallback, UBS_BaseClient *, Client, FBS_DiscoveredDevice, ExpiredDiscoveredDevice);
+    UPROPERTY(BlueprintAssignable, Category = "BS Client")
+    FBS_ClientExpiredDiscoveredDeviceCallback OnExpiredDiscoveredDevice;
+
 private:
     void ParseDiscoveredDevice(const TArray<uint8> &Message);
     void ParseExpiredDiscoveredDevice(const TArray<uint8> &Message);

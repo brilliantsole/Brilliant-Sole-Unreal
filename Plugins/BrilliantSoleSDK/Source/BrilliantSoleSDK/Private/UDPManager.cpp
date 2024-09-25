@@ -114,9 +114,20 @@ bool UUDPManager::EmitBytes(const TArray<uint8> &Bytes)
 
 void UUDPManager::Destroy()
 {
+	if (HasAnyFlags(RF_ClassDefaultObject))
+	{
+		return;
+	}
+
 	CloseSendSocket();
 	CloseReceiveSocket();
 
 	Native->ClearSendCallbacks();
 	Native->ClearReceiveCallbacks();
+}
+
+void UUDPManager::BeginDestroy()
+{
+	Destroy();
+	Super::BeginDestroy();
 }

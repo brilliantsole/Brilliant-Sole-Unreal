@@ -88,6 +88,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "UDP Functions")
 	void Destroy();
 
+	virtual void BeginDestroy() override;
+
 protected:
 	TSharedPtr<FUDPNative> Native;
 	void LinkupCallbacks();
