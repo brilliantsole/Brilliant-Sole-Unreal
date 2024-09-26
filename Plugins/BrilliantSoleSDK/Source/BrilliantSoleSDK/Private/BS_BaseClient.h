@@ -12,6 +12,7 @@
 #include "BS_DiscoveredDevice.h"
 #include "BS_Device.h"
 #include "BS_ConnectionMessage.h"
+#include "BS_Subsystem.h"
 #include "BS_BaseClient.generated.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_BaseClient, Verbose, All);
@@ -148,17 +149,17 @@ private:
 
     // DEVICE CONNECTION START
 public:
-    UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "BS Client")
+    UFUNCTION(BlueprintCallable, Category = "BS Client")
     UBS_Device *ConnectToDevice(const FBS_DiscoveredDevice &DiscoveredDevice);
-    virtual UBS_Device *ConnectToDevice_Implementation(const FBS_DiscoveredDevice &DiscoveredDevice);
 
-    UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "BS Client")
+    UFUNCTION(BlueprintCallable, Category = "BS Client")
     UBS_Device *DisconnectFromDevice(const FBS_DiscoveredDevice &DiscoveredDevice);
-    virtual UBS_Device *DisconnectFromDevice_Implementation(const FBS_DiscoveredDevice &DiscoveredDevice);
 
     UFUNCTION(BlueprintCallable, Category = "BS Client")
     UBS_Device *ToggleDeviceConnection(const FBS_DiscoveredDevice &DiscoveredDevice);
 
+private:
+    UBS_Device *CreateDevice(const FString &BluetoothId);
     // DEVICE CONNECTION END
 
     // DEVICES START
@@ -175,6 +176,9 @@ protected:
 
     UFUNCTION(BlueprintCallable, Category = "BS Client")
     UBS_Device *GetDeviceByDiscoveredDevice(const FBS_DiscoveredDevice &DiscoveredDevice);
+
+    UFUNCTION(BlueprintCallable, Category = "BS Client")
+    UBS_Device *GetDeviceByBluetoothId(const FString &BluetoothId);
 
     UPROPERTY()
     TMap<FString, UBS_Device *> Devices;

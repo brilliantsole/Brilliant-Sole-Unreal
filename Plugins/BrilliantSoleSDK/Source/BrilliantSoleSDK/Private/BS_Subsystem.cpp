@@ -10,6 +10,7 @@ UBS_Subsystem::UBS_Subsystem()
     GetBleManagerClass();
     GetDeviceManagerClass();
     GetUDP_ClientClass();
+    GetDeviceBP_Class();
 }
 
 void UBS_Subsystem::Initialize(FSubsystemCollectionBase &Collection)
@@ -67,6 +68,13 @@ void UBS_Subsystem::CallFunction(UObject *Singleton, FString FunctionName)
     }
 }
 // HELPERS END
+
+// BS DEVICE BP START
+void UBS_Subsystem::GetDeviceBP_Class()
+{
+    DeviceBP_Class = GetClass(TEXT("/Script/Engine.Blueprint'/BrilliantSoleSDK/Blueprints/BS_DeviceBP.BS_DeviceBP_C'"));
+}
+// BS DEVICE BP END
 
 // BLE MANAGER START
 void UBS_Subsystem::GetBleManagerClass()

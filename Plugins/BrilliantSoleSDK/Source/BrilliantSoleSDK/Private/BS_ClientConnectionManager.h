@@ -40,6 +40,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "BS Client Connection Manager")
 	void AssignDiscoveredDevice(const FBS_DiscoveredDevice &NewDiscoveredDevice);
 
+	UFUNCTION(BlueprintCallable, Category = "BS Client Connection Manager")
+	void AssignBluetoothId(const FString &BluetoothId);
+
 private:
 	FBS_DiscoveredDevice DiscoveredDevice;
 	// DISCOVERED DEVICE END
@@ -47,9 +50,9 @@ private:
 	// CONNECTION START
 public:
 	virtual const bool GetIsConnected_Implementation() const override { return bIsConnected; }
+	void SetIsConnected(bool bNewIsConnected);
 
 private:
-	void SetIsConnected(bool bNewIsConnected);
 	bool bIsConnected = false;
 	// CONNECTION END
 

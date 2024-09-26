@@ -33,6 +33,11 @@ void UBS_ClientConnectionManager::AssignDiscoveredDevice(const FBS_DiscoveredDev
     UE_LOGFMT(LogBS_ClientConnectionManager, Verbose, "Assigning DiscoveredDevice...");
     DiscoveredDevice = NewDiscoveredDevice;
 }
+void UBS_ClientConnectionManager::AssignBluetoothId(const FString &BluetoothId)
+{
+    UE_LOGFMT(LogBS_ClientConnectionManager, Verbose, "Assigning BluetoothId {0}", BluetoothId);
+    DiscoveredDevice.BluetoothId = BluetoothId;
+}
 // DISCOVERED DEVICE END
 
 // CONNECTION START

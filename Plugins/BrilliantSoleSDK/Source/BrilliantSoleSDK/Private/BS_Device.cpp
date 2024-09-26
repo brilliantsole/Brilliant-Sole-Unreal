@@ -136,6 +136,7 @@ void UBS_Device::GetBS_Subsystem()
         UE_LOGFMT(LogBS_Device, Verbose, "CDO constructor - skipping");
     }
 }
+// BS DEVICE BP END
 
 void UBS_Device::Reset()
 {

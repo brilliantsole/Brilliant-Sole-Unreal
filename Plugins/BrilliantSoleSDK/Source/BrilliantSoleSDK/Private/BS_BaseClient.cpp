@@ -302,7 +302,7 @@ void UBS_BaseClient::ParseExpiredDiscoveredDevice(const TArray<uint8> &Message)
 // DISCOVERED DEVICES END
 
 // DEVICE CONNECTION START
-UBS_Device *UBS_BaseClient::ConnectToDevice_Implementation(const FBS_DiscoveredDevice &DiscoveredDevice)
+UBS_Device *UBS_BaseClient::ConnectToDevice(const FBS_DiscoveredDevice &DiscoveredDevice)
 {
     UBS_Device *Device = GetDeviceByDiscoveredDevice(DiscoveredDevice);
     if (Device)
@@ -310,10 +310,38 @@ UBS_Device *UBS_BaseClient::ConnectToDevice_Implementation(const FBS_DiscoveredD
         Device->Connect();
         return Device;
     }
-    return nullptr;
+    Device = CreateDevice(DiscoveredDevice.BluetoothId);
+    if (!Device)
+    {
+        UE_LOGFMT(LogBS_BaseClient, Error, "Unable to create device");
+        return nullptr;
+    }
+    Device->Connect();
+    return Device;
+}
+UBS_Device *UBS_BaseClient::CreateDevice(const FString &BluetoothId)
+{
+    UBS_Device *Device = GetDeviceByBluetoothId(BluetoothId);
+    if (Device)
+    {
+        UE_LOGFMT(LogBS_BaseClient, Verbose, "Aready Created device for BluetoothId {0}", BluetoothId);
+        return Device;
+    }
+    Device = Cast<UBS_Device>(_BS_Subsystem->CreateDevice());
+    if (!Device)
+    {
+        UE_LOGFMT(LogBS_BaseClient, Verbose, "Failed to create Device");
+        return nullptr;
+    }
+    UBS_ClientConnectionManager *ConnectionManager = NewObject<UBS_ClientConnectionManager>(this);
+    ConnectionManager->AssignClient(this);
+    ConnectionManager->AssignBluetoothId(BluetoothId);
+    Device->AssignConnectionManager(ConnectionManager);
+    AddDevice(BluetoothId, Device);
+    return Device;
 }
 
-UBS_Device *UBS_BaseClient::DisconnectFromDevice_Implementation(const FBS_DiscoveredDevice &DiscoveredDevice)
+UBS_Device *UBS_BaseClient::DisconnectFromDevice(const FBS_DiscoveredDevice &DiscoveredDevice)
 {
     UBS_Device *Device = GetDeviceByDiscoveredDevice(DiscoveredDevice);
     if (Device)
@@ -340,10 +368,14 @@ UBS_Device *UBS_BaseClient::ToggleDeviceConnection(const FBS_DiscoveredDevice &D
 
 UBS_Device *UBS_BaseClient::GetDeviceByDiscoveredDevice(const FBS_DiscoveredDevice &DiscoveredDevice)
 {
+    return GetDeviceByBluetoothId(DiscoveredDevice.BluetoothId);
+}
+UBS_Device *UBS_BaseClient::GetDeviceByBluetoothId(const FString &BluetoothId)
+{
     UBS_Device *FoundDevice = nullptr;
     for (const TPair<FString, UBS_Device *> &Pair : Devices)
     {
-        if (Pair.Key == DiscoveredDevice.BluetoothId)
+        if (Pair.Key == BluetoothId)
         {
             FoundDevice = Pair.Value;
             break;
@@ -366,7 +398,15 @@ void UBS_BaseClient::ParseConnectedDevices(const TArray<uint8> &Message)
         {
             FString ConnectedDeviceBluetoothId = Value->AsString();
             UE_LOGFMT(LogBS_BaseClient, Verbose, "ConnectedDeviceBluetoothId: {0}", ConnectedDeviceBluetoothId);
-            // FILL - create device
+            UBS_Device *Device = CreateDevice(ConnectedDeviceBluetoothId);
+            UBS_ClientConnectionManager *ConnectionManager = Cast<UBS_ClientConnectionManager>(Device->GetConnectionManager());
+            if (!ConnectionManager)
+            {
+                UE_LOGFMT(LogBS_BaseClient, Error, "Failed to cast ConnectionManager to ClientConnectionManager");
+                return;
+            }
+            Device->SetConnectionStatus(EBS_ConnectionStatus::CONNECTING);
+            ConnectionManager->SetIsConnected(true);
         }
     }
     else

@@ -22,12 +22,24 @@ public:
 	virtual void Initialize(FSubsystemCollectionBase &Collection) override;
 	virtual void Deinitialize() override;
 
+	UClass *GetClass(const FString &ClassPath);
+
 	// HELPERS START
 private:
-	UClass *GetClass(const FString &ClassPath);
 	UObject *CreateSingleton(UClass *SingletonClass, bool bInitialize);
 	void CallFunction(UObject *Singleton, FString FunctionName);
 	// HELPERS END
+
+	// BS DEVICE BP START
+public:
+	UObject *CreateDevice() { return CreateSingleton(DeviceBP_Class, false); }
+
+private:
+	void GetDeviceBP_Class();
+
+	UPROPERTY()
+	TSubclassOf<UObject> DeviceBP_Class;
+	// BS DEVICE BP END
 
 	// BLE MANAGER START
 public:

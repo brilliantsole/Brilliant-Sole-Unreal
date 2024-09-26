@@ -104,13 +104,15 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "BS Device")
 	FBS_IsConnectedUpdateCallback OnIsConnectedUpdate;
 
+	void SetConnectionStatus(EBS_ConnectionStatus NewConnectionStatus);
+
 protected:
 	UFUNCTION(BlueprintCallable, Category = "BS Connection Manager")
 	void OnConnectionManagerStatusUpdate(UBS_BaseConnectionManager *_ConnectionManager, EBS_ConnectionStatus NewConnectionManagerConnectionStatus);
 
 private:
 	EBS_ConnectionStatus ConnectionStatus = EBS_ConnectionStatus::NOT_CONNECTED;
-	void SetConnectionStatus(EBS_ConnectionStatus NewConnectionStatus);
+	// void SetConnectionStatus(EBS_ConnectionStatus NewConnectionStatus);
 
 	void CheckIfFullyConnected();
 	TSet<EBS_TxRxMessage> ReceivedTxMessages;
