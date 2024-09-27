@@ -35,6 +35,15 @@ public:
 private:
 	void Reset();
 
+public:
+	UFUNCTION(BlueprintNativeEvent, Category = "BS Device")
+	void Remove();
+	virtual void Remove_Implementation();
+
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FBS_RemoveCallback, UBS_Device *, Device);
+	UPROPERTY(BlueprintAssignable, Category = "BS Device")
+	FBS_RemoveCallback OnRemoveCallback;
+
 	// BS SUBSYSTEM START
 protected:
 	UFUNCTION(BlueprintImplementableEvent, Category = "BS Subsystem")

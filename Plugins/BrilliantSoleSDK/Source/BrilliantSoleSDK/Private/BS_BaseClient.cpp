@@ -41,14 +41,14 @@ void UBS_BaseClient::Reset()
             UE_LOGFMT(LogBS_BaseClient, Error, "Failed to cast ConnectionManager to ClientConnectionManager");
             return;
         }
-        Device->SetConnectionStatus(EBS_ConnectionStatus::DISCONNECTING);
+        // Device->SetConnectionStatus(EBS_ConnectionStatus::DISCONNECTING);
         ConnectionManager->SetIsConnected(false);
 
-        // FILL - remove device from DeviceManager
+        // Device->Remove();
     }
 
     DiscoveredDevices.Reset();
-    Devices.Reset();
+    // Devices.Reset();
 }
 
 void UBS_BaseClient::PostInitProperties()

@@ -98,6 +98,12 @@ void UBS_Device::PostInitProperties()
     InitializeBP();
 }
 
+void UBS_Device::Remove_Implementation()
+{
+    UE_LOGFMT(LogBS_Device, Verbose, "Removing self from Device Manager...");
+    OnRemoveCallback.Broadcast(this);
+}
+
 void UBS_Device::GetBS_Subsystem()
 {
     if (!HasAnyFlags(RF_ClassDefaultObject))
