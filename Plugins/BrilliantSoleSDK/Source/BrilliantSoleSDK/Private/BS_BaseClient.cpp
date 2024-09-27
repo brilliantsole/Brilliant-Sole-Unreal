@@ -31,6 +31,22 @@ void UBS_BaseClient::Reset()
     bIsScanningAvailable = false;
     bIsScanning = false;
 
+    for (const TPair<FString, UBS_Device *> &Pair : Devices)
+    {
+        UBS_Device *Device = Pair.Value;
+
+        UBS_ClientConnectionManager *ConnectionManager = Cast<UBS_ClientConnectionManager>(Device->GetConnectionManager());
+        if (!ConnectionManager)
+        {
+            UE_LOGFMT(LogBS_BaseClient, Error, "Failed to cast ConnectionManager to ClientConnectionManager");
+            return;
+        }
+        Device->SetConnectionStatus(EBS_ConnectionStatus::DISCONNECTING);
+        ConnectionManager->SetIsConnected(false);
+
+        // FILL - remove device from DeviceManager
+    }
+
     DiscoveredDevices.Reset();
     Devices.Reset();
 }

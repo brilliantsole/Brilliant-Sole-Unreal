@@ -26,7 +26,7 @@ public:
     UBS_BaseClient();
     void PostInitProperties();
 
-private:
+protected:
     void Reset();
 
 public:

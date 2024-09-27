@@ -25,6 +25,7 @@ UBS_BaseUDP_Client::UBS_BaseUDP_Client()
 
 void UBS_BaseUDP_Client::Reset()
 {
+    Super::Reset();
     bDidSendSetInListenPortMessage = false;
 }
 
