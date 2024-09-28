@@ -303,7 +303,7 @@ public:
 	const UBS_SensorConfiguration *SensorConfiguration() const { return SensorConfigurationManager->GetSensorConfiguration(); }
 
 	UFUNCTION(BlueprintCallable, Category = "BS Sensor Configuration")
-	void SetSensorConfiguration(const UBS_SensorConfiguration *NewSensorConfiguration) { SensorConfigurationManager->SetSensorConfiguration(NewSensorConfiguration); }
+	void SetSensorConfiguration(const UBS_SensorConfiguration *NewSensorConfiguration, bool bClearRest = false) { SensorConfigurationManager->SetSensorConfiguration(NewSensorConfiguration, bClearRest); }
 
 	UFUNCTION(BlueprintCallable, Category = "BS Sensor Configuration")
 	void ClearSensorConfiguration() { SensorConfigurationManager->ClearSensorConfiguration(); }

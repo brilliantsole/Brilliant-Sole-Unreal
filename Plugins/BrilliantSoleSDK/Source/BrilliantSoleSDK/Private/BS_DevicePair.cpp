@@ -236,6 +236,8 @@ void UBS_DevicePair::AddDeviceListeners(UBS_Device *Device)
     Device->OnConnectionStatusUpdate.AddDynamic(this, &UBS_DevicePair::_OnDeviceConnectionStatusUpdate);
     Device->OnIsConnectedUpdate.AddDynamic(this, &UBS_DevicePair::_OnDeviceIsConnectedUpdate);
 
+    Device->OnSensorConfiguration.AddDynamic(this, &UBS_DevicePair::OnDeviceSensorConfigurationUpdate);
+
     Device->OnAcceleration.AddDynamic(this, &UBS_DevicePair::OnDeviceAccelerationUpdate);
     Device->OnGravity.AddDynamic(this, &UBS_DevicePair::OnDeviceGravityUpdate);
     Device->OnLinearAcceleration.AddDynamic(this, &UBS_DevicePair::OnDeviceLinearAccelerationUpdate);
@@ -290,18 +292,24 @@ void UBS_DevicePair::RemoveDeviceListeners(UBS_Device *Device)
 // DEVICE LISTENERS END
 
 // SENSOR CONFIGURATION START
-void UBS_DevicePair::SetSensorConfiguration(const UBS_SensorConfiguration *NewSensorConfiguration)
+void UBS_DevicePair::SetSensorConfiguration(const UBS_SensorConfiguration *NewSensorConfiguration, bool bClearRest)
 {
     for (const TPair<EBS_InsoleSide, UBS_Device *> &Pair : Devices)
     {
-        Pair.Value->SetSensorConfiguration(NewSensorConfiguration);
+        if (Pair.Value)
+        {
+            Pair.Value->SetSensorConfiguration(NewSensorConfiguration, bClearRest);
+        }
     }
 }
 void UBS_DevicePair::ClearSensorConfiguration()
 {
     for (const TPair<EBS_InsoleSide, UBS_Device *> &Pair : Devices)
     {
-        Pair.Value->ClearSensorConfiguration();
+        if (Pair.Value)
+        {
+            Pair.Value->ClearSensorConfiguration();
+        }
     }
 }
 void UBS_DevicePair::SetSensorRate(EBS_SensorType SensorType, EBS_SensorRate SensorRate, bool &bDidUpdateSensorRate)
@@ -309,14 +317,20 @@ void UBS_DevicePair::SetSensorRate(EBS_SensorType SensorType, EBS_SensorRate Sen
     UE_LOGFMT(LogBS_DevicePair, Verbose, "SetSensorRate: {0} {1}", UEnum::GetValueAsString(SensorType), UEnum::GetValueAsString(SensorRate));
     for (const TPair<EBS_InsoleSide, UBS_Device *> &Pair : Devices)
     {
-        Pair.Value->SetSensorRate(SensorType, SensorRate, bDidUpdateSensorRate);
+        if (Pair.Value)
+        {
+            Pair.Value->SetSensorRate(SensorType, SensorRate, bDidUpdateSensorRate);
+        }
     }
 }
 void UBS_DevicePair::SetSensorRates(const TMap<EBS_SensorType, EBS_SensorRate> &SensorRates)
 {
     for (const TPair<EBS_InsoleSide, UBS_Device *> &Pair : Devices)
     {
-        Pair.Value->SetSensorRates(SensorRates);
+        if (Pair.Value)
+        {
+            Pair.Value->SetSensorRates(SensorRates);
+        }
     }
 }
 void UBS_DevicePair::ClearSensorRate(EBS_SensorType SensorType)
@@ -324,7 +338,10 @@ void UBS_DevicePair::ClearSensorRate(EBS_SensorType SensorType)
     UE_LOGFMT(LogBS_DevicePair, Verbose, "ClearSensorRate: {0}", UEnum::GetValueAsString(SensorType));
     for (const TPair<EBS_InsoleSide, UBS_Device *> &Pair : Devices)
     {
-        Pair.Value->ClearSensorRate(SensorType);
+        if (Pair.Value)
+        {
+            Pair.Value->ClearSensorRate(SensorType);
+        }
     }
 }
 
@@ -346,7 +363,10 @@ void UBS_DevicePair::TriggerVibration(const TArray<FBS_VibrationConfiguration> &
 {
     for (const TPair<EBS_InsoleSide, UBS_Device *> &Pair : Devices)
     {
-        Pair.Value->TriggerVibration(VibrationConfigurations);
+        if (Pair.Value)
+        {
+            Pair.Value->TriggerVibration(VibrationConfigurations);
+        }
     }
 }
 // VIBRATION END
@@ -356,7 +376,10 @@ void UBS_DevicePair::SetTfliteInferencingEnabled(const bool NewInferencingEnable
 {
     for (const TPair<EBS_InsoleSide, UBS_Device *> &Pair : Devices)
     {
-        Pair.Value->SetTfliteInferencingEnabled(NewInferencingEnabled);
+        if (Pair.Value)
+        {
+            Pair.Value->SetTfliteInferencingEnabled(NewInferencingEnabled);
+        }
     }
 }
 // TFLITE END

@@ -122,7 +122,7 @@ private:
     // SENSOR CONFIGURATION START
 public:
     UFUNCTION(BlueprintCallable, Category = "BS Device Pair Sensor Configuration")
-    void SetSensorConfiguration(const UBS_SensorConfiguration *NewSensorConfiguration);
+    void SetSensorConfiguration(const UBS_SensorConfiguration *NewSensorConfiguration, bool bClearRest = false);
 
     UFUNCTION(BlueprintCallable, Category = "BS Device Pair Sensor Configuration")
     void ClearSensorConfiguration();
@@ -135,6 +135,14 @@ public:
 
     UFUNCTION(BlueprintCallable, Category = "BS Device Pair Sensor Configuration")
     void ClearSensorRate(EBS_SensorType SensorType);
+
+    DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FBS_DevicePairDeviceSensorConfigurationCallback, UBS_DevicePair *, DevicePair, EBS_InsoleSide, Side, UBS_Device *, Device, const UBS_SensorConfiguration *, SensorConfiguration);
+    UPROPERTY(BlueprintAssignable, Category = "BS Device Pair Sensor Configuration")
+    FBS_DevicePairDeviceSensorConfigurationCallback OnDeviceSensorConfiguration;
+
+private:
+    UFUNCTION()
+    void OnDeviceSensorConfigurationUpdate(UBS_Device *Device, const UBS_SensorConfiguration *SensorConfiguration) { OnDeviceSensorConfiguration.Broadcast(this, Device->InsoleSide(), Device, SensorConfiguration); }
 
     // SENSOR CONFIGURATION END
 

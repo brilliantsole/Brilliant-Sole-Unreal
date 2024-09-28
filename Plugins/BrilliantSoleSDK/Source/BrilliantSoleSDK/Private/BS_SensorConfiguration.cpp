@@ -112,7 +112,7 @@ void UBS_SensorConfiguration::ClearSensorRate(EBS_SensorType SensorType)
     {
         return;
     }
-    SensorRates.Add(SensorType, EBS_SensorRate::Value0);
+    SensorRates[SensorType] = EBS_SensorRate::Value0;
 }
 
 void UBS_SensorConfiguration::ToggleSensorRate(EBS_SensorType SensorType, EBS_SensorRate SensorRate, EBS_SensorRate &UpdatedSensorRate)

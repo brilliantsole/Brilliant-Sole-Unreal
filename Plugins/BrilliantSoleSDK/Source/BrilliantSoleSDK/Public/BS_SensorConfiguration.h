@@ -7,7 +7,7 @@
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_SensorConfiguration, Verbose, All);
 
-UCLASS()
+UCLASS(Blueprintable)
 class BRILLIANTSOLESDK_API UBS_SensorConfiguration : public UObject
 {
     GENERATED_BODY()

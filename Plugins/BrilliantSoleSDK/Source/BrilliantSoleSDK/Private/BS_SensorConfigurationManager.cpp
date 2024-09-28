@@ -10,6 +10,7 @@ UBS_SensorConfigurationManager::UBS_SensorConfigurationManager()
 {
     SensorConfiguration = CreateDefaultSubobject<UBS_SensorConfiguration>(TEXT("SensorConfiguration"));
     TempSensorConfiguration = CreateDefaultSubobject<UBS_SensorConfiguration>(TEXT("TempSensorConfiguration"));
+    TempSensorConfiguration2 = CreateDefaultSubobject<UBS_SensorConfiguration>(TEXT("TempSensorConfiguration2"));
 }
 
 bool UBS_SensorConfigurationManager::OnRxMessage(EBS_TxRxMessage MessageType, const TArray<uint8> &Message)
@@ -39,15 +40,29 @@ void UBS_SensorConfigurationManager::ParseSensorConfiguration(const TArray<uint8
     OnSensorConfigurationUpdate.ExecuteIfBound(SensorConfiguration);
 }
 
-void UBS_SensorConfigurationManager::SetSensorConfiguration(const UBS_SensorConfiguration *NewSensorConfiguration)
+void UBS_SensorConfigurationManager::SetSensorConfiguration(const UBS_SensorConfiguration *NewSensorConfiguration, bool bClearRest)
 {
     if (SensorConfiguration->IsEqualTo(NewSensorConfiguration))
     {
         UE_LOGFMT(LogBS_SensorConfigurationManager, Verbose, "SensorConfigurations are equal - not updating");
         return;
     }
+    TempSensorConfiguration2->Copy(NewSensorConfiguration);
+    if (bClearRest)
+    {
+        const TArray<EBS_SensorType> &SensorTypes = SensorConfiguration->GetSensorTypes();
+        const TMap<EBS_SensorType, EBS_SensorRate> &SensorRates = SensorConfiguration->GetSensorRates();
+        const TMap<EBS_SensorType, EBS_SensorRate> &NewSensorRates = TempSensorConfiguration2->GetSensorRates();
+        for (const TPair<EBS_SensorType, EBS_SensorRate> &Pair : SensorRates)
+        {
+            if (!NewSensorRates.Contains(Pair.Key))
+            {
+                TempSensorConfiguration2->ClearSensorRate(Pair.Key);
+            }
+        }
+    }
     UE_LOGFMT(LogBS_SensorConfigurationManager, Verbose, "Setting SensorConfiguration...");
-    const TArray<uint8> TxMessage = NewSensorConfiguration->ToArray();
+    const TArray<uint8> TxMessage = TempSensorConfiguration2->ToArray();
     SendTxMessages.ExecuteIfBound({{EBS_TxRxMessage::SET_SENSOR_CONFIGURATION, TxMessage}}, true);
 }
 

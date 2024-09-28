@@ -27,7 +27,7 @@ public:
 	const UBS_SensorConfiguration *GetSensorConfiguration() { return SensorConfiguration; }
 	FBS_SensorConfigurationCallbackLocal OnSensorConfigurationUpdate;
 
-	void SetSensorConfiguration(const UBS_SensorConfiguration *NewSensorConfiguration);
+	void SetSensorConfiguration(const UBS_SensorConfiguration *NewSensorConfiguration, bool bClearRest = false);
 	void ClearSensorConfiguration();
 
 	EBS_SensorRate GetSensorRate(EBS_SensorType SensorType, bool &bContainsSensorType) const { return SensorConfiguration->GetSensorRate(SensorType, bContainsSensorType); }
@@ -47,4 +47,6 @@ private:
 	UBS_SensorConfiguration *SensorConfiguration;
 	UPROPERTY()
 	UBS_SensorConfiguration *TempSensorConfiguration;
+	UPROPERTY()
+	UBS_SensorConfiguration *TempSensorConfiguration2;
 };
