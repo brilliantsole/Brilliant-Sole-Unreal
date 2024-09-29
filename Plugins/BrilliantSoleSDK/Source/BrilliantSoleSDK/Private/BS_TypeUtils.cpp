@@ -4,10 +4,10 @@
 
 DEFINE_LOG_CATEGORY(LogBS_TypeUtils);
 
-#define ENUM_CONVERSION(EnumValue)                                                     \
-    case EBS_DeviceEvent::EnumValue:                                                   \
-        UE_LOGFMT(LogBS_TypeUtils, Log, "Converting DeviceEventType {0}", #EnumValue); \
-        TxRxMessageType = EBS_TxRxMessage::EnumValue;                                  \
+#define ENUM_CONVERSION(EnumValue)                                                         \
+    case EBS_DeviceEvent::EnumValue:                                                       \
+        UE_LOGFMT(LogBS_TypeUtils, Verbose, "Converting DeviceEventType {0}", #EnumValue); \
+        TxRxMessageType = EBS_TxRxMessage::EnumValue;                                      \
         break;
 
 bool BS_TypeUtils::ConvertDeviceEventTypeToTxRxMessageType(EBS_DeviceEvent DeviceEventType, EBS_TxRxMessage &TxRxMessageType)
@@ -64,7 +64,7 @@ bool BS_TypeUtils::ConvertDeviceEventTypeToTxRxMessageType(EBS_DeviceEvent Devic
         ENUM_CONVERSION(TFLITE_INFERENCE)
 
     default:
-        UE_LOGFMT(LogBS_TypeUtils, Log, "Uncaught DeviceEventType {0}", static_cast<uint8>(DeviceEventType));
+        UE_LOGFMT(LogBS_TypeUtils, Verbose, "Uncaught DeviceEventType {0}", static_cast<uint8>(DeviceEventType));
         return false;
     }
     return true;

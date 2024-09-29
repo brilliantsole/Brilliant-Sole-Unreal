@@ -8,7 +8,7 @@
 #include "BS_InformationMessageType.h"
 #include "BS_InformationManager.generated.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogBS_InformationManager, Verbose, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_InformationManager, Log, All);
 
 UCLASS()
 class UBS_InformationManager : public UBS_BaseManager

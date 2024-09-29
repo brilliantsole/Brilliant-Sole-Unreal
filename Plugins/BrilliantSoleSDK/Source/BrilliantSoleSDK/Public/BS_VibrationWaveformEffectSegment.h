@@ -6,7 +6,7 @@
 #include "BS_VibrationWaveformEffect.h"
 #include "BS_VibrationWaveformEffectSegment.generated.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(BS_VibrationWaveformEffectSegment, Verbose, All);
+DECLARE_LOG_CATEGORY_EXTERN(BS_VibrationWaveformEffectSegment, Log, All);
 
 UENUM()
 enum class EBS_VibrationWaveformEffectSegmentType

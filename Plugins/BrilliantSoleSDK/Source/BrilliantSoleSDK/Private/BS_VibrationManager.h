@@ -8,7 +8,7 @@
 #include "BS_VibrationMessageType.h"
 #include "BS_VibrationManager.generated.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogBS_VibrationManager, Verbose, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_VibrationManager, Log, All);
 
 UCLASS()
 class UBS_VibrationManager : public UBS_BaseManager

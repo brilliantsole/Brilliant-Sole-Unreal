@@ -10,7 +10,7 @@
 #include "BS_Device.h"
 #include "BS_ParseUtils.generated.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogBS_ParseUtils, Verbose, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_ParseUtils, Log, All);
 
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FBS_MessageCallback, uint8, MessageType, const TArray<uint8> &, Message);
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FBS_UDP_MessageCallback, EBS_UDP_MessageType, MessageType, const TArray<uint8> &, Message);

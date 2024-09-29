@@ -7,7 +7,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "UDP_Utils.generated.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogUDP_Utils, Verbose, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogUDP_Utils, Log, All);
 
 UCLASS()
 class UUDP_Utils : public UBlueprintFunctionLibrary

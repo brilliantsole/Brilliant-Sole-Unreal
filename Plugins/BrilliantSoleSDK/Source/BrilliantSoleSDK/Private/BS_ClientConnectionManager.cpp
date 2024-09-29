@@ -115,18 +115,18 @@ void UBS_ClientConnectionManager::SendTxData_Implementation(const TArray<uint8> 
 
 void UBS_ClientConnectionManager::OnDeviceEvent(UBS_Device *Device, EBS_DeviceEvent DeviceEventType, const TArray<uint8> &Message)
 {
-    UE_LOGFMT(LogBS_ClientConnectionManager, Log, "Message {0} ({1} Bytes) for \"{2}\"", static_cast<uint8>(DeviceEventType), Message.Num(), Device->Name());
+    UE_LOGFMT(LogBS_ClientConnectionManager, Verbose, "Message {0} ({1} Bytes) for \"{2}\"", static_cast<uint8>(DeviceEventType), Message.Num(), Device->Name());
     switch (DeviceEventType)
     {
     case EBS_DeviceEvent::IS_CONNECTED:
     {
-        UE_LOGFMT(LogBS_ClientConnectionManager, Log, "Received IsConnected Message");
+        UE_LOGFMT(LogBS_ClientConnectionManager, Verbose, "Received IsConnected Message");
         bool bNewIsConnected = static_cast<bool>(Message[0]);
         SetIsConnected(bNewIsConnected);
     }
     break;
     case EBS_DeviceEvent::RX:
-        UE_LOGFMT(LogBS_ClientConnectionManager, Log, "Received Rx Message");
+        UE_LOGFMT(LogBS_ClientConnectionManager, Verbose, "Received Rx Message");
         ParseRxData(Message);
         break;
 
@@ -157,12 +157,12 @@ void UBS_ClientConnectionManager::OnDeviceEvent(UBS_Device *Device, EBS_DeviceEv
         break;
 
     default:
-        UE_LOGFMT(LogBS_ClientConnectionManager, Log, "miscellaneous message {0}", static_cast<uint8>(DeviceEventType));
+        UE_LOGFMT(LogBS_ClientConnectionManager, Verbose, "miscellaneous message {0}", static_cast<uint8>(DeviceEventType));
 
         EBS_TxRxMessage TxRxMessage = static_cast<EBS_TxRxMessage>(0);
         if (BS_TypeUtils::ConvertDeviceEventTypeToTxRxMessageType(DeviceEventType, TxRxMessage))
         {
-            UE_LOGFMT(LogBS_ClientConnectionManager, Log, "TxRxMessage message {0}", static_cast<uint8>(DeviceEventType));
+            UE_LOGFMT(LogBS_ClientConnectionManager, Verbose, "TxRxMessage message {0}", static_cast<uint8>(DeviceEventType));
             OnRxMessage.Broadcast(this, TxRxMessage, static_cast<TArray<uint8>>(Message));
             OnRxMessages.Broadcast(this);
         }

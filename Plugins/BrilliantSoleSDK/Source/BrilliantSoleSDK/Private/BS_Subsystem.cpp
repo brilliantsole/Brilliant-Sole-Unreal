@@ -93,7 +93,7 @@ UObject *UBS_Subsystem::GetBleManager()
         UFunction *InitalizeFunction = BleManagerSingleton->FindFunction(MethodName);
         if (InitalizeFunction)
         {
-            UE_LOGFMT(LogBS_Subsystem, Log, "Assigning DeviceManagerSingleton to BleManagerSingleton...");
+            UE_LOGFMT(LogBS_Subsystem, Verbose, "Assigning DeviceManagerSingleton to BleManagerSingleton...");
             BleManagerSingleton->ProcessEvent(InitalizeFunction, &DeviceManagerSingleton);
         }
         else

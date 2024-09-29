@@ -11,7 +11,7 @@
 #include "BS_TxRxMessageType.h"
 #include "BS_BaseConnectionManager.generated.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogBS_BaseConnectionManager, Verbose, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_BaseConnectionManager, Log, All);
 
 UCLASS(Abstract, BlueprintType, Blueprintable)
 class UBS_BaseConnectionManager : public UObject

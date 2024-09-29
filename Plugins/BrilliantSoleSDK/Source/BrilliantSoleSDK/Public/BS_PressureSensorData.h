@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "BS_PressureSensorData.generated.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogBS_PressureSensorData, Verbose, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_PressureSensorData, Log, All);
 
 USTRUCT(BlueprintType, meta = (ShowOnlyInnerProperties, FullyExpand = "true"))
 struct FBS_PressureSensorData

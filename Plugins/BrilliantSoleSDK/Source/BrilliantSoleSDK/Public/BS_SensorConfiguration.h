@@ -5,7 +5,7 @@
 #include "BS_SensorRate.h"
 #include "BS_SensorConfiguration.generated.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogBS_SensorConfiguration, Verbose, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_SensorConfiguration, Log, All);
 
 UCLASS(Blueprintable)
 class BRILLIANTSOLESDK_API UBS_SensorConfiguration : public UObject

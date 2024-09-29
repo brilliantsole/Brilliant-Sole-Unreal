@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "Logging/StructuredLog.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogBS_TimeUtils, Verbose, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_TimeUtils, Log, All);
 
 class TimeUtils
 {

@@ -15,7 +15,7 @@
 #include "BS_Subsystem.h"
 #include "BS_BaseClient.generated.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogBS_BaseClient, Verbose, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_BaseClient, Log, All);
 
 UCLASS(Abstract, BlueprintType, Blueprintable)
 class UBS_BaseClient : public UObject
@@ -170,7 +170,7 @@ protected:
     UFUNCTION(BlueprintCallable, Category = "BS Client")
     void AddDevice(FString BluetoothId, UBS_Device *Device)
     {
-        UE_LOGFMT(LogTemp, Log, "Adding Device for BluetoothId {0}", BluetoothId);
+        // UE_LOGFMT(LogTemp, Verbose, "Adding Device for BluetoothId {0}", BluetoothId);
         Devices.Add(BluetoothId, Device);
     }
 

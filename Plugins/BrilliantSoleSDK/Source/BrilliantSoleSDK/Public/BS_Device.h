@@ -21,7 +21,7 @@
 #include "BS_BaseConnectionManager.h"
 #include "BS_Device.generated.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogBS_Device, Verbose, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_Device, Log, All);
 
 UCLASS(Abstract, BlueprintType, Blueprintable)
 class UBS_Device : public UObject

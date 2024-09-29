@@ -9,7 +9,7 @@
 #include "BS_VibrationWaveformEffectSegment.h"
 #include "BS_VibrationConfiguration.generated.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogBS_VibrationConfiguration, Verbose, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_VibrationConfiguration, Log, All);
 
 USTRUCT(BlueprintType, meta = (ShowOnlyInnerProperties, FullyExpand = "true"))
 struct FBS_VibrationConfiguration

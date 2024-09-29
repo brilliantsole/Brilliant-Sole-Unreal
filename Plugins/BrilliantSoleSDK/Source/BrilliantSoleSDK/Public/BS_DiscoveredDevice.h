@@ -31,7 +31,7 @@ public:
     bool Parse(const TArray<uint8> &Message)
     {
         const FString DiscoveredDeviceString = BS_ByteParser::GetString(Message, true);
-        UE_LOGFMT(LogTemp, Log, "DiscoveredDeviceString: {0}", DiscoveredDeviceString);
+        UE_LOGFMT(LogTemp, Verbose, "DiscoveredDeviceString: {0}", DiscoveredDeviceString);
 
         TSharedPtr<FJsonObject> DiscoveredDeviceJson;
         TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(DiscoveredDeviceString);
@@ -56,7 +56,7 @@ public:
                 return false;
             }
 
-            UE_LOGFMT(LogTemp, Log, "Name: {0}, BluetoothId: {1}, RSSI: {2}, DeviceType: {3}", Name, BluetoothId, RSSI, UEnum::GetValueAsString(DeviceType));
+            UE_LOGFMT(LogTemp, Verbose, "Name: {0}, BluetoothId: {1}, RSSI: {2}, DeviceType: {3}", Name, BluetoothId, RSSI, UEnum::GetValueAsString(DeviceType));
         }
         else
         {

@@ -169,7 +169,7 @@ void UBS_BaseClient::OnMessage(EBS_ServerMessage MessageType, const TArray<uint8
 
 void UBS_BaseClient::OnData(const TArray<uint8> &Data)
 {
-    UE_LOGFMT(LogBS_BaseClient, Log, "Parsing {0} Bytes...", Data.Num());
+    UE_LOGFMT(LogBS_BaseClient, Verbose, "Parsing {0} Bytes...", Data.Num());
     UBS_ParseUtils::ParseServerData(Data, BoundOnMessage);
 }
 
@@ -286,7 +286,7 @@ void UBS_BaseClient::ToggleScan()
 // DISCOVERED DEVICES START
 void UBS_BaseClient::ParseDiscoveredDevice(const TArray<uint8> &Message)
 {
-    UE_LOGFMT(LogBS_BaseClient, Log, "Parsing Discovered Device ({0} bytes)...", Message.Num());
+    UE_LOGFMT(LogBS_BaseClient, Verbose, "Parsing Discovered Device ({0} bytes)...", Message.Num());
 
     FBS_DiscoveredDevice DiscoveredDevice;
     if (DiscoveredDevice.Parse(Message))
@@ -301,9 +301,9 @@ void UBS_BaseClient::ParseDiscoveredDevice(const TArray<uint8> &Message)
 }
 void UBS_BaseClient::ParseExpiredDiscoveredDevice(const TArray<uint8> &Message)
 {
-    UE_LOGFMT(LogBS_BaseClient, Log, "Parsing Expired Discovered Device ({0} bytes)...", Message.Num());
+    UE_LOGFMT(LogBS_BaseClient, Verbose, "Parsing Expired Discovered Device ({0} bytes)...", Message.Num());
     const FString BluetoothId = BS_ByteParser::GetString(Message, true);
-    UE_LOGFMT(LogBS_BaseClient, Log, "Expired Discovered Device for BluetoothId: {0}", BluetoothId);
+    UE_LOGFMT(LogBS_BaseClient, Verbose, "Expired Discovered Device for BluetoothId: {0}", BluetoothId);
     if (!DiscoveredDevices.Contains(BluetoothId))
     {
         UE_LOGFMT(LogBS_BaseClient, Error, "No DiscoveredDevice found with BluetoothId {0}", BluetoothId);
@@ -401,9 +401,9 @@ UBS_Device *UBS_BaseClient::GetDeviceByBluetoothId(const FString &BluetoothId)
 }
 void UBS_BaseClient::ParseConnectedDevices(const TArray<uint8> &Message)
 {
-    UE_LOGFMT(LogBS_BaseClient, Log, "Parsing Connected Devices ({0} bytes)...", Message.Num());
+    UE_LOGFMT(LogBS_BaseClient, Verbose, "Parsing Connected Devices ({0} bytes)...", Message.Num());
     const FString ConnectedDeviceBluetoothIdsString = BS_ByteParser::GetString(Message, true);
-    UE_LOGFMT(LogBS_BaseClient, Log, "ConnectedDeviceBluetoothIdsString: {0}", ConnectedDeviceBluetoothIdsString);
+    UE_LOGFMT(LogBS_BaseClient, Verbose, "ConnectedDeviceBluetoothIdsString: {0}", ConnectedDeviceBluetoothIdsString);
 
     TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(ConnectedDeviceBluetoothIdsString);
     TArray<TSharedPtr<FJsonValue>> ConnectedDeviceBluetoothIds;
@@ -435,25 +435,25 @@ void UBS_BaseClient::ParseConnectedDevices(const TArray<uint8> &Message)
 // DEVICE MESSAGE START
 void UBS_BaseClient::SendConnectToDeviceMessage(const FBS_DiscoveredDevice &DiscoveredDevice, bool bSendImmediately)
 {
-    UE_LOGFMT(LogBS_BaseClient, Log, "Requesting connection to {0}...", DiscoveredDevice.BluetoothId);
+    UE_LOGFMT(LogBS_BaseClient, Verbose, "Requesting connection to {0}...", DiscoveredDevice.BluetoothId);
     const TArray<uint8> TxMessage = BS_ByteParser::StringToArray(DiscoveredDevice.BluetoothId, true);
     SendMessages({{EBS_ServerMessage::CONNECT_TO_DEVICE, TxMessage}});
 }
 void UBS_BaseClient::SendDisconnectFromDeviceMessage(const FBS_DiscoveredDevice &DiscoveredDevice, bool bSendImmediately)
 {
-    UE_LOGFMT(LogBS_BaseClient, Log, "Requesting disconnection from {0}...", DiscoveredDevice.BluetoothId);
+    UE_LOGFMT(LogBS_BaseClient, Verbose, "Requesting disconnection from {0}...", DiscoveredDevice.BluetoothId);
     const TArray<uint8> TxMessage = BS_ByteParser::StringToArray(DiscoveredDevice.BluetoothId, true);
     SendMessages({{EBS_ServerMessage::DISCONNECT_FROM_DEVICE, TxMessage}});
 }
 void UBS_BaseClient::SendDeviceMessages(const FBS_DiscoveredDevice &DiscoveredDevice, const TArray<FBS_ConnectionMessage> &Messages, bool bSendImmediately)
 {
-    UE_LOGFMT(LogBS_BaseClient, Log, "Sending {0} messages to {1}...", Messages.Num(), DiscoveredDevice.BluetoothId);
+    UE_LOGFMT(LogBS_BaseClient, Verbose, "Sending {0} messages to {1}...", Messages.Num(), DiscoveredDevice.BluetoothId);
     TArray<uint8> MessageData;
     MessageData.Append(BS_ByteParser::StringToArray(DiscoveredDevice.BluetoothId, true));
 
     for (const FBS_ConnectionMessage &Message : Messages)
     {
-        UE_LOGFMT(LogBS_BaseClient, Log, "Appending {0} ({1} bytes) to message", static_cast<uint8>(Message.Type), Message.DataNum());
+        UE_LOGFMT(LogBS_BaseClient, Verbose, "Appending {0} ({1} bytes) to message", static_cast<uint8>(Message.Type), Message.DataNum());
         Message.AppendTo(MessageData);
     }
 
@@ -464,12 +464,12 @@ void UBS_BaseClient::ParseDeviceMessage(const TArray<uint8> &Message)
 {
     const uint16 MessageLength = Message.Num();
 
-    UE_LOGFMT(LogBS_BaseClient, Log, "Parsing Device Message ({0} bytes)...", MessageLength);
+    UE_LOGFMT(LogBS_BaseClient, Verbose, "Parsing Device Message ({0} bytes)...", MessageLength);
     uint8 Offset = 0;
     const FString BluetoothId = BS_ByteParser::GetString(Message, true);
     Offset += 1 + BluetoothId.Len();
 
-    UE_LOGFMT(LogBS_BaseClient, Log, "Received Device Message for BluetoothId: {0}", BluetoothId);
+    UE_LOGFMT(LogBS_BaseClient, Verbose, "Received Device Message for BluetoothId: {0}", BluetoothId);
     if (!Devices.Contains(BluetoothId))
     {
         UE_LOGFMT(LogBS_BaseClient, Error, "No Device found with BluetoothId {0}", BluetoothId);
@@ -481,7 +481,7 @@ void UBS_BaseClient::ParseDeviceMessage(const TArray<uint8> &Message)
     const uint16 MessageDataLength = MessageLength - Offset;
     const TArrayView<uint8> MessageData((uint8 *)(Message.GetData() + Offset), MessageDataLength);
 
-    UE_LOGFMT(LogBS_BaseClient, Log, "Parsing {0} Bytes for Device...", MessageDataLength);
+    UE_LOGFMT(LogBS_BaseClient, Verbose, "Parsing {0} Bytes for Device...", MessageDataLength);
     UBS_ClientConnectionManager *ConnectionManager = Cast<UBS_ClientConnectionManager>(Device->GetConnectionManager());
     if (!ConnectionManager)
     {

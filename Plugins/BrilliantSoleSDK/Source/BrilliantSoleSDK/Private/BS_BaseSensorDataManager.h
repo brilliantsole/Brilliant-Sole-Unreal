@@ -7,7 +7,7 @@
 #include "BS_SensorType.h"
 #include "BS_BaseSensorDataManager.generated.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogBS_BaseSensorDataManager, Verbose, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_BaseSensorDataManager, Log, All);
 
 UCLASS(Abstract)
 class UBS_BaseSensorDataManager : public UObject

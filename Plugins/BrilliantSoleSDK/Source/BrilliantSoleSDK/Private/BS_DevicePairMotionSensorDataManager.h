@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "BS_DevicePairMotionSensorDataManager.generated.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogBS_DevicePairMotionSensorDataManager, Verbose, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_DevicePairMotionSensorDataManager, Log, All);
 
 UCLASS()
 class UBS_DevicePairMotionSensorDataManager : public UObject

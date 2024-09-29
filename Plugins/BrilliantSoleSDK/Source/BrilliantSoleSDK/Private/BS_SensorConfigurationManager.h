@@ -8,7 +8,7 @@
 #include "BS_SensorConfigurationMessageType.h"
 #include "BS_SensorConfigurationManager.generated.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogBS_SensorConfigurationManager, Verbose, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_SensorConfigurationManager, Log, All);
 
 DECLARE_DELEGATE_OneParam(FBS_SensorConfigurationCallbackLocal, const UBS_SensorConfiguration *);
 

@@ -11,7 +11,7 @@
 #include "BS_TfliteMessageType.h"
 #include "BS_TfliteManager.generated.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogBS_TfliteManager, Verbose, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_TfliteManager, Log, All);
 
 UCLASS()
 class UBS_TfliteManager : public UBS_BaseManager

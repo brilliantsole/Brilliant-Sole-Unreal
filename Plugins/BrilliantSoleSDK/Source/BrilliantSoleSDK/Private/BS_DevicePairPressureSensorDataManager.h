@@ -9,7 +9,7 @@
 #include "BS_CenterOfPressureRange.h"
 #include "BS_DevicePairPressureSensorDataManager.generated.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogBS_DevicePairPressureSensorDataManager, Verbose, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_DevicePairPressureSensorDataManager, Log, All);
 
 DECLARE_DELEGATE_TwoParams(FBS_DevicePairPressureDataCallbackLocal, const FBS_DevicePairPressureData &, const int64 &);
 

@@ -7,7 +7,7 @@
 #include "BS_TxMessage.h"
 #include "BS_BaseManager.generated.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogBS_BaseManager, Verbose, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_BaseManager, Log, All);
 
 DECLARE_DELEGATE_TwoParams(FSendTxMessagesDelegate, const TArray<FBS_TxMessage> &, bool);
 

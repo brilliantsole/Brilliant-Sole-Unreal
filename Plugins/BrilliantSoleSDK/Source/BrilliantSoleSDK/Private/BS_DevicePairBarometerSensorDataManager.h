@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "BS_DevicePairBarometerSensorDataManager.generated.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogBS_DevicePairBarometerSensorDataManager, Verbose, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_DevicePairBarometerSensorDataManager, Log, All);
 
 UCLASS()
 class UBS_DevicePairBarometerSensorDataManager : public UObject

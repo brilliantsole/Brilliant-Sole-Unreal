@@ -6,7 +6,7 @@
 #include "Logging/StructuredLog.h"
 #include "BS_Range.generated.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogBS_Range, Verbose, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_Range, Log, All);
 
 USTRUCT()
 struct FBS_Range

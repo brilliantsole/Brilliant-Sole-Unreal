@@ -6,7 +6,7 @@
 #include "BS_BaseSensorDataManager.h"
 #include "BS_BarometerSensorDataManager.generated.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogBS_BarometerSensorDataManager, Verbose, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_BarometerSensorDataManager, Log, All);
 
 DECLARE_DELEGATE_TwoParams(FBS_BarometerCallbackLocal, const float &, const uint64 &);
 
