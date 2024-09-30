@@ -27,9 +27,13 @@
     <true />
     <key>UIViewControllerBasedStatusBarAppearance</key>
     <false />
+    <key>UIInterfaceOrientation</key>
+    <string>UIInterfaceOrientationLandscapeLeft</string>
     <key>UISupportedInterfaceOrientations</key>
     <array>
       <string>UIInterfaceOrientationPortrait</string>
+      <string>UIInterfaceOrientationLandscapeLeft</string>
+      <string>UIInterfaceOrientationLandscapeRight</string>
     </array>
     <key>UIRequiredDeviceCapabilities</key>
     <array>
