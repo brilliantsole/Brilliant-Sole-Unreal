@@ -49,7 +49,7 @@ void UBS_PressureSensorDataManager::ParsePressure(EBS_SensorType SensorType, con
     {
         const FVector2D &Position = PressurePositions[Index];
 
-        const uint16 RawValue = BS_ByteParser::ParseAs<uint16>(Message, Index * 2);
+        const uint16 RawValue = BS_ByteParser::ParseAs<uint16>(Message, Index * 2, true);
         UE_LOGFMT(LogBS_PressureSensorDataManager, Verbose, "RawPressureValue #{0}: {1}", Index, RawValue);
 
         const float ScaledValue = static_cast<float>(RawValue) * Scalar;

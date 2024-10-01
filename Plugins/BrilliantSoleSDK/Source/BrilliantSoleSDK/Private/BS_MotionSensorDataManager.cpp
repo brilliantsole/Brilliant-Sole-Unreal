@@ -85,8 +85,6 @@ void UBS_MotionSensorDataManager::ParseRotator(EBS_SensorType SensorType, const 
     const int16 Pitch = BS_ByteParser::ParseAs<int16>(Message, 2, true);
     const int16 Roll = BS_ByteParser::ParseAs<int16>(Message, 4, true);
 
-    UE_LOGFMT(LogBS_MotionSensorDataManager, Verbose, "Pitch1: {0}, Pitch2: {1}", Message[2], Message[3]);
-
     UE_LOGFMT(LogBS_MotionSensorDataManager, Verbose, "Yaw: {0}, Pitch: {1}, Roll: {2}", Yaw, Pitch, Roll);
 
     FRotator Rotator(-Pitch, Yaw, -Roll);

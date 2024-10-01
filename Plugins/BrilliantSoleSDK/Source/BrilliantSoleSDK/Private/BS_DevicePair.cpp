@@ -269,19 +269,19 @@ void UBS_DevicePair::RemoveDeviceListeners(UBS_Device *Device)
     Device->OnConnectionStatusUpdate.RemoveDynamic(this, &UBS_DevicePair::_OnDeviceConnectionStatusUpdate);
     Device->OnIsConnectedUpdate.RemoveDynamic(this, &UBS_DevicePair::_OnDeviceIsConnectedUpdate);
 
-    Device->OnAcceleration.AddDynamic(this, &UBS_DevicePair::OnDeviceAccelerationUpdate);
-    Device->OnGravity.AddDynamic(this, &UBS_DevicePair::OnDeviceGravityUpdate);
-    Device->OnLinearAcceleration.AddDynamic(this, &UBS_DevicePair::OnDeviceLinearAccelerationUpdate);
-    Device->OnGyroscope.AddDynamic(this, &UBS_DevicePair::OnDeviceGyroscopeUpdate);
-    Device->OnMagnetometer.AddDynamic(this, &UBS_DevicePair::OnDeviceMagnetometerUpdate);
-    Device->OnGameRotation.AddDynamic(this, &UBS_DevicePair::OnDeviceGameRotationUpdate);
-    Device->OnRotation.AddDynamic(this, &UBS_DevicePair::OnDeviceRotationUpdate);
+    Device->OnAcceleration.RemoveDynamic(this, &UBS_DevicePair::OnDeviceAccelerationUpdate);
+    Device->OnGravity.RemoveDynamic(this, &UBS_DevicePair::OnDeviceGravityUpdate);
+    Device->OnLinearAcceleration.RemoveDynamic(this, &UBS_DevicePair::OnDeviceLinearAccelerationUpdate);
+    Device->OnGyroscope.RemoveDynamic(this, &UBS_DevicePair::OnDeviceGyroscopeUpdate);
+    Device->OnMagnetometer.RemoveDynamic(this, &UBS_DevicePair::OnDeviceMagnetometerUpdate);
+    Device->OnGameRotation.RemoveDynamic(this, &UBS_DevicePair::OnDeviceGameRotationUpdate);
+    Device->OnRotation.RemoveDynamic(this, &UBS_DevicePair::OnDeviceRotationUpdate);
 
-    Device->OnOrientation.AddDynamic(this, &UBS_DevicePair::OnDeviceOrientationUpdate);
-    Device->OnActivity.AddDynamic(this, &UBS_DevicePair::OnDeviceActivityUpdate);
-    Device->OnStepCount.AddDynamic(this, &UBS_DevicePair::OnDeviceStepCountUpdate);
-    Device->OnStepDetection.AddDynamic(this, &UBS_DevicePair::OnDeviceStepDetectionUpdate);
-    Device->OnDeviceOrientation.AddDynamic(this, &UBS_DevicePair::OnDeviceDeviceOrientationUpdate);
+    Device->OnOrientation.RemoveDynamic(this, &UBS_DevicePair::OnDeviceOrientationUpdate);
+    Device->OnActivity.RemoveDynamic(this, &UBS_DevicePair::OnDeviceActivityUpdate);
+    Device->OnStepCount.RemoveDynamic(this, &UBS_DevicePair::OnDeviceStepCountUpdate);
+    Device->OnStepDetection.RemoveDynamic(this, &UBS_DevicePair::OnDeviceStepDetectionUpdate);
+    Device->OnDeviceOrientation.RemoveDynamic(this, &UBS_DevicePair::OnDeviceDeviceOrientationUpdate);
 
     Device->OnBarometer.RemoveDynamic(this, &UBS_DevicePair::OnDeviceBarometerUpdate);
 
