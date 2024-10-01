@@ -8,7 +8,7 @@
 
 DEFINE_LOG_CATEGORY(LogBS_FileTransferManager);
 
-bool UBS_FileTransferManager::OnRxMessage(EBS_TxRxMessage MessageType, const TArray<uint8> &Message)
+bool UBS_FileTransferManager::OnRxMessage(EBS_TxRxMessage MessageType, const TArrayView<const uint8> &Message)
 {
     switch (MessageType)
     {
@@ -60,7 +60,7 @@ void UBS_FileTransferManager::Reset()
 }
 
 // MAX FILE LENGTH START
-void UBS_FileTransferManager::ParseMaxFileLength(const TArray<uint8> &Message)
+void UBS_FileTransferManager::ParseMaxFileLength(const TArrayView<const uint8> &Message)
 {
     UE_LOGFMT(LogBS_FileTransferManager, Verbose, "Parsing MaxFileLength...");
     MaxFileLength = BS_ByteParser::ParseAs<uint32>(Message, 0, true);
@@ -70,7 +70,7 @@ void UBS_FileTransferManager::ParseMaxFileLength(const TArray<uint8> &Message)
 // MAX FILE LENGTH END
 
 // FILE TRANSFER TYPE START
-void UBS_FileTransferManager::ParseFileType(const TArray<uint8> &Message)
+void UBS_FileTransferManager::ParseFileType(const TArrayView<const uint8> &Message)
 {
     FileType = static_cast<EBS_FileType>(Message[0]);
     UE_LOGFMT(LogBS_FileTransferManager, Verbose, "Parsed FileType: {0}", UEnum::GetValueAsString(FileType));
@@ -92,7 +92,7 @@ void UBS_FileTransferManager::SetFileType(const EBS_FileType NewFileType, bool b
 // FILE TRANSFER TYPE END
 
 // FILE LENGTH START
-void UBS_FileTransferManager::ParseFileLength(const TArray<uint8> &Message)
+void UBS_FileTransferManager::ParseFileLength(const TArrayView<const uint8> &Message)
 {
     UE_LOGFMT(LogBS_FileTransferManager, Verbose, "Parsing FileLength...");
     FileLength = BS_ByteParser::ParseAs<uint32>(Message, 0, true);
@@ -119,7 +119,7 @@ void UBS_FileTransferManager::SetFileLength(const uint32 NewFileLength, bool bSe
 // FILE LENGTH END
 
 // FILE CHECKSUM START
-void UBS_FileTransferManager::ParseFileChecksum(const TArray<uint8> &Message)
+void UBS_FileTransferManager::ParseFileChecksum(const TArrayView<const uint8> &Message)
 {
     UE_LOGFMT(LogBS_FileTransferManager, Verbose, "Parsing FileChecksum...");
     FileChecksum = BS_ByteParser::ParseAs<uint32>(Message, 0, true);
@@ -151,7 +151,7 @@ void UBS_FileTransferManager::SetFileTransferCommand(const EBS_FileTransferComma
 // FILE TRANSFER COMMAND END
 
 // FILE TRANSFER STATUS START
-void UBS_FileTransferManager::ParseFileTransferStatus(const TArray<uint8> &Message)
+void UBS_FileTransferManager::ParseFileTransferStatus(const TArrayView<const uint8> &Message)
 {
     FileTransferStatus = static_cast<EBS_FileTransferStatus>(Message[0]);
     UE_LOGFMT(LogBS_FileTransferManager, Verbose, "Parsed FileTransferStatus: {0}", UEnum::GetValueAsString(FileTransferStatus));
@@ -259,7 +259,7 @@ void UBS_FileTransferManager::SendFileBlock(bool bSendImmediately)
 
     SendTxMessages.ExecuteIfBound({{EBS_TxRxMessage::SET_FILE_TRANSFER_BLOCK, FileBlockToSend}}, bSendImmediately);
 }
-void UBS_FileTransferManager::ParseFileTransferBlock(const TArray<uint8> &Message)
+void UBS_FileTransferManager::ParseFileTransferBlock(const TArrayView<const uint8> &Message)
 {
     if (FileTransferStatus != EBS_FileTransferStatus::RECEIVING)
     {
@@ -302,7 +302,7 @@ void UBS_FileTransferManager::ParseFileTransferBlock(const TArray<uint8> &Messag
         SendTxMessages.ExecuteIfBound({{EBS_TxRxMessage::FILE_BYTES_TRANSFERRED, TxMessage}}, true); // TODO: try setting to "false", since it'll be picked up UBS_Device::OnRxMessages
     }
 }
-void UBS_FileTransferManager::ParseFileBytesTransferred(const TArray<uint8> &Message)
+void UBS_FileTransferManager::ParseFileBytesTransferred(const TArrayView<const uint8> &Message)
 {
     if (FileTransferStatus != EBS_FileTransferStatus::SENDING)
     {

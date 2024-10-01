@@ -13,7 +13,7 @@ UBS_SensorConfigurationManager::UBS_SensorConfigurationManager()
     TempSensorConfiguration2 = CreateDefaultSubobject<UBS_SensorConfiguration>(TEXT("TempSensorConfiguration2"));
 }
 
-bool UBS_SensorConfigurationManager::OnRxMessage(EBS_TxRxMessage MessageType, const TArray<uint8> &Message)
+bool UBS_SensorConfigurationManager::OnRxMessage(EBS_TxRxMessage MessageType, const TArrayView<const uint8> &Message)
 {
     switch (MessageType)
     {
@@ -33,7 +33,7 @@ void UBS_SensorConfigurationManager::Reset()
     SensorConfiguration->Reset();
 }
 
-void UBS_SensorConfigurationManager::ParseSensorConfiguration(const TArray<uint8> &Message)
+void UBS_SensorConfigurationManager::ParseSensorConfiguration(const TArrayView<const uint8> &Message)
 {
     UE_LOGFMT(LogBS_SensorConfigurationManager, Verbose, "Parsing SensorConfiguration...");
     SensorConfiguration->Parse(Message);

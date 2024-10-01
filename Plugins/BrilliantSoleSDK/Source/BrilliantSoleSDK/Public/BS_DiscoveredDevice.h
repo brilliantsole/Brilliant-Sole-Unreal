@@ -28,7 +28,7 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "BS Discovered Device")
     int32 RSSI;
 
-    bool Parse(const TArray<uint8> &Message)
+    bool Parse(const TArrayView<const uint8> &Message)
     {
         const FString DiscoveredDeviceString = BS_ByteParser::GetString(Message, true);
         UE_LOGFMT(LogTemp, Verbose, "DiscoveredDeviceString: {0}", DiscoveredDeviceString);

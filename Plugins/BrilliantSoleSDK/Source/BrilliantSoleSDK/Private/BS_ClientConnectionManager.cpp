@@ -113,7 +113,7 @@ void UBS_ClientConnectionManager::SendTxData_Implementation(const TArray<uint8> 
     OnSendTxMessage.Broadcast(this);
 }
 
-void UBS_ClientConnectionManager::OnDeviceEvent(UBS_Device *Device, EBS_DeviceEvent DeviceEventType, const TArray<uint8> &Message)
+void UBS_ClientConnectionManager::OnDeviceEvent(UBS_Device *Device, EBS_DeviceEvent DeviceEventType, const TArrayView<const uint8> &Message)
 {
     UE_LOGFMT(LogBS_ClientConnectionManager, Verbose, "Message {0} ({1} Bytes) for \"{2}\"", static_cast<uint8>(DeviceEventType), Message.Num(), Device->Name());
     switch (DeviceEventType)
@@ -138,32 +138,50 @@ void UBS_ClientConnectionManager::OnDeviceEvent(UBS_Device *Device, EBS_DeviceEv
     break;
 
     case EBS_DeviceEvent::MANUFACTURER_NAME:
-        OnDeviceInformationValue.Broadcast(this, EBS_DeviceInformation::MANUFACTURER_NAME, Message);
-        break;
+    {
+        const TArray<uint8> ManufacturerName(Message.GetData(), Message.Num());
+        OnDeviceInformationValue.Broadcast(this, EBS_DeviceInformation::MANUFACTURER_NAME, ManufacturerName);
+    }
+    break;
     case EBS_DeviceEvent::MODEL_NUMBER:
-        OnDeviceInformationValue.Broadcast(this, EBS_DeviceInformation::MODEL_NUMBER, Message);
-        break;
+    {
+        const TArray<uint8> ModelNumber(Message.GetData(), Message.Num());
+        OnDeviceInformationValue.Broadcast(this, EBS_DeviceInformation::MODEL_NUMBER, ModelNumber);
+    }
+    break;
     case EBS_DeviceEvent::SOFTWARE_REVISION:
-        OnDeviceInformationValue.Broadcast(this, EBS_DeviceInformation::SOFTWARE_REVISION, Message);
-        break;
+    {
+        const TArray<uint8> SoftwareRevision(Message.GetData(), Message.Num());
+        OnDeviceInformationValue.Broadcast(this, EBS_DeviceInformation::SOFTWARE_REVISION, SoftwareRevision);
+    }
+    break;
     case EBS_DeviceEvent::HARDWARE_REVISION:
-        OnDeviceInformationValue.Broadcast(this, EBS_DeviceInformation::HARDWARE_REVISION, Message);
-        break;
+    {
+        const TArray<uint8> HardwareRevision(Message.GetData(), Message.Num());
+        OnDeviceInformationValue.Broadcast(this, EBS_DeviceInformation::HARDWARE_REVISION, HardwareRevision);
+    }
+    break;
     case EBS_DeviceEvent::FIRMWARE_REVISION:
-        OnDeviceInformationValue.Broadcast(this, EBS_DeviceInformation::FIRMWARE_REVISION, Message);
-        break;
+    {
+        const TArray<uint8> FirmwareRevision(Message.GetData(), Message.Num());
+        OnDeviceInformationValue.Broadcast(this, EBS_DeviceInformation::FIRMWARE_REVISION, FirmwareRevision);
+    }
+    break;
     case EBS_DeviceEvent::SERIAL_NUMBER:
-        OnDeviceInformationValue.Broadcast(this, EBS_DeviceInformation::SERIAL_NUMBER, Message);
-        break;
+    {
+        const TArray<uint8> SerialNumber(Message.GetData(), Message.Num());
+        OnDeviceInformationValue.Broadcast(this, EBS_DeviceInformation::SERIAL_NUMBER, SerialNumber);
+    }
+    break;
 
     default:
         UE_LOGFMT(LogBS_ClientConnectionManager, Verbose, "miscellaneous message {0}", static_cast<uint8>(DeviceEventType));
 
-        EBS_TxRxMessage TxRxMessage = static_cast<EBS_TxRxMessage>(0);
-        if (BS_TypeUtils::ConvertDeviceEventTypeToTxRxMessageType(DeviceEventType, TxRxMessage))
+        EBS_TxRxMessage TxRxMessageType = static_cast<EBS_TxRxMessage>(0);
+        if (BS_TypeUtils::ConvertDeviceEventTypeToTxRxMessageType(DeviceEventType, TxRxMessageType))
         {
             UE_LOGFMT(LogBS_ClientConnectionManager, Verbose, "TxRxMessage message {0}", static_cast<uint8>(DeviceEventType));
-            OnRxMessage.Broadcast(this, TxRxMessage, static_cast<TArray<uint8>>(Message));
+            OnRxMessage.Broadcast(this, TxRxMessageType, Message);
             OnRxMessages.Broadcast(this);
         }
         break;

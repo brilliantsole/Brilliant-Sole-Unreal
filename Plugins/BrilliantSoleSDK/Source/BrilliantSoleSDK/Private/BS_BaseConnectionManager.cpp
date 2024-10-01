@@ -108,6 +108,12 @@ void UBS_BaseConnectionManager::SetConnectionStatus(EBS_ConnectionStatus NewConn
 // RX DATA END
 void UBS_BaseConnectionManager::ParseRxData(const TArray<uint8> &Data)
 {
+    const TArrayView<const uint8> &DataView = Data;
+    ParseRxData(DataView);
+}
+
+void UBS_BaseConnectionManager::ParseRxData(const TArrayView<const uint8> &Data)
+{
     UE_LOGFMT(LogBS_BaseConnectionManager, Verbose, "Parsing Rx Data ({0} Bytes)", Data.Num());
 
     const auto DataLength = Data.Num();
@@ -132,8 +138,8 @@ void UBS_BaseConnectionManager::ParseRxData(const TArray<uint8> &Data)
 
         UE_LOGFMT(LogBS_BaseConnectionManager, Verbose, "Message {0} ({1} bytes)", static_cast<uint8>(MessageType), MessageDataLength);
 
-        const TArrayView<uint8> MessageData((uint8 *)(Data.GetData() + Offset), MessageDataLength);
-        OnRxMessage.Broadcast(this, MessageType, static_cast<TArray<uint8>>(MessageData));
+        const TArrayView<const uint8> MessageData((uint8 *)(Data.GetData() + Offset), MessageDataLength);
+        OnRxMessage.Broadcast(this, MessageType, MessageData);
 
         Offset += MessageDataLength;
         UE_LOGFMT(LogBS_BaseConnectionManager, Verbose, "New Offset: {0}/{1}", Offset, DataLength);

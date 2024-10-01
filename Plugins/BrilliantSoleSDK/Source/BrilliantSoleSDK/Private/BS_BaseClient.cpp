@@ -137,7 +137,7 @@ void UBS_BaseClient::SetConnectionStatus(EBS_ConnectionStatus NewConnectionStatu
 // CONNECTION END
 
 // MESSAGING START
-void UBS_BaseClient::OnMessage(EBS_ServerMessage MessageType, const TArray<uint8> &Message)
+void UBS_BaseClient::OnMessage(EBS_ServerMessage MessageType, const TArrayView<const uint8> &Message)
 {
     UE_LOGFMT(LogBS_BaseClient, Verbose, "message {0} ({1} bytes)", UEnum::GetValueAsString(MessageType), Message.Num());
 
@@ -167,7 +167,7 @@ void UBS_BaseClient::OnMessage(EBS_ServerMessage MessageType, const TArray<uint8
     }
 }
 
-void UBS_BaseClient::OnData(const TArray<uint8> &Data)
+void UBS_BaseClient::OnData(const TArrayView<const uint8> &Data)
 {
     UE_LOGFMT(LogBS_BaseClient, Verbose, "Parsing {0} Bytes...", Data.Num());
     UBS_ParseUtils::ParseServerData(Data, BoundOnMessage);
@@ -208,7 +208,7 @@ const TArray<FBS_ServerMessage> UBS_BaseClient::RequiredMessages = UBS_BaseClien
 // MESSAGING END
 
 // SCANNING START
-void UBS_BaseClient::ParseIsScanningAvailable(const TArray<uint8> &Message)
+void UBS_BaseClient::ParseIsScanningAvailable(const TArrayView<const uint8> &Message)
 {
     bool bNewIsScanningAvailable = static_cast<bool>(Message[0]);
     UE_LOGFMT(LogBS_BaseClient, Verbose, "bNewIsScanningAvailable: {0}", bNewIsScanningAvailable);
@@ -229,7 +229,7 @@ void UBS_BaseClient::ParseIsScanningAvailable(const TArray<uint8> &Message)
         SendMessages({{EBS_ServerMessage::IS_SCANNING}});
     }
 }
-void UBS_BaseClient::ParseIsScanning(const TArray<uint8> &Message)
+void UBS_BaseClient::ParseIsScanning(const TArrayView<const uint8> &Message)
 {
     bool bNewIsScanning = static_cast<bool>(Message[0]);
     UE_LOGFMT(LogBS_BaseClient, Verbose, "bNewIsScanning: {0}", bNewIsScanning);
@@ -284,7 +284,7 @@ void UBS_BaseClient::ToggleScan()
 // SCANNING END
 
 // DISCOVERED DEVICES START
-void UBS_BaseClient::ParseDiscoveredDevice(const TArray<uint8> &Message)
+void UBS_BaseClient::ParseDiscoveredDevice(const TArrayView<const uint8> &Message)
 {
     UE_LOGFMT(LogBS_BaseClient, Verbose, "Parsing Discovered Device ({0} bytes)...", Message.Num());
 
@@ -299,7 +299,7 @@ void UBS_BaseClient::ParseDiscoveredDevice(const TArray<uint8> &Message)
         UE_LOGFMT(LogBS_BaseClient, Error, "Failed to parse Discovered Device");
     }
 }
-void UBS_BaseClient::ParseExpiredDiscoveredDevice(const TArray<uint8> &Message)
+void UBS_BaseClient::ParseExpiredDiscoveredDevice(const TArrayView<const uint8> &Message)
 {
     UE_LOGFMT(LogBS_BaseClient, Verbose, "Parsing Expired Discovered Device ({0} bytes)...", Message.Num());
     const FString BluetoothId = BS_ByteParser::GetString(Message, true);
@@ -399,7 +399,7 @@ UBS_Device *UBS_BaseClient::GetDeviceByBluetoothId(const FString &BluetoothId)
     }
     return FoundDevice;
 }
-void UBS_BaseClient::ParseConnectedDevices(const TArray<uint8> &Message)
+void UBS_BaseClient::ParseConnectedDevices(const TArrayView<const uint8> &Message)
 {
     UE_LOGFMT(LogBS_BaseClient, Verbose, "Parsing Connected Devices ({0} bytes)...", Message.Num());
     const FString ConnectedDeviceBluetoothIdsString = BS_ByteParser::GetString(Message, true);
@@ -460,7 +460,7 @@ void UBS_BaseClient::SendDeviceMessages(const FBS_DiscoveredDevice &DiscoveredDe
     SendMessages({{EBS_ServerMessage::DEVICE_MESSAGE, MessageData}});
 }
 
-void UBS_BaseClient::ParseDeviceMessage(const TArray<uint8> &Message)
+void UBS_BaseClient::ParseDeviceMessage(const TArrayView<const uint8> &Message)
 {
     const uint16 MessageLength = Message.Num();
 
@@ -479,7 +479,7 @@ void UBS_BaseClient::ParseDeviceMessage(const TArray<uint8> &Message)
     UBS_Device *Device = Devices[BluetoothId];
 
     const uint16 MessageDataLength = MessageLength - Offset;
-    const TArrayView<uint8> MessageData((uint8 *)(Message.GetData() + Offset), MessageDataLength);
+    const TArrayView<const uint8> MessageData((uint8 *)(Message.GetData() + Offset), MessageDataLength);
 
     UE_LOGFMT(LogBS_BaseClient, Verbose, "Parsing {0} Bytes for Device...", MessageDataLength);
     UBS_ClientConnectionManager *ConnectionManager = Cast<UBS_ClientConnectionManager>(Device->GetConnectionManager());

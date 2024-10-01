@@ -19,7 +19,7 @@ class UBS_TfliteManager : public UBS_BaseManager
 	GENERATED_BODY()
 
 public:
-	bool OnRxMessage(EBS_TxRxMessage MessageType, const TArray<uint8> &Message) override;
+	bool OnRxMessage(EBS_TxRxMessage MessageType, const TArrayView<const uint8> &Message) override;
 	void Reset() override;
 
 public:
@@ -38,7 +38,7 @@ public:
 private:
 	UPROPERTY()
 	FString Name;
-	void ParseName(const TArray<uint8> &Message);
+	void ParseName(const TArrayView<const uint8> &Message);
 	// NAME END
 
 	// TASK START
@@ -52,7 +52,7 @@ public:
 private:
 	UPROPERTY()
 	EBS_TfliteTask Task;
-	void ParseTask(const TArray<uint8> &Message);
+	void ParseTask(const TArrayView<const uint8> &Message);
 	// TASK END
 
 	// SAMPLE RATE START
@@ -66,7 +66,7 @@ public:
 private:
 	UPROPERTY()
 	EBS_SensorRate SampleRate = EBS_SensorRate::Value0;
-	void ParseSampleRate(const TArray<uint8> &Message);
+	void ParseSampleRate(const TArrayView<const uint8> &Message);
 	// SAMPLE RATE END
 
 	// SENSOR TYPES START
@@ -81,7 +81,7 @@ private:
 	UPROPERTY()
 	TArray<EBS_SensorType> SensorTypes;
 	bool IsSensorTypeValid(const EBS_SensorType SensorType);
-	void ParseSensorTypes(const TArray<uint8> &Message);
+	void ParseSensorTypes(const TArrayView<const uint8> &Message);
 	// SENSOR TYPES END
 
 	// IS READY START
@@ -93,7 +93,7 @@ public:
 private:
 	UPROPERTY()
 	bool IsReady = false;
-	void ParseIsReady(const TArray<uint8> &Message);
+	void ParseIsReady(const TArrayView<const uint8> &Message);
 	// IS READY END
 
 	// CAPTURE DELAY START
@@ -107,7 +107,7 @@ public:
 private:
 	UPROPERTY()
 	uint16 CaptureDelay = 0;
-	void ParseCaptureDelay(const TArray<uint8> &Message);
+	void ParseCaptureDelay(const TArrayView<const uint8> &Message);
 	// CAPTURE DELAY END
 
 	// THRESHOLD START
@@ -121,7 +121,7 @@ public:
 private:
 	UPROPERTY()
 	float Threshold = 0.0f;
-	void ParseThreshold(const TArray<uint8> &Message);
+	void ParseThreshold(const TArrayView<const uint8> &Message);
 	// THRESHOLD END
 
 	// INFERENCING ENABLED START
@@ -136,7 +136,7 @@ public:
 private:
 	UPROPERTY()
 	bool InferencingEnabled = false;
-	void ParseInferencingEnabled(const TArray<uint8> &Message);
+	void ParseInferencingEnabled(const TArrayView<const uint8> &Message);
 	// INFERENCING ENABLED END
 
 	// INFERENCE START
@@ -145,6 +145,6 @@ public:
 	FBS_TfliteInferenceCallbackLocal OnInferenceUpdate;
 
 private:
-	void ParseInference(const TArray<uint8> &Message);
+	void ParseInference(const TArrayView<const uint8> &Message);
 	// INFERENCE END
 };

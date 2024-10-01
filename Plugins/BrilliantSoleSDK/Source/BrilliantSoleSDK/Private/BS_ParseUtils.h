@@ -12,10 +12,8 @@
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_ParseUtils, Log, All);
 
-DECLARE_DYNAMIC_DELEGATE_TwoParams(FBS_MessageCallback, uint8, MessageType, const TArray<uint8> &, Message);
-DECLARE_DYNAMIC_DELEGATE_TwoParams(FBS_UDP_MessageCallback, EBS_UDP_MessageType, MessageType, const TArray<uint8> &, Message);
-DECLARE_DELEGATE_TwoParams(FBS_ServerMessageCallback, EBS_ServerMessage, const TArray<uint8> &);
-DECLARE_DELEGATE_ThreeParams(FBS_DeviceEventCallback, UBS_Device *, EBS_DeviceEvent, const TArray<uint8> &);
+DECLARE_DELEGATE_TwoParams(FBS_ServerMessageCallback, EBS_ServerMessage, const TArrayView<const uint8> &);
+DECLARE_DELEGATE_ThreeParams(FBS_DeviceEventCallback, UBS_Device *, EBS_DeviceEvent, const TArrayView<const uint8> &);
 
 UCLASS()
 class UBS_ParseUtils : public UBlueprintFunctionLibrary
@@ -23,13 +21,6 @@ class UBS_ParseUtils : public UBlueprintFunctionLibrary
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintCallable, Category = "BS Parse Utils")
-	static void ParseRxData(const TArray<uint8> &Data, FBS_MessageCallback MessageCallback);
-
-	UFUNCTION(BlueprintCallable, Category = "BS Parse Utils")
-	static void ParseUDP_Data(const TArray<uint8> &Data, FBS_UDP_MessageCallback MessageCallback);
-
-	static void ParseServerData(const TArray<uint8> &Data, FBS_ServerMessageCallback MessageCallback);
-
+	static void ParseServerData(const TArrayView<const uint8> &Data, FBS_ServerMessageCallback MessageCallback);
 	static void ParseDeviceEventData(UBS_Device *Device, const TArray<uint8> &Data, FBS_DeviceEventCallback MessageCallback);
 };

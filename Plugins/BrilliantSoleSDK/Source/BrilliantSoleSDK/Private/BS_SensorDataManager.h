@@ -23,14 +23,14 @@ public:
 	void Reset() override;
 
 public:
-	bool OnRxMessage(EBS_TxRxMessage MessageType, const TArray<uint8> &Message) override;
+	bool OnRxMessage(EBS_TxRxMessage MessageType, const TArrayView<const uint8> &Message) override;
 
 public:
 	UPROPERTY()
 	TMap<EBS_SensorType, float> SensorScalars;
-	void ParseSensorScalars(const TArray<uint8> &Message);
+	void ParseSensorScalars(const TArrayView<const uint8> &Message);
 
-	void ParseSensorData(const TArray<uint8> &Message);
+	void ParseSensorData(const TArrayView<const uint8> &Message);
 
 	UPROPERTY()
 	UBS_PressureSensorDataManager *PressureSensorDataManager;

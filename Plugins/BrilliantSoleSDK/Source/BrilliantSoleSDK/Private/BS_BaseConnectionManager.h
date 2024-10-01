@@ -70,6 +70,8 @@ private:
 protected:
 	UFUNCTION(BlueprintCallable, Category = "BS Connection Manager")
 	void ParseRxData(const TArray<uint8> &Data);
+
+	void ParseRxData(const TArrayView<const uint8> &Data);
 	// RX DATA END
 
 	// MESSAGING START
@@ -117,7 +119,7 @@ public:
 
 	// MESSAGING EVENT DISPTACHERS START
 public:
-	DECLARE_MULTICAST_DELEGATE_ThreeParams(FBS_ConnectionManagerRxDataCallback, UBS_BaseConnectionManager *, EBS_TxRxMessage, const TArray<uint8> &);
+	DECLARE_MULTICAST_DELEGATE_ThreeParams(FBS_ConnectionManagerRxDataCallback, UBS_BaseConnectionManager *, EBS_TxRxMessage, const TArrayView<const uint8> &);
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBS_ConnectionManagerBatteryLevelCallback, UBS_BaseConnectionManager *, ConnectionManager, uint8, BatteryLevel);
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FBS_ConnectionManagerDeviceInformationValueCallback, UBS_BaseConnectionManager *, ConnectionManager, EBS_DeviceInformation, Type, const TArray<uint8> &, Value);
 

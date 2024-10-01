@@ -30,7 +30,7 @@ public:
     }
 
     template <typename T>
-    static T ParseAs(const TArray<uint8> &ByteArray, uint16 Offset = 0, bool bIsLittleEndian = false)
+    static T ParseAs(const TArrayView<const uint8> &ByteArray, uint16 Offset = 0, bool bIsLittleEndian = false)
     {
         if (ByteArray.Num() < Offset + sizeof(T))
         {
@@ -51,6 +51,13 @@ public:
         return ParsedValue;
     }
 
-    static FString GetString(const TArray<uint8> &ByteArray, bool bIncludesLength = false);
+    template <typename T>
+    static T ParseAs(const TArray<uint8> ByteArray, uint16 Offset = 0, bool bIsLittleEndian = false)
+    {
+        const TArrayView<const uint8> ByteArrayView = ByteArray;
+        return ParseAs<T>(ByteArrayView, Offset, bIsLittleEndian);
+    }
+
+    static FString GetString(const TArrayView<const uint8> &ByteArray, bool bIncludesLength = false);
     static TArray<uint8> StringToArray(const FString &String, bool bIncludeLength = false);
 };

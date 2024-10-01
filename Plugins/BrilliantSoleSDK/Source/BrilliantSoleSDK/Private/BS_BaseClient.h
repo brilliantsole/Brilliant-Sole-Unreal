@@ -73,12 +73,12 @@ private:
 
     // MESSAGING START
 protected:
-    void OnData(const TArray<uint8> &Data);
+    void OnData(const TArrayView<const uint8> &Data);
 
     virtual void SendMessageData(const TArray<uint8> &Data, bool bSendImmediately = true) {}
 
 private:
-    void OnMessage(EBS_ServerMessage MessageType, const TArray<uint8> &Message);
+    void OnMessage(EBS_ServerMessage MessageType, const TArrayView<const uint8> &Message);
     FBS_ServerMessageCallback BoundOnMessage;
 
     void SendMessages(const TArray<FBS_ServerMessage> &ServerMessages, bool bSendImmediately = true);
@@ -121,8 +121,8 @@ private:
     bool bIsScanningAvailable = false;
     bool bIsScanning = false;
 
-    void ParseIsScanningAvailable(const TArray<uint8> &Message);
-    void ParseIsScanning(const TArray<uint8> &Message);
+    void ParseIsScanningAvailable(const TArrayView<const uint8> &Message);
+    void ParseIsScanning(const TArrayView<const uint8> &Message);
     // SCANNING END
 
     // DISCOVERED DEVICES START
@@ -140,8 +140,8 @@ protected:
     const TMap<FString, FBS_DiscoveredDevice> &GetDiscoveredDevices() const { return DiscoveredDevices; }
 
 private:
-    void ParseDiscoveredDevice(const TArray<uint8> &Message);
-    void ParseExpiredDiscoveredDevice(const TArray<uint8> &Message);
+    void ParseDiscoveredDevice(const TArrayView<const uint8> &Message);
+    void ParseExpiredDiscoveredDevice(const TArrayView<const uint8> &Message);
 
     UPROPERTY()
     TMap<FString, FBS_DiscoveredDevice> DiscoveredDevices;
@@ -184,7 +184,7 @@ protected:
     TMap<FString, UBS_Device *> Devices;
 
 private:
-    void ParseConnectedDevices(const TArray<uint8> &Message);
+    void ParseConnectedDevices(const TArrayView<const uint8> &Message);
 
     // DEVICES DEVICES END
 
@@ -195,7 +195,7 @@ public:
     void SendDeviceMessages(const FBS_DiscoveredDevice &DiscoveredDevice, const TArray<FBS_ConnectionMessage> &Messages, bool bSendImmediately = true);
 
 private:
-    void ParseDeviceMessage(const TArray<uint8> &Message);
+    void ParseDeviceMessage(const TArrayView<const uint8> &Message);
 
     // DEVICE MESSAGE END
 };

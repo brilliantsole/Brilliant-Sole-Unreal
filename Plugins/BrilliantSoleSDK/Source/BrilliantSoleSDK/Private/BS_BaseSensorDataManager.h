@@ -15,5 +15,5 @@ class UBS_BaseSensorDataManager : public UObject
 	GENERATED_BODY()
 
 public:
-	virtual bool OnSensorDataMessage(EBS_SensorType SensorType, const TArray<uint8> &Message, const uint64 &Timestamp, const float &Scalar) { return false; }
+	virtual bool OnSensorDataMessage(EBS_SensorType SensorType, const TArrayView<const uint8> &Message, const uint64 &Timestamp, const float &Scalar) { return false; }
 };

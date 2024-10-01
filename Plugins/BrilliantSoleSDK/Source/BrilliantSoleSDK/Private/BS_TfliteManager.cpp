@@ -10,7 +10,7 @@
 
 DEFINE_LOG_CATEGORY(LogBS_TfliteManager);
 
-bool UBS_TfliteManager::OnRxMessage(EBS_TxRxMessage MessageType, const TArray<uint8> &Message)
+bool UBS_TfliteManager::OnRxMessage(EBS_TxRxMessage MessageType, const TArrayView<const uint8> &Message)
 {
     switch (MessageType)
     {
@@ -78,7 +78,7 @@ void UBS_TfliteManager::SetConfiguration(const FBS_TfliteConfiguration &TfliteCo
 }
 
 // NAME START
-void UBS_TfliteManager::ParseName(const TArray<uint8> &Message)
+void UBS_TfliteManager::ParseName(const TArrayView<const uint8> &Message)
 {
     UE_LOGFMT(LogBS_TfliteManager, Verbose, "Parsing Name...");
     Name = BS_ByteParser::GetString(Message);
@@ -109,7 +109,7 @@ void UBS_TfliteManager::SetName(const FString &NewName, bool bSendImmediately)
 // NAME END
 
 // TASK START
-void UBS_TfliteManager::ParseTask(const TArray<uint8> &Message)
+void UBS_TfliteManager::ParseTask(const TArrayView<const uint8> &Message)
 {
     Task = static_cast<EBS_TfliteTask>(Message[0]);
     UE_LOGFMT(LogBS_TfliteManager, Verbose, "Parsed Task: {0}", UEnum::GetValueAsString(Task));
@@ -131,7 +131,7 @@ void UBS_TfliteManager::SetTask(const EBS_TfliteTask NewTask, bool bSendImmediat
 // TASK END
 
 // SAMPLE RATE START
-void UBS_TfliteManager::ParseSampleRate(const TArray<uint8> &Message)
+void UBS_TfliteManager::ParseSampleRate(const TArrayView<const uint8> &Message)
 {
     UE_LOGFMT(LogBS_TfliteManager, Verbose, "Parsing SampleRate...");
 
@@ -173,7 +173,7 @@ bool UBS_TfliteManager::IsSensorTypeValid(const EBS_SensorType SensorType)
         return false;
     }
 }
-void UBS_TfliteManager::ParseSensorTypes(const TArray<uint8> &Message)
+void UBS_TfliteManager::ParseSensorTypes(const TArrayView<const uint8> &Message)
 {
     UE_LOGFMT(LogBS_TfliteManager, Verbose, "Parsing SensorTypes...");
 
@@ -219,7 +219,7 @@ void UBS_TfliteManager::SetSensorTypes(const TArray<EBS_SensorType> &NewSensorTy
 // SENSOR TYPES END
 
 // IS READY START
-void UBS_TfliteManager::ParseIsReady(const TArray<uint8> &Message)
+void UBS_TfliteManager::ParseIsReady(const TArrayView<const uint8> &Message)
 {
     UE_LOGFMT(LogBS_TfliteManager, Verbose, "Parsing IsReady...");
     IsReady = static_cast<bool>(Message[0]);
@@ -229,7 +229,7 @@ void UBS_TfliteManager::ParseIsReady(const TArray<uint8> &Message)
 // IS READY END
 
 // CAPTURE DELAY START
-void UBS_TfliteManager::ParseCaptureDelay(const TArray<uint8> &Message)
+void UBS_TfliteManager::ParseCaptureDelay(const TArrayView<const uint8> &Message)
 {
     UE_LOGFMT(LogBS_TfliteManager, Verbose, "Parsing CaptureDelay...");
     CaptureDelay = BS_ByteParser::ParseAs<uint16>(Message, 0, true);
@@ -251,7 +251,7 @@ void UBS_TfliteManager::SetCaptureDelay(const uint16 NewCaptureDelay, bool bSend
 // CAPTURE DELAY END
 
 // THRESHOLD START
-void UBS_TfliteManager::ParseThreshold(const TArray<uint8> &Message)
+void UBS_TfliteManager::ParseThreshold(const TArrayView<const uint8> &Message)
 {
     UE_LOGFMT(LogBS_TfliteManager, Verbose, "Parsing Threshold...");
     Threshold = BS_ByteParser::ParseAs<float>(Message, 0, true);
@@ -273,7 +273,7 @@ void UBS_TfliteManager::SetThreshold(const float NewThreshold, bool bSendImmedia
 // THRESHOLD END
 
 // INFERENCING ENABLED START
-void UBS_TfliteManager::ParseInferencingEnabled(const TArray<uint8> &Message)
+void UBS_TfliteManager::ParseInferencingEnabled(const TArrayView<const uint8> &Message)
 {
     UE_LOGFMT(LogBS_TfliteManager, Verbose, "Parsing InferencingEnabled...");
     InferencingEnabled = static_cast<bool>(Message[0]);
@@ -300,7 +300,7 @@ void UBS_TfliteManager::SetInferencingEnabled(const bool NewInferencingEnabled)
 // INFERENCING ENABLED END
 
 // INFERENCE START
-void UBS_TfliteManager::ParseInference(const TArray<uint8> &Message)
+void UBS_TfliteManager::ParseInference(const TArrayView<const uint8> &Message)
 {
     uint8 Offset = 0;
     const uint16 MessageLength = Message.Num();

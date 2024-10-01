@@ -176,7 +176,39 @@ void UBS_BaseUDP_Client::SendPendingUDP_Messages()
 // MESSAGING END
 
 // PARSING START
-void UBS_BaseUDP_Client::OnUDP_Message(EBS_UDP_MessageType MessageType, const TArray<uint8> &Message)
+void UBS_BaseUDP_Client::ParseUDP_Data(const TArray<uint8> &Data)
+{
+    const auto DataLength = Data.Num();
+    uint16 Offset = 0;
+
+    UE_LOGFMT(LogBS_BaseUDP_Client, Verbose, "Parsing {0} bytes...", DataLength);
+
+    while (Offset < DataLength)
+    {
+        UE_LOGFMT(LogBS_BaseUDP_Client, Verbose, "Parsing Message at {0}...", Offset);
+
+        const uint8 MessageTypeEnum = Data[Offset++];
+        if (MessageTypeEnum >= static_cast<uint8>(EBS_UDP_MessageType::COUNT))
+        {
+            UE_LOGFMT(LogBS_BaseUDP_Client, Error, "invalid MessageTypeEnum {0}", MessageTypeEnum);
+            continue;
+        }
+        const EBS_UDP_MessageType MessageType = static_cast<EBS_UDP_MessageType>(MessageTypeEnum);
+
+        const uint16 MessageDataLength = BS_ByteParser::ParseAs<uint16>(Data, Offset, true);
+        Offset += 2;
+
+        UE_LOGFMT(LogBS_BaseUDP_Client, Verbose, "Message {0} ({1} bytes)", UEnum::GetValueAsString(MessageType), MessageDataLength);
+
+        const TArrayView<const uint8> MessageData((uint8 *)(Data.GetData() + Offset), MessageDataLength);
+        OnUDP_Message(MessageType, MessageData);
+
+        Offset += MessageDataLength;
+        UE_LOGFMT(LogBS_BaseUDP_Client, Verbose, "New Offset: {0}/{1}", Offset, DataLength);
+    }
+}
+
+void UBS_BaseUDP_Client::OnUDP_Message(EBS_UDP_MessageType MessageType, const TArrayView<const uint8> &Message)
 {
     UE_LOGFMT(LogBS_BaseUDP_Client, Verbose, "message {0} ({1} bytes)", UEnum::GetValueAsString(MessageType), Message.Num());
     StopWaitingForPong();
@@ -206,7 +238,7 @@ void UBS_BaseUDP_Client::OnUDP_Message(EBS_UDP_MessageType MessageType, const TA
     }
 }
 
-void UBS_BaseUDP_Client::OnSetRemoteReceivePortMessage(const TArray<uint8> &Message)
+void UBS_BaseUDP_Client::OnSetRemoteReceivePortMessage(const TArrayView<const uint8> &Message)
 {
     const uint16 ParsedRemoteReceivePort = BS_ByteParser::ParseAs<uint16>(Message);
     UE_LOGFMT(LogBS_BaseUDP_Client, Verbose, "Parsed RemoteReceivePort: {0}", ParsedRemoteReceivePort);

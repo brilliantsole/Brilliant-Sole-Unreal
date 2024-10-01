@@ -18,7 +18,7 @@ uint64 TimeUtils::GetMilliseconds()
     return Milliseconds;
 }
 
-uint64 TimeUtils::ParseTimestamp(const TArray<uint8> &Message)
+uint64 TimeUtils::ParseTimestamp(const TArrayView<const uint8> &Message)
 {
     const uint64 CurrentTimestamp = GetMilliseconds();
     UE_LOGFMT(LogBS_TimeUtils, Verbose, "CurrentTimestamp: {0}ms", CurrentTimestamp);

@@ -8,7 +8,7 @@
 #include "BS_Activity.h"
 #include "BS_MotionSensorDataManager.generated.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogBS_MotionSensorDataManager, Log, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_MotionSensorDataManager, Verbose, All);
 
 DECLARE_DELEGATE_TwoParams(FBS_VectorCallbackLocal, const FVector &, const uint64 &);
 DECLARE_DELEGATE_TwoParams(FBS_RotatorCallbackLocal, const FRotator &, const uint64 &);
@@ -24,17 +24,17 @@ class UBS_MotionSensorDataManager : public UBS_BaseSensorDataManager
 	GENERATED_BODY()
 
 public:
-	bool OnSensorDataMessage(EBS_SensorType SensorType, const TArray<uint8> &Message, const uint64 &Timestamp, const float &Scalar) override;
+	bool OnSensorDataMessage(EBS_SensorType SensorType, const TArrayView<const uint8> &Message, const uint64 &Timestamp, const float &Scalar) override;
 
 private:
-	void ParseVector(EBS_SensorType SensorType, const TArray<uint8> &Message, const uint64 &Timestamp, const float &Scalar);
-	void ParseRotator(EBS_SensorType SensorType, const TArray<uint8> &Message, const uint64 &Timestamp, const float &Scalar);
-	void ParseQuaternion(EBS_SensorType SensorType, const TArray<uint8> &Message, const uint64 &Timestamp, const float &Scalar);
-	void ParseOrientation(EBS_SensorType SensorType, const TArray<uint8> &Message, const uint64 &Timestamp, const float &Scalar);
-	void ParseActivity(EBS_SensorType SensorType, const TArray<uint8> &Message, const uint64 &Timestamp);
-	void ParseStepCount(EBS_SensorType SensorType, const TArray<uint8> &Message, const uint64 &Timestamp);
-	void ParseStepDetection(EBS_SensorType SensorType, const TArray<uint8> &Message, const uint64 &Timestamp);
-	void ParseDeviceOrientation(EBS_SensorType SensorType, const TArray<uint8> &Message, const uint64 &Timestamp);
+	void ParseVector(EBS_SensorType SensorType, const TArrayView<const uint8> &Message, const uint64 &Timestamp, const float &Scalar);
+	void ParseRotator(EBS_SensorType SensorType, const TArrayView<const uint8> &Message, const uint64 &Timestamp, const float &Scalar);
+	void ParseQuaternion(EBS_SensorType SensorType, const TArrayView<const uint8> &Message, const uint64 &Timestamp, const float &Scalar);
+	void ParseOrientation(EBS_SensorType SensorType, const TArrayView<const uint8> &Message, const uint64 &Timestamp, const float &Scalar);
+	void ParseActivity(EBS_SensorType SensorType, const TArrayView<const uint8> &Message, const uint64 &Timestamp);
+	void ParseStepCount(EBS_SensorType SensorType, const TArrayView<const uint8> &Message, const uint64 &Timestamp);
+	void ParseStepDetection(EBS_SensorType SensorType, const TArrayView<const uint8> &Message, const uint64 &Timestamp);
+	void ParseDeviceOrientation(EBS_SensorType SensorType, const TArrayView<const uint8> &Message, const uint64 &Timestamp);
 
 public:
 	FBS_VectorCallbackLocal OnAccelerationUpdate;

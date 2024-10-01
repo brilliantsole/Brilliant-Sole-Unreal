@@ -18,7 +18,7 @@ class UBS_BatteryManager : public UBS_BaseManager
 
 public:
 	void Reset() override;
-	bool OnRxMessage(EBS_TxRxMessage MessageType, const TArray<uint8> &Message) override;
+	bool OnRxMessage(EBS_TxRxMessage MessageType, const TArrayView<const uint8> &Message) override;
 
 	bool GetIsBatteryCharging() const { return bIsBatteryCharging; }
 	FBS_IsBatteryChargingCallbackLocal OnIsBatteryChargingUpdate;
@@ -29,9 +29,9 @@ public:
 private:
 	UPROPERTY()
 	bool bIsBatteryCharging = false;
-	void ParseIsBatteryCharging(const TArray<uint8> &Message);
+	void ParseIsBatteryCharging(const TArrayView<const uint8> &Message);
 
 	UPROPERTY()
 	float BatteryCurrent = 0.0f;
-	void ParseBatteryCurrent(const TArray<uint8> &Message);
+	void ParseBatteryCurrent(const TArrayView<const uint8> &Message);
 };

@@ -20,7 +20,7 @@ class UBS_SensorConfigurationManager : public UBS_BaseManager
 public:
 	UBS_SensorConfigurationManager();
 
-	bool OnRxMessage(EBS_TxRxMessage MessageType, const TArray<uint8> &Message) override;
+	bool OnRxMessage(EBS_TxRxMessage MessageType, const TArrayView<const uint8> &Message) override;
 	void Reset() override;
 
 public:
@@ -42,7 +42,7 @@ public:
 	void ToggleSensorRate(EBS_SensorType SensorType, EBS_SensorRate SensorRate, EBS_SensorRate &UpdatedSensorRate);
 
 private:
-	void ParseSensorConfiguration(const TArray<uint8> &Message);
+	void ParseSensorConfiguration(const TArrayView<const uint8> &Message);
 	UPROPERTY()
 	UBS_SensorConfiguration *SensorConfiguration;
 	UPROPERTY()

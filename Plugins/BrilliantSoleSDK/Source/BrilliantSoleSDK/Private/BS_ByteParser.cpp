@@ -4,7 +4,7 @@
 
 DEFINE_LOG_CATEGORY(LogBS_ByteParser);
 
-FString BS_ByteParser::GetString(const TArray<uint8> &Data, bool bIncludesLength)
+FString BS_ByteParser::GetString(const TArrayView<const uint8> &Data, bool bIncludesLength)
 {
     uint8 Offset = 0;
     uint8 StringLength = Data.Num();

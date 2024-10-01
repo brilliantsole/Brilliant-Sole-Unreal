@@ -103,10 +103,13 @@ private:
     // PARSING START
 protected:
     UFUNCTION(BlueprintCallable, Category = "BS UDP Client")
-    void OnUDP_Message(EBS_UDP_MessageType MessageType, const TArray<uint8> &Message);
+    void ParseUDP_Data(const TArray<uint8> &Data);
+
+    // UFUNCTION(BlueprintCallable, Category = "BS UDP Client")
+    void OnUDP_Message(EBS_UDP_MessageType MessageType, const TArrayView<const uint8> &Message);
 
 private:
-    void OnSetRemoteReceivePortMessage(const TArray<uint8> &Message);
+    void OnSetRemoteReceivePortMessage(const TArrayView<const uint8> &Message);
     // PARSING END
 
     // CONNECTION START

@@ -16,10 +16,10 @@ class UBS_BarometerSensorDataManager : public UBS_BaseSensorDataManager
 	GENERATED_BODY()
 
 public:
-	bool OnSensorDataMessage(EBS_SensorType SensorType, const TArray<uint8> &Message, const uint64 &Timestamp, const float &Scalar) override;
+	bool OnSensorDataMessage(EBS_SensorType SensorType, const TArrayView<const uint8> &Message, const uint64 &Timestamp, const float &Scalar) override;
 
 private:
-	void ParseBarometer(EBS_SensorType SensorType, const TArray<uint8> &Message, const uint64 &Timestamp, const float &Scalar);
+	void ParseBarometer(EBS_SensorType SensorType, const TArrayView<const uint8> &Message, const uint64 &Timestamp, const float &Scalar);
 
 public:
 	FBS_BarometerCallbackLocal OnBarometerUpdate;

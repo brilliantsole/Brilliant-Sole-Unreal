@@ -63,7 +63,7 @@ public:
 	virtual void SendTxData_Implementation(const TArray<uint8> &Data) override;
 
 public:
-	void OnDeviceEvent(UBS_Device *Device, EBS_DeviceEvent DeviceEventType, const TArray<uint8> &Message);
+	void OnDeviceEvent(UBS_Device *Device, EBS_DeviceEvent DeviceEventType, const TArrayView<const uint8> &Message);
 	FBS_DeviceEventCallback BoundOnDeviceEvent;
 	// MESSAGING END
 

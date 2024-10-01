@@ -8,7 +8,7 @@
 
 DEFINE_LOG_CATEGORY(LogBS_InformationManager);
 
-bool UBS_InformationManager::OnRxMessage(EBS_TxRxMessage MessageType, const TArray<uint8> &Message)
+bool UBS_InformationManager::OnRxMessage(EBS_TxRxMessage MessageType, const TArrayView<const uint8> &Message)
 {
     switch (MessageType)
     {
@@ -48,7 +48,7 @@ void UBS_InformationManager::Reset()
 }
 
 // MTU START
-void UBS_InformationManager::ParseMTU(const TArray<uint8> &Message)
+void UBS_InformationManager::ParseMTU(const TArrayView<const uint8> &Message)
 {
     UE_LOGFMT(LogBS_InformationManager, Verbose, "Parsing MTU...");
     MTU = BS_ByteParser::ParseAs<uint16>(Message, 0, true);
@@ -58,7 +58,7 @@ void UBS_InformationManager::ParseMTU(const TArray<uint8> &Message)
 // MTU END
 
 // ID START
-void UBS_InformationManager::ParseId(const TArray<uint8> &Message)
+void UBS_InformationManager::ParseId(const TArrayView<const uint8> &Message)
 {
     UE_LOGFMT(LogBS_InformationManager, Verbose, "Parsing Id...");
     Id = BS_ByteParser::GetString(Message);
@@ -68,7 +68,7 @@ void UBS_InformationManager::ParseId(const TArray<uint8> &Message)
 // ID END
 
 // NAME START
-void UBS_InformationManager::ParseName(const TArray<uint8> &Message)
+void UBS_InformationManager::ParseName(const TArrayView<const uint8> &Message)
 {
     UE_LOGFMT(LogBS_InformationManager, Verbose, "Parsing Name...");
     Name = BS_ByteParser::GetString(Message);
@@ -99,7 +99,7 @@ void UBS_InformationManager::SetName(const FString &NewName)
 // NAME END
 
 // TYPE START
-void UBS_InformationManager::ParseType(const TArray<uint8> &Message)
+void UBS_InformationManager::ParseType(const TArrayView<const uint8> &Message)
 {
     Type = static_cast<EBS_DeviceType>(Message[0]);
     UE_LOGFMT(LogBS_InformationManager, Verbose, "Parsed Type: {0}", UEnum::GetValueAsString(Type));
@@ -121,7 +121,7 @@ void UBS_InformationManager::SetType(const EBS_DeviceType NewType)
 // TYPE END
 
 // CURRENT TIME START
-void UBS_InformationManager::ParseCurrentTime(const TArray<uint8> &Message)
+void UBS_InformationManager::ParseCurrentTime(const TArrayView<const uint8> &Message)
 {
     CurrentTime = BS_ByteParser::ParseAs<uint64>(Message, 0, true);
     UE_LOGFMT(LogBS_InformationManager, Verbose, "Parsed CurrentTime: {0}", CurrentTime);

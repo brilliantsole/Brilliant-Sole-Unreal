@@ -78,7 +78,7 @@ public:
     static EBS_SensorRate GetClosestSensorRate(uint16 RawSensorRate);
     static uint16 GetRawSensorRate(EBS_SensorRate SensorRate) { return static_cast<uint16>(SensorRate); }
 
-    void Parse(const TArray<uint8> &Message);
+    void Parse(const TArrayView<const uint8> &Message);
 
     const TArray<uint8> ToArray() const;
     // UTILS END

@@ -22,7 +22,7 @@ class UBS_FileTransferManager : public UBS_BaseManager
 	GENERATED_BODY()
 
 public:
-	bool OnRxMessage(EBS_TxRxMessage MessageType, const TArray<uint8> &Message) override;
+	bool OnRxMessage(EBS_TxRxMessage MessageType, const TArrayView<const uint8> &Message) override;
 	void Reset() override;
 
 	// MAX FILE LENGTH START
@@ -33,7 +33,7 @@ public:
 private:
 	UPROPERTY()
 	uint32 MaxFileLength = 0;
-	void ParseMaxFileLength(const TArray<uint8> &Message);
+	void ParseMaxFileLength(const TArrayView<const uint8> &Message);
 	// MAX FILE LENGTH END
 
 	// FILE TRANSFER TYPE START
@@ -47,7 +47,7 @@ public:
 private:
 	UPROPERTY()
 	EBS_FileType FileType = EBS_FileType::TFLITE;
-	void ParseFileType(const TArray<uint8> &Message);
+	void ParseFileType(const TArrayView<const uint8> &Message);
 	// FILE TRANSFER TYPE END
 
 	// FILE LENGTH START
@@ -60,7 +60,7 @@ public:
 private:
 	UPROPERTY()
 	uint32 FileLength = 0;
-	void ParseFileLength(const TArray<uint8> &Message);
+	void ParseFileLength(const TArrayView<const uint8> &Message);
 	// FILE LENGTH END
 
 	// FiLE CHECKSUM START
@@ -74,7 +74,7 @@ public:
 private:
 	UPROPERTY()
 	uint32 FileChecksum = 0;
-	void ParseFileChecksum(const TArray<uint8> &Message);
+	void ParseFileChecksum(const TArrayView<const uint8> &Message);
 	// FiLE CHECKSUM END
 
 	// FILE TRANSFER COMMAND START
@@ -100,7 +100,7 @@ public:
 private:
 	UPROPERTY()
 	EBS_FileTransferStatus FileTransferStatus = EBS_FileTransferStatus::IDLE;
-	void ParseFileTransferStatus(const TArray<uint8> &Message);
+	void ParseFileTransferStatus(const TArrayView<const uint8> &Message);
 	// FILE TRANSFER STATUS END
 
 	// FILE BLOCK START
@@ -129,7 +129,7 @@ private:
 
 	void SendFileBlock(bool bSendImmediately);
 
-	void ParseFileTransferBlock(const TArray<uint8> &Message);
-	void ParseFileBytesTransferred(const TArray<uint8> &Message);
+	void ParseFileTransferBlock(const TArrayView<const uint8> &Message);
+	void ParseFileBytesTransferred(const TArrayView<const uint8> &Message);
 	// FILE BLOCK END
 };

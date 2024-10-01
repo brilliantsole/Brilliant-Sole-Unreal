@@ -146,7 +146,7 @@ private:
 	// MESSAGING START
 public:
 protected:
-	void OnRxMessage(UBS_BaseConnectionManager *_ConnectionManager, EBS_TxRxMessage MessageType, const TArray<uint8> &Message);
+	void OnRxMessage(UBS_BaseConnectionManager *_ConnectionManager, EBS_TxRxMessage MessageType, const TArrayView<const uint8> &Message);
 	UFUNCTION()
 	void OnRxMessages(UBS_BaseConnectionManager *_ConnectionManager);
 	UFUNCTION()

@@ -187,7 +187,7 @@ EBS_SensorRate UBS_SensorConfiguration::GetClosestSensorRate(uint16 RawSensorRat
     return SensorRate;
 }
 
-void UBS_SensorConfiguration::Parse(const TArray<uint8> &Message)
+void UBS_SensorConfiguration::Parse(const TArrayView<const uint8> &Message)
 {
     SensorRates.Reset();
 

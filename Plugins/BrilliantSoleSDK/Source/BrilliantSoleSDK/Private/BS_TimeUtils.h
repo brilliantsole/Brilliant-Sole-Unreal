@@ -11,7 +11,7 @@ class TimeUtils
 {
 public:
     static uint64 GetMilliseconds();
-    static uint64 ParseTimestamp(const TArray<uint8> &Message);
+    static uint64 ParseTimestamp(const TArrayView<const uint8> &Message);
 
 private:
     static const uint64 TimestampThreshold;

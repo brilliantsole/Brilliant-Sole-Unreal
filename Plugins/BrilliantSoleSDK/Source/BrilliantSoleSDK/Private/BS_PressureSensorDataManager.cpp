@@ -9,7 +9,7 @@ DEFINE_LOG_CATEGORY(LogBS_PressureSensorDataManager);
 
 const float UBS_PressureSensorDataManager::PressurePositionScalar = FMath::Pow(2.0f, 8.0f);
 
-bool UBS_PressureSensorDataManager::OnSensorDataMessage(EBS_SensorType SensorType, const TArray<uint8> &Message, const uint64 &Timestamp, const float &Scalar)
+bool UBS_PressureSensorDataManager::OnSensorDataMessage(EBS_SensorType SensorType, const TArrayView<const uint8> &Message, const uint64 &Timestamp, const float &Scalar)
 {
     switch (SensorType)
     {
@@ -31,7 +31,7 @@ void UBS_PressureSensorDataManager::Reset()
     }
 }
 
-void UBS_PressureSensorDataManager::ParsePressure(EBS_SensorType SensorType, const TArray<uint8> &Message, const uint64 &Timestamp, const float &Scalar)
+void UBS_PressureSensorDataManager::ParsePressure(EBS_SensorType SensorType, const TArrayView<const uint8> &Message, const uint64 &Timestamp, const float &Scalar)
 {
     FBS_PressureData PressureData;
 
@@ -92,7 +92,7 @@ void UBS_PressureSensorDataManager::ParsePressure(EBS_SensorType SensorType, con
     OnPressureUpdate.ExecuteIfBound(PressureData, Timestamp);
 }
 
-void UBS_PressureSensorDataManager::ParsePressurePositions(const TArray<uint8> &Message)
+void UBS_PressureSensorDataManager::ParsePressurePositions(const TArrayView<const uint8> &Message)
 {
     PressurePositions.Reset();
 

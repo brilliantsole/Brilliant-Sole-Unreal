@@ -30,7 +30,7 @@ void UBS_SensorDataManager::Reset()
     PressureSensorDataManager->Reset();
 }
 
-bool UBS_SensorDataManager::OnRxMessage(EBS_TxRxMessage MessageType, const TArray<uint8> &Message)
+bool UBS_SensorDataManager::OnRxMessage(EBS_TxRxMessage MessageType, const TArrayView<const uint8> &Message)
 {
     switch (MessageType)
     {
@@ -50,7 +50,7 @@ bool UBS_SensorDataManager::OnRxMessage(EBS_TxRxMessage MessageType, const TArra
     return true;
 }
 
-void UBS_SensorDataManager::ParseSensorScalars(const TArray<uint8> &Message)
+void UBS_SensorDataManager::ParseSensorScalars(const TArrayView<const uint8> &Message)
 {
     SensorScalars.Reset();
 
@@ -73,7 +73,7 @@ void UBS_SensorDataManager::ParseSensorScalars(const TArray<uint8> &Message)
     UE_LOGFMT(LogBS_SensorDataManager, Verbose, "SensorScalars updated");
 }
 
-void UBS_SensorDataManager::ParseSensorData(const TArray<uint8> &Message)
+void UBS_SensorDataManager::ParseSensorData(const TArrayView<const uint8> &Message)
 {
     uint16 Offset = 0;
     const uint16 MessageLength = Message.Num();
@@ -101,18 +101,17 @@ void UBS_SensorDataManager::ParseSensorData(const TArray<uint8> &Message)
 
         UE_LOGFMT(LogBS_SensorDataManager, Verbose, "SensorDataMessageLength: {0}", SensorDataMessageLength);
 
-        // I have no idea why I have to add 1 here...
-        const TArrayView<uint8> SensorDataMessage((uint8 *)(Message.GetData() + Offset + 1), SensorDataMessageLength);
+        const TArrayView<const uint8> SensorDataMessage = Message.Slice(Offset, SensorDataMessageLength);
 
-        if (PressureSensorDataManager->OnSensorDataMessage(SensorType, static_cast<TArray<uint8>>(SensorDataMessage), Timestamp, Scalar))
+        if (PressureSensorDataManager->OnSensorDataMessage(SensorType, SensorDataMessage, Timestamp, Scalar))
         {
             UE_LOGFMT(LogBS_SensorDataManager, Verbose, "Parsed PressureSensorDataManager Message");
         }
-        else if (MotionSensorDataManager->OnSensorDataMessage(SensorType, static_cast<TArray<uint8>>(SensorDataMessage), Timestamp, Scalar))
+        else if (MotionSensorDataManager->OnSensorDataMessage(SensorType, SensorDataMessage, Timestamp, Scalar))
         {
             UE_LOGFMT(LogBS_SensorDataManager, Verbose, "Parsed MotionSensorDataManager Message");
         }
-        else if (BarometerSensorDataManager->OnSensorDataMessage(SensorType, static_cast<TArray<uint8>>(SensorDataMessage), Timestamp, Scalar))
+        else if (BarometerSensorDataManager->OnSensorDataMessage(SensorType, SensorDataMessage, Timestamp, Scalar))
         {
             UE_LOGFMT(LogBS_SensorDataManager, Verbose, "Parsed BarometerSensorDataManager Message");
         }

@@ -6,7 +6,7 @@
 
 DEFINE_LOG_CATEGORY(LogBS_BarometerSensorDataManager);
 
-bool UBS_BarometerSensorDataManager::OnSensorDataMessage(EBS_SensorType SensorType, const TArray<uint8> &Message, const uint64 &Timestamp, const float &Scalar)
+bool UBS_BarometerSensorDataManager::OnSensorDataMessage(EBS_SensorType SensorType, const TArrayView<const uint8> &Message, const uint64 &Timestamp, const float &Scalar)
 {
     switch (SensorType)
     {
@@ -19,7 +19,7 @@ bool UBS_BarometerSensorDataManager::OnSensorDataMessage(EBS_SensorType SensorTy
     return true;
 }
 
-void UBS_BarometerSensorDataManager::ParseBarometer(EBS_SensorType SensorType, const TArray<uint8> &Message, const uint64 &Timestamp, const float &Scalar)
+void UBS_BarometerSensorDataManager::ParseBarometer(EBS_SensorType SensorType, const TArrayView<const uint8> &Message, const uint64 &Timestamp, const float &Scalar)
 {
     const float Barometer = BS_ByteParser::ParseAs<float>(Message);
     UE_LOGFMT(LogBS_BarometerSensorDataManager, Verbose, "Barometer: {0}", Barometer);

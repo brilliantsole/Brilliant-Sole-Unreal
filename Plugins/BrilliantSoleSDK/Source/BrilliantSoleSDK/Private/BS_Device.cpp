@@ -344,7 +344,7 @@ const TArray<uint8> UBS_Device::InitializePingTxData()
 
 // MESSAGING START
 
-void UBS_Device::OnRxMessage(UBS_BaseConnectionManager *_ConnectionManager, EBS_TxRxMessage MessageType, const TArray<uint8> &Message)
+void UBS_Device::OnRxMessage(UBS_BaseConnectionManager *_ConnectionManager, EBS_TxRxMessage MessageType, const TArrayView<const uint8> &Message)
 {
     UE_LOGFMT(LogBS_Device, Verbose, "message {0} ({1} bytes)", static_cast<uint8>(MessageType), Message.Num());
 

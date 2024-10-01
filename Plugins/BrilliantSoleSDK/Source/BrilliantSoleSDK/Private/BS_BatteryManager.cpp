@@ -7,7 +7,7 @@
 
 DEFINE_LOG_CATEGORY(LogBS_BatteryManager);
 
-bool UBS_BatteryManager::OnRxMessage(EBS_TxRxMessage MessageType, const TArray<uint8> &Message)
+bool UBS_BatteryManager::OnRxMessage(EBS_TxRxMessage MessageType, const TArrayView<const uint8> &Message)
 {
     switch (MessageType)
     {
@@ -24,13 +24,13 @@ bool UBS_BatteryManager::OnRxMessage(EBS_TxRxMessage MessageType, const TArray<u
     return true;
 }
 
-void UBS_BatteryManager::ParseIsBatteryCharging(const TArray<uint8> &Message)
+void UBS_BatteryManager::ParseIsBatteryCharging(const TArrayView<const uint8> &Message)
 {
     bIsBatteryCharging = Message[0];
     UE_LOGFMT(LogBS_BatteryManager, Verbose, "Is Battery Charging: {0}", bIsBatteryCharging);
     OnIsBatteryChargingUpdate.ExecuteIfBound(bIsBatteryCharging);
 }
-void UBS_BatteryManager::ParseBatteryCurrent(const TArray<uint8> &Message)
+void UBS_BatteryManager::ParseBatteryCurrent(const TArrayView<const uint8> &Message)
 {
     BatteryCurrent = BS_ByteParser::ParseAs<float>(Message, 0, true);
     UE_LOGFMT(LogBS_BatteryManager, Verbose, "Battery Current: {0}mAh", BatteryCurrent);
