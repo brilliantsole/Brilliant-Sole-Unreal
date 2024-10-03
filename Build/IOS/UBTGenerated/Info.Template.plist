@@ -1,36 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<dict>
-	<key>CFBundleURLTypes</key>
-	<array>
-		<dict>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>BrilliantSoleUnreal</string>
-			</array>
-			<key>NSBluetoothAlwaysUsageDescription</key>
-			<string>$(PRODUCT_NAME) uses bluetooth to find nearby devices.</string>
-			<key>NSBluetoothPeripheralUsageDescription</key>
-			<string>$(PRODUCT_NAME) uses bluetooth to find nearby devices.</string>
-		</dict>
-	</array>
-	<key>ITSAppUsesNonExemptEncryption</key>
-	<false/>
-	<key>TVTopShelfImage</key>
-	<dict>
-		<key>NSBluetoothAlwaysUsageDescription</key>
-		<string>$(PRODUCT_NAME) uses bluetooth to find nearby devices.</string>
-		<key>NSBluetoothPeripheralUsageDescription</key>
-		<string>$(PRODUCT_NAME) uses bluetooth to find nearby devices.</string>
-		<key>TVTopShelfPrimaryImageWide</key>
-		<string>Top Shelf Image Wide</string>
-	</dict>
-	<key>UIFileSharingEnabled</key>
-	<false/>
-	<key>UIInterfaceOrientation</key>
-	<string>UIInterfaceOrientationLandscapeLeft</string>
-	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false/>
-</dict>
+  <dict>
+    <key>CFBundleURLTypes</key>
+    <array>
+      <dict>
+        <key>CFBundleURLName</key>
+        <string>com.Epic.Unreal</string>
+        <key>CFBundleURLSchemes</key>
+        <array>
+          <string>BrilliantSole_Unreal</string>
+        </array>
+        <key __line="12">NSBluetoothAlwaysUsageDescription</key>
+        <string __line="13">$(PRODUCT_NAME) uses bluetooth to find nearby devices.</string>
+        <key __line="14">NSBluetoothPeripheralUsageDescription</key>
+        <string __line="15">$(PRODUCT_NAME) uses bluetooth to find nearby devices.</string>
+      </dict>
+    </array>
+    <key>UIStatusBarHidden</key>
+    <true />
+    <key>UIFileSharingEnabled</key>
+    <false />
+    <key>CFBundleDisplayName</key>
+    <string>Brilliant Sole Unreal Engine Demo</string>
+    <key>UIRequiresFullScreen</key>
+    <true />
+    <key>UIViewControllerBasedStatusBarAppearance</key>
+    <false />
+    <key>UIInterfaceOrientation</key>
+    <string>UIInterfaceOrientationLandscapeLeft</string>
+    <key>UISupportedInterfaceOrientations</key>
+    <array>
+      <string>UIInterfaceOrientationPortrait</string>
+      <string>UIInterfaceOrientationLandscapeLeft</string>
+      <string>UIInterfaceOrientationLandscapeRight</string>
+    </array>
+    <key>UIRequiredDeviceCapabilities</key>
+    <array>
+      <string>arm64</string>
+      <string>metal</string>
+    </array>
+    <key>UILaunchStoryboardName</key>
+    <string>LaunchScreen</string>
+    <key>ITSAppUsesNonExemptEncryption</key>
+    <false />
+    <key>TVTopShelfImage</key>
+    <dict>
+      <key>TVTopShelfPrimaryImageWide</key>
+      <string>Top Shelf Image Wide</string>
+      <key __line="12">NSBluetoothAlwaysUsageDescription</key>
+      <string __line="13">$(PRODUCT_NAME) uses bluetooth to find nearby devices.</string>
+      <key __line="14">NSBluetoothPeripheralUsageDescription</key>
+      <string __line="15">$(PRODUCT_NAME) uses bluetooth to find nearby devices.</string>
+    </dict>
+    <key>NSCameraUsageDescription</key>
+    <string>Not sure why, but we also need to use the camera</string>
+    <key>CFBundleURLTypes</key>
+    <array>
+      <dict>
+        <key>CFBundleURLSchemes</key>
+        <array>
+          <string>BrilliantSoleUnreal</string>
+        </array>
+        <key __line="12">NSBluetoothAlwaysUsageDescription</key>
+        <string __line="13">$(PRODUCT_NAME) uses bluetooth to find nearby devices.</string>
+        <key __line="14">NSBluetoothPeripheralUsageDescription</key>
+        <string __line="15">$(PRODUCT_NAME) uses bluetooth to find nearby devices.</string>
+      </dict>
+    </array>
+    <key __line="12">NSBluetoothAlwaysUsageDescription</key>
+    <string __line="13">$(PRODUCT_NAME) uses bluetooth to find nearby devices.</string>
+    <key __line="14">NSBluetoothPeripheralUsageDescription</key>
+    <string __line="15">$(PRODUCT_NAME) uses bluetooth to find nearby devices.</string>
+  </dict>
 </plist>
