@@ -21,7 +21,7 @@ bool UBS_BarometerSensorDataManager::OnSensorDataMessage(EBS_SensorType SensorTy
 
 void UBS_BarometerSensorDataManager::ParseBarometer(EBS_SensorType SensorType, const TArrayView<const uint8> &Message, const uint64 &Timestamp, const float &Scalar)
 {
-    const float Barometer = BS_ByteParser::ParseAs<float>(Message) * Scalar;
+    const float Barometer = BS_ByteParser::ParseAs<float>(Message, 0, true) * Scalar;
     UE_LOGFMT(LogBS_BarometerSensorDataManager, Verbose, "Barometer: {0}", Barometer);
     OnBarometerUpdate.ExecuteIfBound(Barometer, Timestamp);
 }
