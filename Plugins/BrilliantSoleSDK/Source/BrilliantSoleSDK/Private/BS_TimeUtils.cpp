@@ -26,7 +26,7 @@ uint64 TimeUtils::ParseTimestamp(const TArrayView<const uint8> &Message)
     uint16 RawTimestamp = BS_ByteParser::ParseAs<uint16>(Message, 0, true);
     UE_LOGFMT(LogBS_TimeUtils, Verbose, "RawTimestamp: {0}ms", RawTimestamp);
 
-    uint64 Timestamp = CurrentTimestamp - (CurrentTimestamp % UINT16_MAX);
+    uint64 Timestamp = CurrentTimestamp - (CurrentTimestamp % (UINT16_MAX + 1));
     Timestamp += RawTimestamp;
 
     UE_LOGFMT(LogBS_TimeUtils, Verbose, "Temp Timestamp: {0}ms", Timestamp);
