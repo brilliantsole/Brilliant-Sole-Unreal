@@ -83,8 +83,6 @@ const TArray<uint8> FBS_VibrationConfiguration::WaveformEffectSequenceToArray() 
         }
     }
 
-    const uint8 IncludeAllWaveformEffectSegmentLoopCounts = WaveformEffectSequenceLoopCount != 0;
-
     for (uint8 Index = 0; Index < NumberOfSegments || (IncludeAllWaveformEffectSegments && Index < MaxNumberOfWaveformEffectSegments); Index++)
     {
         const uint8 SegmentLoopCount = WaveformEffectSequence.IsValidIndex(Index) ? WaveformEffectSequence[Index].LoopCount : 0;
@@ -99,7 +97,8 @@ const TArray<uint8> FBS_VibrationConfiguration::WaveformEffectSequenceToArray() 
         }
     }
 
-    if (WaveformEffectSequenceLoopCount != 0)
+    const bool IncludeAllWaveformEffectSegmentLoopCounts = WaveformEffectSequenceLoopCount != 0;
+    if (IncludeAllWaveformEffectSegmentLoopCounts)
     {
         Array.Add(WaveformEffectSequenceLoopCount);
     }
