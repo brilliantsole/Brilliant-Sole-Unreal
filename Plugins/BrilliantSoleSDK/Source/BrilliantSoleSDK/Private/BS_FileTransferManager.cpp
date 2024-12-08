@@ -184,7 +184,7 @@ void UBS_FileTransferManager::SendFile(const EBS_FileType NewFileType, const TAr
         return;
     }
 
-    UE_LOGFMT(LogBS_FileTransferManager, Verbose, "Requestig to send File with {0} bytes...", File.Num());
+    UE_LOGFMT(LogBS_FileTransferManager, Verbose, "Requesting to send File with {0} bytes...", File.Num());
 
     FileToSend = File;
 
