@@ -310,11 +310,11 @@ void UBS_TfliteManager::ParseInference(const TArrayView<const uint8> &Message)
     Offset += 2;
     UE_LOGFMT(LogBS_TfliteManager, Verbose, "Timestamp: {0}ms", Timestamp);
 
-    const uint8 InferenceMessageLegth = MessageLength - Offset;
+    const uint8 InferenceMessageLength = MessageLength - Offset;
     const uint8 InferenceSize = sizeof(float);
-    if (InferenceMessageLegth % InferenceSize != 0)
+    if (InferenceMessageLength % InferenceSize != 0)
     {
-        UE_LOGFMT(LogBS_TfliteManager, Error, "Message is not a multiple of 4 (got {0})", InferenceMessageLegth);
+        UE_LOGFMT(LogBS_TfliteManager, Error, "InferenceMessageLength is not a multiple of 4 (got {0})", InferenceMessageLength);
         return;
     }
 
