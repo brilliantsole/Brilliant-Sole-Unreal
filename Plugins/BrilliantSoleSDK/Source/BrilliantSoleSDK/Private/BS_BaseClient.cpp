@@ -406,28 +406,38 @@ void UBS_BaseClient::ParseConnectedDevices(const TArrayView<const uint8> &Messag
     UE_LOGFMT(LogBS_BaseClient, Verbose, "ConnectedDeviceBluetoothIdsString: {0}", ConnectedDeviceBluetoothIdsString);
 
     TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(ConnectedDeviceBluetoothIdsString);
-    TArray<TSharedPtr<FJsonValue>> ConnectedDeviceBluetoothIds;
+    TSharedPtr<FJsonObject> JsonObject;
 
-    if (FJsonSerializer::Deserialize(Reader, ConnectedDeviceBluetoothIds))
+    if (FJsonSerializer::Deserialize(Reader, JsonObject) && JsonObject.IsValid())
     {
-        for (const TSharedPtr<FJsonValue> &Value : ConnectedDeviceBluetoothIds)
+        const TArray<TSharedPtr<FJsonValue>> *ConnectedDeviceBluetoothIds;
+        if (JsonObject->TryGetArrayField(TEXT("connectedDevices"), ConnectedDeviceBluetoothIds))
         {
-            FString ConnectedDeviceBluetoothId = Value->AsString();
-            UE_LOGFMT(LogBS_BaseClient, Verbose, "ConnectedDeviceBluetoothId: {0}", ConnectedDeviceBluetoothId);
-            UBS_Device *Device = CreateDevice(ConnectedDeviceBluetoothId);
-            UBS_ClientConnectionManager *ConnectionManager = Cast<UBS_ClientConnectionManager>(Device->GetConnectionManager());
-            if (!ConnectionManager)
+            for (const TSharedPtr<FJsonValue> &Value : *ConnectedDeviceBluetoothIds)
             {
-                UE_LOGFMT(LogBS_BaseClient, Error, "Failed to cast ConnectionManager to ClientConnectionManager");
-                return;
+                FString ConnectedDeviceBluetoothId = Value->AsString();
+                UE_LOGFMT(LogBS_BaseClient, Verbose, "ConnectedDeviceBluetoothId: {0}", ConnectedDeviceBluetoothId);
+
+                UBS_Device *Device = CreateDevice(ConnectedDeviceBluetoothId);
+                UBS_ClientConnectionManager *ConnectionManager = Cast<UBS_ClientConnectionManager>(Device->GetConnectionManager());
+                if (!ConnectionManager)
+                {
+                    UE_LOGFMT(LogBS_BaseClient, Error, "Failed to cast ConnectionManager to ClientConnectionManager");
+                    return;
+                }
+
+                Device->SetConnectionStatus(EBS_ConnectionStatus::CONNECTING);
+                ConnectionManager->SetIsConnected(true);
             }
-            Device->SetConnectionStatus(EBS_ConnectionStatus::CONNECTING);
-            ConnectionManager->SetIsConnected(true);
+        }
+        else
+        {
+            UE_LOGFMT(LogBS_BaseClient, Error, "Failed to find 'connectedDevices' array in JSON");
         }
     }
     else
     {
-        UE_LOGFMT(LogBS_BaseClient, Error, "Unable to parse ConnectedDeviceBluetoothIdsString");
+        UE_LOGFMT(LogBS_BaseClient, Error, "Unable to parse ConnectedDeviceBluetoothIdsString as JSON object");
     }
 }
 // DEVICES END
