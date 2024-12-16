@@ -446,14 +446,14 @@ void UBS_BaseClient::ParseConnectedDevices(const TArrayView<const uint8> &Messag
 void UBS_BaseClient::SendConnectToDeviceMessage(const FBS_DiscoveredDevice &DiscoveredDevice, bool bSendImmediately)
 {
     UE_LOGFMT(LogBS_BaseClient, Verbose, "Requesting connection to {0}...", DiscoveredDevice.BluetoothId);
-    const TArray<uint8> TxMessage = BS_ByteParser::StringToArray(DiscoveredDevice.BluetoothId, true);
-    SendMessages({{EBS_ServerMessage::CONNECT_TO_DEVICE, TxMessage}});
+    const TArray<uint8> Message = BS_ByteParser::StringToArray(DiscoveredDevice.BluetoothId, true);
+    SendMessages({{EBS_ServerMessage::CONNECT_TO_DEVICE, Message}});
 }
 void UBS_BaseClient::SendDisconnectFromDeviceMessage(const FBS_DiscoveredDevice &DiscoveredDevice, bool bSendImmediately)
 {
     UE_LOGFMT(LogBS_BaseClient, Verbose, "Requesting disconnection from {0}...", DiscoveredDevice.BluetoothId);
-    const TArray<uint8> TxMessage = BS_ByteParser::StringToArray(DiscoveredDevice.BluetoothId, true);
-    SendMessages({{EBS_ServerMessage::DISCONNECT_FROM_DEVICE, TxMessage}});
+    const TArray<uint8> Message = BS_ByteParser::StringToArray(DiscoveredDevice.BluetoothId, true);
+    SendMessages({{EBS_ServerMessage::DISCONNECT_FROM_DEVICE, Message}});
 }
 void UBS_BaseClient::SendDeviceMessages(const FBS_DiscoveredDevice &DiscoveredDevice, const TArray<FBS_ConnectionMessage> &Messages, bool bSendImmediately)
 {
