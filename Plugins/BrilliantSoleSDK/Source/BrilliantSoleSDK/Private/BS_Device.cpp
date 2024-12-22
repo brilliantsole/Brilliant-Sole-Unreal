@@ -399,15 +399,15 @@ void UBS_Device::SendTxMessages(const TArray<FBS_TxMessage> &TxMessages, bool bS
         UE_LOGFMT(LogBS_Device, Verbose, "Not sending data immediately");
         return;
     }
+    SendPendingTxMessages();
+}
+void UBS_Device::SendPendingTxMessages()
+{
     if (bIsSendingTxData)
     {
         UE_LOGFMT(LogBS_Device, Verbose, "Already sending data - will wait until new data is sent");
         return;
     }
-    SendPendingTxMessages();
-}
-void UBS_Device::SendPendingTxMessages()
-{
     if (PendingTxMessages.IsEmpty())
     {
         return;
