@@ -34,6 +34,19 @@ if ([[Characteristic.UUID.UUIDString lowercaseString] isEqualToString:[Character
 }
 ```
 
+and add to IOS BleDevice.cpp's `UBleDevice::Init` function (to the beginning of both `DeviceDelegate.onRead` and `DeviceDelegate.onNotification` callbacks):
+
+```
+if (Data == nil)
+{
+	return;
+}
+else if (Data.length == 0)
+{
+	return;
+}
+```
+
 and add to BleDeviceDelegate.cpp (be sure to replace the existing `didUpdateValueForCharacteristic` method):
 
 ```
