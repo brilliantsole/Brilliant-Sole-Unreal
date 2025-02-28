@@ -150,7 +150,7 @@ void UBS_MotionSensorDataManager::ParseActivity(EBS_SensorType SensorType, const
 
 void UBS_MotionSensorDataManager::ParseStepCount(EBS_SensorType SensorType, const TArrayView<const uint8> &Message, const uint64 &Timestamp)
 {
-    const uint32 StepCount = BS_ByteParser::ParseAs<uint32>(Message);
+    const uint32 StepCount = BS_ByteParser::ParseAs<uint32>(Message, 0, true);
     UE_LOGFMT(LogBS_MotionSensorDataManager, Verbose, "StepCount: {0}", StepCount);
     OnStepCountUpdate.ExecuteIfBound(StepCount, Timestamp);
 }
