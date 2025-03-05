@@ -32,6 +32,8 @@ private:
 	TArray<FBS_Range> PressureSensorRanges;
 	UPROPERTY()
 	FBS_CenterOfPressureRange CenterOfPressureRange;
+	UPROPERTY()
+	FBS_Range NormalizedSumRange;
 
 public:
 	void Reset();

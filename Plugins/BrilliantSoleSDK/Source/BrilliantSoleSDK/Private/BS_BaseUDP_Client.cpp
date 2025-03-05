@@ -137,8 +137,6 @@ void UBS_BaseUDP_Client::SendPendingUDP_Messages()
     }
     bIsSendingUDP_Data = true;
 
-    UDP_Data.Reset();
-
     const uint32 MaxMessageLength = MAX_UDP_MESSAGE_SIZE;
 
     uint8 PendingUDP_MessageIndex = 0;

@@ -22,7 +22,6 @@ UBS_BaseClient::UBS_BaseClient()
         UE_LOGFMT(LogBS_BaseClient, Verbose, "CDO - Skipping Constructor");
         return;
     }
-
     BoundOnMessage.BindUObject(this, &UBS_BaseClient::OnMessage);
 }
 

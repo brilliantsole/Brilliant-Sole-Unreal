@@ -35,11 +35,10 @@ void UBS_DevicePairPressureSensorDataManager::OnDevicePressureData(EBS_InsoleSid
     for (const TPair<EBS_InsoleSide, FBS_PressureData> &Pair : DevicesPressureData)
     {
         const FBS_PressureData &_DevicePressureData = Pair.Value;
-        PressureData.RawSum += _DevicePressureData.ScaledSum;
-        PressureData.NormalizedSum += _DevicePressureData.NormalizedSum;
+        PressureData.ScaledSum += _DevicePressureData.ScaledSum;
     }
-
-    UE_LOGFMT(LogBS_DevicePairPressureSensorDataManager, Verbose, "RawSum: {0}, NormalizedSum: {1}", PressureData.RawSum, PressureData.NormalizedSum);
+    PressureData.NormalizedSum = NormalizedSumRange.UpdateAndGetNormalization(PressureData.ScaledSum, false);
+    UE_LOGFMT(LogBS_DevicePairPressureSensorDataManager, Verbose, "ScaledSum: {0}, NormalizedSum: {1}", PressureData.ScaledSum, PressureData.NormalizedSum);
 
     if (PressureData.NormalizedSum > 0)
     {
@@ -47,13 +46,52 @@ void UBS_DevicePairPressureSensorDataManager::OnDevicePressureData(EBS_InsoleSid
         {
             const EBS_InsoleSide _InsoleSide = Pair.Key;
             const FBS_PressureData &_DevicePressureData = Pair.Value;
-            const float NormalizedSumWeight = _DevicePressureData.NormalizedSum / PressureData.NormalizedSum;
-            if (NormalizedSumWeight > 0)
+
+            if (true)
             {
-                PressureData.CenterOfPressure.Y += _DevicePressureData.NormalizedCenterOfPressure.Y * NormalizedSumWeight;
+                const uint8 NumberOfPressureSensors = _DevicePressureData.Sensors.Num();
+
                 if (_InsoleSide == EBS_InsoleSide::RIGHT)
                 {
-                    PressureData.CenterOfPressure.X = NormalizedSumWeight;
+                    PressureData.RightSensors.Reset(NumberOfPressureSensors);
+                }
+                else
+                {
+                    PressureData.LeftSensors.Reset(NumberOfPressureSensors);
+                }
+
+                for (uint8 Index = 0; Index < NumberOfPressureSensors; Index++)
+                {
+                    auto PressureSensorData = _DevicePressureData.Sensors[Index];
+                    PressureSensorData.WeightedValue = PressureSensorData.ScaledValue / PressureData.ScaledSum;
+                    PressureSensorData.Position.X *= 0.5;
+                    if (_InsoleSide == EBS_InsoleSide::RIGHT)
+                    {
+                        PressureSensorData.Position.X += 0.5;
+                    }
+                    PressureData.CenterOfPressure.X += PressureSensorData.Position.X * PressureSensorData.WeightedValue;
+                    PressureData.CenterOfPressure.Y += PressureSensorData.Position.Y * PressureSensorData.WeightedValue;
+
+                    if (_InsoleSide == EBS_InsoleSide::RIGHT)
+                    {
+                        PressureData.RightSensors.Add(PressureSensorData);
+                    }
+                    else
+                    {
+                        PressureData.LeftSensors.Add(PressureSensorData);
+                    }
+                }
+            }
+            else
+            {
+                const float NormalizedSumWeight = _DevicePressureData.NormalizedSum / PressureData.NormalizedSum;
+                if (NormalizedSumWeight > 0)
+                {
+                    PressureData.CenterOfPressure.Y += _DevicePressureData.NormalizedCenterOfPressure.Y * NormalizedSumWeight;
+                    if (_InsoleSide == EBS_InsoleSide::RIGHT)
+                    {
+                        PressureData.CenterOfPressure.X = NormalizedSumWeight;
+                    }
                 }
             }
         }

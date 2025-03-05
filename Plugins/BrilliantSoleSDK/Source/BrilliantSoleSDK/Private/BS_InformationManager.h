@@ -25,7 +25,7 @@ public:
 	DECLARE_DELEGATE_OneParam(FBS_MTU_CallbackLocal, uint16);
 	FBS_MTU_CallbackLocal OnMTU_Update;
 
-	uint16 GetMaxTxMessageLength() const { return MTU == 0 ? 0 : MTU - 3; }
+	uint16 GetMaxTxMessageLength() const { return MTU == 0 ? (23 - 3) : MTU - 3; }
 
 private:
 	UPROPERTY()

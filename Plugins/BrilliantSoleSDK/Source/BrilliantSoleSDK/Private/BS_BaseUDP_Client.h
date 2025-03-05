@@ -89,6 +89,7 @@ private:
     {
         UDP_Manager->EmitBytes(Data);
         bIsSendingUDP_Data = false;
+        SendPendingUDP_Messages();
     }
 
     void SendUDP_Messages(const TArray<FBS_UDP_Message> &UDP_Messages, bool bSendImmediately = true);

@@ -32,7 +32,13 @@ public:
 private:
 	UPROPERTY()
 	FBS_CenterOfPressureRange CenterOfPressureRange;
+	UPROPERTY()
+	FBS_Range NormalizedSumRange;
 
 public:
-	void Reset() { CenterOfPressureRange.Reset(); }
+	void Reset()
+	{
+		CenterOfPressureRange.Reset();
+		NormalizedSumRange.Reset();
+	}
 };
