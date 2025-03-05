@@ -54,6 +54,7 @@ void UBS_BaseUDP_Client::StartPinging()
     {
         UE_LOGFMT(LogBS_BaseUDP_Client, Verbose, "StartPinging");
         World->GetTimerManager().SetTimer(PingTimerHandler, this, &UBS_BaseUDP_Client::Ping, 2.0f, true);
+        Ping();
     }
 }
 void UBS_BaseUDP_Client::StopPinging()
