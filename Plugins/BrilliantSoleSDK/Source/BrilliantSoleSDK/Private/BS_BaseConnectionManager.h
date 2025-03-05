@@ -66,6 +66,13 @@ private:
 	EBS_ConnectionStatus ConnectionStatus = EBS_ConnectionStatus::NOT_CONNECTED;
 	// CONNECTION STATUS END
 
+	// IS AVAILABLE START
+public:
+	UFUNCTION(BlueprintPure, BlueprintNativeEvent, Category = "BS Connection Manager")
+	const bool GetIsAvailable() const;
+	virtual const bool GetIsAvailable_Implementation() const { return false; }
+	// IS AVAILABLE END
+
 	// RX DATA START
 protected:
 	UFUNCTION(BlueprintCallable, Category = "BS Connection Manager")

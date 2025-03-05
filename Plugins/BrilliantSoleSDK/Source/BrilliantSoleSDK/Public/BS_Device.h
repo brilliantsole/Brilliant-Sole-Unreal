@@ -127,6 +127,19 @@ private:
 	TSet<EBS_TxRxMessage> ReceivedTxMessages;
 	// CONNECTION END
 
+	// IS AVAILABLE START
+public:
+	UFUNCTION(BlueprintPure, Category = "BS Device")
+	bool IsAvailable() const
+	{
+		if (ConnectionManager == nullptr)
+		{
+			return false;
+		}
+		return ConnectionManager->GetIsAvailable();
+	}
+	// IS AVAILABLE END
+
 	// CONNECTION MANAGER START
 public:
 	UFUNCTION(BlueprintPure, Category = "BS Connection Manager")

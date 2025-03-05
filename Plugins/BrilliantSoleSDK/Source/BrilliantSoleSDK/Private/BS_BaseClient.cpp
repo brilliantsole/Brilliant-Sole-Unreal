@@ -42,8 +42,10 @@ void UBS_BaseClient::Reset()
         }
         // Device->SetConnectionStatus(EBS_ConnectionStatus::DISCONNECTING);
         ConnectionManager->SetIsConnected(false);
-
-        // Device->Remove();
+        if (!Device->IsAvailable())
+        {
+            Device->Remove();
+        }
     }
 
     DiscoveredDevices.Reset();

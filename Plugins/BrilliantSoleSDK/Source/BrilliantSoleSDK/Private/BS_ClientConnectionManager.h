@@ -32,6 +32,18 @@ private:
 	UBS_BaseClient *Client = nullptr;
 	// CLIENT END
 
+	// IS AVAILABLE START
+public:
+	virtual const bool GetIsAvailable_Implementation() const override
+	{
+		if (Client == nullptr)
+		{
+			return false;
+		}
+		return Client->IsConnected();
+	}
+	// IS AVAILABLE END
+
 	// DISCOVERED DEVICE START
 public:
 	UFUNCTION(BlueprintPure, Category = "BS Client Connection Manager")

@@ -15,7 +15,7 @@
 #include "BS_Subsystem.h"
 #include "BS_BaseClient.generated.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogBS_BaseClient, Log, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_BaseClient, Verbose, All);
 
 UCLASS(Abstract, BlueprintType, Blueprintable)
 class UBS_BaseClient : public UObject

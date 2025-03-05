@@ -27,6 +27,8 @@ void UBS_BaseUDP_Client::Reset()
 {
     Super::Reset();
     bDidSendSetInListenPortMessage = false;
+    PendingUDP_Messages.Reset();
+    UDP_Data.Reset();
 }
 
 // IN LISTEN PORT START
@@ -68,7 +70,7 @@ void UBS_BaseUDP_Client::StopPinging()
 
 void UBS_BaseUDP_Client::Ping()
 {
-    UE_LOGFMT(LogBS_BaseUDP_Client, Verbose, "Pinging...");
+    UE_LOGFMT(LogBS_BaseUDP_Client, Verbose, "Pinging (bDidSendSetInListenPortMessage? {0})", bDidSendSetInListenPortMessage);
     const FBS_UDP_Message &_PingMessage = bDidSendSetInListenPortMessage ? PingMessage : SetInListenPortUDP_Message;
     SendUDP_Messages({_PingMessage}, true);
 };
@@ -136,7 +138,12 @@ void UBS_BaseUDP_Client::SendPendingUDP_Messages()
     {
         return;
     }
+    if (bIsSendingUDP_Data)
+    {
+        return;
+    }
     bIsSendingUDP_Data = true;
+    UDP_Data.Reset();
 
     const uint32 MaxMessageLength = MAX_UDP_MESSAGE_SIZE;
 

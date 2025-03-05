@@ -18,6 +18,13 @@ UBS_BaseConnectionManager::UBS_BaseConnectionManager()
 // CONNECTION START
 void UBS_BaseConnectionManager::Connect_Implementation(bool &bContinue)
 {
+    if (!GetIsAvailable())
+    {
+        bContinue = false;
+        UE_LOGFMT(LogBS_BaseConnectionManager, Error, "Device is not available");
+        return;
+    }
+
     switch (ConnectionStatus)
     {
     case EBS_ConnectionStatus::CONNECTED:
