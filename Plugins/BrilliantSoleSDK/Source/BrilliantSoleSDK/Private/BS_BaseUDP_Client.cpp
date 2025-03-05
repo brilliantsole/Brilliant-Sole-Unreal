@@ -259,7 +259,8 @@ void UBS_BaseUDP_Client::OnSetRemoteReceivePortMessage(const TArrayView<const ui
 
     bDidSendSetInListenPortMessage = true;
 
-    SetConnectionStatus(EBS_ConnectionStatus::CONNECTED);
+    // SetConnectionStatus(EBS_ConnectionStatus::CONNECTED);
+    SendRequiredMessages();
 }
 // PARSING END
 

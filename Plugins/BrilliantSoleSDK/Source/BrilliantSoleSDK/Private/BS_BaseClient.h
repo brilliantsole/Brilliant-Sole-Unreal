@@ -69,6 +69,8 @@ protected:
 private:
     EBS_ConnectionStatus ConnectionStatus = EBS_ConnectionStatus::NOT_CONNECTED;
 
+    void CheckIfFullyConnected();
+    TSet<EBS_ServerMessage> ReceivedMessages;
     // CONNECTION END
 
     // MESSAGING START
@@ -77,13 +79,13 @@ protected:
 
     virtual void SendMessageData(const TArray<uint8> &Data, bool bSendImmediately = true) {}
 
+    void SendRequiredMessages() { SendMessages(UBS_BaseClient::RequiredMessages); }
+
 private:
     void OnMessage(EBS_ServerMessage MessageType, const TArrayView<const uint8> &Message);
     FBS_ServerMessageCallback BoundOnMessage;
 
     void SendMessages(const TArray<FBS_ServerMessage> &ServerMessages, bool bSendImmediately = true);
-
-    void SendRequiredMessages() { SendMessages(UBS_BaseClient::RequiredMessages); }
 
     static const TArray<EBS_ServerMessage> RequiredMessageTypes;
     static const TArray<FBS_ServerMessage> RequiredMessages;

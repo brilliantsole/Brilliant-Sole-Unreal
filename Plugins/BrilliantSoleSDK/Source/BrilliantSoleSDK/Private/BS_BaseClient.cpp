@@ -44,12 +44,14 @@ void UBS_BaseClient::Reset()
         ConnectionManager->SetIsConnected(false);
         if (!Device->IsAvailable())
         {
-            Device->Remove();
+            // Device->Remove();
         }
     }
 
     DiscoveredDevices.Reset();
     // Devices.Reset();
+
+    ReceivedMessages.Reset();
 }
 
 void UBS_BaseClient::PostInitProperties()
@@ -124,7 +126,7 @@ void UBS_BaseClient::SetConnectionStatus(EBS_ConnectionStatus NewConnectionStatu
         OnIsConnectedUpdate.Broadcast(this, GetIsConnected());
         if (ConnectionStatus == EBS_ConnectionStatus::CONNECTED)
         {
-            SendRequiredMessages();
+            // SendRequiredMessages();
         }
         else
         {
@@ -134,6 +136,33 @@ void UBS_BaseClient::SetConnectionStatus(EBS_ConnectionStatus NewConnectionStatu
     default:
         break;
     }
+}
+
+void UBS_BaseClient::CheckIfFullyConnected()
+{
+    if (ConnectionStatus != EBS_ConnectionStatus::CONNECTING)
+    {
+        return;
+    }
+    UE_LOGFMT(LogBS_BaseClient, Verbose, "Checking if fully connected");
+
+    if (!ReceivedMessages.Contains(EBS_ServerMessage::IS_SCANNING_AVAILABLE))
+    {
+        UE_LOGFMT(LogBS_BaseClient, Verbose, "Not Fully Connected - didn't receive {0}", UEnum::GetValueAsString(EBS_ServerMessage::IS_SCANNING_AVAILABLE));
+        return;
+    }
+
+    if (GetIsScanningAvailable())
+    {
+        if (!ReceivedMessages.Contains(EBS_ServerMessage::IS_SCANNING))
+        {
+            UE_LOGFMT(LogBS_BaseClient, Verbose, "Not Fully Connected - didn't receive {0}", UEnum::GetValueAsString(EBS_ServerMessage::IS_SCANNING));
+            return;
+        }
+    }
+
+    UE_LOGFMT(LogBS_BaseClient, Verbose, "Fully Connected");
+    SetConnectionStatus(EBS_ConnectionStatus::CONNECTED);
 }
 // CONNECTION END
 
@@ -166,12 +195,18 @@ void UBS_BaseClient::OnMessage(EBS_ServerMessage MessageType, const TArrayView<c
         UE_LOGFMT(LogBS_BaseClient, Error, "Uncaught MessageType {0}", UEnum::GetValueAsString(MessageType));
         break;
     }
+
+    if (ConnectionStatus == EBS_ConnectionStatus::CONNECTING)
+    {
+        ReceivedMessages.Emplace(MessageType);
+    }
 }
 
 void UBS_BaseClient::OnData(const TArrayView<const uint8> &Data)
 {
     UE_LOGFMT(LogBS_BaseClient, Verbose, "Parsing {0} Bytes...", Data.Num());
     UBS_ParseUtils::ParseServerData(Data, BoundOnMessage);
+    CheckIfFullyConnected();
 }
 
 void UBS_BaseClient::SendMessages(const TArray<FBS_ServerMessage> &ServerMessages, bool bSendImmediately)
