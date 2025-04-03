@@ -9,9 +9,9 @@ DEFINE_LOG_CATEGORY(LogBS_DevicePairPressureSensorDataManager);
 bool UBS_DevicePairPressureSensorDataManager::HasAllData() const
 {
     bool bHasAllData = true;
-    for (EBS_InsoleSide InsoleSide : TEnumRange<EBS_InsoleSide>())
+    for (EBS_Side Side : TEnumRange<EBS_Side>())
     {
-        bHasAllData = bHasAllData || DevicesPressureData.Contains(InsoleSide);
+        bHasAllData = bHasAllData || DevicesPressureData.Contains(Side);
         if (!bHasAllData)
         {
             break;
@@ -20,10 +20,10 @@ bool UBS_DevicePairPressureSensorDataManager::HasAllData() const
     return bHasAllData;
 }
 
-void UBS_DevicePairPressureSensorDataManager::OnDevicePressureData(EBS_InsoleSide InsoleSide, const FBS_PressureData &DevicePressureData, const int64 &Timestamp)
+void UBS_DevicePairPressureSensorDataManager::OnDevicePressureData(EBS_Side Side, const FBS_PressureData &DevicePressureData, const int64 &Timestamp)
 {
-    UE_LOGFMT(LogBS_DevicePairPressureSensorDataManager, Verbose, "Received Pressure Data from {0}", UEnum::GetValueAsString(InsoleSide));
-    DevicesPressureData.Emplace(InsoleSide, DevicePressureData);
+    UE_LOGFMT(LogBS_DevicePairPressureSensorDataManager, Verbose, "Received Pressure Data from {0}", UEnum::GetValueAsString(Side));
+    DevicesPressureData.Emplace(Side, DevicePressureData);
 
     if (!HasAllData())
     {
@@ -32,7 +32,7 @@ void UBS_DevicePairPressureSensorDataManager::OnDevicePressureData(EBS_InsoleSid
     }
 
     FBS_DevicePairPressureData PressureData;
-    for (const TPair<EBS_InsoleSide, FBS_PressureData> &Pair : DevicesPressureData)
+    for (const TPair<EBS_Side, FBS_PressureData> &Pair : DevicesPressureData)
     {
         const FBS_PressureData &_DevicePressureData = Pair.Value;
         PressureData.ScaledSum += _DevicePressureData.ScaledSum;
@@ -42,16 +42,16 @@ void UBS_DevicePairPressureSensorDataManager::OnDevicePressureData(EBS_InsoleSid
 
     if (PressureData.NormalizedSum > 0)
     {
-        for (const TPair<EBS_InsoleSide, FBS_PressureData> &Pair : DevicesPressureData)
+        for (const TPair<EBS_Side, FBS_PressureData> &Pair : DevicesPressureData)
         {
-            const EBS_InsoleSide _InsoleSide = Pair.Key;
+            const EBS_Side _Side = Pair.Key;
             const FBS_PressureData &_DevicePressureData = Pair.Value;
 
             if (true)
             {
                 const uint8 NumberOfPressureSensors = _DevicePressureData.Sensors.Num();
 
-                if (_InsoleSide == EBS_InsoleSide::RIGHT)
+                if (_Side == EBS_Side::RIGHT)
                 {
                     PressureData.RightSensors.Reset(NumberOfPressureSensors);
                 }
@@ -65,14 +65,14 @@ void UBS_DevicePairPressureSensorDataManager::OnDevicePressureData(EBS_InsoleSid
                     auto PressureSensorData = _DevicePressureData.Sensors[Index];
                     PressureSensorData.WeightedValue = PressureSensorData.ScaledValue / PressureData.ScaledSum;
                     PressureSensorData.Position.X *= 0.5;
-                    if (_InsoleSide == EBS_InsoleSide::RIGHT)
+                    if (_Side == EBS_Side::RIGHT)
                     {
                         PressureSensorData.Position.X += 0.5;
                     }
                     PressureData.CenterOfPressure.X += PressureSensorData.Position.X * PressureSensorData.WeightedValue;
                     PressureData.CenterOfPressure.Y += PressureSensorData.Position.Y * PressureSensorData.WeightedValue;
 
-                    if (_InsoleSide == EBS_InsoleSide::RIGHT)
+                    if (_Side == EBS_Side::RIGHT)
                     {
                         PressureData.RightSensors.Add(PressureSensorData);
                     }
@@ -88,7 +88,7 @@ void UBS_DevicePairPressureSensorDataManager::OnDevicePressureData(EBS_InsoleSid
                 if (NormalizedSumWeight > 0)
                 {
                     PressureData.CenterOfPressure.Y += _DevicePressureData.NormalizedCenterOfPressure.Y * NormalizedSumWeight;
-                    if (_InsoleSide == EBS_InsoleSide::RIGHT)
+                    if (_Side == EBS_Side::RIGHT)
                     {
                         PressureData.CenterOfPressure.X = NormalizedSumWeight;
                     }

@@ -18,6 +18,18 @@ UBS_DevicePair::UBS_DevicePair()
     SensorDataManager->PressureSensorDataManager->OnPressureUpdate.BindUObject(this, &UBS_DevicePair::OnPressureUpdate);
 }
 
+void UBS_DevicePair::SetType(EBS_DevicePairType newType)
+{
+    if (Type == newType)
+    {
+        UE_LOGFMT(LogBS_DevicePair, Verbose, "Redundant type assignemnt {0}", UEnum::GetValueAsString(newType));
+        return;
+    }
+    Type = newType;
+    UE_LOGFMT(LogBS_DevicePair, Verbose, "Updated type to type {0}", UEnum::GetValueAsString(Type));
+    RemoveDevices();
+}
+
 void UBS_DevicePair::PostInitProperties()
 {
     Super::PostInitProperties();
@@ -99,7 +111,12 @@ bool UBS_DevicePair::VerifyDevice(const UBS_Device *Device)
         UE_LOGFMT(LogBS_DevicePair, Error, "Device is nullptr");
         return false;
     }
-    if (!Device->IsInsole())
+    if (Type == EBS_DevicePairType::INSOLES && !Device->IsInsole())
+    {
+        UE_LOGFMT(LogBS_DevicePair, Verbose, "Device is not an Insole");
+        return false;
+    }
+    if (Type == EBS_DevicePairType::GLOVES && !Device->IsGlove())
     {
         UE_LOGFMT(LogBS_DevicePair, Verbose, "Device is not an Insole");
         return false;
@@ -114,32 +131,32 @@ void UBS_DevicePair::AddDevice(UBS_Device *Device)
         return;
     }
 
-    const EBS_InsoleSide InsoleSide = Device->InsoleSide();
-    if (Devices.Contains(InsoleSide) && Devices[InsoleSide] == Device)
+    const EBS_Side Side = Device->Side();
+    if (Devices.Contains(Side) && Devices[Side] == Device)
     {
         UE_LOGFMT(LogBS_DevicePair, Verbose, "Redundant Device Assignment");
         return;
     }
-    if (Devices.Contains(InsoleSide))
+    if (Devices.Contains(Side))
     {
-        UE_LOGFMT(LogBS_DevicePair, Verbose, "Removing existing {0} Device...", UEnum::GetValueAsString(InsoleSide));
-        RemoveDeviceBySide(InsoleSide);
+        UE_LOGFMT(LogBS_DevicePair, Verbose, "Removing existing {0} Device...", UEnum::GetValueAsString(Side));
+        RemoveDeviceBySide(Side);
     }
 
-    UE_LOGFMT(LogBS_DevicePair, Verbose, "Adding {0} Device \"{1}\"", UEnum::GetValueAsString(InsoleSide), Device->Name());
-    Devices.Emplace(InsoleSide, Device);
+    UE_LOGFMT(LogBS_DevicePair, Verbose, "Adding {0} Device \"{1}\"", UEnum::GetValueAsString(Side), Device->Name());
+    Devices.Emplace(Side, Device);
     AddDeviceListeners(Device);
     UpdateHasAllDevices();
     UpdateIsFullyConnected();
 }
-void UBS_DevicePair::RemoveDeviceBySide(const EBS_InsoleSide InsoleSide)
+void UBS_DevicePair::RemoveDeviceBySide(const EBS_Side Side)
 {
-    if (!Devices.Contains(InsoleSide))
+    if (!Devices.Contains(Side))
     {
-        UE_LOGFMT(LogBS_DevicePair, Verbose, "{0} Device not assigned", UEnum::GetValueAsString(InsoleSide));
+        UE_LOGFMT(LogBS_DevicePair, Verbose, "{0} Device not assigned", UEnum::GetValueAsString(Side));
         return;
     }
-    RemoveDevice(Devices[InsoleSide]);
+    RemoveDevice(Devices[Side]);
 }
 void UBS_DevicePair::RemoveDevice(UBS_Device *Device)
 {
@@ -148,32 +165,32 @@ void UBS_DevicePair::RemoveDevice(UBS_Device *Device)
         return;
     }
 
-    const EBS_InsoleSide InsoleSide = Device->InsoleSide();
-    if (!Devices.Contains(InsoleSide) || Devices[InsoleSide] != Device)
+    const EBS_Side Side = Device->Side();
+    if (!Devices.Contains(Side) || Devices[Side] != Device)
     {
         UE_LOGFMT(LogBS_DevicePair, Verbose, "Device is not assigned");
         return;
     }
 
-    UE_LOGFMT(LogBS_DevicePair, Verbose, "Removing {0} Device \"{1}\"", UEnum::GetValueAsString(InsoleSide), Device->Name());
+    UE_LOGFMT(LogBS_DevicePair, Verbose, "Removing {0} Device \"{1}\"", UEnum::GetValueAsString(Side), Device->Name());
     RemoveDeviceListeners(Device);
-    Devices.Remove(InsoleSide);
+    Devices.Remove(Side);
     UpdateHasAllDevices();
 }
 void UBS_DevicePair::RemoveDevices()
 {
-    for (const EBS_InsoleSide InsoleSide : TEnumRange<EBS_InsoleSide>())
+    for (const EBS_Side Side : TEnumRange<EBS_Side>())
     {
-        RemoveDeviceBySide(InsoleSide);
+        RemoveDeviceBySide(Side);
     }
 }
 
 void UBS_DevicePair::UpdateHasAllDevices()
 {
     bool bNewHasAllDevices = true;
-    for (const EBS_InsoleSide InsoleSide : TEnumRange<EBS_InsoleSide>())
+    for (const EBS_Side Side : TEnumRange<EBS_Side>())
     {
-        bNewHasAllDevices = bNewHasAllDevices && Devices.Contains(InsoleSide);
+        bNewHasAllDevices = bNewHasAllDevices && Devices.Contains(Side);
         if (!bNewHasAllDevices)
         {
             break;
@@ -196,9 +213,9 @@ void UBS_DevicePair::UpdateIsFullyConnected()
 
     if (bHasAllDevices)
     {
-        for (const EBS_InsoleSide InsoleSide : TEnumRange<EBS_InsoleSide>())
+        for (const EBS_Side Side : TEnumRange<EBS_Side>())
         {
-            bNewIsFullyConnected = bNewIsFullyConnected && Devices[InsoleSide]->IsConnected();
+            bNewIsFullyConnected = bNewIsFullyConnected && Devices[Side]->IsConnected();
             if (!bNewIsFullyConnected)
             {
                 break;
@@ -294,7 +311,7 @@ void UBS_DevicePair::RemoveDeviceListeners(UBS_Device *Device)
 // SENSOR CONFIGURATION START
 void UBS_DevicePair::SetSensorConfiguration(const UBS_SensorConfiguration *NewSensorConfiguration, bool bClearRest)
 {
-    for (const TPair<EBS_InsoleSide, UBS_Device *> &Pair : Devices)
+    for (const TPair<EBS_Side, UBS_Device *> &Pair : Devices)
     {
         if (Pair.Value)
         {
@@ -304,7 +321,7 @@ void UBS_DevicePair::SetSensorConfiguration(const UBS_SensorConfiguration *NewSe
 }
 void UBS_DevicePair::ClearSensorConfiguration()
 {
-    for (const TPair<EBS_InsoleSide, UBS_Device *> &Pair : Devices)
+    for (const TPair<EBS_Side, UBS_Device *> &Pair : Devices)
     {
         if (Pair.Value)
         {
@@ -315,7 +332,7 @@ void UBS_DevicePair::ClearSensorConfiguration()
 void UBS_DevicePair::SetSensorRate(EBS_SensorType SensorType, EBS_SensorRate SensorRate, bool &bDidUpdateSensorRate)
 {
     UE_LOGFMT(LogBS_DevicePair, Verbose, "SetSensorRate: {0} {1}", UEnum::GetValueAsString(SensorType), UEnum::GetValueAsString(SensorRate));
-    for (const TPair<EBS_InsoleSide, UBS_Device *> &Pair : Devices)
+    for (const TPair<EBS_Side, UBS_Device *> &Pair : Devices)
     {
         if (Pair.Value)
         {
@@ -325,7 +342,7 @@ void UBS_DevicePair::SetSensorRate(EBS_SensorType SensorType, EBS_SensorRate Sen
 }
 void UBS_DevicePair::SetSensorRates(const TMap<EBS_SensorType, EBS_SensorRate> &SensorRates)
 {
-    for (const TPair<EBS_InsoleSide, UBS_Device *> &Pair : Devices)
+    for (const TPair<EBS_Side, UBS_Device *> &Pair : Devices)
     {
         if (Pair.Value)
         {
@@ -336,7 +353,7 @@ void UBS_DevicePair::SetSensorRates(const TMap<EBS_SensorType, EBS_SensorRate> &
 void UBS_DevicePair::ClearSensorRate(EBS_SensorType SensorType)
 {
     UE_LOGFMT(LogBS_DevicePair, Verbose, "ClearSensorRate: {0}", UEnum::GetValueAsString(SensorType));
-    for (const TPair<EBS_InsoleSide, UBS_Device *> &Pair : Devices)
+    for (const TPair<EBS_Side, UBS_Device *> &Pair : Devices)
     {
         if (Pair.Value)
         {
@@ -350,10 +367,10 @@ void UBS_DevicePair::ClearSensorRate(EBS_SensorType SensorType)
 // PRESSURE START
 void UBS_DevicePair::OnDevicePressureUpdate(UBS_Device *Device, const FBS_PressureData &PressureData, const int64 &Timestamp)
 {
-    OnDevicePressure.Broadcast(this, Device->InsoleSide(), Device, PressureData, Timestamp);
+    OnDevicePressure.Broadcast(this, Device->Side(), Device, PressureData, Timestamp);
     if (bIsFullyConnected)
     {
-        SensorDataManager->PressureSensorDataManager->OnDevicePressureData(Device->InsoleSide(), PressureData, Timestamp);
+        SensorDataManager->PressureSensorDataManager->OnDevicePressureData(Device->Side(), PressureData, Timestamp);
     }
 }
 // PRESSURE END
@@ -361,7 +378,7 @@ void UBS_DevicePair::OnDevicePressureUpdate(UBS_Device *Device, const FBS_Pressu
 // VIBRATION START
 void UBS_DevicePair::TriggerVibration(const TArray<FBS_VibrationConfiguration> &VibrationConfigurations)
 {
-    for (const TPair<EBS_InsoleSide, UBS_Device *> &Pair : Devices)
+    for (const TPair<EBS_Side, UBS_Device *> &Pair : Devices)
     {
         if (Pair.Value)
         {
@@ -374,7 +391,7 @@ void UBS_DevicePair::TriggerVibration(const TArray<FBS_VibrationConfiguration> &
 // TFLITE START
 void UBS_DevicePair::SetTfliteInferencingEnabled(const bool NewInferencingEnabled)
 {
-    for (const TPair<EBS_InsoleSide, UBS_Device *> &Pair : Devices)
+    for (const TPair<EBS_Side, UBS_Device *> &Pair : Devices)
     {
         if (Pair.Value)
         {

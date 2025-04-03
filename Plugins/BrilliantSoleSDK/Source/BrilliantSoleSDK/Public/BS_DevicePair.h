@@ -3,8 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "BS_InsoleSide.h"
+#include "BS_Side.h"
 #include "BS_Device.h"
+#include "BS_DevicePairType.h"
 #include "BS_DevicePairSensorDataManager.h"
 #include "BS_DevicePair.generated.h"
 
@@ -21,6 +22,15 @@ public:
 
 private:
     void Reset();
+
+    // TYPE START
+public:
+    UPROPERTY(BlueprintReadOnly, Category = "BS Device Pair")
+    EBS_DevicePairType Type;
+
+    UFUNCTION(BlueprintCallable, Category = "BS Device Pair")
+    void SetType(EBS_DevicePairType newType);
+    // TYPE END
 
     // BS SUBSYSTEM START
 protected:
@@ -53,7 +63,7 @@ public:
     UFUNCTION(BlueprintCallable, Category = "BS Device Pair")
     void AddDevice(UBS_Device *Device);
     UFUNCTION(BlueprintCallable, Category = "BS Device Pair")
-    void RemoveDeviceBySide(const EBS_InsoleSide InsoleSide);
+    void RemoveDeviceBySide(const EBS_Side Side);
     UFUNCTION(BlueprintCallable, Category = "BS Device Pair")
     void RemoveDevice(UBS_Device *Device);
     UFUNCTION(BlueprintCallable, Category = "BS Device Pair")
@@ -64,7 +74,7 @@ public:
 
 protected:
     UPROPERTY(BlueprintReadOnly)
-    TMap<EBS_InsoleSide, UBS_Device *> Devices;
+    TMap<EBS_Side, UBS_Device *> Devices;
 
     bool VerifyDevice(const UBS_Device *Device);
 
@@ -99,22 +109,22 @@ private:
 
     // DEVICE CONNECTION LISTENERS START
 public:
-    DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FBS_DevicePairDeviceConnectionStatusCallback, UBS_DevicePair *, DevicePair, EBS_InsoleSide, Side, UBS_Device *, Device, EBS_ConnectionStatus, ConnectionStatus);
+    DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FBS_DevicePairDeviceConnectionStatusCallback, UBS_DevicePair *, DevicePair, EBS_Side, Side, UBS_Device *, Device, EBS_ConnectionStatus, ConnectionStatus);
     UPROPERTY(BlueprintAssignable, Category = "BS Device Pair")
     FBS_DevicePairDeviceConnectionStatusCallback OnDeviceConnectionStatusUpdate;
 
-    DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FBS_DevicePairDeviceIsConnectedCallback, UBS_DevicePair *, DevicePair, EBS_InsoleSide, Side, UBS_Device *, Device, bool, IsConnected);
+    DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FBS_DevicePairDeviceIsConnectedCallback, UBS_DevicePair *, DevicePair, EBS_Side, Side, UBS_Device *, Device, bool, IsConnected);
     UPROPERTY(BlueprintAssignable, Category = "BS Device Pair")
     FBS_DevicePairDeviceIsConnectedCallback OnDeviceIsConnectedUpdate;
 
 private:
     UFUNCTION()
-    void _OnDeviceConnectionStatusUpdate(UBS_Device *Device, EBS_ConnectionStatus ConnectionStatus) { OnDeviceConnectionStatusUpdate.Broadcast(this, Device->InsoleSide(), Device, ConnectionStatus); }
+    void _OnDeviceConnectionStatusUpdate(UBS_Device *Device, EBS_ConnectionStatus ConnectionStatus) { OnDeviceConnectionStatusUpdate.Broadcast(this, Device->Side(), Device, ConnectionStatus); }
 
     UFUNCTION()
     void _OnDeviceIsConnectedUpdate(UBS_Device *Device, bool bIsConnected)
     {
-        OnDeviceIsConnectedUpdate.Broadcast(this, Device->InsoleSide(), Device, bIsConnected);
+        OnDeviceIsConnectedUpdate.Broadcast(this, Device->Side(), Device, bIsConnected);
         UpdateIsFullyConnected();
     }
     // DEVICE CONNECTION LISTENERS END
@@ -136,25 +146,25 @@ public:
     UFUNCTION(BlueprintCallable, Category = "BS Device Pair Sensor Configuration")
     void ClearSensorRate(EBS_SensorType SensorType);
 
-    DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FBS_DevicePairDeviceSensorConfigurationCallback, UBS_DevicePair *, DevicePair, EBS_InsoleSide, Side, UBS_Device *, Device, const UBS_SensorConfiguration *, SensorConfiguration);
+    DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FBS_DevicePairDeviceSensorConfigurationCallback, UBS_DevicePair *, DevicePair, EBS_Side, Side, UBS_Device *, Device, const UBS_SensorConfiguration *, SensorConfiguration);
     UPROPERTY(BlueprintAssignable, Category = "BS Device Pair Sensor Configuration")
     FBS_DevicePairDeviceSensorConfigurationCallback OnDeviceSensorConfiguration;
 
 private:
     UFUNCTION()
-    void OnDeviceSensorConfigurationUpdate(UBS_Device *Device, const UBS_SensorConfiguration *SensorConfiguration) { OnDeviceSensorConfiguration.Broadcast(this, Device->InsoleSide(), Device, SensorConfiguration); }
+    void OnDeviceSensorConfigurationUpdate(UBS_Device *Device, const UBS_SensorConfiguration *SensorConfiguration) { OnDeviceSensorConfiguration.Broadcast(this, Device->Side(), Device, SensorConfiguration); }
 
     // SENSOR CONFIGURATION END
 
     // DEVICE MOTION DATA LISTENERS START
 public:
-    DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(FBS_DevicePairDeviceVectorCallback, UBS_DevicePair *, DevicePair, EBS_InsoleSide, Side, UBS_Device *, Device, const FVector &, Vector, const int64 &, Timestamp);
-    DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(FBS_DevicePairDeviceRotatorCallback, UBS_DevicePair *, DevicePair, EBS_InsoleSide, Side, UBS_Device *, Device, const FRotator &, Rotator, const int64 &, Timestamp);
-    DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(FBS_DevicePairDeviceQuaternionCallback, UBS_DevicePair *, DevicePair, EBS_InsoleSide, Side, UBS_Device *, Device, const FQuat &, Quaternion, const int64 &, Timestamp);
-    DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FBS_DevicePairDeviceTimestampCallback, UBS_DevicePair *, DevicePair, EBS_InsoleSide, Side, UBS_Device *, Device, const int64 &, Timestamp);
-    DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(FBS_DevicePairDeviceActivityCallback, UBS_DevicePair *, DevicePair, EBS_InsoleSide, Side, UBS_Device *, Device, const TSet<EBS_Activity> &, Activity, const int64 &, Timestamp);
-    DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(FBS_DevicePairDeviceStepCountCallback, UBS_DevicePair *, DevicePair, EBS_InsoleSide, Side, UBS_Device *, Device, const uint32 &, StepCount, const int64 &, Timestamp);
-    DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(FBS_DevicePairDeviceDeviceOrientationCallback, UBS_DevicePair *, DevicePair, EBS_InsoleSide, Side, UBS_Device *, Device, const EBS_DeviceOrientation &, DeviceOrientation, const int64 &, Timestamp);
+    DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(FBS_DevicePairDeviceVectorCallback, UBS_DevicePair *, DevicePair, EBS_Side, Side, UBS_Device *, Device, const FVector &, Vector, const int64 &, Timestamp);
+    DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(FBS_DevicePairDeviceRotatorCallback, UBS_DevicePair *, DevicePair, EBS_Side, Side, UBS_Device *, Device, const FRotator &, Rotator, const int64 &, Timestamp);
+    DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(FBS_DevicePairDeviceQuaternionCallback, UBS_DevicePair *, DevicePair, EBS_Side, Side, UBS_Device *, Device, const FQuat &, Quaternion, const int64 &, Timestamp);
+    DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FBS_DevicePairDeviceTimestampCallback, UBS_DevicePair *, DevicePair, EBS_Side, Side, UBS_Device *, Device, const int64 &, Timestamp);
+    DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(FBS_DevicePairDeviceActivityCallback, UBS_DevicePair *, DevicePair, EBS_Side, Side, UBS_Device *, Device, const TSet<EBS_Activity> &, Activity, const int64 &, Timestamp);
+    DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(FBS_DevicePairDeviceStepCountCallback, UBS_DevicePair *, DevicePair, EBS_Side, Side, UBS_Device *, Device, const uint32 &, StepCount, const int64 &, Timestamp);
+    DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(FBS_DevicePairDeviceDeviceOrientationCallback, UBS_DevicePair *, DevicePair, EBS_Side, Side, UBS_Device *, Device, const EBS_DeviceOrientation &, DeviceOrientation, const int64 &, Timestamp);
 
     UPROPERTY(BlueprintAssignable, Category = "BS Device Pair Motion Data")
     FBS_DevicePairDeviceVectorCallback OnDeviceAcceleration;
@@ -184,47 +194,47 @@ public:
 
 private:
     UFUNCTION()
-    void OnDeviceAccelerationUpdate(UBS_Device *Device, const FVector &Vector, const int64 &Timestamp) { OnDeviceAcceleration.Broadcast(this, Device->InsoleSide(), Device, Vector, Timestamp); }
+    void OnDeviceAccelerationUpdate(UBS_Device *Device, const FVector &Vector, const int64 &Timestamp) { OnDeviceAcceleration.Broadcast(this, Device->Side(), Device, Vector, Timestamp); }
     UFUNCTION()
-    void OnDeviceGravityUpdate(UBS_Device *Device, const FVector &Vector, const int64 &Timestamp) { OnDeviceGravity.Broadcast(this, Device->InsoleSide(), Device, Vector, Timestamp); }
+    void OnDeviceGravityUpdate(UBS_Device *Device, const FVector &Vector, const int64 &Timestamp) { OnDeviceGravity.Broadcast(this, Device->Side(), Device, Vector, Timestamp); }
     UFUNCTION()
-    void OnDeviceLinearAccelerationUpdate(UBS_Device *Device, const FVector &Vector, const int64 &Timestamp) { OnDeviceLinearAcceleration.Broadcast(this, Device->InsoleSide(), Device, Vector, Timestamp); }
+    void OnDeviceLinearAccelerationUpdate(UBS_Device *Device, const FVector &Vector, const int64 &Timestamp) { OnDeviceLinearAcceleration.Broadcast(this, Device->Side(), Device, Vector, Timestamp); }
     UFUNCTION()
-    void OnDeviceGyroscopeUpdate(UBS_Device *Device, const FVector &Vector, const int64 &Timestamp) { OnDeviceGyroscope.Broadcast(this, Device->InsoleSide(), Device, Vector, Timestamp); }
+    void OnDeviceGyroscopeUpdate(UBS_Device *Device, const FVector &Vector, const int64 &Timestamp) { OnDeviceGyroscope.Broadcast(this, Device->Side(), Device, Vector, Timestamp); }
     UFUNCTION()
-    void OnDeviceMagnetometerUpdate(UBS_Device *Device, const FVector &Vector, const int64 &Timestamp) { OnDeviceMagnetometer.Broadcast(this, Device->InsoleSide(), Device, Vector, Timestamp); }
+    void OnDeviceMagnetometerUpdate(UBS_Device *Device, const FVector &Vector, const int64 &Timestamp) { OnDeviceMagnetometer.Broadcast(this, Device->Side(), Device, Vector, Timestamp); }
     UFUNCTION()
-    void OnDeviceGameRotationUpdate(UBS_Device *Device, const FQuat &Quaternion, const int64 &Timestamp) { OnDeviceGameRotation.Broadcast(this, Device->InsoleSide(), Device, Quaternion, Timestamp); }
+    void OnDeviceGameRotationUpdate(UBS_Device *Device, const FQuat &Quaternion, const int64 &Timestamp) { OnDeviceGameRotation.Broadcast(this, Device->Side(), Device, Quaternion, Timestamp); }
     UFUNCTION()
-    void OnDeviceRotationUpdate(UBS_Device *Device, const FQuat &Quaternion, const int64 &Timestamp) { OnDeviceRotation.Broadcast(this, Device->InsoleSide(), Device, Quaternion, Timestamp); }
+    void OnDeviceRotationUpdate(UBS_Device *Device, const FQuat &Quaternion, const int64 &Timestamp) { OnDeviceRotation.Broadcast(this, Device->Side(), Device, Quaternion, Timestamp); }
 
     UFUNCTION()
-    void OnDeviceOrientationUpdate(UBS_Device *Device, const FRotator &Rotator, const int64 &Timestamp) { OnDeviceOrientation.Broadcast(this, Device->InsoleSide(), Device, Rotator, Timestamp); }
+    void OnDeviceOrientationUpdate(UBS_Device *Device, const FRotator &Rotator, const int64 &Timestamp) { OnDeviceOrientation.Broadcast(this, Device->Side(), Device, Rotator, Timestamp); }
     UFUNCTION()
-    void OnDeviceActivityUpdate(UBS_Device *Device, const TSet<EBS_Activity> &Activity, const int64 &Timestamp) { OnDeviceActivity.Broadcast(this, Device->InsoleSide(), Device, Activity, Timestamp); }
+    void OnDeviceActivityUpdate(UBS_Device *Device, const TSet<EBS_Activity> &Activity, const int64 &Timestamp) { OnDeviceActivity.Broadcast(this, Device->Side(), Device, Activity, Timestamp); }
     UFUNCTION()
-    void OnDeviceStepCountUpdate(UBS_Device *Device, const uint32 &StepCount, const int64 &Timestamp) { OnDeviceStepCount.Broadcast(this, Device->InsoleSide(), Device, StepCount, Timestamp); }
+    void OnDeviceStepCountUpdate(UBS_Device *Device, const uint32 &StepCount, const int64 &Timestamp) { OnDeviceStepCount.Broadcast(this, Device->Side(), Device, StepCount, Timestamp); }
     UFUNCTION()
-    void OnDeviceStepDetectionUpdate(UBS_Device *Device, const int64 &Timestamp) { OnDeviceStepDetection.Broadcast(this, Device->InsoleSide(), Device, Timestamp); }
+    void OnDeviceStepDetectionUpdate(UBS_Device *Device, const int64 &Timestamp) { OnDeviceStepDetection.Broadcast(this, Device->Side(), Device, Timestamp); }
     UFUNCTION()
-    void OnDeviceDeviceOrientationUpdate(UBS_Device *Device, const EBS_DeviceOrientation &DeviceOrientation, const int64 &Timestamp) { OnDeviceDeviceOrientation.Broadcast(this, Device->InsoleSide(), Device, DeviceOrientation, Timestamp); }
+    void OnDeviceDeviceOrientationUpdate(UBS_Device *Device, const EBS_DeviceOrientation &DeviceOrientation, const int64 &Timestamp) { OnDeviceDeviceOrientation.Broadcast(this, Device->Side(), Device, DeviceOrientation, Timestamp); }
     // DEVICE MOTION DATA LISTENERS END
 
     // DEVICE BAROMETER LISTENERS START
 public:
-    DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(FBS_DevicePairDeviceBarometerCallback, UBS_DevicePair *, DevicePair, EBS_InsoleSide, Side, UBS_Device *, Device, const float &, Barometer, const int64 &, Timestamp);
+    DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(FBS_DevicePairDeviceBarometerCallback, UBS_DevicePair *, DevicePair, EBS_Side, Side, UBS_Device *, Device, const float &, Barometer, const int64 &, Timestamp);
 
     UPROPERTY(BlueprintAssignable, Category = "BS Device Pair Barometer Data")
     FBS_DevicePairDeviceBarometerCallback OnDeviceBarometer;
 
 private:
     UFUNCTION()
-    void OnDeviceBarometerUpdate(UBS_Device *Device, const float &Barometer, const int64 &Timestamp) { OnDeviceBarometer.Broadcast(this, Device->InsoleSide(), Device, Barometer, Timestamp); }
+    void OnDeviceBarometerUpdate(UBS_Device *Device, const float &Barometer, const int64 &Timestamp) { OnDeviceBarometer.Broadcast(this, Device->Side(), Device, Barometer, Timestamp); }
     // DEVICE BAROMETER LISTENERS END
 
     // PRESSURE START
 public:
-    DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(FBS_DevicePairDevicePressureCallback, UBS_DevicePair *, DevicePair, EBS_InsoleSide, Side, UBS_Device *, Device, const FBS_PressureData &, PressureData, const int64 &, Timestamp);
+    DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(FBS_DevicePairDevicePressureCallback, UBS_DevicePair *, DevicePair, EBS_Side, Side, UBS_Device *, Device, const FBS_PressureData &, PressureData, const int64 &, Timestamp);
     UPROPERTY(BlueprintAssignable, Category = "BS Device Pair Pressure")
     FBS_DevicePairDevicePressureCallback OnDevicePressure;
 
@@ -248,7 +258,7 @@ public:
 
     // TFLITE START
 public:
-    DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(FBS_DevicePairDeviceTfliteInferenceCallback, UBS_DevicePair *, DevicePair, EBS_InsoleSide, Side, UBS_Device *, Device, const TArray<float> &, Inference, const int64 &, Timestamp);
+    DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(FBS_DevicePairDeviceTfliteInferenceCallback, UBS_DevicePair *, DevicePair, EBS_Side, Side, UBS_Device *, Device, const TArray<float> &, Inference, const int64 &, Timestamp);
     UPROPERTY(BlueprintAssignable, Category = "BS Device Pair Tflite")
     FBS_DevicePairDeviceTfliteInferenceCallback OnDeviceTfliteInference;
 
@@ -259,7 +269,7 @@ private:
     UFUNCTION()
     void OnDeviceTfliteInferenceUpdate(UBS_Device *Device, const TArray<float> &Inference, const int64 &Timestamp)
     {
-        OnDeviceTfliteInference.Broadcast(this, Device->InsoleSide(), Device, Inference, Timestamp);
+        OnDeviceTfliteInference.Broadcast(this, Device->Side(), Device, Inference, Timestamp);
     }
     // TFLITE END
 };

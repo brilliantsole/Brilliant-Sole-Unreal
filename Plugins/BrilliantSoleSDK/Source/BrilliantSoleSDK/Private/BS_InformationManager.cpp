@@ -5,6 +5,7 @@
 #include "BS_ByteParser.h"
 #include "BS_TxRxMessageType.h"
 #include "BS_TimeUtils.h"
+#include "Math/UnrealMathUtility.h"
 
 DEFINE_LOG_CATEGORY(LogBS_InformationManager);
 
@@ -52,6 +53,7 @@ void UBS_InformationManager::ParseMTU(const TArrayView<const uint8> &Message)
 {
     UE_LOGFMT(LogBS_InformationManager, Verbose, "Parsing MTU...");
     MTU = BS_ByteParser::ParseAs<uint16>(Message, 0, true);
+    MTU = FMath::Min(MTU, uint16(512));
     UE_LOGFMT(LogBS_InformationManager, Verbose, "Parsed MTU: {0}", MTU);
     OnMTU_Update.ExecuteIfBound(MTU);
 }

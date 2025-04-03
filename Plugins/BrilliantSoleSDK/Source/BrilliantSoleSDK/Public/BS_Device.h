@@ -16,7 +16,7 @@
 #include "BS_VibrationManager.h"
 #include "BS_FileTransferManager.h"
 #include "BS_TfliteManager.h"
-#include "BS_InsoleSide.h"
+#include "BS_Side.h"
 #include "BS_MathUtils.h"
 #include "BS_BaseConnectionManager.h"
 #include "BS_Device.generated.h"
@@ -79,6 +79,9 @@ private:
 public:
 	UFUNCTION(BlueprintPure, Category = "BS Device Information")
 	FBS_DeviceInformation GetDeviceInformation() const { return DeviceInformation; }
+
+	UFUNCTION(BlueprintPure, Category = "BS Device Information")
+	bool IsUkaton() const { return DeviceInformation.ModelNumber.Contains("Ukaton"); }
 
 protected:
 	UFUNCTION(BlueprintCallable, Category = "BS Device Information")
@@ -253,14 +256,27 @@ public:
 	}
 
 	UFUNCTION(BlueprintPure, Category = "BS Information")
-	EBS_InsoleSide InsoleSide() const
+	bool IsGlove() const
+	{
+		switch (Type())
+		{
+		case EBS_DeviceType::LEFT_GLOVE:
+		case EBS_DeviceType::RIGHT_GLOVE:
+			return true;
+		}
+		return false;
+	}
+
+	UFUNCTION(BlueprintPure, Category = "BS Information")
+	EBS_Side Side() const
 	{
 		switch (Type())
 		{
 		case EBS_DeviceType::LEFT_INSOLE:
-			return EBS_InsoleSide::LEFT;
+		case EBS_DeviceType::LEFT_GLOVE:
+			return EBS_Side::LEFT;
 		default:
-			return EBS_InsoleSide::RIGHT;
+			return EBS_Side::RIGHT;
 		}
 	}
 

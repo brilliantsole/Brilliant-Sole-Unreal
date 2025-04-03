@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "BS_InsoleSide.h"
+#include "BS_Side.h"
 #include "BS_PressureData.h"
 #include "BS_DevicePairPressureData.h"
 #include "BS_CenterOfPressureRange.h"
@@ -20,14 +20,14 @@ class UBS_DevicePairPressureSensorDataManager : public UObject
 
 private:
 	UPROPERTY()
-	TMap<EBS_InsoleSide, FBS_PressureData> DevicesPressureData;
+	TMap<EBS_Side, FBS_PressureData> DevicesPressureData;
 	bool HasAllData() const;
 
 public:
 	FBS_DevicePairPressureDataCallbackLocal OnPressureUpdate;
 
 public:
-	void OnDevicePressureData(EBS_InsoleSide InsoleSide, const FBS_PressureData &DevicePressureData, const int64 &Timestamp);
+	void OnDevicePressureData(EBS_Side Side, const FBS_PressureData &DevicePressureData, const int64 &Timestamp);
 
 private:
 	UPROPERTY()

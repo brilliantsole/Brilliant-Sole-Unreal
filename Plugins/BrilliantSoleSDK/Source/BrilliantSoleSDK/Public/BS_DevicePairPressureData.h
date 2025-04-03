@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "BS_InsoleSide.h"
+#include "BS_Side.h"
 #include "BS_PressureData.h"
 #include "BS_DevicePairPressureData.generated.h"
 

@@ -9,6 +9,11 @@ enum class EBS_DeviceType : uint8
 {
     LEFT_INSOLE UMETA(DisplayName = "Left Insole"),
     RIGHT_INSOLE UMETA(DisplayName = "Right Insole"),
+    LEFT_GLOVE UMETA(DisplayName = "Left Glove"),
+    RIGHT_GLOVE UMETA(DisplayName = "Right Glove"),
+    GLASSES UMETA(DisplayName = "Glasses"),
+    GENERIC UMETA(DisplayName = "Generic"),
+
     COUNT UMETA(Hidden)
 };
 

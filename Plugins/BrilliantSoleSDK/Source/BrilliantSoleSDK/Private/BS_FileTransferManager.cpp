@@ -299,7 +299,7 @@ void UBS_FileTransferManager::ParseFileTransferBlock(const TArrayView<const uint
     else
     {
         const TArray<uint8> TxMessage = BS_ByteParser::ToByteArray(CurrentFileLength, true);
-        SendTxMessages.ExecuteIfBound({{EBS_TxRxMessage::FILE_BYTES_TRANSFERRED, TxMessage}}, false); // TODO: try setting to "false", since it'll be picked up UBS_Device::OnRxMessages
+        SendTxMessages.ExecuteIfBound({{EBS_TxRxMessage::FILE_BYTES_TRANSFERRED, TxMessage}}, false);
     }
 }
 void UBS_FileTransferManager::ParseFileBytesTransferred(const TArrayView<const uint8> &Message)
