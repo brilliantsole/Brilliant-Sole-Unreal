@@ -44,7 +44,7 @@ void UBS_BaseClient::Reset()
         ConnectionManager->SetIsConnected(false);
         if (!Device->IsAvailable())
         {
-            Device->Remove();
+            // Device->Remove();
         }
     }
 
