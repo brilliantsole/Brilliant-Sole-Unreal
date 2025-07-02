@@ -10,7 +10,7 @@
 #include "BS_Device.h"
 #include "BS_ParseUtils.generated.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogBS_ParseUtils, Log, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_ParseUtils, Warning, All);
 
 DECLARE_DELEGATE_TwoParams(FBS_ServerMessageCallback, EBS_ServerMessage, const TArrayView<const uint8> &);
 DECLARE_DELEGATE_ThreeParams(FBS_DeviceEventCallback, UBS_Device *, EBS_DeviceEvent, const TArrayView<const uint8> &);

@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "Logging/StructuredLog.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogBS_MathUtils, Log, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_MathUtils, Warning, All);
 
 class BS_MathUtils
 {

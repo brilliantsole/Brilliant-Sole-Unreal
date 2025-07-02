@@ -10,7 +10,7 @@
 #include "Logging/StructuredLog.h"
 #include "BS_TfliteConfiguration.generated.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogBS_TfliteConfiguration, Log, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_TfliteConfiguration, Warning, All);
 
 USTRUCT(BlueprintType, meta = (ShowOnlyInnerProperties, FullyExpand = "true"))
 struct FBS_TfliteConfiguration

@@ -6,7 +6,7 @@
 #include "Logging/StructuredLog.h"
 #include "Algo/Reverse.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogBS_ByteParser, Log, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_ByteParser, Warning, All);
 
 class BS_ByteParser
 {

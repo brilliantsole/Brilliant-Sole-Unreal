@@ -21,7 +21,7 @@
 #include "BS_BaseConnectionManager.h"
 #include "BS_Device.generated.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogBS_Device, Log, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_Device, Warning, All);
 
 UCLASS(Abstract, BlueprintType, Blueprintable)
 class UBS_Device : public UObject
@@ -461,11 +461,20 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "BS Vibration")
 	void TriggerVibration(const TArray<FBS_VibrationConfiguration> &VibrationConfigurations) { VibrationManager->TriggerVibration(VibrationConfigurations); }
 
+	UFUNCTION(BlueprintPure, Category = "BS Vibration")
+	const TArray<EBS_VibrationLocation> &GetVibrationLocations() const { return VibrationManager->GetVibrationLocations(); }
+
+public:
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBS_VibrationLocationsCallback, UBS_Device *, Device, const TArray<EBS_VibrationLocation> &, VibrationLocations);
+	UPROPERTY(BlueprintAssignable, Category = "BS Vibration")
+	FBS_VibrationLocationsCallback OnVibrationLocations;
+
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "BS Vibration")
 	UBS_VibrationManager *VibrationManager;
 
 private:
+	void OnVibrationLocationsUpdate(const TArray<EBS_VibrationLocation> &VibrationLocations) { OnVibrationLocations.Broadcast(this, VibrationLocations); }
 	// VIBRATION END
 
 	// FILE TRANSFER START

@@ -12,7 +12,7 @@
 #include "Engine/World.h"
 #include "BS_BaseUDP_Client.generated.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogBS_BaseUDP_Client, Verbose, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_BaseUDP_Client, Warning, All);
 
 #define MAX_UDP_MESSAGE_SIZE 65507
 

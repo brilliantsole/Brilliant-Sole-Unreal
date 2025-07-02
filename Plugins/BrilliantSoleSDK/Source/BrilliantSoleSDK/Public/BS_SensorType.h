@@ -17,7 +17,10 @@
                         STEP_COUNT,          \
                         STEP_DETECTION,      \
                         DEVICE_ORIENTATION,  \
-                        BAROMETER
+                        TAP_DETECTOR,        \
+                        BAROMETER,           \
+                        CAMERA,              \
+                        MICROPHONE
 
 UENUM(BlueprintType)
 enum class EBS_SensorType : uint8
@@ -37,8 +40,12 @@ enum class EBS_SensorType : uint8
     STEP_COUNT UMETA(DisplayName = "Step Count"),
     STEP_DETECTION UMETA(DisplayName = "Step Detection"),
     DEVICE_ORIENTATION UMETA(DisplayName = "Device Orientation"),
+    TAP_DETECTOR UMETA(DisplayName = "Tap Detector"),
 
     BAROMETER UMETA(DisplayName = "Barometer"),
+
+    CAMERA UMETA(DisplayName = "Camera"),
+    MICROPHONE UMETA(DisplayName = "Camera"),
 
     COUNT UMETA(Hidden)
 };

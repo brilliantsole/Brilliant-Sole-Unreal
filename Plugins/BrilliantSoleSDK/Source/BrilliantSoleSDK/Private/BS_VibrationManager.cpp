@@ -6,6 +6,50 @@
 
 DEFINE_LOG_CATEGORY(LogBS_VibrationManager);
 
+bool UBS_VibrationManager::OnRxMessage(EBS_TxRxMessage MessageType, const TArrayView<const uint8> &Message)
+{
+    switch (MessageType)
+    {
+    case EBS_TxRxMessage::GET_VIBRATION_LOCATIONS:
+        ParseVibrationLocations(Message);
+        break;
+    default:
+        return false;
+    }
+    return true;
+}
+
+void UBS_VibrationManager::Reset()
+{
+    VibrationLocations.Reset();
+}
+
+// VIBRATION LOCATIONS START
+void UBS_VibrationManager::ParseVibrationLocations(const TArrayView<const uint8> &Message)
+{
+    UE_LOGFMT(LogBS_VibrationManager, Verbose, "Parsing Vibration Locations...");
+
+    TArray<EBS_VibrationLocation> NewVibrationLocations;
+    for (const uint8 VibrationLocationEnum : Message)
+    {
+        if (VibrationLocationEnum >= static_cast<uint8>(EBS_VibrationLocation::COUNT))
+        {
+            UE_LOGFMT(LogBS_VibrationManager, Error, "invalid VibrationLocationEnum {0}", VibrationLocationEnum);
+            continue;
+        }
+        const EBS_VibrationLocation VibrationLocation = static_cast<EBS_VibrationLocation>(VibrationLocationEnum);
+
+        UE_LOGFMT(LogBS_VibrationManager, Verbose, "Adding VibrationLocation {0}", UEnum::GetValueAsString(VibrationLocation));
+        NewVibrationLocations.Add(VibrationLocation);
+    }
+
+    VibrationLocations = NewVibrationLocations;
+    UE_LOGFMT(LogBS_VibrationManager, Verbose, "Parsed {0} VibrationLocations", VibrationLocations.Num());
+
+    OnVibrationLocationsUpdate.ExecuteIfBound(VibrationLocations);
+}
+// VIBRATION LOCATIONS END
+
 void UBS_VibrationManager::TriggerVibration(const TArray<FBS_VibrationConfiguration> &VibrationConfigurations)
 {
     UE_LOGFMT(LogBS_VibrationManager, Verbose, "Triggering Vibration...");

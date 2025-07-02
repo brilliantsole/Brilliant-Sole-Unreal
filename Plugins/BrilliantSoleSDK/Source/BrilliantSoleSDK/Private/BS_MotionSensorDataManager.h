@@ -8,7 +8,7 @@
 #include "BS_Activity.h"
 #include "BS_MotionSensorDataManager.generated.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogBS_MotionSensorDataManager, Log, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_MotionSensorDataManager, Warning, All);
 
 DECLARE_DELEGATE_TwoParams(FBS_VectorCallbackLocal, const FVector &, const uint64 &);
 DECLARE_DELEGATE_TwoParams(FBS_RotatorCallbackLocal, const FRotator &, const uint64 &);

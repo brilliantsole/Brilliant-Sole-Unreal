@@ -12,6 +12,11 @@ bool UBS_FileTransferManager::OnRxMessage(EBS_TxRxMessage MessageType, const TAr
 {
     switch (MessageType)
     {
+    case EBS_TxRxMessage::GET_FILE_TYPES:
+        // FILL
+        // ParseFileTypes(Message);
+        UE_LOGFMT(LogBS_FileTransferManager, Verbose, "GET_FILE_TYPES");
+        break;
     case EBS_TxRxMessage::GET_MAX_FILE_LENGTH:
         ParseMaxFileLength(Message);
         break;

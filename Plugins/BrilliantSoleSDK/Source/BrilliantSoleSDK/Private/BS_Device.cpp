@@ -61,6 +61,8 @@ UBS_Device::UBS_Device()
     VibrationManager = CreateDefaultSubobject<UBS_VibrationManager>(TEXT("VibrationManager"));
     VibrationManager->SendTxMessages.BindUObject(this, &UBS_Device::SendTxMessages);
 
+    VibrationManager->OnVibrationLocationsUpdate.BindUObject(this, &UBS_Device::OnVibrationLocationsUpdate);
+
     FileTransferManager = CreateDefaultSubobject<UBS_FileTransferManager>(TEXT("FileTransferManager"));
     FileTransferManager->SendTxMessages.BindUObject(this, &UBS_Device::SendTxMessages);
 
@@ -364,6 +366,10 @@ void UBS_Device::OnRxMessage(UBS_BaseConnectionManager *_ConnectionManager, EBS_
     {
         UE_LOGFMT(LogBS_Device, Verbose, "Parsed SensorDataManager Message");
     }
+    else if (VibrationManager->OnRxMessage(MessageType, Message))
+    {
+        UE_LOGFMT(LogBS_Device, Verbose, "Parsed VibrationManager Message");
+    }
     else if (FileTransferManager->OnRxMessage(MessageType, Message))
     {
         UE_LOGFMT(LogBS_Device, Verbose, "Parsed FileTransferManager Message");
@@ -479,10 +485,13 @@ const TArray<EBS_TxRxMessage> UBS_Device::RequiredTxMessageTypes = {
     EBS_TxRxMessage::GET_TYPE,
     EBS_TxRxMessage::GET_CURRENT_TIME,
 
+    EBS_TxRxMessage::GET_SENSOR_CONFIGURATION,
     EBS_TxRxMessage::GET_PRESSURE_POSITIONS,
     EBS_TxRxMessage::GET_SENSOR_SCALARS,
-    EBS_TxRxMessage::GET_SENSOR_CONFIGURATION,
 
+    EBS_TxRxMessage::GET_VIBRATION_LOCATIONS,
+
+    EBS_TxRxMessage::GET_FILE_TYPES,
     EBS_TxRxMessage::GET_MAX_FILE_LENGTH,
     EBS_TxRxMessage::GET_FILE_TRANSFER_TYPE,
     EBS_TxRxMessage::GET_FILE_LENGTH,

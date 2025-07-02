@@ -34,7 +34,7 @@ void UBS_BaseUDP_Client::Reset()
 // IN LISTEN PORT START
 int32 UBS_BaseUDP_Client::SetInListenPort(int32 NewInListenPort)
 {
-    // UE_LOGFMT(LogBS_BaseUDP_Client, Verbose, "Setting InListenPort to {0}...", NewInListenPort);
+    UE_LOGFMT(LogBS_BaseUDP_Client, Verbose, "Setting InListenPort to {0}...", NewInListenPort);
     if (InListenPort != NewInListenPort)
     {
         InListenPort = NewInListenPort;

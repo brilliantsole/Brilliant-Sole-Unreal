@@ -10,7 +10,7 @@
 #include "BS_BaseManager.h"
 #include "BS_DevicePairSensorDataManager.generated.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogBS_DevicePairSensorDataManager, Log, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_DevicePairSensorDataManager, Warning, All);
 
 UCLASS()
 class UBS_DevicePairSensorDataManager : public UBS_BaseManager

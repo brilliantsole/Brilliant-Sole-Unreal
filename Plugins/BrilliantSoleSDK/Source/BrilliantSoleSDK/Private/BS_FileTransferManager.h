@@ -12,7 +12,7 @@
 #include "BS_FileTransferMessageType.h"
 #include "BS_FileTransferManager.generated.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogBS_FileTransferManager, Log, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_FileTransferManager, Warning, All);
 
 DECLARE_DELEGATE_OneParam(FBS_FileTransferFileLengthCallbackLocal, uint32);
 

@@ -7,7 +7,7 @@
 #include "BS_TxRxMessageType.h"
 #include "BS_DeviceEventType.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogBS_TypeUtils, Log, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_TypeUtils, Warning, All);
 
 class BS_TypeUtils
 {

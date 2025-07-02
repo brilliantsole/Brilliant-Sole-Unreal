@@ -19,9 +19,12 @@
                          EBS_DeviceInformationEvents,     \
                          EBS_SensorConfigurationMessages, \
                          EBS_SensorDataEvents,            \
+                         EBS_VibrationMessages,           \
                          EBS_FileTransferEvents,          \
                          EBS_TfliteMessages,              \
                          EBS_SMP_Events
+
+// TODO - Wifi, Camera, Microphone, Display
 
 enum class EBS_DeviceEvent : uint8
 {

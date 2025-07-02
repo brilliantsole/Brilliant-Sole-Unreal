@@ -4,7 +4,8 @@
 
 #include "CoreMinimal.h"
 
-#define EBS_VibrationMessages TRIGGER_VIBRATION
+#define EBS_VibrationMessages GET_VIBRATION_LOCATIONS, \
+                              TRIGGER_VIBRATION
 
 enum class EBS_VibrationMessage : uint8
 {

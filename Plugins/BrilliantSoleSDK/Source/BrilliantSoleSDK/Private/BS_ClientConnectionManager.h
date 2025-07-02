@@ -10,7 +10,7 @@
 #include "BS_DiscoveredDevice.h"
 #include "BS_ClientConnectionManager.generated.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogBS_ClientConnectionManager, Log, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_ClientConnectionManager, Warning, All);
 
 UCLASS()
 class UBS_ClientConnectionManager : public UBS_BaseConnectionManager

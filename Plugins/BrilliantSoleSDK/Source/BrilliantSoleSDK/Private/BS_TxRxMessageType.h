@@ -6,15 +6,15 @@
 #include "BS_SensorConfigurationMessageType.h"
 #include "BS_SensorDataMessageType.h"
 #include "BS_VibrationMessageType.h"
-#include "BS_TfliteMessageType.h"
 #include "BS_FileTransferMessageType.h"
+#include "BS_TfliteMessageType.h"
 
 #define EBS_TxRxMessages EBS_InformationMessages,         \
                          EBS_SensorConfigurationMessages, \
                          EBS_SensorDataMessages,          \
                          EBS_VibrationMessages,           \
-                         EBS_TfliteMessages,              \
-                         EBS_FileTransferMessages
+                         EBS_FileTransferMessages,        \
+                         EBS_TfliteMessages
 
 enum class EBS_TxRxMessage : uint8
 {

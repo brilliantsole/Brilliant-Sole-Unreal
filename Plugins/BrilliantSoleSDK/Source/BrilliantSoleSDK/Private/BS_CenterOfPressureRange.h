@@ -6,7 +6,7 @@
 #include "BS_Range.h"
 #include "BS_CenterOfPressureRange.generated.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogBS_CenterOfPressureRange, Log, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_CenterOfPressureRange, Warning, All);
 
 USTRUCT()
 struct FBS_CenterOfPressureRange

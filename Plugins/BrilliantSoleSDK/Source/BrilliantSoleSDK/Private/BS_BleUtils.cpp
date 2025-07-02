@@ -3,8 +3,8 @@
 #include "BS_BleUtils.h"
 #include "Logging/StructuredLog.h"
 
-#define BS_BLE_UUID_PREFIX "ea6da725-"
-#define BS_BLE_UUID_SUFFIX "-4f9b-893d-c3913e33b39f"
+#define BS_BLE_UUID_PREFIX "ea6d"
+#define BS_BLE_UUID_SUFFIX "-a725-4f9b-893d-c3913e33b39f"
 #define BS_BLE_GENERATE_UUID(val) (BS_BLE_UUID_PREFIX val BS_BLE_UUID_SUFFIX)
 
 #define BLE_UUID_PREFIX "0000"

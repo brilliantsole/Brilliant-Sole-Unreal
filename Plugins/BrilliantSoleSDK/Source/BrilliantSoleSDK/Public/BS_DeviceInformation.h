@@ -7,7 +7,7 @@
 #include "BS_DeviceInformationType.h"
 #include "BS_DeviceInformation.generated.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogBS_DeviceInformation, Log, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogBS_DeviceInformation, Warning, All);
 
 USTRUCT(BlueprintType, meta = (ShowOnlyInnerProperties, FullyExpand = "true"))
 struct FBS_DeviceInformation

@@ -4,7 +4,8 @@
 
 #include "CoreMinimal.h"
 
-#define EBS_FileTransferMessages GET_MAX_FILE_LENGTH,       \
+#define EBS_FileTransferMessages GET_FILE_TYPES,            \
+								 GET_MAX_FILE_LENGTH,       \
 								 GET_FILE_TRANSFER_TYPE,    \
 								 SET_FILE_TRANSFER_TYPE,    \
 								 GET_FILE_LENGTH,           \
