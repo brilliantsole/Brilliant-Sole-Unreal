@@ -13,9 +13,7 @@ bool UBS_FileTransferManager::OnRxMessage(EBS_TxRxMessage MessageType, const TAr
     switch (MessageType)
     {
     case EBS_TxRxMessage::GET_FILE_TYPES:
-        // FILL
-        // ParseFileTypes(Message);
-        UE_LOGFMT(LogBS_FileTransferManager, Verbose, "GET_FILE_TYPES");
+        ParseFileTypes(Message);
         break;
     case EBS_TxRxMessage::GET_MAX_FILE_LENGTH:
         ParseMaxFileLength(Message);
@@ -51,6 +49,7 @@ bool UBS_FileTransferManager::OnRxMessage(EBS_TxRxMessage MessageType, const TAr
 
 void UBS_FileTransferManager::Reset()
 {
+    FileTypes.Reset();
     MTU = 0;
     MaxFileLength = 0;
     FileType = EBS_FileType::TFLITE;
@@ -63,6 +62,32 @@ void UBS_FileTransferManager::Reset()
     BytesTransferred = 0;
     bWaitingToSendMoreData = false;
 }
+
+// FILE TYPES START
+void UBS_FileTransferManager::ParseFileTypes(const TArrayView<const uint8> &Message)
+{
+    UE_LOGFMT(LogBS_FileTransferManager, Verbose, "Parsing Vibration Locations...");
+
+    TArray<EBS_FileType> NewFileTypes;
+    for (const uint8 FileTypeEnum : Message)
+    {
+        if (FileTypeEnum >= static_cast<uint8>(EBS_FileType::COUNT))
+        {
+            UE_LOGFMT(LogBS_FileTransferManager, Error, "invalid FileTypeEnum {0}", FileTypeEnum);
+            continue;
+        }
+        const EBS_FileType _FileType = static_cast<EBS_FileType>(FileTypeEnum);
+
+        UE_LOGFMT(LogBS_FileTransferManager, Verbose, "Adding FileType {0}", UEnum::GetValueAsString(_FileType));
+        NewFileTypes.Add(_FileType);
+    }
+
+    FileTypes = NewFileTypes;
+    UE_LOGFMT(LogBS_FileTransferManager, Verbose, "Parsed {0} FileTypes", FileTypes.Num());
+
+    OnFileTypesUpdate.ExecuteIfBound(FileTypes);
+}
+// FILE TYPES END
 
 // MAX FILE LENGTH START
 void UBS_FileTransferManager::ParseMaxFileLength(const TArrayView<const uint8> &Message)

@@ -50,9 +50,17 @@ public:
             {
                 DeviceType = EBS_DeviceType::RIGHT_INSOLE;
             }
+            else if (DeviceTypeString == "glasses")
+            {
+                DeviceType = EBS_DeviceType::GLASSES;
+            }
+            else if (DeviceTypeString == "generic")
+            {
+                DeviceType = EBS_DeviceType::GENERIC;
+            }
             else
             {
-                UE_LOGFMT(LogTemp, Error, "uncaught  DeviceTypeString {0}", DeviceTypeString);
+                UE_LOGFMT(LogTemp, Error, "uncaught DeviceTypeString {0}", DeviceTypeString);
                 return false;
             }
 

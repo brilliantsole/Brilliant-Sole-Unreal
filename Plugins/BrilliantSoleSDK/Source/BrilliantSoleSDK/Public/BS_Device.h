@@ -480,6 +480,9 @@ private:
 	// FILE TRANSFER START
 public:
 	UFUNCTION(BlueprintPure, Category = "BS File Transfer")
+	const TArray<EBS_FileType> &GetFileTypes() const { return FileTransferManager->GetFileTypes(); }
+
+	UFUNCTION(BlueprintPure, Category = "BS File Transfer")
 	const int32 GetMaxFileLength() const { return FileTransferManager->GetMaxFileLength(); }
 
 	UFUNCTION(BlueprintPure, Category = "BS File Transfer")

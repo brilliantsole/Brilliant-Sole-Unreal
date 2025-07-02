@@ -14,6 +14,7 @@
 
 DECLARE_LOG_CATEGORY_EXTERN(LogBS_FileTransferManager, Warning, All);
 
+DECLARE_DELEGATE_OneParam(FBS_FileTypesCallbackLocal, const TArray<EBS_FileType> &);
 DECLARE_DELEGATE_OneParam(FBS_FileTransferFileLengthCallbackLocal, uint32);
 
 UCLASS()
@@ -24,6 +25,17 @@ class UBS_FileTransferManager : public UBS_BaseManager
 public:
 	bool OnRxMessage(EBS_TxRxMessage MessageType, const TArrayView<const uint8> &Message) override;
 	void Reset() override;
+
+	// FILE TYPES START
+public:
+	const TArray<EBS_FileType> &GetFileTypes() const { return FileTypes; }
+	FBS_FileTypesCallbackLocal OnFileTypesUpdate;
+
+private:
+	UPROPERTY()
+	TArray<EBS_FileType> FileTypes;
+	void ParseFileTypes(const TArrayView<const uint8> &Message);
+	// FILE TYPES END
 
 	// MAX FILE LENGTH START
 public:

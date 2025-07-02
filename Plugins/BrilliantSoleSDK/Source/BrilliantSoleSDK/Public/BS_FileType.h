@@ -8,6 +8,8 @@ UENUM(BlueprintType)
 enum class EBS_FileType : uint8
 {
     TFLITE UMETA(DisplayName = "Tflite"),
+    WIFI_SERVER_CERT UMETA(DisplayName = "Wifi Server Certificate"),
+    WIFI_SERVER_KEY UMETA(DisplayName = "Wifi Server Key"),
     COUNT UMETA(Hidden)
 };
 
