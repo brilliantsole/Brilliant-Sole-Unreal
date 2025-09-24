@@ -54,6 +54,14 @@ public:
             {
                 DeviceType = EBS_DeviceType::GLASSES;
             }
+            else if (DeviceTypeString == "rightGlove")
+            {
+                DeviceType = EBS_DeviceType::RIGHT_GLOVE;
+            }
+            else if (DeviceTypeString == "leftGlove")
+            {
+                DeviceType = EBS_DeviceType::LEFT_GLOVE;
+            }
             else if (DeviceTypeString == "generic")
             {
                 DeviceType = EBS_DeviceType::GENERIC;
