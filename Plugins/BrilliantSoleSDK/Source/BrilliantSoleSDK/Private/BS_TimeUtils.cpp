@@ -31,7 +31,10 @@ uint64 TimeUtils::ParseTimestamp(const TArrayView<const uint8> &Message)
 
     UE_LOGFMT(LogBS_TimeUtils, Verbose, "Temp Timestamp: {0}ms", Timestamp);
 
-    const uint64 TimestampDifference = FMath::Abs(CurrentTimestamp > Timestamp ? CurrentTimestamp - Timestamp : Timestamp - CurrentTimestamp);
+    const uint64 TimestampDifference =
+        (CurrentTimestamp > Timestamp)
+            ? (CurrentTimestamp - Timestamp)
+            : (Timestamp - CurrentTimestamp);
     UE_LOGFMT(LogBS_TimeUtils, Verbose, "TimestampDifference: {0}ms", TimestampDifference);
 
     if (TimestampDifference > TimestampThreshold)
