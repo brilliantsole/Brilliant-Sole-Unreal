@@ -282,9 +282,9 @@ void UBS_BaseUDP_Client::Disconnect_Implementation()
 
 void UBS_BaseUDP_Client::ToggleConnection(const FString &IP_Address, const int32 Port)
 {
-    const EBS_ConnectionStatus ConnectionStatus = GetConnectionStatus();
-    UE_LOGFMT(LogBS_BaseUDP_Client, Verbose, "Toggling Connection based on {0}...", UEnum::GetValueAsString(ConnectionStatus));
-    switch (ConnectionStatus)
+    const EBS_ConnectionStatus _ConnectionStatus = GetConnectionStatus();
+    UE_LOGFMT(LogBS_BaseUDP_Client, Verbose, "Toggling Connection based on {0}...", UEnum::GetValueAsString(_ConnectionStatus));
+    switch (_ConnectionStatus)
     {
     case EBS_ConnectionStatus::CONNECTED:
     case EBS_ConnectionStatus::CONNECTING:

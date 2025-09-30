@@ -26,7 +26,7 @@ bool UBS_BatteryManager::OnRxMessage(EBS_TxRxMessage MessageType, const TArrayVi
 
 void UBS_BatteryManager::ParseIsBatteryCharging(const TArrayView<const uint8> &Message)
 {
-    bIsBatteryCharging = Message[0];
+    bIsBatteryCharging = (Message[0] != 0);
     UE_LOGFMT(LogBS_BatteryManager, Verbose, "Is Battery Charging: {0}", bIsBatteryCharging);
     OnIsBatteryChargingUpdate.ExecuteIfBound(bIsBatteryCharging);
 }
