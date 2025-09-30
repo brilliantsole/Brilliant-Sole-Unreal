@@ -116,7 +116,7 @@ const TArray<uint8> FBS_VibrationConfiguration::WaveformSequenceToArray() const
     }
 
     TArray<uint8> Array;
-    for (uint Index = 0; Index < NumberOfSegments; Index++)
+    for (uint8 Index = 0; Index < NumberOfSegments; Index++)
     {
         const FBS_VibrationWaveformSegment &Segment = WaveformSequence[Index];
 
