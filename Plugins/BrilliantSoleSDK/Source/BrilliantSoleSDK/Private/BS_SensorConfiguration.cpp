@@ -96,7 +96,6 @@ void UBS_SensorConfiguration::SetSensorRate(EBS_SensorType SensorType, EBS_Senso
 
 void UBS_SensorConfiguration::SetSensorRates(const TMap<EBS_SensorType, EBS_SensorRate> &NewSensorRates)
 {
-
     for (const TPair<EBS_SensorType, EBS_SensorRate> &Pair : SensorRates)
     {
         if (SensorRates.Contains(Pair.Key))
