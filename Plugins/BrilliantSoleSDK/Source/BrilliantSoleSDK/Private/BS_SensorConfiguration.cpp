@@ -96,13 +96,13 @@ void UBS_SensorConfiguration::SetSensorRate(EBS_SensorType SensorType, EBS_Senso
 
 void UBS_SensorConfiguration::SetSensorRates(const TMap<EBS_SensorType, EBS_SensorRate> &NewSensorRates)
 {
-    for (const TPair<EBS_SensorType, EBS_SensorRate> &Pair : SensorRates)
+    bool bDidUpdateSensorRate;
+    for (const TPair<EBS_SensorType, EBS_SensorRate> &Pair : NewSensorRates)
     {
-        if (SensorRates.Contains(Pair.Key))
-        {
-            SensorRates[Pair.Key] = Pair.Value;
-        }
+        UE_LOGFMT(LogBS_SensorConfiguration, Verbose, "Setting Sensor Rate {0} to {1}", UEnum::GetValueAsString(Pair.Key), UEnum::GetValueAsString(Pair.Value));
+        SetSensorRate(Pair.Key, Pair.Value, bDidUpdateSensorRate);
     }
+    // return bDidUpdateSensorRate;
 }
 
 void UBS_SensorConfiguration::ClearSensorRate(EBS_SensorType SensorType)
