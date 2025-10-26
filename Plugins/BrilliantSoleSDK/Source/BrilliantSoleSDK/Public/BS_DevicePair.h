@@ -117,9 +117,38 @@ public:
     UPROPERTY(BlueprintAssignable, Category = "BS Device Pair")
     FBS_DevicePairDeviceIsConnectedCallback OnDeviceIsConnectedUpdate;
 
+    DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FBS_DevicePairDeviceGenericConnectionCallback, UBS_DevicePair *, DevicePair, EBS_Side, Side, UBS_Device *, Device);
+    UPROPERTY(BlueprintAssignable, Category = "BS Device Pair")
+    FBS_DevicePairDeviceGenericConnectionCallback OnDeviceConnected;
+    UPROPERTY(BlueprintAssignable, Category = "BS Device Pair")
+    FBS_DevicePairDeviceGenericConnectionCallback OnDeviceNotConnected;
+    UPROPERTY(BlueprintAssignable, Category = "BS Device Pair")
+    FBS_DevicePairDeviceGenericConnectionCallback OnDeviceConnecting;
+    UPROPERTY(BlueprintAssignable, Category = "BS Device Pair")
+    FBS_DevicePairDeviceGenericConnectionCallback OnDeviceDisconnecting;
+
 private:
     UFUNCTION()
-    void _OnDeviceConnectionStatusUpdate(UBS_Device *Device, EBS_ConnectionStatus ConnectionStatus) { OnDeviceConnectionStatusUpdate.Broadcast(this, Device->Side(), Device, ConnectionStatus); }
+    void _OnDeviceConnectionStatusUpdate(UBS_Device *Device, EBS_ConnectionStatus ConnectionStatus)
+    {
+        OnDeviceConnectionStatusUpdate.Broadcast(this, Device->Side(), Device, ConnectionStatus);
+
+        switch (ConnectionStatus)
+        {
+        case EBS_ConnectionStatus::CONNECTED:
+            OnDeviceConnected.Broadcast(this, Device->Side(), Device);
+            break;
+        case EBS_ConnectionStatus::NOT_CONNECTED:
+            OnDeviceNotConnected.Broadcast(this, Device->Side(), Device);
+            break;
+        case EBS_ConnectionStatus::CONNECTING:
+            OnDeviceConnecting.Broadcast(this, Device->Side(), Device);
+            break;
+        case EBS_ConnectionStatus::DISCONNECTING:
+            OnDeviceDisconnecting.Broadcast(this, Device->Side(), Device);
+            break;
+        }
+    }
 
     UFUNCTION()
     void _OnDeviceIsConnectedUpdate(UBS_Device *Device, bool bIsConnected)
@@ -256,8 +285,60 @@ public:
     void TriggerVibration(const TArray<FBS_VibrationConfiguration> &VibrationConfigurations);
     // VIBRATION END
 
+    // FILE TRANSFER START
+public:
+    DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FBS_DevicePairDeviceFileTransferStatusCallback, UBS_DevicePair *, DevicePair, EBS_Side, Side, UBS_Device *, Device, EBS_FileTransferStatus, FileTransferStatus);
+    UPROPERTY(BlueprintAssignable, Category = "BS Device Pair File Transfer")
+    FBS_DevicePairDeviceFileTransferStatusCallback OnDeviceFileTransferStatus;
+
+    DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(FBS_DevicePairDeviceFileTransferFileReceivedCallback, UBS_DevicePair *, DevicePair, EBS_Side, Side, UBS_Device *, Device, EBS_FileType, FileType, const TArray<uint8> &, File);
+    UPROPERTY(BlueprintAssignable, Category = "BS Device Pair File Transfer")
+    FBS_DevicePairDeviceFileTransferFileReceivedCallback OnDeviceFileReceived;
+
+    DECLARE_DYNAMIC_MULTICAST_DELEGATE_SixParams(FBS_DevicePairDeviceFileTransferProgressCallback, UBS_DevicePair *, DevicePair, EBS_Side, Side, UBS_Device *, Device, EBS_FileType, FileType, EBS_FileTransferDirection, FileTransferDirection, float, Progress);
+    UPROPERTY(BlueprintAssignable, Category = "BS Device Pair File Transfer")
+    FBS_DevicePairDeviceFileTransferProgressCallback OnDeviceFileTransferProgress;
+
+    DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(FBS_DevicePairDeviceFileTransferCompleteCallback, UBS_DevicePair *, DevicePair, EBS_Side, Side, UBS_Device *, Device, EBS_FileType, FileType, EBS_FileTransferDirection, FileTransferDirection);
+    UPROPERTY(BlueprintAssignable, Category = "BS Device Pair File Transfer")
+    FBS_DevicePairDeviceFileTransferCompleteCallback OnDeviceFileTransferComplete;
+
+private:
+    UFUNCTION()
+    void OnDeviceFileTransferStatusUpdate(UBS_Device *Device, const EBS_FileTransferStatus FileTransferStatus)
+    {
+        OnDeviceFileTransferStatus.Broadcast(this, Device->Side(), Device, FileTransferStatus);
+    }
+
+    UFUNCTION()
+    void OnDeviceFileReceivedUpdate(UBS_Device *Device, const EBS_FileType FileType, const TArray<uint8> &File)
+    {
+        OnDeviceFileReceived.Broadcast(this, Device->Side(), Device, FileType, File);
+    }
+
+    UFUNCTION()
+    void OnDeviceFileTransferProgressUpdate(UBS_Device *Device, const EBS_FileType FileType, EBS_FileTransferDirection FileTransferDirection, float Progress)
+    {
+        OnDeviceFileTransferProgress.Broadcast(this, Device->Side(), Device, FileType, FileTransferDirection, Progress);
+    }
+
+    UFUNCTION()
+    void OnDeviceFileTransferCompleteUpdate(UBS_Device *Device, const EBS_FileType FileType, EBS_FileTransferDirection FileTransferDirection)
+    {
+        OnDeviceFileTransferComplete.Broadcast(this, Device->Side(), Device, FileType, FileTransferDirection);
+    }
+    // FILE TRANSFER END
+
     // TFLITE START
 public:
+    DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FBS_DeviceTfliteIsReadyCallback, UBS_DevicePair *, DevicePair, EBS_Side, Side, UBS_Device *, Device, bool, IsReady);
+    UPROPERTY(BlueprintAssignable, Category = "BS Device Pair Tflite")
+    FBS_DeviceTfliteIsReadyCallback OnDeviceTfliteIsReady;
+
+    DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FBS_DeviceTfliteInferencingEnabledCallback, UBS_DevicePair *, DevicePair, EBS_Side, Side, UBS_Device *, Device, bool, InferencingEnabled);
+    UPROPERTY(BlueprintAssignable, Category = "BS Device Pair Tflite")
+    FBS_DeviceTfliteInferencingEnabledCallback OnDeviceTfliteInferencingEnabled;
+
     DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(FBS_DevicePairDeviceTfliteInferenceCallback, UBS_DevicePair *, DevicePair, EBS_Side, Side, UBS_Device *, Device, const TArray<float> &, Inference, const int64 &, Timestamp);
     UPROPERTY(BlueprintAssignable, Category = "BS Device Pair Tflite")
     FBS_DevicePairDeviceTfliteInferenceCallback OnDeviceTfliteInference;
@@ -265,7 +346,22 @@ public:
     UFUNCTION(BlueprintCallable, Category = "BS Device Pair Tflite")
     void SetTfliteInferencingEnabled(const bool NewInferencingEnabled);
 
+    UFUNCTION(BlueprintCallable, Category = "BS Device Pair Tflite")
+    void SendTfliteModel(const FBS_TfliteConfiguration &TfliteConfiguration, const TArray<uint8> &File);
+
 private:
+    UFUNCTION()
+    void OnDeviceTfliteIsReadyUpdate(UBS_Device *Device, bool IsReady)
+    {
+        OnDeviceTfliteIsReady.Broadcast(this, Device->Side(), Device, IsReady);
+    }
+
+    UFUNCTION()
+    void OnDeviceTfliteInferencingEnabledUpdate(UBS_Device *Device, bool InferencingEnabled)
+    {
+        OnDeviceTfliteInferencingEnabled.Broadcast(this, Device->Side(), Device, InferencingEnabled);
+    }
+
     UFUNCTION()
     void OnDeviceTfliteInferenceUpdate(UBS_Device *Device, const TArray<float> &Inference, const int64 &Timestamp)
     {

@@ -246,6 +246,22 @@ void UBS_Device::SetConnectionStatus(EBS_ConnectionStatus NewConnectionStatus)
     default:
         break;
     }
+
+    switch (ConnectionStatus)
+    {
+    case EBS_ConnectionStatus::CONNECTED:
+        OnConnected.Broadcast(this);
+        break;
+    case EBS_ConnectionStatus::NOT_CONNECTED:
+        OnNotConnected.Broadcast(this);
+        break;
+    case EBS_ConnectionStatus::CONNECTING:
+        OnConnecting.Broadcast(this);
+        break;
+    case EBS_ConnectionStatus::DISCONNECTING:
+        OnDisconnecting.Broadcast(this);
+        break;
+    }
 }
 
 void UBS_Device::CheckIfFullyConnected()

@@ -273,6 +273,13 @@ void UBS_DevicePair::AddDeviceListeners(UBS_Device *Device)
 
     Device->OnPressure.AddDynamic(this, &UBS_DevicePair::OnDevicePressureUpdate);
 
+    Device->OnFileTransferStatus.AddDynamic(this, &UBS_DevicePair::OnDeviceFileTransferStatusUpdate);
+    Device->OnFileReceived.AddDynamic(this, &UBS_DevicePair::OnDeviceFileReceivedUpdate);
+    Device->OnFileTransferProgress.AddDynamic(this, &UBS_DevicePair::OnDeviceFileTransferProgressUpdate);
+    Device->OnFileTransferComplete.AddDynamic(this, &UBS_DevicePair::OnDeviceFileTransferCompleteUpdate);
+
+    Device->OnTfliteIsReady.AddDynamic(this, &UBS_DevicePair::OnDeviceTfliteIsReadyUpdate);
+    Device->OnTfliteInferencingEnabled.AddDynamic(this, &UBS_DevicePair::OnDeviceTfliteInferencingEnabledUpdate);
     Device->OnTfliteInference.AddDynamic(this, &UBS_DevicePair::OnDeviceTfliteInferenceUpdate);
 }
 void UBS_DevicePair::RemoveDeviceListeners(UBS_Device *Device)
@@ -399,4 +406,16 @@ void UBS_DevicePair::SetTfliteInferencingEnabled(const bool NewInferencingEnable
         }
     }
 }
+
+void UBS_DevicePair::SendTfliteModel(const FBS_TfliteConfiguration &TfliteConfiguration, const TArray<uint8> &File)
+{
+    for (const TPair<EBS_Side, UBS_Device *> &Pair : Devices)
+    {
+        if (Pair.Value)
+        {
+            Pair.Value->SendTfliteModel(TfliteConfiguration, File);
+        }
+    }
+}
+
 // TFLITE END
