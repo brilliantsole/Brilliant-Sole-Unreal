@@ -1,5 +1,7 @@
 # Brilliant Sole Unreal SDK Demo
 
+## Setting up the BleGoodies plugin
+
 In the BleGoodies Plugin, modify BleUtils.cpp's `UBleUtils::HexToUUID` function:
 
 ```
@@ -186,3 +188,11 @@ and add to BleDeviceDelegate.cpp (be sure to replace the existing `didUpdateValu
 	}
 }
 ```
+
+## Playing with the BS_MinimalSampleLevel
+
+`a` to toggle linear acceleration data  
+`p` to toggle pressure data  
+`r` to toggle game rotation data  
+`v` to vibrate  
+`t` to upload a tflite model, `i` to toggle tflite inferencing (wait until the tflite model is uploaded)
