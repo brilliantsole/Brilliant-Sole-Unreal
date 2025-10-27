@@ -409,7 +409,7 @@ public:
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FBS_QuaternionCallback, UBS_Device *, Device, const FQuat &, Quaternion, const int64 &, Timestamp);
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBS_TimestampCallback, UBS_Device *, Device, const int64 &, Timestamp);
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FBS_ActivityCallback, UBS_Device *, Device, const TSet<EBS_Activity> &, Activity, const int64 &, Timestamp);
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FBS_StepCountCallback, UBS_Device *, Device, const uint32 &, StepCount, const int64 &, Timestamp);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FBS_StepCountCallback, UBS_Device *, Device, const int32 &, StepCount, const int64 &, Timestamp);
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FBS_DeviceOrientationCallback, UBS_Device *, Device, const EBS_DeviceOrientation &, DeviceOrientation, const int64 &, Timestamp);
 
 	UPROPERTY(BlueprintAssignable, Category = "BS Motion Data")
@@ -635,11 +635,11 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "BS Tflite")
 	FBS_TfliteInferenceCallback OnTfliteInference;
 
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FBS_TfliteClassificationCallback, UBS_Device *, Device, const uint32 &, ClassificationIndex, const float &, ClassificationValue, const int64 &, Timestamp);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FBS_TfliteClassificationCallback, UBS_Device *, Device, const uint8, ClassificationIndex, const float &, ClassificationValue, const int64 &, Timestamp);
 	UPROPERTY(BlueprintAssignable, Category = "BS Tflite")
 	FBS_TfliteClassificationCallback OnTfliteClassification;
 
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(FBS_TfliteNamedClassificationCallback, UBS_Device *, Device, const FString &, Name, const uint32 &, ClassificationIndex, const float &, ClassificationValue, const int64 &, Timestamp);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(FBS_TfliteNamedClassificationCallback, UBS_Device *, Device, const FString &, Name, const uint8, ClassificationIndex, const float &, ClassificationValue, const int64 &, Timestamp);
 	UPROPERTY(BlueprintAssignable, Category = "BS Tflite")
 	FBS_TfliteNamedClassificationCallback OnTfliteNamedClassification;
 
@@ -657,7 +657,7 @@ private:
 	void OnTfliteThresholdUpdate(float Threshold) { OnTfliteThreshold.Broadcast(this, Threshold); }
 	void OnTfliteInferencingEnabledUpdate(bool InferencingEnabled) { OnTfliteInferencingEnabled.Broadcast(this, InferencingEnabled); }
 	void OnTfliteInferenceUpdate(const TArray<float> &Inference, const uint64 &Timestamp) { OnTfliteInference.Broadcast(this, Inference, Timestamp); }
-	void OnTfliteClassificationUpdate(const uint32 &ClassificationIndex, const float &ClassificationValue, const uint64 &Timestamp) { OnTfliteClassification.Broadcast(this, ClassificationIndex, ClassificationValue, Timestamp); }
-	void OnTfliteNamedClassificationUpdate(const FString &ClassificationName, const uint32 &ClassificationIndex, const float &ClassificationValue, const uint64 &Timestamp) { OnTfliteNamedClassification.Broadcast(this, ClassificationName, ClassificationIndex, ClassificationValue, Timestamp); }
+	void OnTfliteClassificationUpdate(const uint8 ClassificationIndex, const float &ClassificationValue, const uint64 &Timestamp) { OnTfliteClassification.Broadcast(this, ClassificationIndex, ClassificationValue, Timestamp); }
+	void OnTfliteNamedClassificationUpdate(const FString &ClassificationName, const uint8 ClassificationIndex, const float &ClassificationValue, const uint64 &Timestamp) { OnTfliteNamedClassification.Broadcast(this, ClassificationName, ClassificationIndex, ClassificationValue, Timestamp); }
 	// TFLITE END
 };

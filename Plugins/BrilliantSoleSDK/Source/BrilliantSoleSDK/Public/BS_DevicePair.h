@@ -192,7 +192,7 @@ public:
     DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(FBS_DevicePairDeviceQuaternionCallback, UBS_DevicePair *, DevicePair, EBS_Side, Side, UBS_Device *, Device, const FQuat &, Quaternion, const int64 &, Timestamp);
     DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FBS_DevicePairDeviceTimestampCallback, UBS_DevicePair *, DevicePair, EBS_Side, Side, UBS_Device *, Device, const int64 &, Timestamp);
     DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(FBS_DevicePairDeviceActivityCallback, UBS_DevicePair *, DevicePair, EBS_Side, Side, UBS_Device *, Device, const TSet<EBS_Activity> &, Activity, const int64 &, Timestamp);
-    DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(FBS_DevicePairDeviceStepCountCallback, UBS_DevicePair *, DevicePair, EBS_Side, Side, UBS_Device *, Device, const uint32 &, StepCount, const int64 &, Timestamp);
+    DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(FBS_DevicePairDeviceStepCountCallback, UBS_DevicePair *, DevicePair, EBS_Side, Side, UBS_Device *, Device, const int32 &, StepCount, const int64 &, Timestamp);
     DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(FBS_DevicePairDeviceDeviceOrientationCallback, UBS_DevicePair *, DevicePair, EBS_Side, Side, UBS_Device *, Device, const EBS_DeviceOrientation &, DeviceOrientation, const int64 &, Timestamp);
 
     UPROPERTY(BlueprintAssignable, Category = "BS Device Pair Motion Data")
@@ -242,7 +242,7 @@ private:
     UFUNCTION()
     void OnDeviceActivityUpdate(UBS_Device *Device, const TSet<EBS_Activity> &Activity, const int64 &Timestamp) { OnDeviceActivity.Broadcast(this, Device->Side(), Device, Activity, Timestamp); }
     UFUNCTION()
-    void OnDeviceStepCountUpdate(UBS_Device *Device, const uint32 &StepCount, const int64 &Timestamp) { OnDeviceStepCount.Broadcast(this, Device->Side(), Device, StepCount, Timestamp); }
+    void OnDeviceStepCountUpdate(UBS_Device *Device, const int32 &StepCount, const int64 &Timestamp) { OnDeviceStepCount.Broadcast(this, Device->Side(), Device, StepCount, Timestamp); }
     UFUNCTION()
     void OnDeviceStepDetectionUpdate(UBS_Device *Device, const int64 &Timestamp) { OnDeviceStepDetection.Broadcast(this, Device->Side(), Device, Timestamp); }
     UFUNCTION()
@@ -343,11 +343,11 @@ public:
     UPROPERTY(BlueprintAssignable, Category = "BS Device Pair Tflite")
     FBS_DevicePairDeviceTfliteInferenceCallback OnDeviceTfliteInference;
 
-    DECLARE_DYNAMIC_MULTICAST_DELEGATE_SixParams(FBS_DevicePairDeviceTfliteClassificationCallback, UBS_DevicePair *, DevicePair, EBS_Side, Side, UBS_Device *, Device, const uint32 &, ClassificationIndex, const float &, ClassificationValue, const int64 &, Timestamp);
+    DECLARE_DYNAMIC_MULTICAST_DELEGATE_SixParams(FBS_DevicePairDeviceTfliteClassificationCallback, UBS_DevicePair *, DevicePair, EBS_Side, Side, UBS_Device *, Device, const uint8, ClassificationIndex, const float &, ClassificationValue, const int64 &, Timestamp);
     UPROPERTY(BlueprintAssignable, Category = "BS Device Pair Tflite")
     FBS_DevicePairDeviceTfliteClassificationCallback OnDeviceTfliteClassification;
 
-    DECLARE_DYNAMIC_MULTICAST_DELEGATE_SevenParams(FBS_DevicePairDeviceTfliteNamedClassificationCallback, UBS_DevicePair *, DevicePair, EBS_Side, Side, UBS_Device *, Device, const FString &, ClassificationName, const uint32 &, ClassificationIndex, const float &, ClassificationValue, const int64 &, Timestamp);
+    DECLARE_DYNAMIC_MULTICAST_DELEGATE_SevenParams(FBS_DevicePairDeviceTfliteNamedClassificationCallback, UBS_DevicePair *, DevicePair, EBS_Side, Side, UBS_Device *, Device, const FString &, ClassificationName, const uint8, ClassificationIndex, const float &, ClassificationValue, const int64 &, Timestamp);
     UPROPERTY(BlueprintAssignable, Category = "BS Device Pair Tflite")
     FBS_DevicePairDeviceTfliteNamedClassificationCallback OnDeviceTfliteNamedClassification;
 
@@ -377,13 +377,13 @@ private:
     }
 
     UFUNCTION()
-    void OnDeviceTfliteClassificationUpdate(UBS_Device *Device, const uint32 &ClassificationIndex, const float &ClassificationValue, const int64 &Timestamp)
+    void OnDeviceTfliteClassificationUpdate(UBS_Device *Device, const uint8 ClassificationIndex, const float &ClassificationValue, const int64 &Timestamp)
     {
         OnDeviceTfliteClassification.Broadcast(this, Device->Side(), Device, ClassificationIndex, ClassificationValue, Timestamp);
     }
 
     UFUNCTION()
-    void OnDeviceTfliteNamedClassificationUpdate(UBS_Device *Device, const FString &ClassificationName, const uint32 &ClassificationIndex, const float &ClassificationValue, const int64 &Timestamp)
+    void OnDeviceTfliteNamedClassificationUpdate(UBS_Device *Device, const FString &ClassificationName, const uint8 ClassificationIndex, const float &ClassificationValue, const int64 &Timestamp)
     {
         OnDeviceTfliteNamedClassification.Broadcast(this, Device->Side(), Device, ClassificationName, ClassificationIndex, ClassificationValue, Timestamp);
     }

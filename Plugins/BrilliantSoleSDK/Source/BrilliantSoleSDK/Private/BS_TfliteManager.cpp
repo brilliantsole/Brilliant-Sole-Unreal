@@ -320,7 +320,7 @@ void UBS_TfliteManager::ParseInference(const TArrayView<const uint8> &Message)
     }
 
     TArray<float> Inference;
-    uint32 MaxClassIndex = 0;
+    uint8 MaxClassIndex = 0;
     float MaxClassValue = -1.0f;
     for (uint8 ClassIndex = 0; Offset < MessageLength; Offset += InferenceSize, ClassIndex++)
     {

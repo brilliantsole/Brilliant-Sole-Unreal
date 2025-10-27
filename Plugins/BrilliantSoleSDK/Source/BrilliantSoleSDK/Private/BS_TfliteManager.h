@@ -147,10 +147,10 @@ public:
 	DECLARE_DELEGATE_TwoParams(FBS_TfliteInferenceCallbackLocal, const TArray<float> &, const uint64 &);
 	FBS_TfliteInferenceCallbackLocal OnInferenceUpdate;
 
-	DECLARE_DELEGATE_ThreeParams(FBS_TfliteClassificationCallbackLocal, const uint32 &, const float &, const uint64 &);
+	DECLARE_DELEGATE_ThreeParams(FBS_TfliteClassificationCallbackLocal, const uint8, const float &, const uint64 &);
 	FBS_TfliteClassificationCallbackLocal OnClassificationUpdate;
 
-	DECLARE_DELEGATE_FourParams(FBS_TfliteNamedClassificationCallbackLocal, const FString &, const uint32 &, const float &, const uint64 &);
+	DECLARE_DELEGATE_FourParams(FBS_TfliteNamedClassificationCallbackLocal, const FString &, const uint8, const float &, const uint64 &);
 	FBS_TfliteNamedClassificationCallbackLocal OnNamedClassificationUpdate;
 
 private:
