@@ -206,22 +206,49 @@ uint32 UBS_FileTransferManager::GetCRC32(const TArray<uint8> &Data)
     return Checksum;
 }
 
-void UBS_FileTransferManager::SendFile(const EBS_FileType NewFileType, const TArray<uint8> &File)
+bool UBS_FileTransferManager::SendFile(const EBS_FileType NewFileType, const TArray<uint8> &File)
 {
+    if (!FileTypes.Contains(NewFileType))
+    {
+        UE_LOGFMT(LogBS_FileTransferManager, Error, "FileType {0} not supported", UEnum::GetValueAsString(NewFileType));
+        return false;
+    }
     if (FileTransferStatus != EBS_FileTransferStatus::IDLE)
     {
-        UE_LOGFMT(LogBS_FileTransferManager, Warning, "Can only send files when Idle");
-        return;
+        UE_LOGFMT(LogBS_FileTransferManager, Error, "Can only send files when Idle");
+        return false;
     }
 
-    UE_LOGFMT(LogBS_FileTransferManager, Verbose, "Requesting to send File with {0} bytes...", File.Num());
+    const auto NewFileLength = File.Num();
+    const auto NewFileChecksum = GetCRC32(File);
+
+    if (NewFileType != FileType)
+    {
+        //  different file type - sending
+    }
+    else if (NewFileLength != FileLength)
+    {
+        // different file length - sending
+    }
+    else if (NewFileChecksum != FileChecksum)
+    {
+        // different file checksum - sending
+    }
+    else
+    {
+        UE_LOGFMT(LogBS_FileTransferManager, Verbose, "Already sent file");
+        return false;
+    }
+
+    UE_LOGFMT(LogBS_FileTransferManager, Verbose, "Requesting to send File with {0} bytes...", NewFileLength);
 
     FileToSend = File;
 
     SetFileType(NewFileType, false);
-    SetFileLength(FileToSend.Num(), false);
-    SetFileChecksum(GetCRC32(FileToSend), false);
+    SetFileLength(NewFileLength, false);
+    SetFileChecksum(NewFileChecksum, false);
     SetFileTransferCommand(EBS_FileTransferCommand::SEND);
+    return true;
 }
 void UBS_FileTransferManager::ReceiveFile(const EBS_FileType NewFileType)
 {

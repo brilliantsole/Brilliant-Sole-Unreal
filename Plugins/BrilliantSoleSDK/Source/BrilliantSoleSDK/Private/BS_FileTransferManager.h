@@ -120,7 +120,7 @@ public:
 	UPROPERTY()
 	uint16 MTU = 0;
 
-	void SendFile(const EBS_FileType NewFileType, const TArray<uint8> &File);
+	bool SendFile(const EBS_FileType NewFileType, const TArray<uint8> &File);
 	void ReceiveFile(const EBS_FileType NewFileType);
 	void CancelFileTransfer();
 

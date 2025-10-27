@@ -595,7 +595,11 @@ public:
 	void SendTfliteModel(const FBS_TfliteConfiguration &TfliteConfiguration, const TArray<uint8> &File)
 	{
 		TfliteManager->SetConfiguration(TfliteConfiguration, false);
-		FileTransferManager->SendFile(EBS_FileType::TFLITE, File);
+		const auto bIsSendingFile = FileTransferManager->SendFile(EBS_FileType::TFLITE, File);
+		if (!bIsSendingFile)
+		{
+			OnTfliteIsReadyUpdate(TfliteManager->GetIsReady());
+		}
 	}
 
 public:

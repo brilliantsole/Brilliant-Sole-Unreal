@@ -530,6 +530,7 @@ const TArray<FBS_TxMessage> UBS_Device::InitializeRequiredTxMessages()
     TArray<FBS_TxMessage> _RequiredTxMessages;
     for (EBS_TxRxMessage TxMessageType : UBS_Device::RequiredTxMessageTypes)
     {
+        UE_LOGFMT(LogBS_Device, Verbose, "Appending message {0} to _RequiredTxMessages", static_cast<uint8>(TxMessageType));
         _RequiredTxMessages.Add({TxMessageType});
     }
     return _RequiredTxMessages;
