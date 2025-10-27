@@ -348,9 +348,9 @@ void UBS_TfliteManager::ParseInference(const TArrayView<const uint8> &Message)
         {
             if (TfliteConfiguration.Classifications.Num() == (Inference.Num() - 1))
             {
-                if (TfliteConfiguration.Classifications.IsValidIndex(MaxClassIndex))
+                if (TfliteConfiguration.Classifications.IsValidIndex(MaxClassIndex - 1))
                 {
-                    OnNamedClassificationUpdate.ExecuteIfBound(TfliteConfiguration.Classifications[MaxClassIndex], MaxClassIndex, MaxClassValue, Timestamp);
+                    OnNamedClassificationUpdate.ExecuteIfBound(TfliteConfiguration.Classifications[MaxClassIndex - 1], MaxClassIndex, MaxClassValue, Timestamp);
                 }
                 else
                 {

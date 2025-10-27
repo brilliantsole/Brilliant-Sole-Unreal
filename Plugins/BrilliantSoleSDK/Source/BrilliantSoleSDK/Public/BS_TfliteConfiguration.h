@@ -71,6 +71,6 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BS Tflite Configuration", meta = (ClampMin = "0", ClampMax = "1", UIMin = "0", UIMax = "1"))
     float Threshold;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BS Tflite Configuration", meta = (ToolTip = "for 'Classification' tasks - omit the first 'Idle' classification"))
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BS Tflite Configuration", meta = (ToolTip = "(only for 'Classification' tasks) - omit the first 'Idle' classification"))
     TArray<FString> Classifications;
 };
