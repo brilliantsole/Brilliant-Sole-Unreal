@@ -635,11 +635,11 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "BS Tflite")
 	FBS_TfliteInferenceCallback OnTfliteInference;
 
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FBS_TfliteClassificationCallback, UBS_Device *, Device, const uint32 &, ClassificationIndex, const float &, ClassificationValue, const uint64 &, Timestamp);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FBS_TfliteClassificationCallback, UBS_Device *, Device, const uint32 &, ClassificationIndex, const float &, ClassificationValue, const int64 &, Timestamp);
 	UPROPERTY(BlueprintAssignable, Category = "BS Tflite")
 	FBS_TfliteClassificationCallback OnTfliteClassification;
 
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(FBS_TfliteNamedClassificationCallback, UBS_Device *, Device, const FString &, Name, const uint32 &, ClassificationIndex, const float &, ClassificationValue, const uint64 &, Timestamp);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(FBS_TfliteNamedClassificationCallback, UBS_Device *, Device, const FString &, Name, const uint32 &, ClassificationIndex, const float &, ClassificationValue, const int64 &, Timestamp);
 	UPROPERTY(BlueprintAssignable, Category = "BS Tflite")
 	FBS_TfliteNamedClassificationCallback OnTfliteNamedClassification;
 

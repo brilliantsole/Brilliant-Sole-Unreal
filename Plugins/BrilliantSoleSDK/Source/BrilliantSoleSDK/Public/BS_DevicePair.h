@@ -377,13 +377,13 @@ private:
     }
 
     UFUNCTION()
-    void OnDeviceTfliteClassificationUpdate(UBS_Device *Device, const uint32 &ClassificationIndex, const float &ClassificationValue, const uint64 &Timestamp)
+    void OnDeviceTfliteClassificationUpdate(UBS_Device *Device, const uint32 &ClassificationIndex, const float &ClassificationValue, const int64 &Timestamp)
     {
         OnDeviceTfliteClassification.Broadcast(this, Device->Side(), Device, ClassificationIndex, ClassificationValue, Timestamp);
     }
 
     UFUNCTION()
-    void OnDeviceTfliteNamedClassificationUpdate(UBS_Device *Device, const FString &ClassificationName, const uint32 &ClassificationIndex, const float &ClassificationValue, const uint64 &Timestamp)
+    void OnDeviceTfliteNamedClassificationUpdate(UBS_Device *Device, const FString &ClassificationName, const uint32 &ClassificationIndex, const float &ClassificationValue, const int64 &Timestamp)
     {
         OnDeviceTfliteNamedClassification.Broadcast(this, Device->Side(), Device, ClassificationName, ClassificationIndex, ClassificationValue, Timestamp);
     }
