@@ -66,9 +66,10 @@ void UBS_TfliteManager::Reset()
     InferencingEnabled = false;
 }
 
-void UBS_TfliteManager::SetConfiguration(const FBS_TfliteConfiguration &TfliteConfiguration, bool bSendImmediately)
+void UBS_TfliteManager::SetConfiguration(const FBS_TfliteConfiguration &_TfliteConfiguration, bool bSendImmediately)
 {
     UE_LOGFMT(LogBS_TfliteManager, Verbose, "Setting Configuration...");
+    TfliteConfiguration = _TfliteConfiguration;
     SetName(TfliteConfiguration.Name, false);
     SetTask(TfliteConfiguration.Task, false);
     SetSensorTypes(TfliteConfiguration.GetSensorTypes(), false);
@@ -319,14 +320,48 @@ void UBS_TfliteManager::ParseInference(const TArrayView<const uint8> &Message)
     }
 
     TArray<float> Inference;
+    uint32 MaxClassIndex = 0;
+    float MaxClassValue = -1.0f;
     for (uint8 ClassIndex = 0; Offset < MessageLength; Offset += InferenceSize, ClassIndex++)
     {
         const float ClassValue = BS_ByteParser::ParseAs<float>(Message, Offset, true);
         UE_LOGFMT(LogBS_TfliteManager, Verbose, "Class #{0} Value: {1}", ClassIndex, ClassValue);
         Inference.Add(ClassValue);
+
+        if (Task == EBS_TfliteTask::CLASSIFICATION && ClassValue > MaxClassValue)
+        {
+            MaxClassValue = ClassValue;
+            MaxClassIndex = ClassIndex;
+        }
     }
 
     UE_LOGFMT(LogBS_TfliteManager, Verbose, "Parsed Inference with {0} classes", Inference.Num());
     OnInferenceUpdate.ExecuteIfBound(Inference, Timestamp);
+
+    if (Task == EBS_TfliteTask::CLASSIFICATION)
+    {
+        UE_LOGFMT(LogBS_TfliteManager, Verbose, "Classification: #{0} with value {1}", MaxClassIndex, MaxClassValue);
+
+        OnClassificationUpdate.ExecuteIfBound(MaxClassIndex, MaxClassValue, Timestamp);
+
+        if (!TfliteConfiguration.Classifications.IsEmpty())
+        {
+            if (TfliteConfiguration.Classifications.Num() == (Inference.Num() - 1))
+            {
+                if (TfliteConfiguration.Classifications.IsValidIndex(MaxClassIndex))
+                {
+                    OnNamedClassificationUpdate.ExecuteIfBound(TfliteConfiguration.Classifications[MaxClassIndex], MaxClassIndex, MaxClassValue, Timestamp);
+                }
+                else
+                {
+                    UE_LOGFMT(LogBS_TfliteManager, Error, "Invalid Classification Index {0}", MaxClassIndex);
+                }
+            }
+            else
+            {
+                UE_LOGFMT(LogBS_TfliteManager, Error, "Expected max {0} Classifications, got {1}", Inference.Num() - 1, TfliteConfiguration.Classifications.Num());
+            }
+        }
+    }
 }
 // INFERENCE END

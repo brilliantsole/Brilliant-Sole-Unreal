@@ -281,6 +281,8 @@ void UBS_DevicePair::AddDeviceListeners(UBS_Device *Device)
     Device->OnTfliteIsReady.AddDynamic(this, &UBS_DevicePair::OnDeviceTfliteIsReadyUpdate);
     Device->OnTfliteInferencingEnabled.AddDynamic(this, &UBS_DevicePair::OnDeviceTfliteInferencingEnabledUpdate);
     Device->OnTfliteInference.AddDynamic(this, &UBS_DevicePair::OnDeviceTfliteInferenceUpdate);
+    Device->OnTfliteClassification.AddDynamic(this, &UBS_DevicePair::OnDeviceTfliteClassificationUpdate);
+    Device->OnTfliteNamedClassification.AddDynamic(this, &UBS_DevicePair::OnDeviceTfliteNamedClassificationUpdate);
 }
 void UBS_DevicePair::RemoveDeviceListeners(UBS_Device *Device)
 {

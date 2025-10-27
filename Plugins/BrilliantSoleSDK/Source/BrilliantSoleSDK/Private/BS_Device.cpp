@@ -84,6 +84,8 @@ UBS_Device::UBS_Device()
     TfliteManager->OnThresholdUpdate.BindUObject(this, &UBS_Device::OnTfliteThresholdUpdate);
     TfliteManager->OnInferencingEnabledUpdate.BindUObject(this, &UBS_Device::OnTfliteInferencingEnabledUpdate);
     TfliteManager->OnInferenceUpdate.BindUObject(this, &UBS_Device::OnTfliteInferenceUpdate);
+    TfliteManager->OnClassificationUpdate.BindUObject(this, &UBS_Device::OnTfliteClassificationUpdate);
+    TfliteManager->OnNamedClassificationUpdate.BindUObject(this, &UBS_Device::OnTfliteNamedClassificationUpdate);
 }
 
 void UBS_Device::PostInitProperties()

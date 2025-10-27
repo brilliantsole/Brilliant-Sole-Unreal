@@ -25,6 +25,9 @@ public:
 public:
 	void SetConfiguration(const FBS_TfliteConfiguration &TfliteConfiguration, bool bSendImmediately);
 
+private:
+	UPROPERTY()
+	FBS_TfliteConfiguration TfliteConfiguration;
 	// NAME START
 public:
 	const FString &GetName() const { return Name; }
@@ -143,6 +146,12 @@ private:
 public:
 	DECLARE_DELEGATE_TwoParams(FBS_TfliteInferenceCallbackLocal, const TArray<float> &, const uint64 &);
 	FBS_TfliteInferenceCallbackLocal OnInferenceUpdate;
+
+	DECLARE_DELEGATE_ThreeParams(FBS_TfliteClassificationCallbackLocal, const uint32 &, const float &, const uint64 &);
+	FBS_TfliteClassificationCallbackLocal OnClassificationUpdate;
+
+	DECLARE_DELEGATE_FourParams(FBS_TfliteNamedClassificationCallbackLocal, const FString &, const uint32 &, const float &, const uint64 &);
+	FBS_TfliteNamedClassificationCallbackLocal OnNamedClassificationUpdate;
 
 private:
 	void ParseInference(const TArrayView<const uint8> &Message);

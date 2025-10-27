@@ -343,6 +343,14 @@ public:
     UPROPERTY(BlueprintAssignable, Category = "BS Device Pair Tflite")
     FBS_DevicePairDeviceTfliteInferenceCallback OnDeviceTfliteInference;
 
+    DECLARE_DYNAMIC_MULTICAST_DELEGATE_SixParams(FBS_DevicePairDeviceTfliteClassificationCallback, UBS_DevicePair *, DevicePair, EBS_Side, Side, UBS_Device *, Device, const uint32 &, ClassificationIndex, const float &, ClassificationValue, const int64 &, Timestamp);
+    UPROPERTY(BlueprintAssignable, Category = "BS Device Pair Tflite")
+    FBS_DevicePairDeviceTfliteClassificationCallback OnDeviceTfliteClassification;
+
+    DECLARE_DYNAMIC_MULTICAST_DELEGATE_SevenParams(FBS_DevicePairDeviceTfliteNamedClassificationCallback, UBS_DevicePair *, DevicePair, EBS_Side, Side, UBS_Device *, Device, const FString &, ClassificationName, const uint32 &, ClassificationIndex, const float &, ClassificationValue, const int64 &, Timestamp);
+    UPROPERTY(BlueprintAssignable, Category = "BS Device Pair Tflite")
+    FBS_DevicePairDeviceTfliteNamedClassificationCallback OnDeviceTfliteNamedClassification;
+
     UFUNCTION(BlueprintCallable, Category = "BS Device Pair Tflite")
     void SetTfliteInferencingEnabled(const bool NewInferencingEnabled);
 
@@ -366,6 +374,18 @@ private:
     void OnDeviceTfliteInferenceUpdate(UBS_Device *Device, const TArray<float> &Inference, const int64 &Timestamp)
     {
         OnDeviceTfliteInference.Broadcast(this, Device->Side(), Device, Inference, Timestamp);
+    }
+
+    UFUNCTION()
+    void OnDeviceTfliteClassificationUpdate(UBS_Device *Device, const uint32 &ClassificationIndex, const float &ClassificationValue, const uint64 &Timestamp)
+    {
+        OnDeviceTfliteClassification.Broadcast(this, Device->Side(), Device, ClassificationIndex, ClassificationValue, Timestamp);
+    }
+
+    UFUNCTION()
+    void OnDeviceTfliteNamedClassificationUpdate(UBS_Device *Device, const FString &ClassificationName, const uint32 &ClassificationIndex, const float &ClassificationValue, const uint64 &Timestamp)
+    {
+        OnDeviceTfliteNamedClassification.Broadcast(this, Device->Side(), Device, ClassificationName, ClassificationIndex, ClassificationValue, Timestamp);
     }
     // TFLITE END
 };
