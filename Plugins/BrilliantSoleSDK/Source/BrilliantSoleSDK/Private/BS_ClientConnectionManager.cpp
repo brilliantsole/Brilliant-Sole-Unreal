@@ -43,11 +43,11 @@ void UBS_ClientConnectionManager::AssignBluetoothId(const FString &BluetoothId)
 // CONNECTION START
 void UBS_ClientConnectionManager::SetIsConnected(bool bNewIsConnected)
 {
-    if (bNewIsConnected == bIsConnected)
-    {
-        UE_LOGFMT(LogBS_ClientConnectionManager, Verbose, "Redundant bIsConnected Assignment");
-        return;
-    }
+    // if (bNewIsConnected == bIsConnected)
+    // {
+    //     UE_LOGFMT(LogBS_ClientConnectionManager, Verbose, "Redundant bIsConnected Assignment");
+    //     return;
+    // }
     bIsConnected = bNewIsConnected;
     UE_LOGFMT(LogBS_ClientConnectionManager, Verbose, "Updated bIsConnected to {0}", bIsConnected);
 
